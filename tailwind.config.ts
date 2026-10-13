@@ -23,6 +23,8 @@ export default {
       spacing: { sentuh: "44px" },
       minHeight: { sentuh: "44px" },
       minWidth: { sentuh: "44px" },
+      keyframes: { muncul: { from: { opacity: "0", transform: "translateY(6px)" }, to: { opacity: "1", transform: "none" } } },
+      animation: { muncul: "muncul 250ms ease-out" },
     },
   },
   plugins: [],

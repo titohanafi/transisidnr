@@ -16,6 +16,15 @@ export function AksiSendiri() {
   const kunci = kunciChecklist(ctx.kartu.id, ctx.tingkat);
   const selesai = (state.checklist[kunci] ?? []).filter((n) => n < langkah.length);
 
+  const dorongan =
+    selesai.length === 0
+      ? null
+      : selesai.length === langkah.length
+        ? t.selesai
+        : selesai.length * 2 >= langkah.length
+          ? t.dorongan.separuh
+          : t.dorongan.mulai;
+
   return (
     <AksiHalaman judul={t.judul} kartu={ctx.kartu} tingkat={ctx.tingkat}>
       <p className="mt-3">{t.bantuan}</p>
@@ -45,7 +54,11 @@ export function AksiSendiri() {
         })}
       </ul>
       <div aria-live="polite">
-        {selesai.length === langkah.length && <p className="mt-4 rounded-kartu bg-utama-muda p-3 font-medium">{t.selesai}</p>}
+        {dorongan && (
+          <p key={dorongan} className="mt-4 rounded-kartu bg-utama-muda p-3 font-medium motion-safe:animate-muncul">
+            {dorongan}
+          </p>
+        )}
       </div>
     </AksiHalaman>
   );

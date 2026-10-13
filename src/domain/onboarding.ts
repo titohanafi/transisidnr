@@ -4,6 +4,8 @@ export interface PilihanOnboarding {
   id: string;
   label: string;
   bulanMaks?: number | null;
+  /** Balasan hangat yang tampil setelah pilihan ini dipilih (opsional). */
+  respons?: string;
 }
 
 type Pertanyaan = Onboarding["pertanyaan"][number];

@@ -7,15 +7,18 @@
       "pilihan": [
         {
           "id": "penyandang",
-          "label": "Penyandang disabilitas"
+          "label": "Penyandang disabilitas",
+          "respons": "Terima kasih. Anda yang paling tahu apa yang dibutuhkan."
         },
         {
           "id": "caregiver",
-          "label": "Caregiver"
+          "label": "Caregiver",
+          "respons": "Terima kasih sudah mendampingi. Anda juga boleh istirahat sebentar."
         },
         {
           "id": "berdua",
-          "label": "Berdua"
+          "label": "Berdua",
+          "respons": "Bagus. Mengisi berdua sering membuat keputusan terasa lebih ringan."
         }
       ],
       "bantuan": "Tidak ada jawaban yang salah. Mengisi berdua juga boleh."
@@ -28,22 +31,26 @@
         {
           "id": "kurang_1_bulan",
           "label": "Kurang dari 1 bulan",
-          "bulanMaks": 1
+          "bulanMaks": 1,
+          "respons": "Masih awal. Pelan-pelan saja, tidak perlu buru-buru."
         },
         {
           "id": "1_3_bulan",
           "label": "1-3 bulan",
-          "bulanMaks": 3
+          "bulanMaks": 3,
+          "respons": "Masa-masa ini penuh penyesuaian. Satu langkah kecil sudah cukup."
         },
         {
           "id": "3_6_bulan",
           "label": "3-6 bulan",
-          "bulanMaks": 6
+          "bulanMaks": 6,
+          "respons": "Anda sudah melewati banyak hal. Kita lanjutkan dengan tenang."
         },
         {
           "id": "lebih_6_bulan",
           "label": "Lebih dari 6 bulan",
-          "bulanMaks": null
+          "bulanMaks": null,
+          "respons": "Anda sudah cukup lama menjalaninya, dan pengalaman Anda berharga."
         }
       ],
       "bantuan": "Kebutuhan sering berubah dari waktu ke waktu, dan itu wajar."
@@ -56,7 +63,8 @@
       "pilihan": [
         {
           "id": "kursi_roda",
-          "label": "Kursi roda"
+          "label": "Kursi roda",
+          "respons": "Baik, kami siapkan untuk pengguna kursi roda."
         },
         {
           "id": "kruk",
@@ -68,7 +76,8 @@
         },
         {
           "id": "belum_ada",
-          "label": "Belum ada / belum tahu"
+          "label": "Belum ada / belum tahu",
+          "respons": "Tidak apa-apa. Kebutuhan bisa berubah, dan rencananya ikut berubah."
         }
       ]
     },
@@ -79,11 +88,13 @@
       "pilihan": [
         {
           "id": "ya",
-          "label": "Ya"
+          "label": "Ya",
+          "respons": "Baik. Kami utamakan solusi yang mudah dibatalkan."
         },
         {
           "id": "belum_tahu",
-          "label": "Belum tahu"
+          "label": "Belum tahu",
+          "respons": "Tidak apa-apa. Kami utamakan solusi yang mudah diubah."
         },
         {
           "id": "tidak",
@@ -99,15 +110,18 @@
       "pilihan": [
         {
           "id": "milik_sendiri",
-          "label": "Milik sendiri"
+          "label": "Milik sendiri",
+          "respons": "Anda lebih leluasa mengubah ruang, tapi kita tetap mulai dari yang ringan."
         },
         {
           "id": "kontrakan",
-          "label": "Kontrakan"
+          "label": "Kontrakan",
+          "respons": "Kami utamakan alat yang bisa dilepas, jadi tidak perlu membongkar."
         },
         {
           "id": "kos",
-          "label": "Kos"
+          "label": "Kos",
+          "respons": "Kami utamakan alat yang bisa dilepas, jadi tidak perlu membongkar."
         },
         {
           "id": "apartemen",

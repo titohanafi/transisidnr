@@ -128,7 +128,7 @@ export const onboardingSchema = z.object({
       bantuan: teks.optional(),
       banyakPilihan: z.boolean(),
       // Salah satu: daftar `pilihan` tertulis di sini, atau `pilihanDari` (daftar dibaca dari config.json).
-      pilihan: z.array(opsi.extend({ bulanMaks: z.number().nullable().optional() })).min(2).optional(),
+      pilihan: z.array(opsi.extend({ bulanMaks: z.number().nullable().optional(), respons: teks.optional() })).min(2).optional(),
       pilihanDari: z.enum(["budget"]).optional(),
     }).refine((q) => (q.pilihan === undefined) !== (q.pilihanDari === undefined), {
       message: "isi tepat satu dari `pilihan` atau `pilihanDari`",
@@ -145,6 +145,8 @@ export const uiSchema = z
     beranda: z.object({
       manfaat: teks,
       sapaan: teks,
+      salam: z.object({ pagi: teks, siang: teks, sore: teks, malam: teks }),
+      salamPeran: z.object({ penyandang: teks, caregiver: teks, berdua: teks, baru: teks }),
       langkah: z.array(z.object({ judul: teks, isi: teks })).length(3),
       spandukDraf: teks,
       tautanIgd: teks,
@@ -179,6 +181,7 @@ export const uiSchema = z
       judul: teks, prioritas: teks, ubahJawaban: teks, satuHal: teks, dariKartu: teks, lihatKartu: teks,
       mulaiDariSini: teks, semuaRekomendasi: teks, kosongJudul: teks, kosongIsi: teks, belumJelas: teks,
       total: teks, pendampingJudul: teks, bukaKartu: teks, cocokSewa: teks, cetak: teks, sedangDisusun: teks, belumAdaSiap: teks, sapaan: teks, satuHalCatatan: teks,
+      ringan: z.object({ catatan: teks, lihatNanti: teks }), kemajuan: teks,
     }),
     kartu: z.object({
       tingkat: z.object({ tanpa_biaya: teks, alat_tanpa_bongkar: teks, renovasi: teks }),
@@ -192,7 +195,7 @@ export const uiSchema = z
     aksi: z.object({
       tombol: z.object({ sendiri: teks, beli: teks, tukang: teks, ahli: teks }),
       kembaliKeKartu: teks,
-      sendiri: z.object({ judul: teks, bantuan: teks, progres: teks, selesai: teks }),
+      sendiri: z.object({ judul: teks, bantuan: teks, progres: teks, selesai: teks, dorongan: z.object({ mulai: teks, separuh: teks }) }),
       beli: z.object({
         judul: teks, bantuan: teks, lihatProduk: teks, linkMenyusul: teks, afiliasi: teks,
         afiliasiPenjelasan: teks, kosong: teks,

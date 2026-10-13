@@ -3,7 +3,7 @@
     "nama": "Transisi"
   },
   "beranda": {
-    "manfaat": "Kita atur kamar mandi yang lebih aman dan nyaman, selangkah demi selangkah. Anda yang menentukan.",
+    "manfaat": "Kita atur kamar mandi yang lebih aman dan nyaman, selangkah demi selangkah.",
     "langkah": [
       {
         "judul": "Jawab pertanyaan",
@@ -38,7 +38,19 @@
       }
     },
     "caraKerja": "Cara kerja Transisi",
-    "sapaan": "Halo. Perubahan besar butuh waktu, dan Anda tidak perlu mengurus semuanya sekarang."
+    "sapaan": "Halo. Perubahan besar butuh waktu, dan Anda tidak perlu mengurus semuanya sekarang.",
+    "salam": {
+      "pagi": "Selamat pagi.",
+      "siang": "Selamat siang.",
+      "sore": "Selamat sore.",
+      "malam": "Selamat malam."
+    },
+    "salamPeran": {
+      "penyandang": "Hari ini cukup mulai dari satu hal kecil. Anda yang menentukan.",
+      "caregiver": "Terima kasih sudah mendampingi. Anda tidak perlu mengurus semuanya sekarang.",
+      "berdua": "Senang melihat Anda berdua mengurus ini bersama.",
+      "baru": "Perubahan besar butuh waktu, dan Anda tidak perlu mengurus semuanya sekarang."
+    }
   },
   "umum": {
     "kembali": "Kembali",
@@ -179,7 +191,12 @@
     "sedangDisusun": "Sedang disusun",
     "belumAdaSiap": "Panduan untuk prioritas Anda belum siap. Isinya sedang disusun; daftarnya ada di bawah.",
     "sapaan": "Terima kasih sudah menjawab. Ini rencana awal Anda, boleh diubah kapan saja.",
-    "satuHalCatatan": "Cukup ini dulu. Sisanya bisa menunggu."
+    "satuHalCatatan": "Cukup ini dulu. Sisanya bisa menunggu.",
+    "ringan": {
+      "catatan": "Anda bilang sedang lelah. Hari ini cukup satu hal; sisanya kami simpan di bawah, untuk nanti.",
+      "lihatNanti": "Lihat yang lain nanti"
+    },
+    "kemajuan": "Anda sudah menyelesaikan {n} langkah. Terus berjalan, pelan-pelan juga maju."
   },
   "kartu": {
     "tingkat": {
@@ -274,7 +291,11 @@
       "judul": "Lakukan sendiri",
       "bantuan": "Centang langkah yang sudah selesai. Centang tersimpan di perangkat ini.",
       "progres": "{n} dari {total} langkah selesai",
-      "selesai": "Semua langkah selesai. Terima kasih sudah mengerjakannya."
+      "selesai": "Semua langkah selesai. Terima kasih sudah mengerjakannya.",
+      "dorongan": {
+        "mulai": "Satu langkah selesai. Bagus.",
+        "separuh": "Sudah separuh jalan. Teruskan sesuai tenaga Anda."
+      }
     },
     "beli": {
       "judul": "Alat yang dibutuhkan",

@@ -26,6 +26,7 @@ export function Onboarding() {
   const tipe = q.banyakPilihan ? "checkbox" : "radio";
   const indikator = isi(teks.indikator, { n, total: soal.length });
 
+  const respons = pilihanPertanyaan(q, konten.config).find((p) => dipilih.includes(p.id) && p.respons)?.respons;
   const lanjut = () => navigate(terakhir ? "/asesmen/aktivitas" : `/mulai/${n + 1}`);
   const kembali = () => navigate(n === 1 ? "/" : `/mulai/${n - 1}`);
 
@@ -53,6 +54,13 @@ export function Onboarding() {
               />
             );
           })}
+        </div>
+        <div aria-live="polite" className="mt-4 min-h-[3.5rem]">
+          {respons && (
+            <p key={respons} className="rounded-kartu bg-aksen-muda p-3 motion-safe:animate-muncul">
+              {respons}
+            </p>
+          )}
         </div>
       </fieldset>
 

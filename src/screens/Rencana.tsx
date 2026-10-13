@@ -25,30 +25,109 @@ export function Rencana() {
     track("rencana_dibuat", { jumlah_kartu: jumlahKartu });
   }, [jumlahKartu]);
 
-  if (Object.keys(state.asesmen.status).length === 0) return <Navigate to="/asesmen/aktivitas" replace />;
+  if (Object.keys(state.asesmen.status).length === 0)
+    return <Navigate to="/asesmen/aktivitas" replace />;
+
+  // Bila caregiver bilang sedang lelah, tampilkan satu hal saja dan simpan sisanya di lipatan.
+  const ringan =
+    state.checkin === "capek_fisik" ||
+    state.checkin === "capek_emosi" ||
+    state.checkin === "butuh_istirahat";
+  const langkahSelesai = Object.values(state.checklist).reduce(
+    (n, daftar) => n + daftar.length,
+    0,
+  );
 
   const dataKartu = (id: string) => konten.kartu.find((k) => k.id === id);
-  const lainnyaSemua = rencana.daftar.filter((k) => !rencana.mulaiDariSini.some((m) => m.id === k.id));
+  const lainnyaSemua = rencana.daftar.filter(
+    (k) => !rencana.mulaiDariSini.some((m) => m.id === k.id),
+  );
   const lainnya = lainnyaSemua.filter((k) => !k.isiMenyusul);
   const disusun = lainnyaSemua.filter((k) => k.isiMenyusul);
-  const pendamping = rencana.pendamping ? dataKartu(rencana.pendamping) : undefined;
+  const pendamping = rencana.pendamping
+    ? dataKartu(rencana.pendamping)
+    : undefined;
   const satuHal = rencana.satuHalHariIni;
-  const labelAkt = (id: string) => konten.asesmen.aktivitas.find((a) => a.id === id)?.label.split(" (")[0] ?? id;
+  const labelAkt = (id: string) =>
+    konten.asesmen.aktivitas.find((a) => a.id === id)?.label.split(" (")[0] ??
+    id;
+
+  const daftarLengkap = (
+    <>
+      {rencana.mulaiDariSini.length > 0 && (
+        <section className="mt-5" aria-labelledby="mulai">
+          <h2 id="mulai" className="text-xl font-bold">
+            {t.mulaiDariSini}
+          </h2>
+          <div className="mt-3 space-y-3">
+            {rencana.mulaiDariSini.map((k) => (
+              <KartuRingkas key={k.id} kartu={k} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {lainnya.length > 0 && (
+        <section className="mt-6" aria-labelledby="lainnya">
+          <h2 id="lainnya" className="text-xl font-bold">
+            {t.semuaRekomendasi}
+          </h2>
+          <div className="mt-3 space-y-3">
+            {lainnya.map((k) => (
+              <KartuRingkas key={k.id} kartu={k} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {disusun.length > 0 && (
+        <Lipat
+          judul={`${t.sedangDisusun} (${disusun.length})`}
+          buka={rencana.mulaiDariSini.length === 0 && lainnya.length === 0}
+        >
+          <div className="space-y-3">
+            {disusun.map((k) => (
+              <KartuRingkas key={k.id} kartu={k} />
+            ))}
+          </div>
+        </Lipat>
+      )}
+    </>
+  );
 
   return (
     <Halaman judul={t.judul}>
       <p className="mt-2 text-lg">{t.sapaan}</p>
+      {langkahSelesai > 0 && (
+        <p className="mt-2 rounded-kartu bg-aksen-muda p-3 motion-safe:animate-muncul">
+          {isi(t.kemajuan, { n: langkahSelesai })}
+        </p>
+      )}
+      {ringan && (
+        <p
+          role="note"
+          className="mt-2 rounded-kartu bg-aksen-muda p-3 motion-safe:animate-muncul"
+        >
+          {t.ringan.catatan}
+        </p>
+      )}
       <div className="mt-2 flex flex-wrap items-center gap-2">
         {masukan.prioritas.map((a) => (
           <Tanda key={a}>{labelAkt(a)}</Tanda>
         ))}
-        <Link to="/asesmen/aktivitas" className="inline-flex min-h-sentuh items-center text-utama underline">
+        <Link
+          to="/asesmen/aktivitas"
+          className="inline-flex min-h-sentuh items-center text-utama underline"
+        >
           {t.ubahJawaban}
         </Link>
       </div>
 
       {rencana.kosong ? (
-        <section className="mt-5 rounded-kartu border border-utama bg-utama-muda p-4" aria-labelledby="kosong">
+        <section
+          className="mt-5 rounded-kartu border border-utama bg-utama-muda p-4"
+          aria-labelledby="kosong"
+        >
           <h2 id="kosong" className="text-lg font-semibold">
             {t.kosongJudul}
           </h2>
@@ -57,66 +136,58 @@ export function Rencana() {
       ) : (
         <>
           {satuHal && (
-            <section className="mt-5 rounded-kartu border-2 border-utama bg-utama-muda p-4" aria-labelledby="satu-hal">
+            <section
+              className="mt-5 rounded-kartu border-2 border-utama bg-utama-muda p-4"
+              aria-labelledby="satu-hal"
+            >
               <h2 id="satu-hal" className="text-lg font-bold">
                 {t.satuHal}
               </h2>
               <p className="mt-2 text-lg">{satuHal.langkah}</p>
               <p className="mt-1 text-redup">{t.satuHalCatatan}</p>
-              <p className="mt-2 text-sm text-redup">{isi(t.dariKartu, { judul: dataKartu(satuHal.kartuId)?.judul ?? "" })}</p>
-              <TombolLink to={`/kartu/${satuHal.kartuId}/${satuHal.tingkat}`} className="mt-3">
+              <p className="mt-2 text-sm text-redup">
+                {isi(t.dariKartu, {
+                  judul: dataKartu(satuHal.kartuId)?.judul ?? "",
+                })}
+              </p>
+              <TombolLink
+                to={`/kartu/${satuHal.kartuId}/${satuHal.tingkat}`}
+                className="mt-3"
+              >
                 {t.lihatKartu}
               </TombolLink>
             </section>
           )}
 
           {!satuHal && rencana.mulaiDariSini.length === 0 && (
-            <p role="note" className="mt-5 rounded-kartu border border-draf bg-draf-muda p-3 text-draf">
+            <p
+              role="note"
+              className="mt-5 rounded-kartu border border-draf bg-draf-muda p-3 text-draf"
+            >
               {t.belumAdaSiap}
             </p>
           )}
 
           {rencana.total.diketahui && (
             <p className="mt-4 font-medium">
-              {isi(t.total, { rentang: formatRentang({ min: rencana.total.minRp, max: rencana.total.maksRp }) })}
+              {isi(t.total, {
+                rentang: formatRentang({
+                  min: rencana.total.minRp,
+                  max: rencana.total.maksRp,
+                }),
+              })}
             </p>
           )}
-          {rencana.kebutuhanJangkaPanjangBelumJelas && <p className="mt-3 text-sm text-redup">{t.belumJelas}</p>}
-
-          {rencana.mulaiDariSini.length > 0 && (
-            <section className="mt-5" aria-labelledby="mulai">
-              <h2 id="mulai" className="text-xl font-bold">
-                {t.mulaiDariSini}
-              </h2>
-              <div className="mt-3 space-y-3">
-                {rencana.mulaiDariSini.map((k) => (
-                  <KartuRingkas key={k.id} kartu={k} />
-                ))}
-              </div>
-            </section>
+          {rencana.kebutuhanJangkaPanjangBelumJelas && (
+            <p className="mt-3 text-sm text-redup">{t.belumJelas}</p>
           )}
 
-          {lainnya.length > 0 && (
-            <section className="mt-6" aria-labelledby="lainnya">
-              <h2 id="lainnya" className="text-xl font-bold">
-                {t.semuaRekomendasi}
-              </h2>
-              <div className="mt-3 space-y-3">
-                {lainnya.map((k) => (
-                  <KartuRingkas key={k.id} kartu={k} />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {disusun.length > 0 && (
-            <Lipat judul={`${t.sedangDisusun} (${disusun.length})`} buka={rencana.mulaiDariSini.length === 0 && lainnya.length === 0}>
-              <div className="space-y-3">
-                {disusun.map((k) => (
-                  <KartuRingkas key={k.id} kartu={k} />
-                ))}
-              </div>
+          {ringan ? (
+            <Lipat judul={t.ringan.lihatNanti}>
+              <div className="-mt-3">{daftarLengkap}</div>
             </Lipat>
+          ) : (
+            daftarLengkap
           )}
         </>
       )}
@@ -135,7 +206,9 @@ export function Rencana() {
           <article className="mt-3 rounded-kartu border border-garis bg-white p-4">
             <div className="flex items-start gap-3">
               <Ikon kunci="caregiver" className="mt-0.5 h-9 w-9" />
-              <h3 className="text-lg font-semibold leading-snug">{pendamping.judul}</h3>
+              <h3 className="text-lg font-semibold leading-snug">
+                {pendamping.judul}
+              </h3>
             </div>
             <div className="mt-2 empty:hidden">
               <LencanaStatus status={pendamping.status_validasi} />
