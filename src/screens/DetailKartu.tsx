@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
+import { Lipat } from "../components/Lipat";
 import { LencanaSifat, LencanaStatus, Tanda } from "../components/Lencana";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { TombolLink } from "../components/Tombol";
@@ -66,13 +67,11 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
         <Ikon kunci={kunciKelompok(kartu)} className="h-12 w-12" />
         <LencanaStatus status={kartu.status_validasi} />
       </div>
-      <PeringatanNonMedis />
-
-      <section className="mt-5" aria-labelledby="situasi">
-        <h2 id="situasi" className="text-xl font-bold">
+      <section className="mt-4 rounded-kartu bg-utama-muda p-4" aria-labelledby="situasi">
+        <h2 id="situasi" className="text-sm font-semibold uppercase tracking-wide text-utama-gelap">
           {t.situasi}
         </h2>
-        <p className="mt-2">{kartu.situasi}</p>
+        <p className="mt-1 text-lg">{kartu.situasi}</p>
       </section>
 
       {kartu.isi_menyusul || !kartu.solusi ? (
@@ -80,12 +79,9 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
       ) : (
         <>
           {kartu.kenapa_penting && (
-            <section className="mt-5" aria-labelledby="kenapa">
-              <h2 id="kenapa" className="text-xl font-bold">
-                {t.kenapa}
-              </h2>
-              <p className="mt-2">{kartu.kenapa_penting}</p>
-            </section>
+            <Lipat judul={t.kenapa}>
+              <p>{kartu.kenapa_penting}</p>
+            </Lipat>
           )}
 
           <section className="mt-5" aria-labelledby="solusi">
@@ -112,27 +108,30 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                         <span aria-hidden="true">{buka ? "−" : "+"}</span>
                       </button>
                     </h3>
-                    <div className="flex flex-wrap gap-2 px-3 pb-3">
+                    <p className="px-3 text-redup">{s.ringkasan}</p>
+                    <p className="mt-1 px-3 text-sm font-medium">
+                      {s.biaya.kisaran_rp ?? umum.biayaMenyusul} · {s.usaha.waktu ?? umum.menyusul}
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2 px-3 pb-3">
                       <LencanaSifat sifat={x.sifat} />
                       {x.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
                       {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
                       {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                     </div>
                     <div id={idPanel} hidden={!buka} className="border-t border-garis p-3">
-                      <p>{s.ringkasan}</p>
-
-                      <h4 className="mt-4 font-semibold">{t.langkah}</h4>
-                      <ol className="mt-1 list-decimal space-y-1 pl-6">
-                        {s.langkah.map((l) => (
-                          <li key={l}>{l}</li>
+                      <h4 className="font-semibold">{t.langkah}</h4>
+                      <ol className="mt-2 space-y-2">
+                        {s.langkah.map((l, i) => (
+                          <li key={l} className="flex gap-3">
+                            <span aria-hidden="true" className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-utama-muda text-sm font-bold text-utama-gelap">
+                              {i + 1}
+                            </span>
+                            <span>{l}</span>
+                          </li>
                         ))}
                       </ol>
 
-                      <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
-                        <dt className="font-semibold">{t.biaya}</dt>
-                        <dd>{s.biaya.kisaran_rp ?? umum.biayaMenyusul}</dd>
-                        <dt className="font-semibold">{t.waktu}</dt>
-                        <dd>{s.usaha.waktu ?? umum.menyusul}</dd>
+                      <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-redup">
                         <dt className="font-semibold">{t.kesulitan}</dt>
                         <dd>{s.usaha.kesulitan ?? umum.menyusul}</dd>
                       </dl>
@@ -244,11 +243,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
           )}
 
           {istilah.length > 0 && (
-            <section className="mt-5" aria-labelledby="istilah">
-              <h2 id="istilah" className="text-xl font-bold">
-                {t.istilah}
-              </h2>
-              <dl className="mt-2 space-y-2">
+            <Lipat judul={t.istilah}>
+              <dl className="space-y-2">
                 {istilah.map((i) => (
                   <div key={i.kata}>
                     <dt className="font-semibold">{i.kata}</dt>
@@ -256,15 +252,12 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   </div>
                 ))}
               </dl>
-            </section>
+            </Lipat>
           )}
 
-          <section className="mt-5" aria-labelledby="sumber">
-            <h2 id="sumber" className="text-xl font-bold">
-              {t.sumber}
-            </h2>
+          <Lipat judul={t.sumber}>
             {kartu.sumber && kartu.sumber.length > 0 ? (
-              <ul className="mt-2 list-disc space-y-1 pl-6">
+              <ul className="list-disc space-y-1 pl-6">
                 {kartu.sumber.map((s) => (
                   <li key={s.judul}>
                     {s.url ? (
@@ -278,11 +271,13 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                 ))}
               </ul>
             ) : (
-              <p className="mt-2 text-redup">{t.sumberMenyusul}</p>
+              <p className="text-redup">{t.sumberMenyusul}</p>
             )}
-          </section>
+          </Lipat>
         </>
       )}
+
+      <PeringatanNonMedis />
 
       <TombolLink to={adaJawaban ? "/rencana" : "/jelajah"} gayaTombol="sekunder" className="mt-8">
         {adaJawaban ? t.kembaliKeRencana : t.kembaliKeJelajah}
