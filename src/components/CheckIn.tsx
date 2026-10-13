@@ -1,7 +1,6 @@
 import { konten } from "../domain/content";
 import { hariTerakhir, kunciHari, labelHari, namaHariSingkat, tanggalDalamBulan } from "../lib/tanggal";
 import { useStore } from "../state/store";
-import { IkonCheckin } from "./IkonCheckin";
 import { PilihanPil } from "./Pilihan";
 
 const t = konten.ui.checkin;
@@ -13,7 +12,8 @@ export function CheckIn() {
   const hariIni = kunciHari();
   const jawabanHariIni = state.riwayatCheckin[hariIni] ?? null;
   const pilihan = t.pilihan.find((p) => p.id === jawabanHariIni);
-  const labelDari = (id: string | undefined) => t.pilihan.find((p) => p.id === id)?.label;
+  const cari = (id: string | undefined) => t.pilihan.find((p) => p.id === id);
+  const labelDari = (id: string | undefined) => cari(id)?.label;
   const hari = hariTerakhir(7);
   const adaRiwayat = Object.keys(state.riwayatCheckin).length > 0;
 
@@ -23,7 +23,7 @@ export function CheckIn() {
       <p className="font-semibold">{t.pertanyaan}</p>
       <div className="mt-2 flex flex-wrap gap-2">
         {t.pilihan.map((p) => (
-          <PilihanPil key={p.id} nama="checkin" label={p.label} aktif={jawabanHariIni === p.id} onUbah={() => setCheckin(p.id)} />
+          <PilihanPil key={p.id} nama="checkin" label={`${p.emoji} ${p.label}`} aktif={jawabanHariIni === p.id} onUbah={() => setCheckin(p.id)} />
         ))}
       </div>
       <div aria-live="polite">
@@ -55,11 +55,11 @@ export function CheckIn() {
                   </span>
                   <span
                     aria-hidden="true"
-                    className={`flex h-9 w-9 items-center justify-center rounded-full border-2 ${
+                    className={`flex h-9 w-9 items-center justify-center rounded-full border-2 text-lg leading-none ${
                       id ? "border-utama bg-utama-muda text-utama-gelap" : "border-dashed border-garisKontrol text-redup"
                     } ${ini ? "ring-2 ring-utama ring-offset-1" : ""}`}
                   >
-                    {id ? <IkonCheckin id={id} className="h-5 w-5" /> : "·"}
+                    {id ? cari(id)?.emoji : "·"}
                   </span>
                   <span aria-hidden="true" className="text-redup">
                     {tanggalDalamBulan(h)}
@@ -71,7 +71,7 @@ export function CheckIn() {
           <ul aria-label={t.artiIkon} className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-redup">
             {t.pilihan.map((p) => (
               <li key={p.id} className="flex items-center gap-1">
-                <IkonCheckin id={p.id} className="h-4 w-4" />
+                <span aria-hidden="true">{p.emoji}</span>
                 {p.label}
               </li>
             ))}

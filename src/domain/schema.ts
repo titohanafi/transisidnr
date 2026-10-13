@@ -231,7 +231,7 @@ export const uiSchema = z
       belumDiisi: teks,
       artiIkon: teks,
       pertanyaan: teks,
-      pilihan: z.array(opsi.extend({ balasan: teks })).min(1),
+      pilihan: z.array(opsi.extend({ emoji: teks, balasan: teks })).min(1),
       penutup: teks,
     }),
   })

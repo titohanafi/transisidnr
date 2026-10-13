@@ -85,26 +85,31 @@
     "pilihan": [
       {
         "id": "capek_fisik",
+        "emoji": "🥱",
         "label": "Tubuh terasa lelah",
         "balasan": "Tubuh Anda sudah bekerja keras. Istirahat sebentar bukan kelalaian."
       },
       {
         "id": "capek_emosi",
+        "emoji": "😔",
         "label": "Hati terasa penuh",
         "balasan": "Wajar bila perasaan terasa penuh. Anda tidak harus kuat setiap saat."
       },
       {
         "id": "bingung_langkah",
+        "emoji": "😕",
         "label": "Bingung harus mulai dari mana",
         "balasan": "Tidak apa-apa bingung. Satu hal kecil hari ini sudah cukup."
       },
       {
         "id": "soal_biaya",
+        "emoji": "😟",
         "label": "Khawatir soal biaya",
         "balasan": "Memikirkan biaya itu berat. Mulai dari langkah tanpa biaya juga sudah berarti."
       },
       {
         "id": "butuh_istirahat",
+        "emoji": "😴",
         "label": "Ingin istirahat sebentar",
         "balasan": "Kebutuhan Anda penting juga. Meminta waktu istirahat itu hal yang wajar."
       }
