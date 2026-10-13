@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { DaftarAhli } from "../components/DaftarAhli";
 import { DaftarAlat } from "../components/DaftarAlat";
 import { Halaman } from "../components/Halaman";
+import { KartuBaris } from "../components/KartuBaris";
+import { PilihanPil } from "../components/Pilihan";
 import { KartuKerangka } from "../components/KartuKerangka";
 import { Ikon } from "../components/Ikon";
 import { LencanaStatus, Tanda } from "../components/Lencana";
@@ -78,36 +80,20 @@ function Daftar({ awal }: { awal: Filter }) {
     <Halaman judul={t.judulFilter[filter]}>
       <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>
 
-      <section
-        className="mt-4 rounded-kartu border border-garis bg-white p-3"
-        aria-label={umum.keBeranda}
+      <div
+        role="radiogroup"
+        aria-label={t.filterLabel}
+        className="mt-4 flex flex-wrap gap-2"
       >
-        <p>{adaJawaban ? t.ajakanSudah : t.ajakanBelum}</p>
-        <TombolLink
-          to={adaJawaban ? "/rencana" : "/mulai/1"}
-          gayaTombol="sekunder"
-          className="mt-2 w-full"
-        >
-          {adaJawaban ? t.ajakanRencana : t.ajakanMulai}
-        </TombolLink>
-      </section>
-
-      <div className="mt-5">
-        <label htmlFor="filter" className="block font-semibold">
-          {t.filterLabel}
-        </label>
-        <select
-          id="filter"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value as Filter)}
-          className="mt-1 min-h-sentuh w-full rounded-tombol border-2 border-garisKontrol bg-white px-3 text-base"
-        >
-          {FILTER.map((f) => (
-            <option key={f} value={f}>
-              {t.filter[f]}
-            </option>
-          ))}
-        </select>
+        {FILTER.map((f) => (
+          <PilihanPil
+            key={f}
+            nama="filter"
+            label={t.filter[f]}
+            aktif={filter === f}
+            onUbah={() => setFilter(f)}
+          />
+        ))}
       </div>
 
       {filter === "alat" ? (
@@ -149,6 +135,8 @@ function Daftar({ awal }: { awal: Filter }) {
                   );
                   if (k.isi_menyusul)
                     return <KartuKerangka key={k.id} kartu={k} />;
+                  if (aksi.length === 0)
+                    return <KartuBaris key={k.id} kartu={k} />;
                   return (
                     <article
                       key={k.id}
@@ -213,7 +201,21 @@ function Daftar({ awal }: { awal: Filter }) {
         </>
       )}
 
-      <TombolLink to="/" gayaTombol="sekunder" className="mt-8">
+      <section
+        className="mt-8 rounded-kartu border border-garis bg-white p-3"
+        aria-label={umum.keBeranda}
+      >
+        <p>{adaJawaban ? t.ajakanSudah : t.ajakanBelum}</p>
+        <TombolLink
+          to={adaJawaban ? "/rencana" : "/mulai/1"}
+          gayaTombol="sekunder"
+          className="mt-2 w-full"
+        >
+          {adaJawaban ? t.ajakanRencana : t.ajakanMulai}
+        </TombolLink>
+      </section>
+
+      <TombolLink to="/" gayaTombol="sekunder" className="mt-4">
         {umum.keBeranda}
       </TombolLink>
     </Halaman>

@@ -219,7 +219,7 @@ export const uiSchema = z
       filter: z.object({ semua: teks, alat: teks, tukang: teks, ahli: teks }),
       judulFilter: z.object({ semua: teks, alat: teks, tukang: teks, ahli: teks }),
       pengantarFilter: z.object({ semua: teks, alat: teks, tukang: teks, ahli: teks }),
-      alat: z.object({ dipakaiDi: teks, kosong: teks }),
+      alat: z.object({ dipakaiDi: teks, kosong: teks, detailMenyusul: teks }),
       ahli: z.object({ membantuDi: teks, kosong: teks }),
     }),
     istilah: z.array(z.object({ kata: teks, arti: teks })),

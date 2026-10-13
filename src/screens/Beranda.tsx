@@ -29,10 +29,10 @@ export function Beranda() {
       </section>
 
       <section className="mt-5" aria-labelledby="jalur-tahu">
-        <h3 id="jalur-tahu" className="font-semibold">
+        <h3 id="jalur-tahu" className="sr-only">
           {pilih.tahu.judul}
         </h3>
-        <div className="mt-2 grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           <Ubin to="/jelajah/alat" ikon="alat">
             {pilih.tahu.alat}
           </Ubin>

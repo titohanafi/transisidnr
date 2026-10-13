@@ -366,7 +366,8 @@
     },
     "alat": {
       "dipakaiDi": "Dipakai di panduan",
-      "kosong": "Belum ada alat yang tercantum."
+      "kosong": "Belum ada alat yang tercantum.",
+      "detailMenyusul": "Spesifikasi dan harga menyusul."
     },
     "ahli": {
       "membantuDi": "Membantu untuk",
