@@ -299,3 +299,5 @@
 ## Pesan ke tukang bukan menu utama Beranda
 - Tombol cepat "Pesan ke tukang" dihapus dari Beranda karena tukang ada di ujung urutan (tanpa biaya -> alat -> renovasi/jasa) dan draf pesannya butuh konteks panduan. Beranda kini punya dua tombol cepat yang lebih besar: Cari alat dan Tanya ahli.
 - Tetap ada: tombol aksi di panduan/Rencana (tingkat renovasi atau alat yang perlu dipasang) dan pilihan "Pesan ke tukang" di halaman Panduan (`/jelajah/tukang`).
+
+- Ikon kamera di layar foto kini Lucide `Camera`. Tidak ada lagi ikon buatan sendiri di aplikasi; `IkonAksi` dihapus.

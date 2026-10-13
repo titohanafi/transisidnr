@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
-import { IkonAksi } from "../components/Ikon";
+import { Camera } from "lucide-react";
 import { NavBawah } from "../components/NavBawah";
 import { Tombol } from "../components/Tombol";
 import { konten } from "../domain/content";
@@ -46,7 +46,7 @@ export function AsesmenFoto() {
           onClick={() => input.current?.click()}
           className="mt-4 flex min-h-[10rem] w-full flex-col items-center justify-center gap-2 rounded-kartu border-2 border-dashed border-utama bg-utama-muda p-4 text-utama-gelap"
         >
-          <IkonAksi kunci="foto" className="h-12 w-12" />
+          <Camera className="h-12 w-12 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
           <span className="text-lg font-semibold">{t.pilih}</span>
         </button>
       )}
