@@ -1,39 +1,14 @@
-import type { ReactNode } from "react";
+import { BookOpen, House, ListChecks, ShieldAlert, type LucideIcon } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { konten } from "../domain/content";
 
 const { umum } = konten.ui;
 
-const garis = {
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round",
-  strokeLinejoin: "round",
-} as const;
-
-const TAB: { ke: string; label: string; ujung?: boolean; ikon: ReactNode }[] = [
-  {
-    ke: "/",
-    label: umum.tabBeranda,
-    ujung: true,
-    ikon: <path d="M4 11l8-7 8 7v9H4zM10 20v-6h4v6" />,
-  },
-  {
-    ke: "/jelajah",
-    label: umum.tabPanduan,
-    ikon: <path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM8 20a3 3 0 0 1-3-3M9 9h6M9 13h6" />,
-  },
-  {
-    ke: "/rencana",
-    label: umum.tabRencana,
-    ikon: <path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2" />,
-  },
-  {
-    ke: "/igd",
-    label: umum.tabDarurat,
-    ikon: <path d="M12 8v8M8 12h8M12 3l8 4v6c0 4-3.5 7-8 8-4.5-1-8-4-8-8V7z" />,
-  },
+const TAB: { ke: string; label: string; ujung?: boolean; Ikon: LucideIcon }[] = [
+  { ke: "/", label: umum.tabBeranda, ujung: true, Ikon: House },
+  { ke: "/jelajah", label: umum.tabPanduan, Ikon: BookOpen },
+  { ke: "/rencana", label: umum.tabRencana, Ikon: ListChecks },
+  { ke: "/igd", label: umum.tabDarurat, Ikon: ShieldAlert },
 ];
 
 // Layar alur pertanyaan dan cetak punya bilah sendiri (atau tanpa bilah), jadi tab disembunyikan.
@@ -66,9 +41,7 @@ export function BilahTab() {
             >
               {({ isActive }) => (
                 <>
-                  <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true" {...garis}>
-                    {t.ikon}
-                  </svg>
+                  <t.Ikon className="h-6 w-6" strokeWidth={2} aria-hidden="true" focusable="false" />
                   <span className={isActive ? "underline decoration-2 underline-offset-4" : ""}>{t.label}</span>
                 </>
               )}

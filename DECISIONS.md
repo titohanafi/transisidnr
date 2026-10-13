@@ -301,3 +301,5 @@
 - Tetap ada: tombol aksi di panduan/Rencana (tingkat renovasi atau alat yang perlu dipasang) dan pilihan "Pesan ke tukang" di halaman Panduan (`/jelajah/tukang`).
 
 - Ikon kamera di layar foto kini Lucide `Camera`. Tidak ada lagi ikon buatan sendiri di aplikasi; `IkonAksi` dihapus.
+
+- Ikon bilah menu bawah kini Lucide: Beranda (rumah), Panduan (buku terbuka), Rencana (daftar centang), Darurat (perisai peringatan). Panah kembali di header juga Lucide (`ChevronLeft`).

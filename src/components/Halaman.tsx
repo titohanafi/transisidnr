@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from "react";
+import { ChevronLeft } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BilahTab } from "./BilahTab";
 import { konten } from "../domain/content";
@@ -36,9 +37,7 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
             aria-label={umum.halamanSebelumnya}
             className="inline-flex h-sentuh w-sentuh items-center justify-center rounded-tombol text-utama"
           >
-            <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 5l-7 7 7 7" />
-            </svg>
+            <ChevronLeft className="h-7 w-7" strokeWidth={2.5} aria-hidden="true" focusable="false" />
           </button>
         )}
         <Link to="/" className={`inline-flex min-h-sentuh items-center text-lg font-bold text-utama ${dalam ? "" : "px-2"}`}>
