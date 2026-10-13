@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { IkonAksi, IlustrasiBeranda } from "../components/Ikon";
+import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
 
 const { app, beranda, umum } = konten.ui;
@@ -45,9 +46,9 @@ export function Beranda() {
             {pilih.tahu.ahli}
           </Ubin>
         </div>
-        <Link to="/jelajah" className="mt-1 inline-flex min-h-sentuh items-center text-utama underline">
+        <TombolLink to="/jelajah" gayaTombol="sekunder" className="mt-3 w-full">
           {pilih.tahu.semua}
-        </Link>
+        </TombolLink>
       </section>
 
       <ol className="mt-4 flex gap-2" aria-label={beranda.caraKerja}>
