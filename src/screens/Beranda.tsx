@@ -52,7 +52,6 @@ export function Beranda() {
       </section>
 
       <nav aria-label={umum.tautanLain} className="mt-auto flex flex-col pt-6">
-        <TautanKecil to="/igd">{beranda.tautanIgd}</TautanKecil>
         <TautanKecil to="/hapus">{beranda.tautanHapus}</TautanKecil>
       </nav>
     </Halaman>

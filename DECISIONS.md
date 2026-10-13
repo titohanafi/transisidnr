@@ -318,3 +318,5 @@
 ## Filter tukang digabung ke ahli di halaman Panduan
 - Pil "Pesan ke tukang" di `/jelajah` dihapus. Tukang kini satu jenis di daftar "Kenali peran ahli" (tampil pertama), lengkap dengan arti dan panduan yang melibatkannya. Pesan WhatsApp-nya diakses dari halaman peran ahli tiap panduan.
 - Alamat lama `/jelajah/tukang` diarahkan ke daftar ahli supaya tautan lama tidak patah.
+
+- Tautan "Kapan harus ke dokter atau IGD" dihapus dari Beranda atas permintaan pemilik. Halamannya tetap bisa dibuka lewat tab Darurat dan lewat peringatan non-medis di panduan.
