@@ -7,6 +7,8 @@ import { LencanaSifat, LencanaStatus, Tanda } from "./Lencana";
 import { aksiUtama } from "../domain/aksi";
 import { TombolAksi } from "./TombolAksi";
 import { KartuKerangka } from "./KartuKerangka";
+import { tingkatBerikutnya } from "../domain/hasil";
+import { useStore } from "../state/store";
 
 const { rencana: tr, umum, kartu: tk } = konten.ui;
 
@@ -17,11 +19,14 @@ export function tingkatUtama(k: KartuRencana): TingkatRencana | undefined {
 }
 
 export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRencana; judulTingkat?: "h2" | "h3" }) {
+  const { state } = useStore();
   const data = konten.kartu.find((k) => k.id === kartu.id);
   if (!data) return null;
   if (kartu.isiMenyusul) return <KartuKerangka kartu={data} />;
   const Judul = judulTingkat;
-  const utama = tingkatUtama(kartu);
+  const h = state.hasil[kartu.id];
+  const berikut = h?.status === "masih_sulit" ? tingkatBerikutnya(kartu, h.tingkat) : undefined;
+  const utama = (berikut && kartu.tingkat.find((t) => t.tingkat === berikut)) || tingkatUtama(kartu);
 
   return (
     <article className="rounded-kartu border border-garis bg-white p-4">
@@ -32,6 +37,11 @@ export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRenca
       <div className="mt-2 flex flex-wrap gap-2 empty:hidden">
         <LencanaStatus status={data.status_validasi} />
       </div>
+      {h?.status === "masih_sulit" && (
+        <p className="mt-2">
+          <Tanda>{tr.perluLagi}</Tanda>
+        </p>
+      )}
       <p className="mt-2 text-redup">{data.situasi}</p>
 
       {kartu.isiMenyusul ? (

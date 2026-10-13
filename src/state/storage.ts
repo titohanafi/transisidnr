@@ -1,4 +1,4 @@
-import { AKTIVITAS, type Aktivitas } from "../domain/konstanta";
+import { AKTIVITAS, TINGKAT, type Aktivitas, type Tingkat } from "../domain/konstanta";
 
 export const KUNCI = "transisi:v1";
 // Foto disimpan terpisah supaya foto besar tidak menggagalkan penyimpanan jawaban.
@@ -16,6 +16,14 @@ export interface AsesmenState {
   jawaban: Record<string, boolean>;
 }
 
+export const STATUS_HASIL = ["cukup", "masih_sulit"] as const;
+export type StatusHasil = (typeof STATUS_HASIL)[number];
+/** Hasil setelah mencoba satu tingkat sebuah panduan. */
+export interface HasilPanduan {
+  status: StatusHasil;
+  tingkat: Tingkat;
+}
+
 export interface State {
   versi: 1;
   /** id pertanyaan onboarding -> id pilihan (satu atau lebih). */
@@ -25,10 +33,12 @@ export interface State {
   checklist: Record<string, number[]>;
   /** id jawaban check-in caregiver yang terakhir dipilih. */
   checkin: string | null;
+  /** id panduan -> hasil setelah dicoba ("sudah cukup" atau "masih sulit"). */
+  hasil: Record<string, HasilPanduan>;
 }
 
 export const asesmenAwal = (): AsesmenState => ({ status: {}, prioritas: [], jawaban: {} });
-export const stateAwal = (): State => ({ versi: 1, onboarding: {}, asesmen: asesmenAwal(), checklist: {}, checkin: null });
+export const stateAwal = (): State => ({ versi: 1, onboarding: {}, asesmen: asesmenAwal(), checklist: {}, checkin: null, hasil: {} });
 
 // Validasi tulisan tangan (tanpa pustaka) agar bundel kecil. Data yang bentuknya salah ditolak seluruhnya.
 const adalahObjek = (x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
@@ -40,6 +50,10 @@ const rekam = <T>(x: unknown, ok: (v: unknown) => v is T): Record<string, T> | n
 const adalahAktivitas = (x: unknown): x is Aktivitas => (AKTIVITAS as readonly unknown[]).includes(x);
 const adalahStatus = (x: unknown): x is StatusAktivitas => (STATUS_AKTIVITAS as readonly unknown[]).includes(x);
 const adalahBool = (x: unknown): x is boolean => typeof x === "boolean";
+const adalahHasil = (x: unknown): x is HasilPanduan =>
+  adalahObjek(x) &&
+  (STATUS_HASIL as readonly unknown[]).includes(x.status) &&
+  (TINGKAT as readonly unknown[]).includes(x.tingkat);
 const adalahNomor = (x: unknown): x is number => Number.isInteger(x) && (x as number) >= 0;
 
 /** Mengubah data mentah menjadi State, atau null bila bentuknya salah. Bagian yang hilang diisi bawaan. */
@@ -66,7 +80,12 @@ export function parseState(x: unknown): State | null {
   const checkin = x.checkin === undefined || x.checkin === null ? null : adalahTeks(x.checkin) ? x.checkin : undefined;
   if (checkin === undefined) return null;
 
-  return { versi: 1, onboarding, asesmen, checklist, checkin };
+  const hasil = x.hasil === undefined ? awal.hasil : rekam(x.hasil, adalahHasil);
+  if (!hasil) return null;
+
+  // Hanya bidang yang dikenal yang dibawa (hasil dibersihkan dari kunci asing).
+  const bersih = Object.fromEntries(Object.entries(hasil).map(([k, v]) => [k, { status: v.status, tingkat: v.tingkat }]));
+  return { versi: 1, onboarding, asesmen, checklist, checkin, hasil: bersih };
 }
 
 type Gudang = Pick<Storage, "getItem" | "setItem" | "removeItem">;

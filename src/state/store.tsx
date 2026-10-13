@@ -4,7 +4,7 @@ import type { Aktivitas } from "../domain/schema";
 import { rapikan, ubahPrioritas } from "./asesmen";
 import {
   hapus, hapusFoto, muat, muatFoto, simpan, simpanFoto, stateAwal,
-  type AsesmenState, type State, STATUS_AKTIVITAS,
+  type AsesmenState, type HasilPanduan, type State, STATUS_AKTIVITAS,
 } from "./storage";
 
 type StatusAkt = (typeof STATUS_AKTIVITAS)[number];
@@ -21,6 +21,8 @@ interface Store {
   /** Mencentang atau melepas satu langkah checklist. */
   toggleLangkah: (kunci: string, nomor: number) => void;
   setCheckin: (id: string | null) => void;
+  /** null menghapus hasil panduan itu. */
+  setHasil: (kartuId: string, hasil: HasilPanduan | null) => void;
   setFoto: (dataUrl: string | null) => boolean;
   hapusSemua: () => void;
 }
@@ -79,6 +81,17 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const setCheckin = useCallback((id: string | null) => ubah((s) => ({ ...s, checkin: id })), [ubah]);
 
+  const setHasil = useCallback(
+    (kartuId: string, hasil: HasilPanduan | null) =>
+      ubah((s) => {
+        const baru = { ...s.hasil };
+        if (hasil) baru[kartuId] = hasil;
+        else delete baru[kartuId];
+        return { ...s, hasil: baru };
+      }),
+    [ubah],
+  );
+
   const setFoto = useCallback((dataUrl: string | null) => {
     if (dataUrl === null) {
       hapusFoto();
@@ -97,8 +110,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const nilai = useMemo(
-    () => ({ state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, toggleLangkah, setCheckin, setFoto, hapusSemua }),
-    [state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, toggleLangkah, setCheckin, setFoto, hapusSemua],
+    () => ({ state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, toggleLangkah, setCheckin, setHasil, setFoto, hapusSemua }),
+    [state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, toggleLangkah, setCheckin, setHasil, setFoto, hapusSemua],
   );
   return <Konteks.Provider value={nilai}>{children}</Konteks.Provider>;
 }

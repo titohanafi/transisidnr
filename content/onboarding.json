@@ -20,8 +20,7 @@
           "label": "Berdua",
           "respons": "Bagus. Mengisi berdua sering membuat keputusan terasa lebih ringan."
         }
-      ],
-      "bantuan": "Tidak ada jawaban yang salah. Mengisi berdua juga boleh."
+      ]
     },
     {
       "id": "kejadian",
@@ -52,8 +51,7 @@
           "bulanMaks": null,
           "respons": "Anda sudah cukup lama menjalaninya, dan pengalaman Anda berharga."
         }
-      ],
-      "bantuan": "Kebutuhan sering berubah dari waktu ke waktu, dan itu wajar."
+      ]
     },
     {
       "id": "alat_bantu",
@@ -100,8 +98,7 @@
           "id": "tidak",
           "label": "Tidak"
         }
-      ],
-      "bantuan": "Belum tahu juga tidak apa-apa."
+      ]
     },
     {
       "id": "hunian",
@@ -127,8 +124,7 @@
           "id": "apartemen",
           "label": "Apartemen"
         }
-      ],
-      "bantuan": "Ini membantu kami menyarankan solusi yang boleh dipasang."
+      ]
     },
     {
       "id": "budget",

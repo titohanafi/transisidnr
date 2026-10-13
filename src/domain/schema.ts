@@ -144,7 +144,6 @@ export const uiSchema = z
     app: z.object({ nama: teks }),
     beranda: z.object({
       manfaat: teks,
-      sapaan: teks,
       salam: z.object({ pagi: teks, siang: teks, sore: teks, malam: teks }),
       salamPeran: z.object({ penyandang: teks, caregiver: teks, berdua: teks, baru: teks }),
       langkah: z.array(z.object({ judul: teks, isi: teks })).length(3),
@@ -180,8 +179,8 @@ export const uiSchema = z
     rencana: z.object({
       judul: teks, prioritas: teks, ubahJawaban: teks, satuHal: teks, dariKartu: teks, lihatKartu: teks,
       mulaiDariSini: teks, semuaRekomendasi: teks, kosongJudul: teks, kosongIsi: teks, belumJelas: teks,
-      total: teks, pendampingJudul: teks, bukaKartu: teks, cocokSewa: teks, cetak: teks, sedangDisusun: teks, belumAdaSiap: teks, sapaan: teks, satuHalCatatan: teks,
-      ringan: z.object({ catatan: teks, lihatNanti: teks }), kemajuan: teks,
+      total: teks, pendampingJudul: teks, bukaKartu: teks, cocokSewa: teks, cetak: teks, sedangDisusun: teks, belumAdaSiap: teks, ringan: z.object({ catatan: teks, lihatNanti: teks }), kemajuan: teks,
+      beres: z.object({ judul: teks, ringkasan: teks, kosong: teks, lihat: teks }), perluLagi: teks,
     }),
     kartu: z.object({
       tingkat: z.object({ tanpa_biaya: teks, alat_tanpa_bongkar: teks, renovasi: teks }),
@@ -195,7 +194,9 @@ export const uiSchema = z
     aksi: z.object({
       tombol: z.object({ sendiri: teks, beli: teks, tukang: teks, ahli: teks }),
       kembaliKeKartu: teks,
-      sendiri: z.object({ judul: teks, bantuan: teks, progres: teks, selesai: teks, dorongan: z.object({ mulai: teks, separuh: teks }) }),
+      sendiri: z.object({ judul: teks, bantuan: teks, progres: teks, selesai: teks, dorongan: z.object({ mulai: teks, separuh: teks }),
+        hasil: z.object({ judul: teks, cukup: teks, sulit: teks, balasCukup: teks, balasSulit: teks, berikutnya: teks, terakhir: teks, keRencana: teks }),
+      }),
       beli: z.object({
         judul: teks, bantuan: teks, lihatProduk: teks, linkMenyusul: teks, afiliasi: teks,
         afiliasiPenjelasan: teks, kosong: teks,

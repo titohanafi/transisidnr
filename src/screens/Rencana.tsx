@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { BilahKemajuan } from "../components/BilahKemajuan";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
@@ -9,6 +10,7 @@ import { Lipat } from "../components/Lipat";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
+import { terapkanHasil } from "../domain/hasil";
 import { track } from "../lib/events";
 import { formatRentang } from "../lib/format";
 import { isi } from "../lib/teks";
@@ -33,34 +35,28 @@ export function Rencana() {
     state.checkin === "capek_fisik" ||
     state.checkin === "capek_emosi" ||
     state.checkin === "butuh_istirahat";
-  const langkahSelesai = Object.values(state.checklist).reduce(
-    (n, daftar) => n + daftar.length,
-    0,
-  );
+  const h = terapkanHasil(rencana, state.hasil, konten.kartu);
 
   const dataKartu = (id: string) => konten.kartu.find((k) => k.id === id);
-  const lainnyaSemua = rencana.daftar.filter(
-    (k) => !rencana.mulaiDariSini.some((m) => m.id === k.id),
-  );
-  const lainnya = lainnyaSemua.filter((k) => !k.isiMenyusul);
-  const disusun = lainnyaSemua.filter((k) => k.isiMenyusul);
+  const lainnya = h.lainnya.filter((k) => !k.isiMenyusul);
+  const disusun = h.lainnya.filter((k) => k.isiMenyusul);
   const pendamping = rencana.pendamping
     ? dataKartu(rencana.pendamping)
     : undefined;
-  const satuHal = rencana.satuHalHariIni;
+  const satuHal = h.satuHal;
   const labelAkt = (id: string) =>
     konten.asesmen.aktivitas.find((a) => a.id === id)?.label.split(" (")[0] ??
     id;
 
   const daftarLengkap = (
     <>
-      {rencana.mulaiDariSini.length > 0 && (
+      {h.mulai.length > 0 && (
         <section className="mt-5" aria-labelledby="mulai">
           <h2 id="mulai" className="text-xl font-bold">
             {t.mulaiDariSini}
           </h2>
           <div className="mt-3 space-y-3">
-            {rencana.mulaiDariSini.map((k) => (
+            {h.mulai.map((k) => (
               <KartuRingkas key={k.id} kartu={k} />
             ))}
           </div>
@@ -80,10 +76,20 @@ export function Rencana() {
         </section>
       )}
 
+      {h.beres.length > 0 && (
+        <Lipat judul={isi(t.beres.lihat, { n: h.beres.length })}>
+          <div className="space-y-3">
+            {h.beres.map((k) => (
+              <KartuRingkas key={k.id} kartu={k} />
+            ))}
+          </div>
+        </Lipat>
+      )}
+
       {disusun.length > 0 && (
         <Lipat
           judul={`${t.sedangDisusun} (${disusun.length})`}
-          buka={rencana.mulaiDariSini.length === 0 && lainnya.length === 0}
+          buka={h.mulai.length === 0 && lainnya.length === 0}
         >
           <div className="space-y-3">
             {disusun.map((k) => (
@@ -97,11 +103,26 @@ export function Rencana() {
 
   return (
     <Halaman judul={t.judul}>
-      <p className="mt-2 text-lg">{t.sapaan}</p>
-      {langkahSelesai > 0 && (
-        <p className="mt-2 rounded-kartu bg-aksen-muda p-3 motion-safe:animate-muncul">
-          {isi(t.kemajuan, { n: langkahSelesai })}
-        </p>
+      {h.jumlahPanduan > 0 && (
+        <section
+          className="mt-3 rounded-kartu bg-aksen-muda p-3"
+          aria-label={t.beres.judul}
+        >
+          <p className="font-semibold">
+            {isi(t.beres.ringkasan, {
+              n: h.beres.length,
+              total: h.jumlahPanduan,
+            })}
+          </p>
+          <BilahKemajuan
+            n={h.beres.length}
+            total={h.jumlahPanduan}
+            label={isi(t.beres.ringkasan, {
+              n: h.beres.length,
+              total: h.jumlahPanduan,
+            })}
+          />
+        </section>
       )}
       {ringan && (
         <p
@@ -144,7 +165,6 @@ export function Rencana() {
                 {t.satuHal}
               </h2>
               <p className="mt-2 text-lg">{satuHal.langkah}</p>
-              <p className="mt-1 text-redup">{t.satuHalCatatan}</p>
               <p className="mt-2 text-sm text-redup">
                 {isi(t.dariKartu, {
                   judul: dataKartu(satuHal.kartuId)?.judul ?? "",
@@ -159,7 +179,7 @@ export function Rencana() {
             </section>
           )}
 
-          {!satuHal && rencana.mulaiDariSini.length === 0 && (
+          {!satuHal && h.mulai.length === 0 && (
             <p
               role="note"
               className="mt-5 rounded-kartu border border-draf bg-draf-muda p-3 text-draf"

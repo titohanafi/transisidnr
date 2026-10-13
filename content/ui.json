@@ -38,7 +38,6 @@
       }
     },
     "caraKerja": "Cara kerja Transisi",
-    "sapaan": "Halo. Perubahan besar butuh waktu, dan Anda tidak perlu mengurus semuanya sekarang.",
     "salam": {
       "pagi": "Selamat pagi.",
       "siang": "Selamat siang.",
@@ -190,13 +189,18 @@
     "cetak": "Cetak rencana",
     "sedangDisusun": "Sedang disusun",
     "belumAdaSiap": "Panduan untuk prioritas Anda belum siap. Isinya sedang disusun; daftarnya ada di bawah.",
-    "sapaan": "Terima kasih sudah menjawab. Ini rencana awal Anda, boleh diubah kapan saja.",
-    "satuHalCatatan": "Cukup ini dulu. Sisanya bisa menunggu.",
     "ringan": {
       "catatan": "Anda bilang sedang lelah. Hari ini cukup satu hal; sisanya kami simpan di bawah, untuk nanti.",
       "lihatNanti": "Lihat yang lain nanti"
     },
-    "kemajuan": "Anda sudah menyelesaikan {n} langkah. Terus berjalan, pelan-pelan juga maju."
+    "kemajuan": "Anda sudah menyelesaikan {n} langkah. Terus berjalan, pelan-pelan juga maju.",
+    "beres": {
+      "judul": "Yang sudah beres",
+      "ringkasan": "{n} dari {total} panduan beres",
+      "kosong": "Belum ada yang ditandai beres. Setelah mencoba satu panduan, catat hasilnya di sana.",
+      "lihat": "Sudah beres ({n})"
+    },
+    "perluLagi": "Perlu langkah berikutnya"
   },
   "kartu": {
     "tingkat": {
@@ -295,6 +299,16 @@
       "dorongan": {
         "mulai": "Satu langkah selesai. Bagus.",
         "separuh": "Sudah separuh jalan. Teruskan sesuai tenaga Anda."
+      },
+      "hasil": {
+        "judul": "Bagaimana hasilnya?",
+        "cukup": "Sudah cukup",
+        "sulit": "Masih sulit",
+        "balasCukup": "Kabar baik. Panduan ini ditandai beres di Rencana.",
+        "balasSulit": "Tidak apa-apa. Pilihan berikutnya sedikit lebih besar, dan tetap boleh Anda tunda.",
+        "berikutnya": "Lihat pilihan berikutnya",
+        "terakhir": "Ini sudah pilihan terakhir di panduan ini. Pertimbangkan bertanya ke ahli.",
+        "keRencana": "Kembali ke rencana"
       }
     },
     "beli": {
