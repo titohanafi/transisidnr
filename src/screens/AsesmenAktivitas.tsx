@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
 import { NavBawah } from "../components/NavBawah";
-import { Pilihan } from "../components/Pilihan";
+import { PilihanPil } from "../components/Pilihan";
 import { konten } from "../domain/content";
 import { kandidatPrioritas, perluTahapPrioritas } from "../state/asesmen";
 import { STATUS_AKTIVITAS } from "../state/storage";
@@ -16,43 +16,55 @@ export function AsesmenAktivitas() {
   const navigate = useNavigate();
   const { state, setStatusAktivitas } = useStore();
   const { status } = state.asesmen;
-  const aktivitas = konten.asesmen.aktivitas.filter((a) => a.bisaDipilihPrioritas);
+  const aktivitas = konten.asesmen.aktivitas.filter(
+    (a) => a.bisaDipilihPrioritas,
+  );
   const adaPilihan = aktivitas.some((a) => status[a.id]);
 
   const lanjut = () =>
-    navigate(perluTahapPrioritas(kandidatPrioritas(konten.asesmen, status)) ? "/asesmen/prioritas" : "/asesmen/pertanyaan/1");
+    navigate(
+      perluTahapPrioritas(kandidatPrioritas(konten.asesmen, status))
+        ? "/asesmen/prioritas"
+        : "/asesmen/pertanyaan/1",
+    );
 
   return (
     <Halaman judul={ta.judul}>
       <p className="mt-2 text-redup">{ta.bantuan}</p>
 
-      <div className="mt-4 space-y-5">
+      <div className="mt-4 space-y-3">
         {aktivitas.map((a) => (
-          <fieldset key={a.id}>
-            <legend className="mb-2 flex items-center gap-3 text-lg font-semibold">
+          <div
+            key={a.id}
+            role="radiogroup"
+            aria-labelledby={`akt-judul-${a.id}`}
+            className="rounded-kartu border border-garis bg-white p-3"
+          >
+            <p
+              id={`akt-judul-${a.id}`}
+              className="flex items-center gap-3 text-lg font-semibold"
+            >
               <Ikon kunci={a.id} className="h-9 w-9" />
               {a.label}
-            </legend>
-            <div className="space-y-2">
-              <Pilihan
-                tipe="radio"
-                nama={`akt-${a.id}`}
-                label={ta.tidakRelevan}
-                aktif={!status[a.id]}
-                onUbah={() => setStatusAktivitas(a.id, null)}
-              />
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2">
               {STATUS_AKTIVITAS.map((s) => (
-                <Pilihan
+                <PilihanPil
                   key={s}
-                  tipe="radio"
                   nama={`akt-${a.id}`}
                   label={ta.status[s]}
                   aktif={status[a.id] === s}
                   onUbah={() => setStatusAktivitas(a.id, s)}
                 />
               ))}
+              <PilihanPil
+                nama={`akt-${a.id}`}
+                label={ta.tidakRelevan}
+                aktif={!status[a.id]}
+                onUbah={() => setStatusAktivitas(a.id, null)}
+              />
             </div>
-          </fieldset>
+          </div>
         ))}
       </div>
 
@@ -61,7 +73,13 @@ export function AsesmenAktivitas() {
           {ta.minimal}
         </p>
       )}
-      <NavBawah onKembali={() => navigate("/mulai/" + konten.onboarding.pertanyaan.length)} onLanjut={lanjut} lanjutNonaktif={!adaPilihan} />
+      <NavBawah
+        onKembali={() =>
+          navigate("/mulai/" + konten.onboarding.pertanyaan.length)
+        }
+        onLanjut={lanjut}
+        lanjutNonaktif={!adaPilihan}
+      />
     </Halaman>
   );
 }

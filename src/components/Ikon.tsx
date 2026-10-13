@@ -86,6 +86,13 @@ const ikonAksi = {
       <path d="M30 15h8M19 20v22" />
     </g>
   ),
+  // Kamera
+  foto: (
+    <g {...garis}>
+      <path d="M6 16h8l3-5h14l3 5h8v22H6z" />
+      <circle cx="24" cy="26" r="7" />
+    </g>
+  ),
   // Gelembung percakapan
   ahli: (
     <g {...garis}>

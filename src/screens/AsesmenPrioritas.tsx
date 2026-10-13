@@ -1,9 +1,14 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
+import { Ikon } from "../components/Ikon";
 import { NavBawah } from "../components/NavBawah";
 import { Pilihan } from "../components/Pilihan";
 import { konten } from "../domain/content";
-import { MAKS_PRIORITAS, kandidatPrioritas, perluTahapPrioritas } from "../state/asesmen";
+import {
+  MAKS_PRIORITAS,
+  kandidatPrioritas,
+  perluTahapPrioritas,
+} from "../state/asesmen";
 import { useStore } from "../state/store";
 
 const { asesmen: t } = konten.ui;
@@ -15,10 +20,12 @@ export function AsesmenPrioritas() {
   const { status, prioritas } = state.asesmen;
   const kandidat = kandidatPrioritas(konten.asesmen, status);
 
-  if (!perluTahapPrioritas(kandidat)) return <Navigate to="/asesmen/pertanyaan/1" replace />;
+  if (!perluTahapPrioritas(kandidat))
+    return <Navigate to="/asesmen/pertanyaan/1" replace />;
 
   const penuh = prioritas.length >= MAKS_PRIORITAS;
-  const label = (id: string) => konten.asesmen.aktivitas.find((a) => a.id === id)?.label ?? id;
+  const label = (id: string) =>
+    konten.asesmen.aktivitas.find((a) => a.id === id)?.label ?? id;
 
   return (
     <Halaman judul={t.prioritas.judul}>
@@ -34,6 +41,17 @@ export function AsesmenPrioritas() {
               label={label(id)}
               aktif={prioritas.includes(id)}
               nonaktif={penuh && !prioritas.includes(id)}
+              ikon={<Ikon kunci={id} className="h-8 w-8" />}
+              lencana={
+                prioritas.includes(id) ? (
+                  <span
+                    aria-hidden="true"
+                    className="flex h-7 w-7 items-center justify-center rounded-full bg-utama text-sm font-bold text-white"
+                  >
+                    {prioritas.indexOf(id) + 1}
+                  </span>
+                ) : undefined
+              }
               onUbah={() => togglePrioritas(id)}
             />
           ))}

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
+import { IkonAksi } from "../components/Ikon";
 import { NavBawah } from "../components/NavBawah";
 import { Tombol } from "../components/Tombol";
 import { konten } from "../domain/content";
@@ -17,7 +18,10 @@ export function AsesmenFoto() {
   const input = useRef<HTMLInputElement>(null);
   const [galat, setGalat] = useState<string | null>(null);
 
-  const jumlah = daftarPertanyaan(konten.asesmen, state.asesmen.prioritas).length;
+  const jumlah = daftarPertanyaan(
+    konten.asesmen,
+    state.asesmen.prioritas,
+  ).length;
 
   const pilih = async (berkas: File | undefined) => {
     if (!berkas) return;
@@ -36,15 +40,49 @@ export function AsesmenFoto() {
     <Halaman judul={t.judul}>
       <p className="mt-2 text-redup">{t.penjelasan}</p>
 
-      {foto && <img src={foto} alt={t.alt} className="mt-4 max-h-64 w-full rounded-kartu border border-garis object-contain" />}
+      {!foto && (
+        <button
+          type="button"
+          onClick={() => input.current?.click()}
+          className="mt-4 flex min-h-[10rem] w-full flex-col items-center justify-center gap-2 rounded-kartu border-2 border-dashed border-utama bg-utama-muda p-4 text-utama-gelap"
+        >
+          <IkonAksi kunci="foto" className="h-12 w-12" />
+          <span className="text-lg font-semibold">{t.pilih}</span>
+        </button>
+      )}
 
-      <input ref={input} type="file" accept="image/*" hidden onChange={(e) => { void pilih(e.target.files?.[0]); e.target.value = ""; }} />
+      {foto && (
+        <img
+          src={foto}
+          alt={t.alt}
+          className="mt-4 max-h-64 w-full rounded-kartu border border-garis object-contain"
+        />
+      )}
+
+      <input
+        ref={input}
+        type="file"
+        accept="image/*"
+        hidden
+        onChange={(e) => {
+          void pilih(e.target.files?.[0]);
+          e.target.value = "";
+        }}
+      />
       <div className="mt-4 flex flex-col gap-3">
-        <Tombol gayaTombol="sekunder" onClick={() => input.current?.click()}>
-          {foto ? t.ganti : t.pilih}
-        </Tombol>
         {foto && (
-          <Tombol gayaTombol="sekunder" onClick={() => { setFoto(null); setGalat(null); }}>
+          <Tombol gayaTombol="sekunder" onClick={() => input.current?.click()}>
+            {t.ganti}
+          </Tombol>
+        )}
+        {foto && (
+          <Tombol
+            gayaTombol="sekunder"
+            onClick={() => {
+              setFoto(null);
+              setGalat(null);
+            }}
+          >
             {t.hapus}
           </Tombol>
         )}
