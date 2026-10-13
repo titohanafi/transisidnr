@@ -10,8 +10,9 @@ export function CheckIn() {
   const pilihan = t.pilihan.find((p) => p.id === state.checkin);
 
   return (
-    <fieldset className="rounded-kartu border border-garis bg-white p-3">
-      <legend className="px-1 font-semibold">{t.pertanyaan}</legend>
+    <fieldset className="rounded-kartu bg-aksen-muda p-4">
+      <legend className="px-1 text-xl font-bold">{t.pertanyaan}</legend>
+      <p className="mt-1 text-redup">{t.sapaan}</p>
       <div className="mt-2 space-y-2">
         {t.pilihan.map((p) => (
           <Pilihan key={p.id} tipe="radio" nama="checkin" label={p.label} aktif={state.checkin === p.id} onUbah={() => setCheckin(p.id)} />
@@ -19,7 +20,7 @@ export function CheckIn() {
       </div>
       <div aria-live="polite" className="mt-3">
         {pilihan && (
-          <p className="rounded-kartu bg-utama-muda p-3">
+          <p className="rounded-kartu bg-white p-3">
             {pilihan.balasan} {t.penutup}
           </p>
         )}

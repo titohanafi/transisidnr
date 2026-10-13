@@ -12,7 +12,11 @@ const { pilih } = beranda;
 export function Beranda() {
   return (
     <Halaman judul={app.nama}>
-      <p className="mt-2 text-lg">{beranda.konteks}</p>
+      <section className="mt-3">
+        <CheckIn />
+      </section>
+
+      <p className="mt-5 text-lg">{beranda.konteks}</p>
 
       <h2 className="sr-only">{pilih.judul}</h2>
 
@@ -47,10 +51,6 @@ export function Beranda() {
         <TombolLink to="/jelajah" gayaTombol="sekunder" className="mt-3 w-full">
           {pilih.tahu.semua}
         </TombolLink>
-      </section>
-
-      <section className="mt-5">
-        <CheckIn />
       </section>
 
       <nav aria-label={umum.tautanLain} className="mt-auto flex flex-col pt-6">

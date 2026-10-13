@@ -225,6 +225,7 @@ export const uiSchema = z
     istilah: z.array(z.object({ kata: teks, arti: teks })),
     pilihRuangan: z.object({ judul: teks, segera: teks, lanjut: teks }),
     checkin: z.object({
+      sapaan: teks,
       pertanyaan: teks,
       pilihan: z.array(opsi.extend({ balasan: teks })).min(1),
       penutup: teks,
