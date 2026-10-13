@@ -71,43 +71,41 @@ export function Ikon({ kunci, className = "h-10 w-10" }: { kunci: KunciKelompok;
   );
 }
 
-/** Ilustrasi kamar mandi ramah untuk Beranda: dinding berubin, batang pegangan, bangku mandi, pancuran. */
+/**
+ * Ilustrasi Beranda: alat bantu gerak yang ditanyakan di onboarding (kursi roda, kruk, walker).
+ * Hanya benda, tanpa gambar orang. Warna mengikuti token tailwind.
+ */
 export function IlustrasiBeranda({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 320 150" className={`w-full ${className}`} aria-hidden="true" focusable="false">
       <rect width="320" height="150" rx="16" className="fill-utama-muda" />
-      {/* ubin */}
-      <g className="stroke-garis" strokeWidth="1.5" fill="none">
-        {[64, 108, 152, 196, 240, 284].map((x) => (
-          <path key={x} d={`M${x} 0V122`} />
-        ))}
-        {[30, 61, 92].map((y) => (
-          <path key={y} d={`M0 ${y}H320`} />
-        ))}
-      </g>
-      {/* lantai */}
       <rect y="122" width="320" height="28" className="fill-kertas" />
       <path d="M0 122H320" className="stroke-utama" strokeWidth="3" />
-      {/* batang pegangan di dinding: batang dengan dua pelat penempel */}
-      <g className="stroke-utama" strokeLinecap="round">
-        <path d="M34 70H104" strokeWidth="8" />
-        <circle cx="30" cy="70" r="9" strokeWidth="3.5" className="fill-white" />
-        <circle cx="108" cy="70" r="9" strokeWidth="3.5" className="fill-white" />
-        <circle cx="30" cy="70" r="2.5" className="fill-utama" stroke="none" />
-        <circle cx="108" cy="70" r="2.5" className="fill-utama" stroke="none" />
-      </g>
-      {/* pancuran */}
-      <g className="stroke-utama" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none">
-        <path d="M250 122V28a12 12 0 0 1 12-12h20" />
-        <path d="M274 22h30l-6 14h-18z" className="fill-white" />
-      </g>
-      <g className="stroke-utama" strokeWidth="3" strokeLinecap="round">
-        <path d="M282 46v10M290 44v14M298 46v10M286 66v10M294 68v10" />
-      </g>
-      {/* bangku mandi */}
-      <g className="stroke-utama" strokeWidth="5" strokeLinecap="round">
-        <path d="M150 88h76" />
-        <path d="M158 88l-6 34M218 88l6 34" />
+
+      <g className="stroke-utama" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        {/* kursi roda (tampak samping) */}
+        <g strokeWidth="4.5">
+          <circle cx="70" cy="88" r="34" />
+          <circle cx="70" cy="88" r="26" strokeWidth="2" />
+          <circle cx="122" cy="112" r="10" />
+          <path d="M52 38h14M58 40L62 78H112" />
+          <path d="M112 78L126 98h16" />
+          <path d="M64 60h38V78" />
+          <path d="M70 88V78" />
+        </g>
+        <circle cx="70" cy="88" r="4" className="fill-utama" stroke="none" />
+
+        {/* sepasang kruk */}
+        <g strokeWidth="4.5">
+          <path d="M184 28h22M195 28L205 122M193 68h14" />
+          <path d="M211 28h22M222 28L232 122M220 68h14" />
+        </g>
+
+        {/* walker */}
+        <g strokeWidth="4.5">
+          <path d="M262 50h38M262 50V122M300 50V122M262 86h38" />
+          <path d="M254 50h14M294 50h14" strokeWidth="8" />
+        </g>
       </g>
     </svg>
   );
