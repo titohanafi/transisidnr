@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { konten } from "../domain/content";
 import type { KartuRencana, TingkatRencana } from "../domain/engine";
 import { LencanaSifat, LencanaStatus, Tanda } from "./Lencana";
-import { TombolLink } from "./Tombol";
+import { aksiUtama } from "../domain/aksi";
+import { TombolAksi } from "./TombolAksi";
 
 const { rencana: tr, umum, kartu: tk } = konten.ui;
 
@@ -48,10 +49,13 @@ export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRenca
 
       <div className="mt-4">
         {utama ? (
-          <TombolLink to={`/kartu/${kartu.id}/${utama.tingkat}`} className="w-full">
-            {tr.tombolTingkat[utama.tingkat]}
-            <span className="sr-only">: {data.judul}</span>
-          </TombolLink>
+          <TombolAksi
+            jenis={aksiUtama(utama.tingkat, data.solusi?.[utama.tingkat]?.barang.length ?? 0)}
+            kartuId={kartu.id}
+            tingkat={utama.tingkat}
+            judulKartu={data.judul}
+            className="w-full"
+          />
         ) : (
           <Link to={`/kartu/${kartu.id}`} className="inline-flex min-h-sentuh items-center text-utama underline">
             {tr.bukaKartu}

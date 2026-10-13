@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
@@ -6,6 +7,7 @@ import { LencanaStatus } from "../components/Lencana";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
+import { track } from "../lib/events";
 import { formatRentang } from "../lib/format";
 import { isi } from "../lib/teks";
 import { useRencana } from "../state/useRencana";
@@ -16,6 +18,10 @@ const { rencana: t, umum } = konten.ui;
 export function Rencana() {
   const { state } = useStore();
   const { rencana, masukan } = useRencana();
+  const jumlahKartu = rencana.daftar.length;
+  useEffect(() => {
+    track("rencana_dibuat", { jumlah_kartu: jumlahKartu });
+  }, [jumlahKartu]);
 
   if (Object.keys(state.asesmen.status).length === 0) return <Navigate to="/asesmen/aktivitas" replace />;
 
@@ -93,6 +99,12 @@ export function Rencana() {
           )}
         </>
       )}
+
+      <div className="mt-6">
+        <TombolLink to="/cetak" gayaTombol="sekunder" className="w-full">
+          {t.cetak}
+        </TombolLink>
+      </div>
 
       {pendamping && (
         <section className="mt-8" aria-labelledby="pendamping">

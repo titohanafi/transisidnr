@@ -20,11 +20,11 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
           e.preventDefault();
           h1.current?.focus();
         }}
-        className="sr-only focus:not-sr-only focus:bg-white focus:p-3"
+        className="sr-only focus:not-sr-only focus:bg-white focus:p-3 print:hidden"
       >
         {umum.lewatiKeIsi}
       </a>
-      <header className="border-b border-garis px-4 py-3">
+      <header className="border-b border-garis px-4 py-3 print:hidden">
         <Link to="/" className="inline-flex min-h-sentuh items-center text-lg font-bold text-utama">
           {app.nama}
         </Link>

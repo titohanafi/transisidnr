@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { LencanaSifat, LencanaStatus, Tanda } from "../components/Lencana";
@@ -10,6 +10,9 @@ import { istilahDalam } from "../domain/istilah";
 import { TINGKAT, type Kartu, type Tingkat } from "../domain/schema";
 import { bolehTampilkanUkuran } from "../domain/ukuran";
 import { tingkatUtama } from "../components/KartuRingkas";
+import { TombolAksi } from "../components/TombolAksi";
+import { aksiTersedia } from "../domain/aksi";
+import { track } from "../lib/events";
 import { useRencana } from "../state/useRencana";
 
 const { kartu: t, umum, rencana: tr } = konten.ui;
@@ -31,6 +34,9 @@ export function DetailKartu() {
 
 function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   const { konteks } = useRencana();
+  useEffect(() => {
+    track("kartu_dibuka", { kartu_id: kartu.id });
+  }, [kartu.id]);
   const tingkat = susunTingkat(kartu, konteks);
   const tampil = tingkat.filter((x) => x.tampil);
   const adaDisembunyikan = tingkat.some((x) => x.disembunyikanHunian);
@@ -163,6 +169,17 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           </ul>
                         </div>
                       )}
+                      <div className="mt-5 flex flex-col gap-2">
+                        {aksiTersedia(kartu, x.tingkat).map((j) => (
+                          <TombolAksi
+                            key={j}
+                            jenis={j}
+                            kartuId={kartu.id}
+                            tingkat={x.tingkat}
+                            gayaTombol={j === "sendiri" ? "utama" : "sekunder"}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 );
@@ -185,6 +202,9 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   </li>
                 ))}
               </ul>
+              <div className="mt-3">
+                <TombolAksi jenis="ahli" kartuId={kartu.id} gayaTombol="sekunder" />
+              </div>
               <p className="mt-3 text-redup">{t.direktoriMenyusul}</p>
             </section>
           )}

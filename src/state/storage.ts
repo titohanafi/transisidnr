@@ -21,6 +21,8 @@ export const stateSchema = z.object({
   /** id pertanyaan onboarding -> id pilihan (satu atau lebih). */
   onboarding: z.record(z.string(), z.array(z.string())).default({}),
   asesmen: asesmenStateSchema.default({ status: {}, prioritas: [], jawaban: {} }),
+  /** "<id kartu>:<tingkat>" -> nomor langkah (mulai 0) yang sudah dicentang. */
+  checklist: z.record(z.string(), z.array(z.number().int().nonnegative())).default({}),
   /** id jawaban check-in caregiver yang terakhir dipilih. */
   checkin: z.string().nullable().default(null),
 });
@@ -28,7 +30,7 @@ export type State = z.infer<typeof stateSchema>;
 export type AsesmenState = z.infer<typeof asesmenStateSchema>;
 
 export const asesmenAwal = (): AsesmenState => ({ status: {}, prioritas: [], jawaban: {} });
-export const stateAwal = (): State => ({ versi: 1, onboarding: {}, asesmen: asesmenAwal(), checkin: null });
+export const stateAwal = (): State => ({ versi: 1, onboarding: {}, asesmen: asesmenAwal(), checklist: {}, checkin: null });
 
 type Gudang = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 

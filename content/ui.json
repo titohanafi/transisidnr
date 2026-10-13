@@ -144,12 +144,8 @@
     "total": "Perkiraan biaya langkah pertama: {rentang}",
     "pendampingJudul": "Untuk caregiver",
     "bukaKartu": "Buka kartu",
-    "tombolTingkat": {
-      "tanpa_biaya": "Lakukan sendiri",
-      "alat_tanpa_bongkar": "Lihat alat",
-      "renovasi": "Cari tukang"
-    },
-    "cocokSewa": "Cocok untuk kontrakan dan kos"
+    "cocokSewa": "Cocok untuk kontrakan dan kos",
+    "cetak": "Cetak rencana"
   },
   "kartu": {
     "tingkat": {
@@ -218,5 +214,67 @@
       "kata": "anti-slip",
       "arti": "Permukaan yang tidak licin saat basah."
     }
-  ]
+  ],
+  "aksi": {
+    "tombol": {
+      "sendiri": "Lakukan sendiri",
+      "beli": "Lihat alat",
+      "tukang": "Cari tukang",
+      "ahli": "Tanya ahli"
+    },
+    "kembaliKeKartu": "Kembali ke kartu",
+    "sendiri": {
+      "judul": "Lakukan sendiri",
+      "bantuan": "Centang langkah yang sudah selesai. Centang tersimpan di perangkat ini.",
+      "progres": "{n} dari {total} langkah selesai",
+      "selesai": "Semua langkah selesai. Terima kasih sudah mengerjakannya."
+    },
+    "beli": {
+      "judul": "Alat yang dibutuhkan",
+      "bantuan": "Baca cara cek kecocokan dulu sebelum membeli.",
+      "lihatProduk": "Lihat produk",
+      "linkMenyusul": "Tautan produk menyusul",
+      "afiliasi": "Tautan afiliasi",
+      "afiliasiPenjelasan": "Bila Anda membeli lewat tautan ini, kami bisa menerima komisi. Urutan rekomendasi tidak dipengaruhi pembayaran.",
+      "kosong": "Tingkat ini belum punya daftar barang."
+    },
+    "tukang": {
+      "judul": "Brief untuk tukang",
+      "bantuan": "Centang butir yang ikut dan ubah teksnya bila perlu. Jangan menulis data medis.",
+      "ikutkan": "Ikutkan",
+      "ubahTeks": "Teks",
+      "pratinjau": "Pesan yang akan dikirim",
+      "kirimWa": "Kirim lewat WhatsApp",
+      "salin": "Salin teks",
+      "tersalin": "Teks sudah disalin.",
+      "gagalSalin": "Teks tidak bisa disalin otomatis. Tahan lama pada pratinjau untuk menyalinnya.",
+      "kosong": "Centang minimal satu butir.",
+      "waCatatan": "WhatsApp terbuka tanpa nomor tujuan. Anda memilih sendiri penerimanya, dan pesan baru terkirim bila Anda menekan kirim di sana."
+    },
+    "brief": {
+      "sapaan": "Halo, saya mencari tukang untuk pekerjaan di rumah.",
+      "ruangan": "Ruangan: Kamar mandi",
+      "masalah": "Masalah: {judul}",
+      "modifikasi": "Yang diinginkan:",
+      "hunian": "Jenis hunian: {hunian}",
+      "izinPemilik": "Tidak boleh bongkar permanen tanpa izin pemilik.",
+      "budget": "Budget kasar: {budget}",
+      "budgetBelumTahu": "belum tahu",
+      "fotoTerpisah": "Foto akan dikirim terpisah."
+    },
+    "ahli": {
+      "judul": "Tanya ahli",
+      "bantuan": "Jenis ahli yang cocok untuk kartu ini:",
+      "nyeri": "Untuk nyeri, luka, atau protesis, tanyakan ke dokter rehabilitasi medik atau prostetis-ortotis. Platform ini tidak menjawabnya.",
+      "kosong": "Kartu ini belum punya saran ahli."
+    },
+    "cetak": {
+      "judulKertas": "Rencana kamar mandi",
+      "tombol": "Cetak atau simpan PDF",
+      "penjelasan": "Tombol ini membuka jendela cetak. Pilih \"Simpan sebagai PDF\" bila ingin berkas.",
+      "foto": "Foto kamar mandi",
+      "satuHal": "Satu hal untuk hari ini",
+      "kosong": "Belum ada kartu di rencana Anda."
+    }
+  }
 }

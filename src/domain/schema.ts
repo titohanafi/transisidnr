@@ -7,11 +7,16 @@ export const STATUS_VALIDASI = ["draf", "ditinjau_ahli", "disetujui"] as const;
 
 const teks = z.string().min(1);
 
+const urlHttp = z
+  .string()
+  .url()
+  .refine((u) => /^https?:\/\//i.test(u), { message: "hanya tautan http(s)" });
+
 export const barangSchema = z.object({
   nama: teks,
   spesifikasi: teks,
   cek_kecocokan: teks,
-  link: z.string().url().nullable(),
+  link: urlHttp.nullable(),
   kisaran_harga: z.string().nullable(),
   afiliasi: z.boolean(),
 });
@@ -74,7 +79,7 @@ export const kartuSchema = z
     bantuan: z.array(bantuanSchema).optional(),
     peran: z.object({ penyandang_disabilitas: teks, caregiver: teks }).optional(),
     peringatan: teks.optional(),
-    sumber: z.array(z.object({ judul: teks, url: z.string().url().optional() })).optional(),
+    sumber: z.array(z.object({ judul: teks, url: urlHttp.optional() })).optional(),
     tag: tagSchema,
     status_validasi: z.enum(STATUS_VALIDASI),
     isi_menyusul: z.boolean().optional(),
@@ -169,8 +174,7 @@ export const uiSchema = z
     rencana: z.object({
       judul: teks, prioritas: teks, ubahJawaban: teks, satuHal: teks, dariKartu: teks, lihatKartu: teks,
       mulaiDariSini: teks, semuaRekomendasi: teks, kosongJudul: teks, kosongIsi: teks, belumJelas: teks,
-      total: teks, pendampingJudul: teks, bukaKartu: teks, cocokSewa: teks,
-      tombolTingkat: z.object({ tanpa_biaya: teks, alat_tanpa_bongkar: teks, renovasi: teks }),
+      total: teks, pendampingJudul: teks, bukaKartu: teks, cocokSewa: teks, cetak: teks,
     }),
     kartu: z.object({
       tingkat: z.object({ tanpa_biaya: teks, alat_tanpa_bongkar: teks, renovasi: teks }),
@@ -180,6 +184,27 @@ export const uiSchema = z
       bantuan: teks, peranPenyandang: teks, peranCaregiver: teks, peringatan: teks, sumber: teks,
       sumberMenyusul: teks, istilah: teks, direktoriMenyusul: teks,
       jenisBantuan: z.record(z.enum(JENIS_BANTUAN), z.object({ nama: teks, arti: teks })),
+    }),
+    aksi: z.object({
+      tombol: z.object({ sendiri: teks, beli: teks, tukang: teks, ahli: teks }),
+      kembaliKeKartu: teks,
+      sendiri: z.object({ judul: teks, bantuan: teks, progres: teks, selesai: teks }),
+      beli: z.object({
+        judul: teks, bantuan: teks, lihatProduk: teks, linkMenyusul: teks, afiliasi: teks,
+        afiliasiPenjelasan: teks, kosong: teks,
+      }),
+      tukang: z.object({
+        judul: teks, bantuan: teks, ikutkan: teks, ubahTeks: teks, pratinjau: teks, kirimWa: teks,
+        salin: teks, tersalin: teks, gagalSalin: teks, kosong: teks, waCatatan: teks,
+      }),
+      brief: z.object({
+        sapaan: teks, ruangan: teks, masalah: teks, modifikasi: teks, hunian: teks, izinPemilik: teks,
+        budget: teks, budgetBelumTahu: teks, fotoTerpisah: teks,
+      }),
+      ahli: z.object({ judul: teks, bantuan: teks, nyeri: teks, kosong: teks }),
+      cetak: z.object({
+        judulKertas: teks, tombol: teks, penjelasan: teks, foto: teks, satuHal: teks, kosong: teks,
+      }),
     }),
     istilah: z.array(z.object({ kata: teks, arti: teks })),
     checkin: z.object({
@@ -198,5 +223,6 @@ export type Pertanyaan = Asesmen["pertanyaan"][number];
 export type Config = z.infer<typeof configSchema>;
 export type Onboarding = z.infer<typeof onboardingSchema>;
 export type Ui = z.infer<typeof uiSchema>;
+export type Brief = Ui["aksi"]["brief"];
 export type Aktivitas = (typeof AKTIVITAS)[number];
 export type Hunian = (typeof HUNIAN)[number];

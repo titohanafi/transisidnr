@@ -18,6 +18,8 @@ interface Store {
   togglePrioritas: (id: Aktivitas) => void;
   setJawaban: (pertanyaanId: string, ya: boolean) => void;
   /** null menghapus foto. Mengembalikan false bila gagal disimpan. */
+  /** Mencentang atau melepas satu langkah checklist. */
+  toggleLangkah: (kunci: string, nomor: number) => void;
   setCheckin: (id: string | null) => void;
   setFoto: (dataUrl: string | null) => boolean;
   hapusSemua: () => void;
@@ -65,6 +67,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     [ubahAsesmen],
   );
 
+  const toggleLangkah = useCallback(
+    (kunci: string, nomor: number) =>
+      ubah((s) => {
+        const ada = s.checklist[kunci] ?? [];
+        const baru = ada.includes(nomor) ? ada.filter((n) => n !== nomor) : [...ada, nomor].sort((a, b) => a - b);
+        return { ...s, checklist: { ...s.checklist, [kunci]: baru } };
+      }),
+    [ubah],
+  );
+
   const setCheckin = useCallback((id: string | null) => ubah((s) => ({ ...s, checkin: id })), [ubah]);
 
   const setFoto = useCallback((dataUrl: string | null) => {
@@ -85,8 +97,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const nilai = useMemo(
-    () => ({ state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, setCheckin, setFoto, hapusSemua }),
-    [state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, setCheckin, setFoto, hapusSemua],
+    () => ({ state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, toggleLangkah, setCheckin, setFoto, hapusSemua }),
+    [state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, toggleLangkah, setCheckin, setFoto, hapusSemua],
   );
   return <Konteks.Provider value={nilai}>{children}</Konteks.Provider>;
 }
