@@ -229,6 +229,7 @@ export const uiSchema = z
       riwayatJudul: teks,
       hariIni: teks,
       belumDiisi: teks,
+      artiIkon: teks,
       pertanyaan: teks,
       pilihan: z.array(opsi.extend({ balasan: teks })).min(1),
       penutup: teks,

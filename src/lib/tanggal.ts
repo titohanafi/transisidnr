@@ -21,3 +21,14 @@ export function labelHari(kunci: string): string {
 export function pangkasRiwayat(r: Record<string, string>, maks = 90): Record<string, string> {
   return Object.fromEntries(Object.entries(r).sort(([a], [b]) => (a < b ? 1 : -1)).slice(0, maks));
 }
+
+/** Nama hari singkat, mis. "Sel". */
+export function namaHariSingkat(kunci: string): string {
+  const [y, m, d] = kunci.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("id-ID", { weekday: "short" });
+}
+
+/** Tanggal dalam bulan, mis. "13". */
+export function tanggalDalamBulan(kunci: string): string {
+  return String(Number(kunci.slice(8, 10)));
+}

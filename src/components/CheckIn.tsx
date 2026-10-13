@@ -1,6 +1,7 @@
 import { konten } from "../domain/content";
-import { hariTerakhir, kunciHari, labelHari } from "../lib/tanggal";
+import { hariTerakhir, kunciHari, labelHari, namaHariSingkat, tanggalDalamBulan } from "../lib/tanggal";
 import { useStore } from "../state/store";
+import { IkonCheckin } from "./IkonCheckin";
 import { PilihanPil } from "./Pilihan";
 
 const t = konten.ui.checkin;
@@ -39,16 +40,41 @@ export function CheckIn() {
             <span aria-hidden="true" className="group-open:hidden">+</span>
             <span aria-hidden="true" className="hidden group-open:inline">−</span>
           </summary>
-          <ul className="divide-y divide-garis text-sm">
-            {hari.map((h) => {
-              const label = labelDari(state.riwayatCheckin[h]);
+          <ol className="mt-1 grid grid-cols-7 gap-1 text-center text-xs">
+            {[...hari].reverse().map((h) => {
+              const id = state.riwayatCheckin[h];
+              const label = labelDari(id);
+              const ini = h === hariIni;
               return (
-                <li key={h} className="flex justify-between gap-3 py-2">
-                  <span className="text-redup">{h === hariIni ? t.hariIni : labelHari(h)}</span>
-                  <span className={label ? "text-right font-medium" : "text-right text-redup"}>{label ?? t.belumDiisi}</span>
+                <li key={h} className="flex flex-col items-center gap-1">
+                  <span className="sr-only">
+                    {ini ? t.hariIni : labelHari(h)}: {label ?? t.belumDiisi}
+                  </span>
+                  <span aria-hidden="true" className={ini ? "font-bold text-utama-gelap" : "text-redup"}>
+                    {namaHariSingkat(h)}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className={`flex h-9 w-9 items-center justify-center rounded-full border-2 ${
+                      id ? "border-utama bg-utama-muda text-utama-gelap" : "border-dashed border-garisKontrol text-redup"
+                    } ${ini ? "ring-2 ring-utama ring-offset-1" : ""}`}
+                  >
+                    {id ? <IkonCheckin id={id} className="h-5 w-5" /> : "·"}
+                  </span>
+                  <span aria-hidden="true" className="text-redup">
+                    {tanggalDalamBulan(h)}
+                  </span>
                 </li>
               );
             })}
+          </ol>
+          <ul aria-label={t.artiIkon} className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-redup">
+            {t.pilihan.map((p) => (
+              <li key={p.id} className="flex items-center gap-1">
+                <IkonCheckin id={p.id} className="h-4 w-4" />
+                {p.label}
+              </li>
+            ))}
           </ul>
         </details>
       )}
