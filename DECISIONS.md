@@ -289,3 +289,9 @@
 
 ## "Cari tukang" diganti "Pesan ke tukang"
 - Fitur ini hanya membuat draf pesan WhatsApp, bukan daftar tukang, jadi namanya diganti agar tidak menjanjikan daftar. Berlaku di Beranda, saringan Panduan, tombol aksi, dan judul layar ("Pesan untuk tukang"). Bila nanti ada direktori tukang, nama lama bisa dipakai lagi untuk itu.
+
+## Ikon aktivitas dari Lucide
+- Ikon aktivitas (Mandi: kepala pancuran, Toilet: kloset, Wudhu: tetesan air, Merapikan diri: kilau, Umum: pintu terbuka) dan ikon pendamping (dua tangan berjabat dengan hati) kini dari `lucide-react`. Komponen `Ikon` tetap sama, sehingga semua layar ikut berganti.
+- Pilihan "Merapikan diri" dan "Umum" adalah tafsiran saya karena Lucide tak punya ikon cermin-wastafel; bisa diganti di `src/components/Ikon.tsx`.
+- Ikon buatan sendiri yang tersisa hanya kamera di layar foto. Ikon alat/tukang/ahli lama yang tak terpakai dibuang.
+- JS gzip kini 34,4 kB (naik 0,5 kB dari penambahan ikon).
