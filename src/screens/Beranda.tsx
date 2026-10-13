@@ -18,9 +18,17 @@ export function Beranda() {
 
       {/* Dua jalur: dipandu (utama), atau langsung ke yang dicari. */}
       <section className="mt-4 rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-susun">
-        <h3 id="jalur-susun" className="text-xl font-bold">
-          {pilih.susun.judul}
-        </h3>
+        <div className="flex items-start gap-3">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white">
+            <IkonAksi kunci="rencana" className="h-8 w-8" />
+          </span>
+          <div>
+            <h3 id="jalur-susun" className="text-xl font-bold leading-snug">
+              {pilih.susun.judul}
+            </h3>
+            <p className="mt-1">{pilih.susun.deskripsi}</p>
+          </div>
+        </div>
         <Link
           to="/mulai/1"
           className="mt-3 inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-base font-semibold text-utama-gelap hover:bg-utama-muda"
