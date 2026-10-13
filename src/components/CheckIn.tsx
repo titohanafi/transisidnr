@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { konten } from "../domain/content";
 import { hariTerakhir, kunciHari, labelHari, namaHariSingkat, tanggalDalamBulan } from "../lib/tanggal";
 import { useStore } from "../state/store";
-import { Tombol } from "./Tombol";
 
 const t = konten.ui.checkin;
 
@@ -17,8 +17,8 @@ export function CheckIn() {
 
   if (pilihan && !mengubah) {
     return (
-      <section aria-label={t.label} className="rounded-kartu border border-garis bg-white px-3 py-2">
-        <div className="flex items-center gap-3">
+      <section aria-label={t.label} className="rounded-kartu border border-garis bg-white p-4">
+        <div className="flex items-start gap-3">
           <span aria-hidden="true" className="text-3xl leading-none">
             {pilihan.emoji}
           </span>
@@ -26,14 +26,25 @@ export function CheckIn() {
             <p className="font-semibold">
               {t.hariIni}: {pilihan.label}
             </p>
-            <p aria-live="polite" className="text-sm text-redup">
+            <p aria-live="polite" className="mt-1 text-sm text-redup">
               {pilihan.balasan}
             </p>
           </div>
-          <Tombol gayaTombol="sekunder" onClick={() => setMengubah(true)} className="shrink-0 !px-3 text-sm">
+          <button
+            type="button"
+            onClick={() => setMengubah(true)}
+            className="-mr-2 -mt-2 min-h-sentuh min-w-sentuh shrink-0 px-2 text-sm font-semibold text-utama-gelap underline"
+          >
             {t.ubah}
-          </Tombol>
+          </button>
         </div>
+        <Link
+          to={pilihan.bantuan.panduan ? `/kartu/${pilihan.bantuan.panduan}` : (pilihan.bantuan.ke ?? "/")}
+          className="mt-3 flex min-h-sentuh items-center justify-between gap-2 rounded-tombol bg-utama-muda px-3 py-2 font-semibold text-utama-gelap"
+        >
+          <span>{pilihan.bantuan.tombol}</span>
+          <span aria-hidden="true">→</span>
+        </Link>
         <Riwayat />
       </section>
     );
@@ -83,8 +94,8 @@ function Riwayat() {
   const hari = hariTerakhir(7);
   const cari = (id: string | undefined) => t.pilihan.find((p) => p.id === id);
   return (
-    <details className="group mt-1 border-t border-garis">
-      <summary className="flex min-h-sentuh cursor-pointer list-none items-center justify-between text-sm font-semibold text-utama-gelap [&::-webkit-details-marker]:hidden">
+    <details className="group mt-2">
+      <summary className="flex min-h-sentuh cursor-pointer list-none items-center justify-between text-sm text-redup [&::-webkit-details-marker]:hidden">
         <span>{t.riwayatJudul}</span>
         <span aria-hidden="true" className="group-open:hidden">+</span>
         <span aria-hidden="true" className="hidden group-open:inline">−</span>

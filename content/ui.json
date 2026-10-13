@@ -86,6 +86,7 @@
     "pilihan": [
       {
         "id": "capek_fisik",
+        "bantuan": { "tombol": "Lihat satu hal untuk hari ini", "ke": "/rencana" },
         "singkat": "Lelah",
         "emoji": "🥱",
         "label": "Tubuh terasa lelah",
@@ -93,6 +94,7 @@
       },
       {
         "id": "capek_emosi",
+        "bantuan": { "tombol": "Baca: mendampingi tanpa mengambil alih", "panduan": "care-assist-transfer" },
         "singkat": "Penuh",
         "emoji": "😔",
         "label": "Hati terasa penuh",
@@ -100,6 +102,7 @@
       },
       {
         "id": "bingung_langkah",
+        "bantuan": { "tombol": "Mulai dari pertanyaan singkat", "ke": "/mulai/1" },
         "singkat": "Bingung",
         "emoji": "😕",
         "label": "Bingung harus mulai dari mana",
@@ -107,6 +110,7 @@
       },
       {
         "id": "soal_biaya",
+        "bantuan": { "tombol": "Lihat panduan, mulai dari yang tanpa biaya", "ke": "/jelajah" },
         "singkat": "Biaya",
         "emoji": "😟",
         "label": "Khawatir soal biaya",
@@ -114,6 +118,7 @@
       },
       {
         "id": "butuh_istirahat",
+        "bantuan": { "tombol": "Lihat siapa yang bisa membantu", "ke": "/jelajah/ahli" },
         "singkat": "Istirahat",
         "emoji": "😴",
         "label": "Ingin istirahat sebentar",

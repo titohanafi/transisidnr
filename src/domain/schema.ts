@@ -232,7 +232,7 @@ export const uiSchema = z
       artiIkon: teks,
       ubah: teks,
       pertanyaan: teks,
-      pilihan: z.array(opsi.extend({ emoji: teks, singkat: teks, balasan: teks })).min(1),
+      pilihan: z.array(opsi.extend({ emoji: teks, singkat: teks, balasan: teks, bantuan: z.object({ tombol: teks, ke: teks.regex(/^\//).optional(), panduan: teks.optional() }) })).min(1),
       penutup: teks,
     }),
   })
