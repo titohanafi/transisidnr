@@ -3,25 +3,14 @@ import { Link } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { IkonAksi, IlustrasiBeranda } from "../components/Ikon";
 import { konten } from "../domain/content";
-import { bagianHari } from "../lib/waktu";
-import { useStore } from "../state/store";
 
 const { app, beranda, umum } = konten.ui;
 const { pilih } = beranda;
 
 export function Beranda() {
-  const { state } = useStore();
-  const pengisi = state.onboarding["pengisi"]?.[0];
-  const peran = pengisi === "penyandang" || pengisi === "caregiver" || pengisi === "berdua" ? pengisi : "baru";
-  const salam = beranda.salam[bagianHari(new Date().getHours())];
   return (
     <Halaman judul={app.nama}>
-      <p className="mt-3 text-2xl font-bold leading-snug text-utama-gelap">
-        {salam} <span className="font-semibold">{beranda.salamPeran[peran]}</span>
-      </p>
-      <p className="mt-2 text-lg">{beranda.manfaat}</p>
-
-      <IlustrasiBeranda className="mt-4" />
+      <IlustrasiBeranda className="mt-2" />
 
       <h2 className="sr-only">{pilih.judul}</h2>
 

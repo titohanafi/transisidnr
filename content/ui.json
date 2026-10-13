@@ -3,7 +3,6 @@
     "nama": "Transisi"
   },
   "beranda": {
-    "manfaat": "Kita atur kamar mandi yang lebih aman dan nyaman, selangkah demi selangkah.",
     "langkah": [
       {
         "judul": "Jawab pertanyaan",
@@ -37,19 +36,7 @@
         "semua": "Lihat semua panduan"
       }
     },
-    "caraKerja": "Cara kerja Transisi",
-    "salam": {
-      "pagi": "Selamat pagi.",
-      "siang": "Selamat siang.",
-      "sore": "Selamat sore.",
-      "malam": "Selamat malam."
-    },
-    "salamPeran": {
-      "penyandang": "Hari ini cukup mulai dari satu hal kecil. Anda yang menentukan.",
-      "caregiver": "Terima kasih sudah mendampingi. Anda tidak perlu mengurus semuanya sekarang.",
-      "berdua": "Senang melihat Anda berdua mengurus ini bersama.",
-      "baru": "Perubahan besar butuh waktu, dan Anda tidak perlu mengurus semuanya sekarang."
-    }
+    "caraKerja": "Cara kerja Transisi"
   },
   "umum": {
     "kembali": "Kembali",
