@@ -18,22 +18,20 @@ export function CheckIn() {
   if (pilihan && !mengubah) {
     return (
       <section aria-label={t.label} className="rounded-kartu border border-garis bg-white p-4">
-        <div className="flex items-start gap-3">
-          <span aria-hidden="true" className="text-3xl leading-none">
+        <div className="relative text-center">
+          <span aria-hidden="true" className="block text-5xl leading-none">
             {pilihan.emoji}
           </span>
-          <div className="min-w-0 flex-1">
-            <p className="font-semibold">
-              {t.hariIni}: {pilihan.label}
-            </p>
-            <p aria-live="polite" className="mt-1 text-sm text-redup">
-              {pilihan.balasan}
-            </p>
-          </div>
+          <p className="mt-2 font-semibold">
+            {t.hariIni}: {pilihan.label}
+          </p>
+          <p aria-live="polite" className="mt-1 text-sm text-redup">
+            {pilihan.balasan}
+          </p>
           <button
             type="button"
             onClick={() => setMengubah(true)}
-            className="-mr-2 -mt-2 min-h-sentuh min-w-sentuh shrink-0 px-2 text-sm font-semibold text-utama-gelap underline"
+            className="absolute -right-2 -top-2 min-h-sentuh min-w-sentuh px-2 text-sm font-semibold text-utama-gelap underline"
           >
             {t.ubah}
           </button>
