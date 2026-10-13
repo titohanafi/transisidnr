@@ -18,7 +18,7 @@ const t = k.ui.aksi.brief;
 const kartu = k.kartu.find((x) => x.id === "bath-transfer-toilet")!;
 const bahan = (o: Partial<BahanBrief> = {}): BahanBrief => ({
   kartu, tingkat: "renovasi", hunianId: "milik_sendiri", hunianLabel: "Milik sendiri",
-  budgetLabel: "Rp 2 - 10 juta", budgetBelumTahu: false, adaFoto: false, ...o,
+  budgetLabel: "Rp 2 - 10 juta", budgetBelumTahu: false, adaFoto: false, ruanganLabel: "Kamar mandi", ...o,
 });
 
 describe("aksi per tingkat", () => {
@@ -56,6 +56,10 @@ describe("brief untuk tukang", () => {
   });
   it.each(["kontrakan", "kos"])("%s menambah larangan bongkar permanen tanpa izin pemilik", (h) => {
     expect(teks({ hunianId: h, hunianLabel: h })).toContain("Tidak boleh bongkar permanen tanpa izin pemilik.");
+  });
+  it("tanpa nama ruangan, butir ruangan dilewati; nama lain ikut tertulis", () => {
+    expect(teks({ ruanganLabel: null })).not.toContain("Ruangan:");
+    expect(teks({ ruanganLabel: "Dapur" })).toContain("Ruangan: Dapur");
   });
   it("milik sendiri tidak menambah larangan itu", () => {
     expect(teks()).not.toContain("izin pemilik");

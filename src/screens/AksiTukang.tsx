@@ -9,6 +9,10 @@ import { useStore } from "../state/store";
 
 const t = konten.ui.aksi.tukang;
 
+// Nama ruangan dari tag kartu; id yang belum punya nama diubah jadi teks biasa.
+const namaRuangan = (id: string | undefined): string | null =>
+  id ? (konten.ui.ruangan[id] ?? id.replace(/_/g, " ")) : null;
+
 async function salinKeClipboard(teks: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(teks);
@@ -54,6 +58,7 @@ function Brief({ kartu, tingkat }: NonNullable<ReturnType<typeof useKonteksAksi>
           budgetLabel: label("budget", jawab("budget")),
           budgetBelumTahu: jawab("budget") === null || jawab("budget") === "belum_tahu",
           adaFoto: foto !== null,
+          ruanganLabel: namaRuangan(kartu.tag.ruangan[0]),
         },
         konten.ui.aksi.brief,
       ),

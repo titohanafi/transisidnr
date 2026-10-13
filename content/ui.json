@@ -37,7 +37,7 @@
       }
     },
     "caraKerja": "Cara kerja Transisi",
-    "konteks": "Panduan dan rencana kamar mandi untuk pengguna kursi roda setelah amputasi kaki, bagi penyandang disabilitas dan caregiver."
+    "konteks": "Panduan dan rencana menyesuaikan rumah untuk pengguna kursi roda setelah amputasi kaki, bagi penyandang disabilitas dan caregiver."
   },
   "umum": {
     "kembali": "Kembali",
@@ -122,7 +122,7 @@
     "lanjutTerakhir": "Selesai"
   },
   "asesmen": {
-    "judul": "Asesmen kamar mandi",
+    "judul": "Mengenali kebutuhan di rumah",
     "aktivitas": {
       "judul": "Aktivitas apa yang relevan?",
       "bantuan": "Pilih yang sesuai dengan keseharian Anda. Tidak ada jawaban benar atau salah, dan boleh dilewati.",
@@ -146,12 +146,12 @@
       "penjelasanJudul": "Artinya:"
     },
     "foto": {
-      "judul": "Foto kamar mandi (boleh dilewati)",
+      "judul": "Foto ruangan (boleh dilewati)",
       "penjelasan": "Foto membantu tukang atau terapis melihat ruangnya. Foto hanya disimpan di perangkat ini, ikut tampil di versi cetak, dan tidak diunggah.",
       "pilih": "Pilih atau ambil foto",
       "ganti": "Ganti foto",
       "hapus": "Hapus foto",
-      "alt": "Foto kamar mandi Anda",
+      "alt": "Foto ruangan Anda",
       "gagalSimpan": "Foto tidak bisa disimpan di perangkat ini. Coba foto lain atau lewati langkah ini.",
       "gagalBaca": "Berkas ini tidak bisa dibuka sebagai foto.",
       "selesai": "Selesai",
@@ -167,7 +167,7 @@
     "lihatKartu": "Lihat panduan",
     "mulaiDariSini": "Mulai dari sini",
     "semuaRekomendasi": "Rekomendasi lainnya",
-    "kosongJudul": "Dari jawaban Anda, belum ada hambatan besar di kamar mandi",
+    "kosongJudul": "Dari jawaban Anda, belum ada hambatan besar",
     "kosongIsi": "Jawaban bisa diubah kapan saja. Panduan untuk caregiver tetap ada di bawah.",
     "belumJelas": "Kebutuhan setelah amputasi sering berubah. Solusi permanen diberi tanda \"tunggu dulu\".",
     "total": "Perkiraan biaya langkah pertama: {rentang}",
@@ -323,7 +323,7 @@
     },
     "brief": {
       "sapaan": "Halo, saya mencari tukang untuk pekerjaan di rumah.",
-      "ruangan": "Ruangan: Kamar mandi",
+      "ruangan": "Ruangan: {ruangan}",
       "masalah": "Masalah: {judul}",
       "modifikasi": "Yang diinginkan:",
       "hunian": "Jenis hunian: {hunian}",
@@ -339,10 +339,10 @@
       "kosong": "Panduan ini belum punya saran ahli."
     },
     "cetak": {
-      "judulKertas": "Rencana kamar mandi",
+      "judulKertas": "Rencana adaptasi rumah",
       "tombol": "Cetak atau simpan PDF",
       "penjelasan": "Tombol ini membuka jendela cetak. Pilih \"Simpan sebagai PDF\" bila ingin berkas.",
-      "foto": "Foto kamar mandi",
+      "foto": "Foto ruangan",
       "satuHal": "Satu hal untuk hari ini",
       "kosong": "Belum ada panduan di rencana Anda.",
       "langkahSelesai": "Selesai:",
@@ -366,5 +366,8 @@
     "ajakanSudah": "Anda sudah punya jawaban. Lihat rencana yang disusun dari jawaban itu.",
     "ajakanRencana": "Lihat Rencana Saya",
     "aksiKartu": "Aksi untuk panduan ini"
+  },
+  "ruangan": {
+    "kamar_mandi": "Kamar mandi"
   }
 }

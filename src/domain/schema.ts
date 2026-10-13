@@ -218,6 +218,8 @@ export const uiSchema = z
       filter: z.object({ semua: teks, alat: teks, tukang: teks, ahli: teks }),
     }),
     istilah: z.array(z.object({ kata: teks, arti: teks })),
+    /** id ruangan (tag kartu) -> nama yang tampil. */
+    ruangan: z.record(z.string(), teks),
     checkin: z.object({
       pertanyaan: teks,
       pilihan: z.array(opsi.extend({ balasan: teks })).min(1),

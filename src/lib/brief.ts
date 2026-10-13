@@ -17,6 +17,8 @@ export interface BahanBrief {
   budgetLabel: string | null;
   budgetBelumTahu: boolean;
   adaFoto: boolean;
+  /** Nama ruangan dari tag kartu; null bila tidak diketahui (butir ruangan dilewati). */
+  ruanganLabel?: string | null;
 }
 
 /**
@@ -27,7 +29,7 @@ export function butirBrief(b: BahanBrief, t: Brief): Butir[] {
   const s = b.kartu.solusi?.[b.tingkat];
   const butir: Butir[] = [
     { id: "sapaan", ikut: true, teks: t.sapaan },
-    { id: "ruangan", ikut: true, teks: t.ruangan },
+    ...(b.ruanganLabel ? [{ id: "ruangan", ikut: true, teks: isi(t.ruangan, { ruangan: b.ruanganLabel }) }] : []),
     { id: "masalah", ikut: true, teks: isi(t.masalah, { judul: b.kartu.judul }) },
   ];
   if (s) {
