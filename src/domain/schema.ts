@@ -127,7 +127,11 @@ export const onboardingSchema = z.object({
       pertanyaan: teks,
       bantuan: teks.optional(),
       banyakPilihan: z.boolean(),
-      pilihan: z.array(opsi.extend({ bulanMaks: z.number().nullable().optional() })).min(2),
+      // Salah satu: daftar `pilihan` tertulis di sini, atau `pilihanDari` (daftar dibaca dari config.json).
+      pilihan: z.array(opsi.extend({ bulanMaks: z.number().nullable().optional() })).min(2).optional(),
+      pilihanDari: z.enum(["budget"]).optional(),
+    }).refine((q) => (q.pilihan === undefined) !== (q.pilihanDari === undefined), {
+      message: "isi tepat satu dari `pilihan` atau `pilihanDari`",
     }),
   ),
 });

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AksiHalaman, KembaliKeRencana, useKonteksAksi } from "../components/AksiHalaman";
 import { Tombol } from "../components/Tombol";
 import { konten } from "../domain/content";
+import { pilihanPertanyaan } from "../domain/onboarding";
 import { butirBrief, susunBrief, urlWhatsApp, type Butir } from "../lib/brief";
 import { track } from "../lib/events";
 import { useStore } from "../state/store";
@@ -40,7 +41,7 @@ function Brief({ kartu, tingkat }: NonNullable<ReturnType<typeof useKonteksAksi>
   const { state, foto } = useStore();
   const jawab = (id: string) => state.onboarding[id]?.[0] ?? null;
   const label = (qid: string, id: string | null) =>
-    konten.onboarding.pertanyaan.find((q) => q.id === qid)?.pilihan.find((p) => p.id === id)?.label ?? null;
+    pilihanPertanyaan(konten.onboarding.pertanyaan.find((q) => q.id === qid), konten.config).find((p) => p.id === id)?.label ?? null;
 
   const awal = useMemo(
     () =>

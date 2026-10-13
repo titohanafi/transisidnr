@@ -51,7 +51,7 @@ Semua isi ada di `content/`. Tidak perlu membuka kode. Setelah mengedit, jalanka
 Bila teks kartu memuat istilah teknis (misalnya "grab bar"), tambahkan penjelasan satu kalimat di `content/ui.json` bagian `istilah` (`kata` dan `arti`). Penjelasan tampil otomatis di Detail kartu bila `kata` muncul di teks kartu.
 
 ### Teks antarmuka
-Semua teks yang dilihat pengguna ada di `content/ui.json`; pertanyaan awal ada di `content/onboarding.json`; angka seperti `faseAwalBulan`, jumlah "mulai dari sini", dan rentang budget ada di `content/config.json`. Jangan mengubah nama kunci (bagian kiri); ubah hanya isinya. Jika kunci hilang, validasi akan gagal.
+Semua teks yang dilihat pengguna ada di `content/ui.json`; pertanyaan awal ada di `content/onboarding.json`; angka seperti `faseAwalBulan`, jumlah "mulai dari sini", dan rentang budget ada di `content/config.json`. Pilihan budget di onboarding dibaca dari `config.json` (`budget`); ubah rentang di sana saja, onboarding dan brief ikut berubah. Menambah pilihan budget baru juga hanya di `config.json` (beri `id` unik). Jangan mengubah nama kunci (bagian kiri); ubah hanya isinya. Jika kunci hilang, validasi akan gagal.
 
 ### Halaman "Kapan harus ke dokter atau IGD"
 Teks di `content/ui.json` bagian `igd` masih placeholder. Daftar tanda bahaya wajib diisi tim medis; jangan ditulis oleh tim non-medis.

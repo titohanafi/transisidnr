@@ -3,6 +3,7 @@ import { Halaman } from "../components/Halaman";
 import { NavBawah } from "../components/NavBawah";
 import { Pilihan } from "../components/Pilihan";
 import { konten } from "../domain/content";
+import { pilihanPertanyaan } from "../domain/onboarding";
 import { isi } from "../lib/teks";
 import { bisaLanjut, ubahPilihan } from "../state/onboarding";
 import { useStore } from "../state/store";
@@ -38,7 +39,7 @@ export function Onboarding() {
         <legend className="sr-only">{q.pertanyaan}</legend>
         {q.bantuan && <p className="mb-3 text-redup">{q.bantuan}</p>}
         <div className="space-y-3">
-          {q.pilihan.map((p) => {
+          {pilihanPertanyaan(q, konten.config).map((p) => {
             const aktif = dipilih.includes(p.id);
             return (
               <Pilihan
