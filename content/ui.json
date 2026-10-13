@@ -131,6 +131,92 @@
   },
   "rencana": {
     "judul": "Rencana Saya",
-    "sementara": "Jawaban Anda sudah tersimpan di perangkat ini. Rencana Anda akan hadir di tahap berikutnya."
-  }
+    "prioritas": "Prioritas Anda: {daftar}",
+    "ubahJawaban": "Ubah jawaban",
+    "satuHal": "Satu hal untuk hari ini",
+    "dariKartu": "Dari kartu: {judul}",
+    "lihatKartu": "Lihat kartu",
+    "mulaiDariSini": "Mulai dari sini",
+    "semuaRekomendasi": "Rekomendasi lainnya",
+    "kosongJudul": "Dari jawaban Anda, belum ada hambatan besar di kamar mandi",
+    "kosongIsi": "Jawaban bisa diubah kapan saja. Kartu untuk caregiver tetap ada di bawah.",
+    "belumJelas": "Kebutuhan setelah amputasi sering berubah. Solusi permanen diberi tanda \"tunggu dulu\".",
+    "total": "Perkiraan biaya langkah pertama: {rentang}",
+    "pendampingJudul": "Untuk caregiver",
+    "bukaKartu": "Buka kartu",
+    "tombolTingkat": {
+      "tanpa_biaya": "Lakukan sendiri",
+      "alat_tanpa_bongkar": "Lihat alat",
+      "renovasi": "Cari tukang"
+    },
+    "cocokSewa": "Cocok untuk kontrakan dan kos"
+  },
+  "kartu": {
+    "tingkat": {
+      "tanpa_biaya": "Tanpa biaya",
+      "alat_tanpa_bongkar": "Alat tanpa bongkar",
+      "renovasi": "Renovasi"
+    },
+    "tidakDitemukan": "Kartu tidak ditemukan",
+    "kembaliKeRencana": "Kembali ke rencana",
+    "situasi": "Situasi",
+    "kenapa": "Kenapa penting",
+    "solusi": "Pilihan solusi",
+    "langkah": "Langkah",
+    "biaya": "Biaya",
+    "waktu": "Waktu",
+    "kesulitan": "Usaha",
+    "ukuran": "Ukuran",
+    "ukuranMenyusul": "Angka teknis akan tampil setelah ditinjau ahli.",
+    "barang": "Barang yang dibutuhkan",
+    "spesifikasi": "Spesifikasi",
+    "cek": "Cek kecocokan dulu",
+    "harga": "Harga",
+    "afiliasi": "Tautan afiliasi",
+    "tingkatDisembunyikan": "Pilihan renovasi permanen tidak ditampilkan karena Anda tinggal di kontrakan atau kos. Perlu izin pemilik.",
+    "bantuan": "Siapa yang bisa membantu",
+    "peranPenyandang": "Peran penyandang disabilitas",
+    "peranCaregiver": "Peran caregiver",
+    "peringatan": "Perhatian",
+    "sumber": "Sumber",
+    "sumberMenyusul": "Sumber menyusul",
+    "istilah": "Istilah",
+    "jenisBantuan": {
+      "tukang": {
+        "nama": "Tukang",
+        "arti": "Pekerja bangunan yang memasang atau mengubah bagian rumah."
+      },
+      "okupasi_terapis": {
+        "nama": "Okupasi terapis",
+        "arti": "Tenaga kesehatan yang membantu orang menjalani kegiatan sehari-hari."
+      },
+      "fisioterapis": {
+        "nama": "Fisioterapis",
+        "arti": "Tenaga kesehatan yang melatih gerak dan kekuatan tubuh."
+      },
+      "arsitek": {
+        "nama": "Arsitek",
+        "arti": "Perancang bangunan."
+      },
+      "komunitas": {
+        "nama": "Komunitas",
+        "arti": "Sesama penyandang disabilitas atau caregiver yang bisa berbagi pengalaman."
+      }
+    },
+    "direktoriMenyusul": "Direktori menyusul"
+  },
+  "istilah": [
+    {
+      "kata": "grab bar",
+      "arti": "Batang pegangan di dinding untuk bertumpu saat berpindah, duduk, atau berdiri."
+    },
+    {
+      "kata": "raised toilet seat",
+      "arti": "Dudukan tambahan di atas kloset supaya posisi duduk lebih tinggi."
+    },
+    {
+      "kata": "anti-slip",
+      "arti": "Permukaan yang tidak licin saat basah."
+    }
+  ]
 }

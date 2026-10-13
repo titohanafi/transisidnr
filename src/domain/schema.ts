@@ -166,7 +166,22 @@ export const uiSchema = z
         gagalSimpan: teks, gagalBaca: teks, selesai: teks, lewati: teks,
       }),
     }),
-    rencana: z.object({ judul: teks, sementara: teks }),
+    rencana: z.object({
+      judul: teks, prioritas: teks, ubahJawaban: teks, satuHal: teks, dariKartu: teks, lihatKartu: teks,
+      mulaiDariSini: teks, semuaRekomendasi: teks, kosongJudul: teks, kosongIsi: teks, belumJelas: teks,
+      total: teks, pendampingJudul: teks, bukaKartu: teks, cocokSewa: teks,
+      tombolTingkat: z.object({ tanpa_biaya: teks, alat_tanpa_bongkar: teks, renovasi: teks }),
+    }),
+    kartu: z.object({
+      tingkat: z.object({ tanpa_biaya: teks, alat_tanpa_bongkar: teks, renovasi: teks }),
+      tidakDitemukan: teks, kembaliKeRencana: teks, situasi: teks, kenapa: teks, solusi: teks,
+      langkah: teks, biaya: teks, waktu: teks, kesulitan: teks, ukuran: teks, ukuranMenyusul: teks,
+      barang: teks, spesifikasi: teks, cek: teks, harga: teks, afiliasi: teks, tingkatDisembunyikan: teks,
+      bantuan: teks, peranPenyandang: teks, peranCaregiver: teks, peringatan: teks, sumber: teks,
+      sumberMenyusul: teks, istilah: teks, direktoriMenyusul: teks,
+      jenisBantuan: z.record(z.enum(JENIS_BANTUAN), z.object({ nama: teks, arti: teks })),
+    }),
+    istilah: z.array(z.object({ kata: teks, arti: teks })),
     checkin: z.object({
       pertanyaan: teks,
       pilihan: z.array(opsi.extend({ balasan: teks })).min(1),

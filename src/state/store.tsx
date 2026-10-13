@@ -18,6 +18,7 @@ interface Store {
   togglePrioritas: (id: Aktivitas) => void;
   setJawaban: (pertanyaanId: string, ya: boolean) => void;
   /** null menghapus foto. Mengembalikan false bila gagal disimpan. */
+  setCheckin: (id: string | null) => void;
   setFoto: (dataUrl: string | null) => boolean;
   hapusSemua: () => void;
 }
@@ -64,6 +65,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     [ubahAsesmen],
   );
 
+  const setCheckin = useCallback((id: string | null) => ubah((s) => ({ ...s, checkin: id })), [ubah]);
+
   const setFoto = useCallback((dataUrl: string | null) => {
     if (dataUrl === null) {
       hapusFoto();
@@ -82,8 +85,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const nilai = useMemo(
-    () => ({ state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, setFoto, hapusSemua }),
-    [state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, setFoto, hapusSemua],
+    () => ({ state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, setCheckin, setFoto, hapusSemua }),
+    [state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, setCheckin, setFoto, hapusSemua],
   );
   return <Konteks.Provider value={nilai}>{children}</Konteks.Provider>;
 }

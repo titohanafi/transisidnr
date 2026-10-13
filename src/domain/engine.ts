@@ -89,13 +89,47 @@ export function bacaKisaranRp(teks: string | null | undefined): Rentang | null {
 
 const adalahPendamping = (k: Kartu) => k.tag.peran?.includes("caregiver") ?? false;
 
+export interface Konteks {
+  belumJelas: boolean;
+  sewa: boolean;
+  maksBudget: number | null;
+}
+
+export function buatKonteks(masukan: Masukan, config: Config): Konteks {
+  return {
+    belumJelas:
+      (masukan.kejadianBulanMaks !== null && masukan.kejadianBulanMaks <= config.faseAwalBulan) ||
+      masukan.protesis !== "tidak",
+    sewa: masukan.hunian === "kontrakan" || masukan.hunian === "kos",
+    maksBudget: config.budget.find((b) => b.id === masukan.budget)?.maksRp ?? null,
+  };
+}
+
+/** Status tiap tingkat solusi sebuah kartu, dalam urutan tetap (aturan 2, 3, 4, 7). */
+export function susunTingkat(k: Kartu, { belumJelas, sewa, maksBudget }: Konteks): TingkatRencana[] {
+  return TINGKAT.flatMap((t) => {
+    const s = k.solusi?.[t];
+    if (!s) return [];
+    const disembunyi = sewa && s.sifat === "permanen";
+    const rentang = bacaKisaranRp(s.biaya.kisaran_rp);
+    return [
+      {
+        tingkat: t,
+        sifat: s.sifat,
+        tampil: !disembunyi,
+        ditandaiPermanen: belumJelas && s.sifat === "permanen",
+        disembunyikanHunian: disembunyi,
+        ditonjolkan: sewa && t === "alat_tanpa_bongkar",
+        diAtasBudget: rentang !== null && maksBudget !== null && rentang.min > maksBudget,
+      },
+    ];
+  });
+}
+
 export function buatRencana(masukan: Masukan, kartu: Kartu[], asesmen: Asesmen, config: Config): Rencana {
   const kartuPerId = new Map(kartu.map((k) => [k.id, k]));
-  const belumJelas =
-    (masukan.kejadianBulanMaks !== null && masukan.kejadianBulanMaks <= config.faseAwalBulan) ||
-    masukan.protesis !== "tidak";
-  const sewa = masukan.hunian === "kontrakan" || masukan.hunian === "kos";
-  const maksBudget = config.budget.find((b) => b.id === masukan.budget)?.maksRp ?? null;
+  const konteks = buatKonteks(masukan, config);
+  const { belumJelas } = konteks;
 
   // Kartu terpicu: urutan kemunculan di asesmen, dengan aktivitas pemicunya.
   const pemicu = new Map<string, Set<Aktivitas>>();
@@ -121,23 +155,7 @@ export function buatRencana(masukan: Masukan, kartu: Kartu[], asesmen: Asesmen, 
 
   const daftar: KartuRencana[] = urutan.map(({ id, r }) => {
     const k = kartuPerId.get(id)!;
-    const tingkat: TingkatRencana[] = TINGKAT.flatMap((t) => {
-      const s = k.solusi?.[t];
-      if (!s) return [];
-      const disembunyi = sewa && s.sifat === "permanen";
-      const rentang = bacaKisaranRp(s.biaya.kisaran_rp);
-      return [
-        {
-          tingkat: t,
-          sifat: s.sifat,
-          tampil: !disembunyi,
-          ditandaiPermanen: belumJelas && s.sifat === "permanen",
-          disembunyikanHunian: disembunyi,
-          ditonjolkan: sewa && t === "alat_tanpa_bongkar",
-          diAtasBudget: rentang !== null && maksBudget !== null && rentang.min > maksBudget,
-        },
-      ];
-    });
+    const tingkat = susunTingkat(k, konteks);
     return { id, prioritas: r !== Infinity, isiMenyusul: !!k.isi_menyusul, tingkat };
   });
 
