@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { aksiKartu, aksiUntukFilter, cocokFilter, kelompokkan } from "../src/domain/jelajah";
+import { aksiKartu, aksiUntukFilter, cocokFilter, kelompokkan, kumpulkanAhli, kumpulkanAlat } from "../src/domain/jelajah";
 import { validasiKonten } from "../src/domain/validasi";
 import { TINGKAT } from "../src/domain/konstanta";
 
@@ -94,5 +94,34 @@ describe("pengelompokan", () => {
     for (const c of salinan) for (const t of TINGKAT) for (const b of c.solusi?.[t]?.barang ?? []) { b.afiliasi = true; b.link = "https://x.example"; }
     const g2 = kelompokkan(salinan, k.asesmen.aktivitas.map((a) => a.id));
     expect(g2.map((x) => x.kartu.map((c) => c.id))).toEqual(g.map((x) => x.kartu.map((c) => c.id)));
+  });
+});
+
+describe("daftar alat dan ahli", () => {
+  const tampilSemua = () => semua;
+  it("alat digabung menurut nama dan mencatat panduan asalnya", () => {
+    const alat = kumpulkanAlat(k.kartu, tampilSemua);
+    const nama = alat.map((a) => a.nama.toLowerCase());
+    expect(new Set(nama).size).toBe(nama.length);
+    expect(alat.every((a) => a.panduan.length > 0)).toBe(true);
+    expect(alat.find((a) => a.nama === "Papan pindah")?.panduan.length).toBeGreaterThan(1);
+  });
+  it("tingkat yang tersembunyi tidak ikut (renovasi disembunyikan)", () => {
+    const tanpaRenovasi = kumpulkanAlat(k.kartu, () => ["tanpa_biaya", "alat_tanpa_bongkar"]);
+    expect(tanpaRenovasi.flatMap((a) => a.panduan).every((p) => p.tingkat !== "renovasi")).toBe(true);
+  });
+  it("kartu kerangka tidak menyumbang alat", () => {
+    expect(kumpulkanAlat([kerangka()], tampilSemua)).toEqual([]);
+  });
+  it("urutan alat tidak berubah oleh tautan atau afiliasi", () => {
+    const salinan = structuredClone(k.kartu);
+    for (const c of salinan) for (const t of TINGKAT) for (const b of c.solusi?.[t]?.barang ?? []) { b.afiliasi = true; b.link = "https://x.example"; }
+    expect(kumpulkanAlat(salinan, tampilSemua).map((a) => a.nama)).toEqual(kumpulkanAlat(k.kartu, tampilSemua).map((a) => a.nama));
+  });
+  it("ahli: tukang tidak dihitung, tiap jenis punya panduan", () => {
+    const ahli = kumpulkanAhli(k.kartu);
+    expect(ahli.map((a) => a.jenis)).not.toContain("tukang");
+    expect(ahli.map((a) => a.jenis)).toContain("okupasi_terapis");
+    expect(ahli.every((a) => a.panduan.length > 0)).toBe(true);
   });
 });

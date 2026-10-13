@@ -37,7 +37,7 @@
       }
     },
     "caraKerja": "Cara kerja Transisi",
-    "konteks": "Panduan dan rencana menyesuaikan rumah untuk pengguna kursi roda setelah amputasi kaki, bagi penyandang disabilitas dan caregiver."
+    "konteks": "Panduan dan rencana menyesuaikan rumah untuk pengguna kursi roda."
   },
   "umum": {
     "kembali": "Kembali",
@@ -354,7 +354,7 @@
   "jelajah": {
     "judul": "Semua panduan",
     "pengantar": "Buka panduan untuk melihat langkahnya. Bila sudah tahu ingin mencari alat, tukang, atau ahli, pilih saringan di bawah. Urutan panduan tidak dipengaruhi pembayaran.",
-    "filterLabel": "Tampilkan panduan untuk",
+    "filterLabel": "Tampilkan",
     "filter": {
       "semua": "Semua",
       "alat": "Cari alat",
@@ -367,7 +367,27 @@
     "ajakanMulai": "Mulai pertanyaan",
     "ajakanSudah": "Anda sudah punya jawaban. Lihat rencana yang disusun dari jawaban itu.",
     "ajakanRencana": "Lihat Rencana Saya",
-    "aksiKartu": "Aksi untuk panduan ini"
+    "aksiKartu": "Aksi untuk panduan ini",
+    "judulFilter": {
+      "semua": "Semua panduan",
+      "alat": "Alat yang mungkin Anda butuhkan",
+      "tukang": "Panduan yang melibatkan tukang",
+      "ahli": "Siapa yang bisa membantu"
+    },
+    "pengantarFilter": {
+      "semua": "Buka panduan untuk melihat langkahnya. Urutan panduan tidak dipengaruhi pembayaran.",
+      "alat": "Daftar alat dari semua panduan. Baca cara cek kecocokan sebelum membeli. Urutan tidak dipengaruhi pembayaran.",
+      "tukang": "Panduan yang punya tingkat renovasi atau alat yang perlu dipasang. Buka panduan lalu pilih Cari tukang.",
+      "ahli": "Jenis ahli yang bisa membantu, dan untuk panduan apa."
+    },
+    "alat": {
+      "dipakaiDi": "Dipakai di panduan",
+      "kosong": "Belum ada alat yang tercantum."
+    },
+    "ahli": {
+      "membantuDi": "Membantu untuk",
+      "kosong": "Belum ada saran ahli."
+    }
   },
   "pilihRuangan": {
     "judul": "Ruangan mana yang ingin dibereskan lebih dulu?",

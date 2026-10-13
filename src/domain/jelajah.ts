@@ -1,6 +1,6 @@
 import type { JenisAksi } from "./aksi";
 import { aksiTersedia } from "./aksi";
-import { AKTIVITAS, TINGKAT, type Aktivitas, type Tingkat } from "./konstanta";
+import { AKTIVITAS, JENIS_BANTUAN, TINGKAT, type Aktivitas, type Tingkat } from "./konstanta";
 import type { Kartu } from "./schema";
 
 export type Filter = "semua" | "alat" | "tukang" | "ahli";
@@ -66,4 +66,56 @@ export function kelompokkan(kartu: Kartu[], urutanAktivitas: readonly Aktivitas[
   return urut
     .map((kunci) => ({ kunci, kartu: kartu.filter((k) => kunciDari(k) === kunci).sort(banding) }))
     .filter((g) => g.kartu.length > 0);
+}
+
+export interface AlatItem {
+  nama: string;
+  cek_kecocokan: string;
+  spesifikasi: string;
+  kisaran_harga: string | null;
+  link: string | null;
+  afiliasi: boolean;
+  /** Panduan tempat alat ini muncul, beserta tingkat yang memuatnya. */
+  panduan: { id: string; judul: string; tingkat: Tingkat }[];
+}
+
+/**
+ * Semua alat dari semua panduan, digabung menurut nama. Hanya tingkat yang tampil yang dipakai.
+ * Urutan mengikuti urutan panduan yang diberikan; tautan atau afiliasi tidak memengaruhinya.
+ */
+export function kumpulkanAlat(kartu: readonly Kartu[], tingkatTampil: (k: Kartu) => readonly Tingkat[]): AlatItem[] {
+  const peta = new Map<string, AlatItem>();
+  for (const k of kartu) {
+    if (k.isi_menyusul || !k.solusi) continue;
+    for (const tingkat of TINGKAT.filter((t) => tingkatTampil(k).includes(t))) {
+      for (const b of k.solusi[tingkat]?.barang ?? []) {
+        const kunci = b.nama.trim().toLowerCase();
+        const ada = peta.get(kunci);
+        const rujukan = { id: k.id, judul: k.judul, tingkat };
+        if (ada) {
+          if (!ada.panduan.some((p) => p.id === k.id)) ada.panduan.push(rujukan);
+        } else {
+          peta.set(kunci, { ...b, panduan: [rujukan] });
+        }
+      }
+    }
+  }
+  return [...peta.values()];
+}
+
+export interface AhliItem {
+  jenis: (typeof JENIS_BANTUAN)[number];
+  panduan: { id: string; judul: string; keterangan: string }[];
+}
+
+/** Jenis ahli dari semua panduan (tukang tidak dihitung; ada jalurnya sendiri), urut sesuai JENIS_BANTUAN. */
+export function kumpulkanAhli(kartu: readonly Kartu[]): AhliItem[] {
+  return JENIS_BANTUAN.filter((j) => j !== "tukang")
+    .map((jenis) => ({
+      jenis,
+      panduan: kartu.flatMap((k) =>
+        k.isi_menyusul ? [] : (k.bantuan ?? []).filter((b) => b.jenis === jenis).map((b) => ({ id: k.id, judul: k.judul, keterangan: b.keterangan })),
+      ),
+    }))
+    .filter((a) => a.panduan.length > 0);
 }
