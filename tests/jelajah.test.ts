@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { aksiKartu, cocokFilter, kelompokkan } from "../src/domain/jelajah";
+import { aksiKartu, aksiUntukFilter, cocokFilter, kelompokkan } from "../src/domain/jelajah";
 import { validasiKonten } from "../src/domain/validasi";
 import { TINGKAT } from "../src/domain/konstanta";
 
@@ -48,6 +48,19 @@ describe("filter", () => {
   });
   it("ahli: kartu dengan bantuan (lengkap dan pendamping), bukan kerangka", () => {
     expect(k.kartu.filter((c) => cocokFilter(c, semua, "ahli")).map((c) => c.id).sort()).toEqual(["bath-transfer-toilet", "care-assist-transfer"]);
+  });
+});
+
+describe("aksi di daftar", () => {
+  const aksi = aksiKartu(kartu("bath-transfer-toilet"), semua);
+  it("tanpa filter tidak ada tombol aksi (cukup buka panduan)", () => {
+    expect(aksiUntukFilter(aksi, "semua")).toEqual([]);
+  });
+  it.each([["alat", "beli"], ["tukang", "tukang"], ["ahli", "ahli"]] as const)("filter %s hanya menampilkan aksi %s", (f, jenis) => {
+    expect(aksiUntukFilter(aksi, f).map((a) => a.jenis)).toEqual([jenis]);
+  });
+  it("lakukan sendiri tidak pernah ditampilkan di daftar", () => {
+    for (const f of ["semua", "alat", "tukang", "ahli"] as const) expect(aksiUntukFilter(aksi, f).some((a) => a.jenis === "sendiri")).toBe(false);
   });
 });
 

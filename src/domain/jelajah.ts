@@ -32,6 +32,15 @@ export function aksiKartu(kartu: Kartu, tingkatTampil: readonly Tingkat[]): Aksi
 
 const jenisFilter: Record<Exclude<Filter, "semua">, JenisAksi> = { alat: "beli", tukang: "tukang", ahli: "ahli" };
 
+/**
+ * Aksi langsung yang ditampilkan di daftar. Tanpa filter tidak ada (pengguna belum menyatakan niat;
+ * langkah dan bantuan ada di panduan). Dengan filter, hanya satu aksi yang sesuai dengan filter itu.
+ */
+export function aksiUntukFilter(aksi: readonly AksiKartu[], filter: Filter): AksiKartu[] {
+  if (filter === "semua") return [];
+  return aksi.filter((a) => a.jenis === jenisFilter[filter]);
+}
+
 /** "semua" menampilkan semua kartu (termasuk kerangka); filter lain hanya kartu yang punya aksi itu. */
 export function cocokFilter(kartu: Kartu, tingkatTampil: readonly Tingkat[], filter: Filter): boolean {
   if (filter === "semua") return true;

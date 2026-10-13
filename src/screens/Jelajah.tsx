@@ -7,7 +7,7 @@ import { TombolAksi } from "../components/TombolAksi";
 import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
 import { susunTingkat } from "../domain/engine";
-import { aksiKartu, cocokFilter, kelompokkan, type Filter } from "../domain/jelajah";
+import { aksiKartu, aksiUntukFilter, cocokFilter, kelompokkan, type Filter } from "../domain/jelajah";
 import { useRencana } from "../state/useRencana";
 import { useStore } from "../state/store";
 
@@ -81,7 +81,7 @@ function Daftar({ awal }: { awal: Filter }) {
           <div className="mt-3 space-y-3">
             {g.kartu.map((k) => {
               const tingkat = tingkatDari(k.id);
-              const aksi = aksiKartu(k, tingkat.filter((x) => x.tampil).map((x) => x.tingkat));
+              const aksi = aksiUntukFilter(aksiKartu(k, tingkat.filter((x) => x.tampil).map((x) => x.tingkat)), filter);
               return (
                 <article key={k.id} className="rounded-kartu border border-garis bg-white p-4">
                   <h3 className="text-lg font-semibold leading-snug">{k.judul}</h3>
@@ -93,12 +93,13 @@ function Daftar({ awal }: { awal: Filter }) {
                   {k.isi_menyusul ? (
                     <p className="mt-3 font-medium">{umum.isiMenyusul}</p>
                   ) : (
+                    aksi.length > 0 && (
                     <ul className="mt-3 space-y-2" aria-label={t.aksiKartu}>
                       {aksi.map((a) => {
                         const tanda = a.tingkat ? tingkat.find((x) => x.tingkat === a.tingkat) : undefined;
                         return (
                           <li key={a.jenis}>
-                            <TombolAksi jenis={a.jenis} kartuId={k.id} tingkat={a.tingkat} judulKartu={k.judul} gayaTombol="sekunder" className="w-full" />
+                            <TombolAksi jenis={a.jenis} kartuId={k.id} tingkat={a.tingkat} judulKartu={k.judul} gayaTombol="utama" className="w-full" />
                             {tanda?.ditandaiPermanen && (
                               <p className="mt-1">
                                 <Tanda>{umum.menunggu}</Tanda>
@@ -108,9 +109,10 @@ function Daftar({ awal }: { awal: Filter }) {
                         );
                       })}
                     </ul>
+                    )
                   )}
 
-                  <TombolLink to={`/kartu/${k.id}`} gayaTombol="sekunder" className="mt-3 w-full">
+                  <TombolLink to={`/kartu/${k.id}`} gayaTombol={aksi.length > 0 ? "sekunder" : "utama"} className="mt-3 w-full">
                     {tr.bukaKartu}
                     <span className="sr-only">: {k.judul}</span>
                   </TombolLink>
