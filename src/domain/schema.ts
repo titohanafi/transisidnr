@@ -149,7 +149,11 @@ export const uiSchema = z
     }),
     umum: rekamTeks,
     igd: z.object({ judul: teks, isi: teks }),
-    hapusData: z.object({ judul: teks, penjelasan: teks, tombol: teks, selesai: teks }),
+    hapusData: z.object({
+      judul: teks, penjelasan: teks, tombol: teks, selesai: teks, konfirmasi: teks, ya: teks, batal: teks,
+    }),
+    onboarding: z.object({ judul: teks, indikator: teks, lanjutTerakhir: teks }),
+    asesmen: z.object({ judul: teks, sementara: teks }),
     checkin: z.object({
       pertanyaan: teks,
       pilihan: z.array(opsi.extend({ balasan: teks })).min(1),

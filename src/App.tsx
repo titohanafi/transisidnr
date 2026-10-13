@@ -1,12 +1,22 @@
-import { konten } from "./domain/content";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { Asesmen } from "./screens/Asesmen";
+import { Beranda } from "./screens/Beranda";
+import { HapusData } from "./screens/HapusData";
+import { Igd } from "./screens/Igd";
+import { Onboarding } from "./screens/Onboarding";
+import { StoreProvider } from "./state/store";
 
-// Kerangka sementara; layar sebenarnya dibangun di milestone 3 dan seterusnya.
 export function App() {
-  const { app, beranda } = konten.ui;
   return (
-    <main className="mx-auto max-w-md p-4">
-      <h1 className="text-2xl font-bold text-utama">{app.nama}</h1>
-      <p className="mt-2">{beranda.manfaat}</p>
-    </main>
+    <StoreProvider>
+      <Routes>
+        <Route path="/" element={<Beranda />} />
+        <Route path="/mulai/:langkah" element={<Onboarding />} />
+        <Route path="/asesmen" element={<Asesmen />} />
+        <Route path="/igd" element={<Igd />} />
+        <Route path="/hapus" element={<HapusData />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </StoreProvider>
   );
 }
