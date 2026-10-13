@@ -93,14 +93,6 @@ const ikonAksi = {
       <circle cx="24" cy="26" r="7" />
     </g>
   ),
-  // Papan catatan dengan daftar centang
-  rencana: (
-    <g {...garis}>
-      <path d="M12 8h24v34H12z" />
-      <path d="M19 5h10v6H19z" />
-      <path d="M18 21l2.5 2.5L26 18M18 33l2.5 2.5L26 30M30 22h3M30 34h3" />
-    </g>
-  ),
   // Gelembung percakapan
   ahli: (
     <g {...garis}>

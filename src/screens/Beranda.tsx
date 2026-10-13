@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
-import { IkonAksi } from "../components/Ikon";
+import { IkonBeranda } from "../components/IkonBeranda";
 import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
 
@@ -18,17 +18,13 @@ export function Beranda() {
 
       {/* Dua jalur: dipandu (utama), atau langsung ke yang dicari. */}
       <section className="mt-4 rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-susun">
-        <div className="flex items-start gap-3">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white">
-            <IkonAksi kunci="rencana" className="h-8 w-8" />
-          </span>
-          <div>
-            <h3 id="jalur-susun" className="text-xl font-bold leading-snug">
-              {pilih.susun.judul}
-            </h3>
-            <p className="mt-1">{pilih.susun.deskripsi}</p>
-          </div>
-        </div>
+        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-utama">
+          <IkonBeranda kunci="rencana" />
+        </span>
+        <h3 id="jalur-susun" className="mt-3 text-xl font-bold leading-snug">
+          {pilih.susun.judul}
+        </h3>
+        <p className="mt-1">{pilih.susun.deskripsi}</p>
         <Link
           to="/mulai/1"
           className="mt-3 inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-base font-semibold text-utama-gelap hover:bg-utama-muda"
@@ -75,7 +71,7 @@ function Ubin({ to, ikon, children }: { to: string; ikon: "alat" | "tukang" | "a
       to={to}
       className="flex min-h-sentuh flex-col items-center justify-center gap-1 rounded-kartu border-2 border-utama bg-white px-1 py-3 text-center text-sm font-semibold text-utama hover:bg-utama-muda"
     >
-      <IkonAksi kunci={ikon} className="h-9 w-9" />
+      <IkonBeranda kunci={ikon} className="h-8 w-8" />
       {children}
     </Link>
   );
