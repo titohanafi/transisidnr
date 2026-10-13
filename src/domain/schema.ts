@@ -1,9 +1,10 @@
 import { z } from "zod";
+import {
+  AKTIVITAS, ALAT_BANTU, HUNIAN, JENIS_BANTUAN, STATUS_VALIDASI, TINGKAT, TINGKAT_BIAYA,
+  type Aktivitas, type Hunian, type Tingkat,
+} from "./konstanta";
 
-export const TINGKAT = ["tanpa_biaya", "alat_tanpa_bongkar", "renovasi"] as const;
-export type Tingkat = (typeof TINGKAT)[number];
-
-export const STATUS_VALIDASI = ["draf", "ditinjau_ahli", "disetujui"] as const;
+export { AKTIVITAS, TINGKAT, type Aktivitas, type Hunian, type Tingkat };
 
 const teks = z.string().min(1);
 
@@ -45,17 +46,10 @@ export const solusiSchema = z
   })
   .refine((s) => TINGKAT.some((t) => s[t]), { message: "solusi minimal punya satu tingkat" });
 
-export const JENIS_BANTUAN = ["tukang", "okupasi_terapis", "fisioterapis", "arsitek", "komunitas"] as const;
-
 export const bantuanSchema = z.object({
   jenis: z.enum(JENIS_BANTUAN),
   keterangan: teks,
 });
-
-export const AKTIVITAS = ["mandi", "toilet", "wudhu", "grooming", "umum"] as const;
-export const ALAT_BANTU = ["kursi_roda", "kruk", "walker"] as const;
-export const HUNIAN = ["milik_sendiri", "kontrakan", "kos", "apartemen"] as const;
-export const TINGKAT_BIAYA = ["nol", "rendah", "tinggi"] as const;
 
 export const tagSchema = z.object({
   fase: z.array(teks),
@@ -203,7 +197,7 @@ export const uiSchema = z
       }),
       ahli: z.object({ judul: teks, bantuan: teks, nyeri: teks, kosong: teks }),
       cetak: z.object({
-        judulKertas: teks, tombol: teks, penjelasan: teks, foto: teks, satuHal: teks, kosong: teks,
+        judulKertas: teks, langkahSelesai: teks, langkahBelum: teks, tombol: teks, penjelasan: teks, foto: teks, satuHal: teks, kosong: teks,
       }),
     }),
     istilah: z.array(z.object({ kata: teks, arti: teks })),
@@ -224,5 +218,3 @@ export type Config = z.infer<typeof configSchema>;
 export type Onboarding = z.infer<typeof onboardingSchema>;
 export type Ui = z.infer<typeof uiSchema>;
 export type Brief = Ui["aksi"]["brief"];
-export type Aktivitas = (typeof AKTIVITAS)[number];
-export type Hunian = (typeof HUNIAN)[number];

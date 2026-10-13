@@ -41,7 +41,8 @@
     "keBeranda": "Kembali ke beranda",
     "lewatiKeIsi": "Lewati ke isi",
     "privasi": "Jawaban Anda hanya tersimpan di perangkat ini dan tidak dikirim ke mana pun.",
-    "tautanLain": "Tautan lain"
+    "tautanLain": "Tautan lain",
+    "tautanIgd": "Kapan harus ke dokter atau IGD"
   },
   "igd": {
     "judul": "Kapan harus ke dokter atau IGD",
@@ -274,7 +275,9 @@
       "penjelasan": "Tombol ini membuka jendela cetak. Pilih \"Simpan sebagai PDF\" bila ingin berkas.",
       "foto": "Foto kamar mandi",
       "satuHal": "Satu hal untuk hari ini",
-      "kosong": "Belum ada kartu di rencana Anda."
+      "kosong": "Belum ada kartu di rencana Anda.",
+      "langkahSelesai": "Selesai:",
+      "langkahBelum": "Belum:"
     }
   }
 }

@@ -1,5 +1,5 @@
-import type { Aktivitas, Asesmen, Config, Kartu, Tingkat } from "./schema";
-import { TINGKAT } from "./schema";
+import { TINGKAT, type Aktivitas, type Tingkat } from "./konstanta";
+import type { Asesmen, Config, Kartu } from "./schema";
 
 export type StatusAktivitas = "bisa_sendiri" | "sulit" | "ingin_belum_bisa";
 

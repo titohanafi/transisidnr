@@ -57,4 +57,5 @@ tests/
 - Di akhir tiap milestone, daftarkan hal yang Anda asumsikan atau tidak bisa diverifikasi.
 
 ## Perintah (perbarui setelah scaffold)
-- `npm run dev`, `npm run build`, `npm test`, `npm run lint`, `npm run typecheck`
+- `npm run dev`, `npm run build` (validasi konten + typecheck + build), `npm test`, `npm run lint`, `npm run typecheck`, `npm run validasi` (hanya periksa `content/`)
+- Mode dev: `VITE_TAMPILKAN_ANGKA_DRAF=true npm run dev` menampilkan angka teknis kartu draf

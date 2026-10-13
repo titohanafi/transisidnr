@@ -78,7 +78,7 @@ export function Cetak() {
                         {s.langkah.map((l, i) => (
                           <li key={i} className="flex gap-2">
                             <span aria-hidden="true">{selesai.includes(i) ? "☑" : "☐"}</span>
-                            <span className="sr-only">{selesai.includes(i) ? "Selesai: " : "Belum: "}</span>
+                            <span className="sr-only">{selesai.includes(i) ? t.langkahSelesai : t.langkahBelum}{" "}</span>
                             <span>{l}</span>
                           </li>
                         ))}

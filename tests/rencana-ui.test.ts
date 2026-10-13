@@ -3,7 +3,7 @@ import { istilahDalam } from "../src/domain/istilah";
 import { bolehTampilkanUkuran } from "../src/domain/ukuran";
 import { formatRentang, formatRp } from "../src/lib/format";
 import { keMasukan } from "../src/state/masukan";
-import { stateAwal, stateSchema } from "../src/state/storage";
+import { parseState, stateAwal } from "../src/state/storage";
 import { buatRencana } from "../src/domain/engine";
 import { validasiKonten } from "../src/domain/validasi";
 import { readdirSync, readFileSync } from "node:fs";
@@ -56,8 +56,7 @@ describe("keMasukan", () => {
 
 describe("check-in tersimpan", () => {
   it("state lama tanpa checkin tetap valid dengan null", () => {
-    const r = stateSchema.parse({ versi: 1, onboarding: {} });
-    expect(r.checkin).toBeNull();
+    expect(parseState({ versi: 1, onboarding: {} })?.checkin).toBeNull();
   });
 });
 

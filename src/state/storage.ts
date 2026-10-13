@@ -1,36 +1,73 @@
-import { z } from "zod";
-import { AKTIVITAS } from "../domain/schema";
+import { AKTIVITAS, type Aktivitas } from "../domain/konstanta";
 
 export const KUNCI = "transisi:v1";
 // Foto disimpan terpisah supaya foto besar tidak menggagalkan penyimpanan jawaban.
 export const KUNCI_FOTO = "transisi:v1:foto";
 
 export const STATUS_AKTIVITAS = ["bisa_sendiri", "sulit", "ingin_belum_bisa"] as const;
+export type StatusAktivitas = (typeof STATUS_AKTIVITAS)[number];
 
-export const asesmenStateSchema = z.object({
+export interface AsesmenState {
   /** Aktivitas yang relevan -> kondisi. Yang tidak ada = tidak relevan. */
-  status: z.partialRecord(z.enum(AKTIVITAS), z.enum(STATUS_AKTIVITAS)).default({}),
+  status: Partial<Record<Aktivitas, StatusAktivitas>>;
   /** Satu atau dua aktivitas, urut dari yang terpenting. */
-  prioritas: z.array(z.enum(AKTIVITAS)).max(2).default([]),
+  prioritas: Aktivitas[];
   /** id pertanyaan -> true (ya) / false (tidak). */
-  jawaban: z.record(z.string(), z.boolean()).default({}),
-});
+  jawaban: Record<string, boolean>;
+}
 
-export const stateSchema = z.object({
-  versi: z.literal(1),
+export interface State {
+  versi: 1;
   /** id pertanyaan onboarding -> id pilihan (satu atau lebih). */
-  onboarding: z.record(z.string(), z.array(z.string())).default({}),
-  asesmen: asesmenStateSchema.default({ status: {}, prioritas: [], jawaban: {} }),
+  onboarding: Record<string, string[]>;
+  asesmen: AsesmenState;
   /** "<id kartu>:<tingkat>" -> nomor langkah (mulai 0) yang sudah dicentang. */
-  checklist: z.record(z.string(), z.array(z.number().int().nonnegative())).default({}),
+  checklist: Record<string, number[]>;
   /** id jawaban check-in caregiver yang terakhir dipilih. */
-  checkin: z.string().nullable().default(null),
-});
-export type State = z.infer<typeof stateSchema>;
-export type AsesmenState = z.infer<typeof asesmenStateSchema>;
+  checkin: string | null;
+}
 
 export const asesmenAwal = (): AsesmenState => ({ status: {}, prioritas: [], jawaban: {} });
 export const stateAwal = (): State => ({ versi: 1, onboarding: {}, asesmen: asesmenAwal(), checklist: {}, checkin: null });
+
+// Validasi tulisan tangan (tanpa pustaka) agar bundel kecil. Data yang bentuknya salah ditolak seluruhnya.
+const adalahObjek = (x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
+const adalahTeks = (x: unknown): x is string => typeof x === "string";
+const arrayDari = <T>(x: unknown, ok: (v: unknown) => v is T): T[] | null =>
+  Array.isArray(x) && x.every(ok) ? (x as T[]) : null;
+const rekam = <T>(x: unknown, ok: (v: unknown) => v is T): Record<string, T> | null =>
+  adalahObjek(x) && Object.values(x).every(ok) ? (x as Record<string, T>) : null;
+const adalahAktivitas = (x: unknown): x is Aktivitas => (AKTIVITAS as readonly unknown[]).includes(x);
+const adalahStatus = (x: unknown): x is StatusAktivitas => (STATUS_AKTIVITAS as readonly unknown[]).includes(x);
+const adalahBool = (x: unknown): x is boolean => typeof x === "boolean";
+const adalahNomor = (x: unknown): x is number => Number.isInteger(x) && (x as number) >= 0;
+
+/** Mengubah data mentah menjadi State, atau null bila bentuknya salah. Bagian yang hilang diisi bawaan. */
+export function parseState(x: unknown): State | null {
+  if (!adalahObjek(x) || x.versi !== 1) return null;
+  const awal = stateAwal();
+
+  const onboarding = x.onboarding === undefined ? awal.onboarding : rekam(x.onboarding, (v): v is string[] => arrayDari(v, adalahTeks) !== null);
+  const checklist = x.checklist === undefined ? awal.checklist : rekam(x.checklist, (v): v is number[] => arrayDari(v, adalahNomor) !== null);
+  if (!onboarding || !checklist) return null;
+
+  let asesmen = awal.asesmen;
+  if (x.asesmen !== undefined) {
+    const a = x.asesmen;
+    if (!adalahObjek(a)) return null;
+    const status = a.status === undefined ? {} : rekam(a.status, adalahStatus);
+    const prioritas = a.prioritas === undefined ? [] : arrayDari(a.prioritas, adalahAktivitas);
+    const jawaban = a.jawaban === undefined ? {} : rekam(a.jawaban, adalahBool);
+    if (!status || !prioritas || prioritas.length > 2 || !jawaban) return null;
+    if (!Object.keys(status).every(adalahAktivitas)) return null;
+    asesmen = { status: status as AsesmenState["status"], prioritas, jawaban };
+  }
+
+  const checkin = x.checkin === undefined || x.checkin === null ? null : adalahTeks(x.checkin) ? x.checkin : undefined;
+  if (checkin === undefined) return null;
+
+  return { versi: 1, onboarding, asesmen, checklist, checkin };
+}
 
 type Gudang = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
@@ -47,8 +84,7 @@ export function muat(gudang: Gudang | null = gudangBawaan()): State {
   try {
     const mentah = gudang?.getItem(KUNCI);
     if (!mentah) return stateAwal();
-    const r = stateSchema.safeParse(JSON.parse(mentah));
-    return r.success ? r.data : stateAwal();
+    return parseState(JSON.parse(mentah)) ?? stateAwal();
   } catch {
     return stateAwal();
   }

@@ -80,3 +80,45 @@ describe("isi templat", () => {
     expect(isi("{x}", {})).toBe("{x}");
   });
 });
+
+import { parseState } from "../src/state/storage";
+
+describe("parseState (validasi tulisan tangan)", () => {
+  const sah = {
+    versi: 1,
+    onboarding: { hunian: ["kos"] },
+    asesmen: { status: { toilet: "sulit" }, prioritas: ["toilet"], jawaban: { a: true } },
+    checklist: { "x:tanpa_biaya": [0, 2] },
+    checkin: "soal_biaya",
+  };
+  it("menerima data sah apa adanya", () => {
+    expect(parseState(sah)).toEqual(sah);
+  });
+  it("mengisi bagian yang hilang dengan bawaan", () => {
+    expect(parseState({ versi: 1 })).toEqual(stateAwal());
+    expect(parseState({ versi: 1, asesmen: {} })?.asesmen).toEqual({ status: {}, prioritas: [], jawaban: {} });
+  });
+  it.each([
+    ["bukan objek", "teks"],
+    ["null", null],
+    ["array", []],
+    ["versi lain", { ...sah, versi: 2 }],
+    ["tanpa versi", { onboarding: {} }],
+    ["onboarding bukan array", { ...sah, onboarding: { a: "x" } }],
+    ["onboarding berisi angka", { ...sah, onboarding: { a: [1] } }],
+    ["aktivitas tidak dikenal", { ...sah, asesmen: { ...sah.asesmen, status: { dapur: "sulit" } } }],
+    ["status tidak dikenal", { ...sah, asesmen: { ...sah.asesmen, status: { toilet: "mudah" } } }],
+    ["prioritas tiga", { ...sah, asesmen: { ...sah.asesmen, prioritas: ["mandi", "toilet", "wudhu"] } }],
+    ["prioritas tidak dikenal", { ...sah, asesmen: { ...sah.asesmen, prioritas: ["dapur"] } }],
+    ["jawaban bukan boolean", { ...sah, asesmen: { ...sah.asesmen, jawaban: { a: "ya" } } }],
+    ["asesmen bukan objek", { ...sah, asesmen: 3 }],
+    ["nomor langkah negatif", { ...sah, checklist: { a: [-1] } }],
+    ["nomor langkah pecahan", { ...sah, checklist: { a: [1.5] } }],
+    ["checkin bukan teks", { ...sah, checkin: 5 }],
+  ])("menolak: %s", (_n, x) => {
+    expect(parseState(x)).toBeNull();
+  });
+  it("tidak ikut membawa kunci asing", () => {
+    expect(parseState({ ...sah, rahasia: "x" })).toEqual(sah);
+  });
+});

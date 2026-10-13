@@ -6,7 +6,7 @@ import { barangSchema, kartuSchema } from "../src/domain/schema";
 import { validasiKonten } from "../src/domain/validasi";
 import { butirBrief, susunBrief, urlWhatsApp, type BahanBrief } from "../src/lib/brief";
 import { setPengirim, track } from "../src/lib/events";
-import { stateAwal, stateSchema } from "../src/state/storage";
+import { parseState, stateAwal } from "../src/state/storage";
 
 const root = join(__dirname, "..", "content");
 const baca = (p: string): unknown => JSON.parse(readFileSync(join(root, p), "utf8"));
@@ -117,11 +117,11 @@ describe("tautan produk", () => {
 
 describe("checklist tersimpan", () => {
   it("state lama tanpa checklist tetap terbaca", () => {
-    expect(stateSchema.parse({ versi: 1 }).checklist).toEqual({});
+    expect(parseState({ versi: 1 })?.checklist).toEqual({});
     expect(stateAwal().checklist).toEqual({});
   });
   it("menolak nomor langkah yang bukan bilangan bulat", () => {
-    expect(stateSchema.safeParse({ versi: 1, checklist: { "a:b": [-1] } }).success).toBe(false);
+    expect(parseState({ versi: 1, checklist: { "a:b": [-1] } })).toBeNull();
   });
 });
 

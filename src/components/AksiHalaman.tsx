@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { konten } from "../domain/content";
-import { TINGKAT, type Kartu, type Tingkat } from "../domain/schema";
+import { TINGKAT, type Tingkat } from "../domain/konstanta";
+import type { Kartu } from "../domain/schema";
 import { Halaman } from "./Halaman";
 import { TombolLink } from "./Tombol";
 
