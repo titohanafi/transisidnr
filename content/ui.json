@@ -9,12 +9,12 @@
     "pilih": {
       "judul": "Apa yang ingin Anda lakukan?",
       "susun": {
-        "judul": "Mari susun rencananya",
-        "isi": "Beberapa pertanyaan singkat. Tanpa mengukur apa pun.",
-        "tombol": "Mari mulai"
+        "judul": "Buat rencana untuk rumah Anda",
+        "isi": "Jawab beberapa pertanyaan ya atau tidak. Anda mendapat langkah-langkah, dari yang paling ringan.",
+        "tombol": "Mulai"
       },
       "tahu": {
-        "judul": "Sudah tahu yang dicari?",
+        "judul": "Atau lewati pertanyaan, langsung cari:",
         "isi": "Langsung ke yang Anda butuhkan.",
         "alat": "Cari alat",
         "tukang": "Cari tukang",
