@@ -18,7 +18,7 @@ export function CheckIn() {
   if (pilihan && !mengubah) {
     return (
       <section aria-label={t.label} className="rounded-kartu border border-garis bg-white p-4">
-        <div className="relative text-center">
+        <div className="relative">
           <span aria-hidden="true" className="block text-5xl leading-none">
             {pilihan.emoji}
           </span>
