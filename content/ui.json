@@ -62,7 +62,10 @@
   },
   "igd": {
     "judul": "Kapan harus ke dokter atau IGD",
-    "isi": "Hubungi dokter atau IGD bila ada tanda bahaya. Daftar tanda bahaya akan diisi tim medis."
+    "isi": "Hubungi dokter atau IGD bila ada tanda bahaya.",
+    "daftarJudul": "Tanda bahaya",
+    "tandaBahaya": [],
+    "menyusul": "Daftar tanda bahaya sedang disiapkan bersama tenaga medis. Sampai daftar ini tersedia, bila Anda ragu atau khawatir, hubungi dokter atau IGD terdekat."
   },
   "hapusData": {
     "judul": "Hapus data saya",

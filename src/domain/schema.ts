@@ -156,7 +156,7 @@ export const uiSchema = z
       caraKerja: teks,
     }),
     umum: rekamTeks,
-    igd: z.object({ judul: teks, isi: teks }),
+    igd: z.object({ judul: teks, isi: teks, daftarJudul: teks, tandaBahaya: z.array(teks), menyusul: teks }),
     hapusData: z.object({
       judul: teks, penjelasan: teks, tombol: teks, selesai: teks, konfirmasi: teks, ya: teks, batal: teks,
     }),
