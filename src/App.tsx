@@ -7,6 +7,7 @@ import { AsesmenPrioritas } from "./screens/AsesmenPrioritas";
 import { Beranda } from "./screens/Beranda";
 import { Cetak } from "./screens/Cetak";
 import { DetailKartu } from "./screens/DetailKartu";
+import { Jelajah } from "./screens/Jelajah";
 import { HapusData } from "./screens/HapusData";
 import { Igd } from "./screens/Igd";
 import { Onboarding } from "./screens/Onboarding";
@@ -18,6 +19,7 @@ export function App() {
     <StoreProvider>
       <Routes>
         <Route path="/" element={<Beranda />} />
+        <Route path="/jelajah" element={<Jelajah />} />
         <Route path="/mulai/:langkah" element={<Onboarding />} />
         <Route path="/asesmen" element={<Navigate to="/asesmen/aktivitas" replace />} />
         <Route path="/asesmen/aktivitas" element={<AsesmenAktivitas />} />

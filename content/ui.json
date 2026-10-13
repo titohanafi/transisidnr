@@ -21,7 +21,12 @@
     "tombolMulai": "Mulai",
     "spandukDraf": "Konten masih draf dan belum ditinjau ahli.",
     "tautanIgd": "Kapan harus ke dokter atau IGD",
-    "tautanHapus": "Hapus data saya"
+    "tautanHapus": "Hapus data saya",
+    "jelajah": {
+      "judul": "Sudah tahu apa yang dicari?",
+      "isi": "Lewati pertanyaan dan langsung buka kartu yang Anda butuhkan: cari alat, cari tukang, atau tanya ahli.",
+      "tombol": "Lihat semua kartu"
+    }
   },
   "umum": {
     "kembali": "Kembali",
@@ -200,7 +205,8 @@
         "arti": "Sesama penyandang disabilitas atau caregiver yang bisa berbagi pengalaman."
       }
     },
-    "direktoriMenyusul": "Direktori menyusul"
+    "direktoriMenyusul": "Direktori menyusul",
+    "kembaliKeJelajah": "Kembali ke semua kartu"
   },
   "istilah": [
     {
@@ -279,5 +285,23 @@
       "langkahSelesai": "Selesai:",
       "langkahBelum": "Belum:"
     }
+  },
+  "jelajah": {
+    "judul": "Semua kartu",
+    "pengantar": "Pilih kartu lalu langsung ke aksi yang Anda butuhkan. Urutan kartu tidak dipengaruhi pembayaran.",
+    "filterLabel": "Tampilkan kartu untuk",
+    "filter": {
+      "semua": "Semua",
+      "alat": "Cari alat",
+      "tukang": "Cari tukang",
+      "ahli": "Tanya ahli"
+    },
+    "kosongFilter": "Belum ada kartu dengan isi lengkap untuk pilihan ini. Isi kartu masih disusun.",
+    "caregiver": "Untuk caregiver",
+    "ajakanBelum": "Ingin rencana yang disesuaikan dengan rumah Anda? Jawab beberapa pertanyaan singkat.",
+    "ajakanMulai": "Mulai pertanyaan",
+    "ajakanSudah": "Anda sudah punya jawaban. Lihat rencana yang disusun dari jawaban itu.",
+    "ajakanRencana": "Lihat Rencana Saya",
+    "aksiKartu": "Aksi untuk kartu ini"
   }
 }

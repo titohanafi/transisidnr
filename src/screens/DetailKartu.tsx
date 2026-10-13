@@ -14,6 +14,7 @@ import { tingkatUtama } from "../components/KartuRingkas";
 import { TombolAksi } from "../components/TombolAksi";
 import { aksiTersedia } from "../domain/aksi";
 import { track } from "../lib/events";
+import { useStore } from "../state/store";
 import { useRencana } from "../state/useRencana";
 
 const { kartu: t, umum, rencana: tr } = konten.ui;
@@ -35,6 +36,8 @@ export function DetailKartu() {
 
 function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   const { konteks } = useRencana();
+  const { state } = useStore();
+  const adaJawaban = Object.keys(state.asesmen.status).length > 0;
   useEffect(() => {
     track("kartu_dibuka", { kartu_id: kartu.id });
   }, [kartu.id]);
@@ -278,8 +281,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
         </>
       )}
 
-      <TombolLink to="/rencana" gayaTombol="sekunder" className="mt-8">
-        {t.kembaliKeRencana}
+      <TombolLink to={adaJawaban ? "/rencana" : "/jelajah"} gayaTombol="sekunder" className="mt-8">
+        {adaJawaban ? t.kembaliKeRencana : t.kembaliKeJelajah}
       </TombolLink>
     </Halaman>
   );

@@ -149,6 +149,7 @@ export const uiSchema = z
       spandukDraf: teks,
       tautanIgd: teks,
       tautanHapus: teks,
+      jelajah: z.object({ judul: teks, isi: teks, tombol: teks }),
     }),
     umum: rekamTeks,
     igd: z.object({ judul: teks, isi: teks }),
@@ -176,7 +177,7 @@ export const uiSchema = z
     }),
     kartu: z.object({
       tingkat: z.object({ tanpa_biaya: teks, alat_tanpa_bongkar: teks, renovasi: teks }),
-      tidakDitemukan: teks, kembaliKeRencana: teks, situasi: teks, kenapa: teks, solusi: teks,
+      tidakDitemukan: teks, kembaliKeRencana: teks, kembaliKeJelajah: teks, situasi: teks, kenapa: teks, solusi: teks,
       langkah: teks, biaya: teks, waktu: teks, kesulitan: teks, ukuran: teks, ukuranMenyusul: teks,
       barang: teks, spesifikasi: teks, cek: teks, harga: teks, afiliasi: teks, tingkatDisembunyikan: teks,
       bantuan: teks, peranPenyandang: teks, peranCaregiver: teks, peringatan: teks, sumber: teks,
@@ -203,6 +204,11 @@ export const uiSchema = z
       cetak: z.object({
         judulKertas: teks, langkahSelesai: teks, langkahBelum: teks, tombol: teks, penjelasan: teks, foto: teks, satuHal: teks, kosong: teks,
       }),
+    }),
+    jelajah: z.object({
+      judul: teks, pengantar: teks, filterLabel: teks, kosongFilter: teks, caregiver: teks,
+      ajakanBelum: teks, ajakanMulai: teks, ajakanSudah: teks, ajakanRencana: teks, aksiKartu: teks,
+      filter: z.object({ semua: teks, alat: teks, tukang: teks, ahli: teks }),
     }),
     istilah: z.array(z.object({ kata: teks, arti: teks })),
     checkin: z.object({

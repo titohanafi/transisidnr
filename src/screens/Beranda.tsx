@@ -34,6 +34,16 @@ export function Beranda() {
       </TombolLink>
       <p className="mt-3 text-sm text-redup">{umum.privasi}</p>
 
+      <section className="mt-6 rounded-kartu border border-garis bg-white p-4" aria-labelledby="jelajah">
+        <h2 id="jelajah" className="text-lg font-semibold">
+          {beranda.jelajah.judul}
+        </h2>
+        <p className="mt-1 text-redup">{beranda.jelajah.isi}</p>
+        <TombolLink to="/jelajah" gayaTombol="sekunder" className="mt-3 w-full">
+          {beranda.jelajah.tombol}
+        </TombolLink>
+      </section>
+
       <nav aria-label={umum.tautanLain} className="mt-auto flex flex-col pt-8">
         <TautanKecil to="/igd">{beranda.tautanIgd}</TautanKecil>
         <TautanKecil to="/hapus">{beranda.tautanHapus}</TautanKecil>
