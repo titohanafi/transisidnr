@@ -4,7 +4,8 @@ import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
 import { KartuRingkas } from "../components/KartuRingkas";
-import { LencanaStatus } from "../components/Lencana";
+import { LencanaStatus, Tanda } from "../components/Lencana";
+import { Lipat } from "../components/Lipat";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
@@ -14,7 +15,7 @@ import { isi } from "../lib/teks";
 import { useRencana } from "../state/useRencana";
 import { useStore } from "../state/store";
 
-const { rencana: t, umum } = konten.ui;
+const { rencana: t } = konten.ui;
 
 export function Rencana() {
   const { state } = useStore();
@@ -27,21 +28,23 @@ export function Rencana() {
   if (Object.keys(state.asesmen.status).length === 0) return <Navigate to="/asesmen/aktivitas" replace />;
 
   const dataKartu = (id: string) => konten.kartu.find((k) => k.id === id);
-  const lainnya = rencana.daftar.filter((k) => !rencana.mulaiDariSini.some((m) => m.id === k.id));
+  const lainnyaSemua = rencana.daftar.filter((k) => !rencana.mulaiDariSini.some((m) => m.id === k.id));
+  const lainnya = lainnyaSemua.filter((k) => !k.isiMenyusul);
+  const disusun = lainnyaSemua.filter((k) => k.isiMenyusul);
   const pendamping = rencana.pendamping ? dataKartu(rencana.pendamping) : undefined;
   const satuHal = rencana.satuHalHariIni;
   const labelAkt = (id: string) => konten.asesmen.aktivitas.find((a) => a.id === id)?.label.split(" (")[0] ?? id;
 
   return (
     <Halaman judul={t.judul}>
-      {masukan.prioritas.length > 0 && (
-        <p className="mt-2 text-redup">{isi(t.prioritas, { daftar: masukan.prioritas.map(labelAkt).join(", ") })}</p>
-      )}
-      <Link to="/asesmen/aktivitas" className="inline-flex min-h-sentuh items-center text-utama underline">
-        {t.ubahJawaban}
-      </Link>
-
-      <PeringatanNonMedis />
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        {masukan.prioritas.map((a) => (
+          <Tanda key={a}>{labelAkt(a)}</Tanda>
+        ))}
+        <Link to="/asesmen/aktivitas" className="inline-flex min-h-sentuh items-center text-utama underline">
+          {t.ubahJawaban}
+        </Link>
+      </div>
 
       {rencana.kosong ? (
         <section className="mt-5 rounded-kartu border border-utama bg-utama-muda p-4" aria-labelledby="kosong">
@@ -65,13 +68,18 @@ export function Rencana() {
             </section>
           )}
 
-          {rencana.kebutuhanJangkaPanjangBelumJelas && <p className="mt-4 text-redup">{t.belumJelas}</p>}
+          {!satuHal && rencana.mulaiDariSini.length === 0 && (
+            <p role="note" className="mt-5 rounded-kartu border border-draf bg-draf-muda p-3 text-draf">
+              {t.belumAdaSiap}
+            </p>
+          )}
 
-          <p className="mt-4 font-medium">
-            {rencana.total.diketahui
-              ? isi(t.total, { rentang: formatRentang({ min: rencana.total.minRp, max: rencana.total.maksRp }) })
-              : umum.biayaMenyusul}
-          </p>
+          {rencana.total.diketahui && (
+            <p className="mt-4 font-medium">
+              {isi(t.total, { rentang: formatRentang({ min: rencana.total.minRp, max: rencana.total.maksRp }) })}
+            </p>
+          )}
+          {rencana.kebutuhanJangkaPanjangBelumJelas && <p className="mt-3 text-sm text-redup">{t.belumJelas}</p>}
 
           {rencana.mulaiDariSini.length > 0 && (
             <section className="mt-5" aria-labelledby="mulai">
@@ -97,6 +105,16 @@ export function Rencana() {
                 ))}
               </div>
             </section>
+          )}
+
+          {disusun.length > 0 && (
+            <Lipat judul={`${t.sedangDisusun} (${disusun.length})`} buka={rencana.mulaiDariSini.length === 0 && lainnya.length === 0}>
+              <div className="space-y-3">
+                {disusun.map((k) => (
+                  <KartuRingkas key={k.id} kartu={k} />
+                ))}
+              </div>
+            </Lipat>
           )}
         </>
       )}
@@ -129,6 +147,7 @@ export function Rencana() {
           <CheckIn />
         </section>
       )}
+      <PeringatanNonMedis />
     </Halaman>
   );
 }

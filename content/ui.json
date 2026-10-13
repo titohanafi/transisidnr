@@ -165,7 +165,9 @@
     "pendampingJudul": "Untuk caregiver",
     "bukaKartu": "Buka panduan",
     "cocokSewa": "Cocok untuk kontrakan dan kos",
-    "cetak": "Cetak rencana"
+    "cetak": "Cetak rencana",
+    "sedangDisusun": "Sedang disusun",
+    "belumAdaSiap": "Panduan untuk prioritas Anda belum siap. Isinya sedang disusun; daftarnya ada di bawah."
   },
   "kartu": {
     "tingkat": {

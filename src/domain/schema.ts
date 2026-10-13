@@ -177,7 +177,7 @@ export const uiSchema = z
     rencana: z.object({
       judul: teks, prioritas: teks, ubahJawaban: teks, satuHal: teks, dariKartu: teks, lihatKartu: teks,
       mulaiDariSini: teks, semuaRekomendasi: teks, kosongJudul: teks, kosongIsi: teks, belumJelas: teks,
-      total: teks, pendampingJudul: teks, bukaKartu: teks, cocokSewa: teks, cetak: teks,
+      total: teks, pendampingJudul: teks, bukaKartu: teks, cocokSewa: teks, cetak: teks, sedangDisusun: teks, belumAdaSiap: teks,
     }),
     kartu: z.object({
       tingkat: z.object({ tanpa_biaya: teks, alat_tanpa_bongkar: teks, renovasi: teks }),
