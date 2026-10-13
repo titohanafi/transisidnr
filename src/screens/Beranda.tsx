@@ -51,17 +51,6 @@ export function Beranda() {
         </TombolLink>
       </section>
 
-      <ol className="mt-4 flex gap-2" aria-label={beranda.caraKerja}>
-        {beranda.langkah.map((l, i) => (
-          <li key={l.judul} className="flex flex-1 flex-col items-center gap-1 text-center text-sm font-medium">
-            <span aria-hidden="true" className="flex h-7 w-7 items-center justify-center rounded-full bg-utama-muda font-bold text-utama-gelap">
-              {i + 1}
-            </span>
-            {l.judul}
-          </li>
-        ))}
-      </ol>
-
       <nav aria-label={umum.tautanLain} className="mt-auto flex flex-col pt-6">
         <TautanKecil to="/igd">{beranda.tautanIgd}</TautanKecil>
         <TautanKecil to="/hapus">{beranda.tautanHapus}</TautanKecil>

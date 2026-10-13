@@ -3,20 +3,6 @@
     "nama": "Transisi"
   },
   "beranda": {
-    "langkah": [
-      {
-        "judul": "Jawab pertanyaan",
-        "isi": "Pertanyaan singkat ya atau tidak. Tanpa ukur-ukur."
-      },
-      {
-        "judul": "Dapat rencana",
-        "isi": "Urut dari yang paling ringan dan bisa dibatalkan."
-      },
-      {
-        "judul": "Lakukan",
-        "isi": "Kerjakan sendiri, beli alat, panggil tukang, atau tanya ahli."
-      }
-    ],
     "spandukDraf": "Konten masih draf dan belum ditinjau ahli.",
     "tautanIgd": "Kapan harus ke dokter atau IGD",
     "tautanHapus": "Hapus data saya",
@@ -36,7 +22,6 @@
         "semua": "Lihat semua panduan"
       }
     },
-    "caraKerja": "Cara kerja Transisi",
     "konteks": "Panduan dan rencana menyesuaikan rumah untuk pengguna kursi roda."
   },
   "umum": {

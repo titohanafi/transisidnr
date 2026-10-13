@@ -144,7 +144,6 @@ export const uiSchema = z
   .object({
     app: z.object({ nama: teks }),
     beranda: z.object({
-      langkah: z.array(z.object({ judul: teks, isi: teks })).length(3),
       spandukDraf: teks,
       tautanIgd: teks,
       tautanHapus: teks,
@@ -154,7 +153,6 @@ export const uiSchema = z
         susun: z.object({ judul: teks, isi: teks, tombol: teks }),
         tahu: z.object({ judul: teks, isi: teks, alat: teks, tukang: teks, ahli: teks, semua: teks }),
       }),
-      caraKerja: teks,
     }),
     umum: rekamTeks,
     igd: z.object({ judul: teks, isi: teks, daftarJudul: teks, tandaBahaya: z.array(teks), menyusul: teks }),
