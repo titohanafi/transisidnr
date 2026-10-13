@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Halaman } from "../components/Halaman";
+import { Ikon } from "../components/Ikon";
 import { LencanaStatus, Tanda } from "../components/Lencana";
 import { TombolAksi } from "../components/TombolAksi";
 import { TombolLink } from "../components/Tombol";
@@ -65,7 +66,8 @@ export function Jelajah() {
 
       {kelompok.map((g) => (
         <section key={g.kunci} className="mt-6" aria-labelledby={`grup-${g.kunci}`}>
-          <h2 id={`grup-${g.kunci}`} className="text-xl font-bold">
+          <h2 id={`grup-${g.kunci}`} className="flex items-center gap-3 text-xl font-bold">
+            <Ikon kunci={g.kunci} className="h-9 w-9" />
             {label(g.kunci)}
           </h2>
           <div className="mt-3 space-y-3">

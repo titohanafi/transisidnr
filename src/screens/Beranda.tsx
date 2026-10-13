@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
+import { IlustrasiBeranda } from "../components/Ikon";
 import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
 
@@ -9,6 +10,7 @@ const { app, beranda, umum } = konten.ui;
 export function Beranda() {
   return (
     <Halaman judul={app.nama}>
+      <IlustrasiBeranda className="mt-3" />
       <p className="mt-3 text-lg">{beranda.manfaat}</p>
 
       <p role="note" className="mt-4 rounded-kartu border border-draf bg-draf-muda p-3 text-draf">

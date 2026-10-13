@@ -53,6 +53,9 @@ Bila teks kartu memuat istilah teknis (misalnya "grab bar"), tambahkan penjelasa
 ### Jalur pintas "Semua kartu"
 Layar `/jelajah` otomatis menampilkan semua kartu di `content/kartu/` dan tombol aksi yang tersedia (sendiri, alat, tukang, ahli) berdasarkan isi kartu. Tidak ada yang perlu didaftarkan: kartu baru dengan `solusi` lengkap langsung tampil dengan tombolnya; kartu `isi_menyusul` tampil tanpa tombol. Kartu dikelompokkan menurut `tag.aktivitas`.
 
+### Ilustrasi
+Ikon di setiap kartu mengikuti `tag.aktivitas` (kartu pendamping memakai ikon hati); tidak ada yang perlu diunggah. Ikon dan ilustrasi ada di `src/components/Ikon.tsx` (SVG sebaris). Jangan menambah foto atau gambar besar tanpa bicara dengan tim, karena aplikasi ini dibuat ringan untuk kuota rendah dan gambar orang atau ukuran harus ditinjau.
+
 ### Teks antarmuka
 Semua teks yang dilihat pengguna ada di `content/ui.json`; pertanyaan awal ada di `content/onboarding.json`; angka seperti `faseAwalBulan`, jumlah "mulai dari sini", dan rentang budget ada di `content/config.json`. Pilihan budget di onboarding dibaca dari `config.json` (`budget`); ubah rentang di sana saja, onboarding dan brief ikut berubah. Menambah pilihan budget baru juga hanya di `config.json` (beri `id` unik). Jangan mengubah nama kunci (bagian kiri); ubah hanya isinya. Jika kunci hilang, validasi akan gagal.
 

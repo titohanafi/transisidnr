@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
+import { Ikon } from "../components/Ikon";
 import { LencanaSifat, LencanaStatus, Tanda } from "../components/Lencana";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { TombolLink } from "../components/Tombol";
 import { TAMPILKAN_ANGKA_DRAF, konten } from "../domain/content";
 import { susunTingkat } from "../domain/engine";
 import { istilahDalam } from "../domain/istilah";
+import { kunciKelompok } from "../domain/jelajah";
 import { TINGKAT, type Tingkat } from "../domain/konstanta";
 import type { Kartu } from "../domain/schema";
 import { bolehTampilkanUkuran } from "../domain/ukuran";
@@ -60,7 +62,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
 
   return (
     <Halaman judul={kartu.judul}>
-      <div className="mt-2 flex flex-wrap gap-2">
+      <div className="mt-2 flex items-center gap-3">
+        <Ikon kunci={kunciKelompok(kartu)} className="h-12 w-12" />
         <LencanaStatus status={kartu.status_validasi} />
       </div>
       <PeringatanNonMedis />

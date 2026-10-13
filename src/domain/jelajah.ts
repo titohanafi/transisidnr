@@ -38,14 +38,18 @@ export function cocokFilter(kartu: Kartu, tingkatTampil: readonly Tingkat[], fil
   return aksiKartu(kartu, tingkatTampil).some((a) => a.jenis === jenisFilter[filter]);
 }
 
+/** Kelompok sebuah kartu: aktivitas pertama di tag-nya, atau "caregiver" untuk kartu pendamping. */
+export function kunciKelompok(k: Kartu, urutanAktivitas: readonly Aktivitas[] = AKTIVITAS): KunciKelompok {
+  return adalahPendamping(k) ? "caregiver" : (urutanAktivitas.find((a) => k.tag.aktivitas.includes(a)) ?? "umum");
+}
+
 /**
  * Mengelompokkan kartu per aktivitas (urutan aktivitas dari asesmen), kartu pendamping di akhir.
  * Dalam satu kelompok, kartu yang sudah berisi tampil sebelum kerangka, lalu urut id.
  * Urutan tidak pernah dipengaruhi tautan atau afiliasi.
  */
 export function kelompokkan(kartu: Kartu[], urutanAktivitas: readonly Aktivitas[] = AKTIVITAS): { kunci: KunciKelompok; kartu: Kartu[] }[] {
-  const kunciDari = (k: Kartu): KunciKelompok =>
-    adalahPendamping(k) ? "caregiver" : (urutanAktivitas.find((a) => k.tag.aktivitas.includes(a)) ?? "umum");
+  const kunciDari = (k: Kartu) => kunciKelompok(k, urutanAktivitas);
   const urut = [...urutanAktivitas, "caregiver" as const];
   const banding = (a: Kartu, b: Kartu) =>
     Number(!!a.isi_menyusul) - Number(!!b.isi_menyusul) || a.id.localeCompare(b.id);

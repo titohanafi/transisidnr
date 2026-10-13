@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { konten } from "../domain/content";
 import type { KartuRencana, TingkatRencana } from "../domain/engine";
+import { Ikon } from "./Ikon";
+import { kunciKelompok } from "../domain/jelajah";
 import { LencanaSifat, LencanaStatus, Tanda } from "./Lencana";
 import { aksiUtama } from "../domain/aksi";
 import { TombolAksi } from "./TombolAksi";
@@ -21,7 +23,10 @@ export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRenca
 
   return (
     <article className="rounded-kartu border border-garis bg-white p-4">
-      <Judul className="text-lg font-semibold leading-snug">{data.judul}</Judul>
+      <div className="flex items-start gap-3">
+        <Ikon kunci={kunciKelompok(data)} className="mt-0.5 h-9 w-9" />
+        <Judul className="text-lg font-semibold leading-snug">{data.judul}</Judul>
+      </div>
       <div className="mt-2 flex flex-wrap gap-2">
         <LencanaStatus status={data.status_validasi} />
       </div>

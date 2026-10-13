@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
+import { Ikon } from "../components/Ikon";
 import { NavBawah } from "../components/NavBawah";
 import { Pilihan } from "../components/Pilihan";
 import { konten } from "../domain/content";
@@ -28,7 +29,10 @@ export function AsesmenAktivitas() {
       <div className="mt-4 space-y-5">
         {aktivitas.map((a) => (
           <fieldset key={a.id}>
-            <legend className="mb-2 text-lg font-semibold">{a.label}</legend>
+            <legend className="mb-2 flex items-center gap-3 text-lg font-semibold">
+              <Ikon kunci={a.id} className="h-9 w-9" />
+              {a.label}
+            </legend>
             <div className="space-y-2">
               <Pilihan
                 tipe="radio"

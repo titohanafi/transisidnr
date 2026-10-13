@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
+import { Ikon } from "../components/Ikon";
 import { KartuRingkas } from "../components/KartuRingkas";
 import { LencanaStatus } from "../components/Lencana";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
@@ -112,7 +113,10 @@ export function Rencana() {
             {t.pendampingJudul}
           </h2>
           <article className="mt-3 rounded-kartu border border-garis bg-white p-4">
-            <h3 className="text-lg font-semibold leading-snug">{pendamping.judul}</h3>
+            <div className="flex items-start gap-3">
+              <Ikon kunci="caregiver" className="mt-0.5 h-9 w-9" />
+              <h3 className="text-lg font-semibold leading-snug">{pendamping.judul}</h3>
+            </div>
             <div className="mt-2">
               <LencanaStatus status={pendamping.status_validasi} />
             </div>
