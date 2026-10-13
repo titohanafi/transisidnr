@@ -56,7 +56,10 @@ describe("aksi di daftar", () => {
   it("tanpa filter tidak ada tombol aksi (cukup buka panduan)", () => {
     expect(aksiUntukFilter(aksi, "semua")).toEqual([]);
   });
-  it.each([["alat", "beli"], ["tukang", "tukang"], ["ahli", "ahli"]] as const)("filter %s hanya menampilkan aksi %s", (f, jenis) => {
+  it("filter ahli tidak punya tombol sendiri (isinya ada di panduan)", () => {
+    expect(aksiUntukFilter(aksi, "ahli")).toEqual([]);
+  });
+  it.each([["alat", "beli"], ["tukang", "tukang"]] as const)("filter %s hanya menampilkan aksi %s", (f, jenis) => {
     expect(aksiUntukFilter(aksi, f).map((a) => a.jenis)).toEqual([jenis]);
   });
   it("lakukan sendiri tidak pernah ditampilkan di daftar", () => {

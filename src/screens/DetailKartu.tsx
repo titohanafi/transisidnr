@@ -208,9 +208,6 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   </li>
                 ))}
               </ul>
-              <div className="mt-3">
-                <TombolAksi jenis="ahli" kartuId={kartu.id} gayaTombol="sekunder" />
-              </div>
               <p className="mt-3 text-redup">{t.direktoriMenyusul}</p>
             </section>
           )}

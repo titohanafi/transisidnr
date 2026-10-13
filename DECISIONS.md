@@ -135,3 +135,8 @@
 - Beranda dirombak agar muat satu layar ponsel dengan sedikit teks: kalimat pembuka dipersingkat, ilustrasi dipindah ke atas, jalur dipandu jadi kartu teal dengan satu tombol, jalur langsung jadi tiga ubin berikon (alat, tukang, ahli), cara kerja jadi tiga langkah satu baris (judul saja).
 - Ikon `alat`, `tukang`, `ahli` ditambahkan ke `Ikon.tsx` (SVG sebaris, dekoratif, tanpa gambar orang). Ikon ini sketsa awal; desainer sebaiknya menggantinya.
 - Kalimat deskripsi langkah "cara kerja" dan "Langsung ke yang Anda butuhkan" tidak lagi ditampilkan (tetap ada di `ui.json` karena skema masih mewajibkan).
+
+## "Tanya ahli" tidak lagi berupa tombol terpisah
+- Halaman `/aksi/ahli/:id` hanya mengulang isi bagian "Siapa yang bisa membantu" di panduan. Tombol "Tanya ahli" di panduan dihapus; bagian itu sudah menjadi tujuannya.
+- Saringan "Tanya ahli" di Jelajah kini menampilkan kartu dengan tombol "Buka panduan" saja.
+- Rute `/aksi/ahli/:id` dibiarkan (tautan lama tidak patah). Bila direktori ahli sudah ada, tombol aksi nyata bisa kembali di bagian itu.
