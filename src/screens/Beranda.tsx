@@ -20,6 +20,7 @@ export function Beranda() {
         <h3 id="jalur-susun" className="text-xl font-bold">
           {pilih.susun.judul}
         </h3>
+        <p className="mt-1">{pilih.susun.isi}</p>
         <Link
           to="/mulai/1"
           className="mt-3 inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-base font-semibold text-utama-gelap hover:bg-utama-muda"
