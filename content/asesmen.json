@@ -73,7 +73,7 @@
     {
       "id": "q-umum-panggil",
       "aktivitas": "umum",
-      "pertanyaan": "Apakah ada tombol atau cara memanggil bantuan dari kamar mandi?",
+      "pertanyaan": "Apakah tidak ada tombol atau cara memanggil bantuan dari kamar mandi?",
       "penjelasan": "Bila terjatuh atau butuh bantuan, Anda perlu cara memberi tahu orang lain tanpa harus berteriak.",
       "memicu_kartu": ["bath-emergency-call"]
     }

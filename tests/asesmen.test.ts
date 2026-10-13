@@ -132,3 +132,11 @@ describe("ukuran foto", () => {
     expect(ukuranBaru(500, 300)).toEqual({ lebar: 500, tinggi: 300 });
   });
 });
+
+describe("arah jawaban pertanyaan", () => {
+  it("setiap pertanyaan ditulis sebagai masalah, sehingga 'ya' berarti ada hambatan", () => {
+    // Jawaban "ya" memicu kartu. Pertanyaan positif ("Apakah ada ...?") akan terbalik artinya.
+    const positif = asesmen.pertanyaan.filter((p) => /^Apakah ada\b/i.test(p.pertanyaan));
+    expect(positif.map((p) => p.id)).toEqual([]);
+  });
+});
