@@ -37,12 +37,9 @@ export function Beranda() {
         <h3 id="jalur-tahu" className="sr-only">
           {pilih.tahu.judul}
         </h3>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <Ubin to="/jelajah/alat" ikon="alat">
             {pilih.tahu.alat}
-          </Ubin>
-          <Ubin to="/jelajah/tukang" ikon="tukang">
-            {pilih.tahu.tukang}
           </Ubin>
           <Ubin to="/jelajah/ahli" ikon="ahli">
             {pilih.tahu.ahli}
@@ -65,13 +62,13 @@ export function Beranda() {
   );
 }
 
-function Ubin({ to, ikon, children }: { to: string; ikon: "alat" | "tukang" | "ahli"; children: ReactNode }) {
+function Ubin({ to, ikon, children }: { to: string; ikon: "alat" | "ahli"; children: ReactNode }) {
   return (
     <Link
       to={to}
-      className="flex min-h-sentuh flex-col items-center justify-center gap-1 rounded-kartu border-2 border-utama bg-white px-1 py-3 text-center text-sm font-semibold text-utama hover:bg-utama-muda"
+      className="flex min-h-sentuh flex-col items-center justify-center gap-2 rounded-kartu border-2 border-utama bg-white px-2 py-4 text-center text-sm font-semibold text-utama hover:bg-utama-muda"
     >
-      <IkonBeranda kunci={ikon} className="h-8 w-8" />
+      <IkonBeranda kunci={ikon} className="h-9 w-9" />
       {children}
     </Link>
   );

@@ -295,3 +295,7 @@
 - Pilihan "Merapikan diri" dan "Umum" adalah tafsiran saya karena Lucide tak punya ikon cermin-wastafel; bisa diganti di `src/components/Ikon.tsx`.
 - Ikon buatan sendiri yang tersisa hanya kamera di layar foto. Ikon alat/tukang/ahli lama yang tak terpakai dibuang.
 - JS gzip kini 34,4 kB (naik 0,5 kB dari penambahan ikon).
+
+## Pesan ke tukang bukan menu utama Beranda
+- Tombol cepat "Pesan ke tukang" dihapus dari Beranda karena tukang ada di ujung urutan (tanpa biaya -> alat -> renovasi/jasa) dan draf pesannya butuh konteks panduan. Beranda kini punya dua tombol cepat yang lebih besar: Cari alat dan Tanya ahli.
+- Tetap ada: tombol aksi di panduan/Rencana (tingkat renovasi atau alat yang perlu dipasang) dan pilihan "Pesan ke tukang" di halaman Panduan (`/jelajah/tukang`).

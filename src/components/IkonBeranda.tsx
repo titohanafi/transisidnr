@@ -1,10 +1,9 @@
-import { ClipboardList, Hammer, MessagesSquare, Wrench } from "lucide-react";
+import { ClipboardList, MessagesSquare, Wrench } from "lucide-react";
 
 // Ikon Beranda dari Lucide (ISC), diimpor satu per satu agar bundel tetap kecil. Dekoratif: artinya sudah ada di teks.
 const ikon = {
   rencana: ClipboardList,
   alat: Wrench,
-  tukang: Hammer,
   ahli: MessagesSquare,
 } as const;
 
