@@ -226,7 +226,9 @@ export const uiSchema = z
     pilihRuangan: z.object({ judul: teks, segera: teks, lanjut: teks }),
     checkin: z.object({
       label: teks,
-      sapaan: teks,
+      riwayatJudul: teks,
+      hariIni: teks,
+      belumDiisi: teks,
       pertanyaan: teks,
       pilihan: z.array(opsi.extend({ balasan: teks })).min(1),
       penutup: teks,

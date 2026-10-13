@@ -77,7 +77,9 @@
   },
   "checkin": {
     "label": "Untuk Anda yang merawat",
-    "sapaan": "Merawat itu pekerjaan yang besar. Anda juga penting.",
+    "riwayatJudul": "Riwayat 7 hari terakhir",
+    "hariIni": "Hari ini",
+    "belumDiisi": "Belum diisi",
     "pertanyaan": "Bagaimana perasaan Anda hari ini?",
     "pilihan": [
       {

@@ -33,6 +33,8 @@ export interface State {
   checklist: Record<string, number[]>;
   /** id jawaban check-in caregiver yang terakhir dipilih. */
   checkin: string | null;
+  /** "YYYY-MM-DD" (tanggal lokal) -> id jawaban check-in hari itu. */
+  riwayatCheckin: Record<string, string>;
   /** id panduan -> hasil setelah dicoba ("sudah cukup" atau "masih sulit"). */
   hasil: Record<string, HasilPanduan>;
   /** id ruangan yang sedang dibereskan (dari config.json); null bila belum dipilih. */
@@ -40,7 +42,7 @@ export interface State {
 }
 
 export const asesmenAwal = (): AsesmenState => ({ status: {}, prioritas: [], jawaban: {} });
-export const stateAwal = (): State => ({ versi: 1, onboarding: {}, asesmen: asesmenAwal(), checklist: {}, checkin: null, hasil: {}, ruangan: null });
+export const stateAwal = (): State => ({ versi: 1, onboarding: {}, asesmen: asesmenAwal(), checklist: {}, checkin: null, riwayatCheckin: {}, hasil: {}, ruangan: null });
 
 // Validasi tulisan tangan (tanpa pustaka) agar bundel kecil. Data yang bentuknya salah ditolak seluruhnya.
 const adalahObjek = (x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
@@ -82,6 +84,9 @@ export function parseState(x: unknown): State | null {
   const checkin = x.checkin === undefined || x.checkin === null ? null : adalahTeks(x.checkin) ? x.checkin : undefined;
   if (checkin === undefined) return null;
 
+  const riwayatCheckin = x.riwayatCheckin === undefined ? awal.riwayatCheckin : rekam(x.riwayatCheckin, adalahTeks);
+  if (!riwayatCheckin || !Object.keys(riwayatCheckin).every((k) => /^\d{4}-\d{2}-\d{2}$/.test(k))) return null;
+
   const hasil = x.hasil === undefined ? awal.hasil : rekam(x.hasil, adalahHasil);
   if (!hasil) return null;
 
@@ -89,7 +94,7 @@ export function parseState(x: unknown): State | null {
   const bersih = Object.fromEntries(Object.entries(hasil).map(([k, v]) => [k, { status: v.status, tingkat: v.tingkat }]));
   const ruangan = x.ruangan === undefined || x.ruangan === null ? null : adalahTeks(x.ruangan) ? x.ruangan : undefined;
   if (ruangan === undefined) return null;
-  return { versi: 1, onboarding, asesmen, checklist, checkin, hasil: bersih, ruangan };
+  return { versi: 1, onboarding, asesmen, checklist, checkin, riwayatCheckin, hasil: bersih, ruangan };
 }
 
 type Gudang = Pick<Storage, "getItem" | "setItem" | "removeItem">;

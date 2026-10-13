@@ -13,6 +13,7 @@ import { konten } from "../domain/content";
 import { terapkanHasil } from "../domain/hasil";
 import { track } from "../lib/events";
 import { formatRentang } from "../lib/format";
+import { kunciHari } from "../lib/tanggal";
 import { isi } from "../lib/teks";
 import { useRencana } from "../state/useRencana";
 import { useStore } from "../state/store";
@@ -31,10 +32,12 @@ export function Rencana() {
     return <Navigate to="/asesmen/aktivitas" replace />;
 
   // Bila caregiver bilang sedang lelah, tampilkan satu hal saja dan simpan sisanya di lipatan.
+  // Yang dihitung hanya jawaban hari ini, supaya "lelah" minggu lalu tidak terus mengurangi rencana.
+  const hariIni = state.riwayatCheckin[kunciHari()];
   const ringan =
-    state.checkin === "capek_fisik" ||
-    state.checkin === "capek_emosi" ||
-    state.checkin === "butuh_istirahat";
+    hariIni === "capek_fisik" ||
+    hariIni === "capek_emosi" ||
+    hariIni === "butuh_istirahat";
   const h = terapkanHasil(rencana, state.hasil, konten.kartu);
 
   const dataKartu = (id: string) => konten.kartu.find((k) => k.id === id);

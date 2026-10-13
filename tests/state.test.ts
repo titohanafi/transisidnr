@@ -90,6 +90,7 @@ describe("parseState (validasi tulisan tangan)", () => {
     asesmen: { status: { toilet: "sulit" }, prioritas: ["toilet"], jawaban: { a: true } },
     checklist: { "x:tanpa_biaya": [0, 2] },
     checkin: "soal_biaya",
+    riwayatCheckin: { "2026-10-13": "soal_biaya", "2026-10-14": "capek_fisik" },
     hasil: { "bath-door": { status: "cukup", tingkat: "tanpa_biaya" } },
     ruangan: "kamar_mandi",
   };
@@ -117,6 +118,8 @@ describe("parseState (validasi tulisan tangan)", () => {
     ["nomor langkah negatif", { ...sah, checklist: { a: [-1] } }],
     ["nomor langkah pecahan", { ...sah, checklist: { a: [1.5] } }],
     ["checkin bukan teks", { ...sah, checkin: 5 }],
+    ["riwayat check-in bukan teks", { ...sah, riwayatCheckin: { "2026-10-14": 3 } }],
+    ["riwayat check-in dengan tanggal salah", { ...sah, riwayatCheckin: { kemarin: "capek_fisik" } }],
     ["hasil status tidak dikenal", { ...sah, hasil: { a: { status: "mungkin", tingkat: "tanpa_biaya" } } }],
     ["hasil tingkat tidak dikenal", { ...sah, hasil: { a: { status: "cukup", tingkat: "mewah" } } }],
     ["hasil bukan objek", { ...sah, hasil: { a: "cukup" } }],

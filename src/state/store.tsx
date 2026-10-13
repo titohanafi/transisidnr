@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { konten } from "../domain/content";
 import type { Aktivitas } from "../domain/schema";
+import { kunciHari, pangkasRiwayat } from "../lib/tanggal";
 import { rapikan, ubahPrioritas } from "./asesmen";
 import {
   hapus, hapusFoto, muat, muatFoto, simpan, simpanFoto, stateAwal,
@@ -80,7 +81,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     [ubah],
   );
 
-  const setCheckin = useCallback((id: string | null) => ubah((s) => ({ ...s, checkin: id })), [ubah]);
+  const setCheckin = useCallback(
+    (id: string | null) =>
+      ubah((s) => {
+        const r = { ...s.riwayatCheckin };
+        if (id) r[kunciHari()] = id;
+        else delete r[kunciHari()];
+        return { ...s, checkin: id, riwayatCheckin: pangkasRiwayat(r) };
+      }),
+    [ubah],
+  );
 
   const setRuangan = useCallback((id: string | null) => ubah((s) => ({ ...s, ruangan: id })), [ubah]);
 
