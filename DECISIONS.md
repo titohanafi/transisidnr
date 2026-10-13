@@ -303,3 +303,7 @@
 - Ikon kamera di layar foto kini Lucide `Camera`. Tidak ada lagi ikon buatan sendiri di aplikasi; `IkonAksi` dihapus.
 
 - Ikon bilah menu bawah kini Lucide: Beranda (rumah), Panduan (buku terbuka), Rencana (daftar centang), Darurat (perisai peringatan). Panah kembali di header juga Lucide (`ChevronLeft`).
+
+## "Tanya ahli" diganti "Kenali peran ahli"
+- Halaman ini hanya menjelaskan peran tiap jenis ahli, bukan daftar ahli yang tersedia (direktori menyusul), jadi "Tanya ahli" menjanjikan terlalu banyak. Nama baru berlaku di Beranda, saringan Panduan, tombol aksi di panduan, dan judul layar aksi.
+- Tombolnya saya biarkan di Beranda karena sifatnya informasi ringan, bukan langkah yang mahal. Bila ingin disamakan dengan tukang (dihapus dari Beranda), Beranda hanya tersisa satu tombol cepat.

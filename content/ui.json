@@ -17,7 +17,7 @@
         "judul": "Atau lewati pertanyaan, langsung cari:",
         "isi": "Langsung ke yang Anda butuhkan.",
         "alat": "Cari alat",
-        "ahli": "Tanya ahli",
+        "ahli": "Kenali peran ahli",
         "semua": "Lihat semua panduan"
       }
     },
@@ -289,7 +289,7 @@
       "sendiri": "Lakukan sendiri",
       "beli": "Lihat alat",
       "tukang": "Pesan ke tukang",
-      "ahli": "Tanya ahli"
+      "ahli": "Kenali peran ahli"
     },
     "kembaliKeKartu": "Kembali ke panduan",
     "sendiri": {
@@ -346,7 +346,7 @@
       "fotoTerpisah": "Foto akan dikirim terpisah."
     },
     "ahli": {
-      "judul": "Tanya ahli",
+      "judul": "Kenali peran ahli",
       "bantuan": "Jenis ahli yang cocok untuk panduan ini:",
       "nyeri": "Untuk nyeri, luka, atau protesis, tanyakan ke dokter rehabilitasi medik atau prostetis-ortotis. Platform ini tidak menjawabnya.",
       "kosong": "Panduan ini belum punya saran ahli."
@@ -370,7 +370,7 @@
       "semua": "Semua",
       "alat": "Cari alat",
       "tukang": "Pesan ke tukang",
-      "ahli": "Tanya ahli"
+      "ahli": "Kenali peran ahli"
     },
     "kosongFilter": "Belum ada panduan dengan isi lengkap untuk pilihan ini. Isi panduan masih disusun.",
     "caregiver": "Untuk caregiver",
