@@ -151,7 +151,7 @@ export const uiSchema = z
       pilih: z.object({
         judul: teks,
         susun: z.object({ judul: teks, deskripsi: teks, tombol: teks }),
-        tahu: z.object({ judul: teks, isi: teks, alat: teks, ahli: teks, semua: teks }),
+        tahu: z.object({ judul: teks, isi: teks, alat: teks, semua: teks }),
       }),
     }),
     umum: rekamTeks,

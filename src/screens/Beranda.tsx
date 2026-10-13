@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
+import { ChevronRight } from "lucide-react";
 import { IkonBeranda } from "../components/IkonBeranda";
-import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
 
 const { app, beranda, umum } = konten.ui;
@@ -37,17 +37,14 @@ export function Beranda() {
         <h3 id="jalur-tahu" className="sr-only">
           {pilih.tahu.judul}
         </h3>
-        <div className="grid grid-cols-2 gap-2">
-          <Ubin to="/jelajah/alat" ikon="alat">
+        <div className="space-y-2">
+          <BarisJalur to="/jelajah" ikon="panduan" utama>
+            {pilih.tahu.semua}
+          </BarisJalur>
+          <BarisJalur to="/jelajah/alat" ikon="alat">
             {pilih.tahu.alat}
-          </Ubin>
-          <Ubin to="/jelajah/ahli" ikon="ahli">
-            {pilih.tahu.ahli}
-          </Ubin>
+          </BarisJalur>
         </div>
-        <TombolLink to="/jelajah" gayaTombol="sekunder" className="mt-3 w-full">
-          {pilih.tahu.semua}
-        </TombolLink>
       </section>
 
       <section className="mt-5">
@@ -62,14 +59,17 @@ export function Beranda() {
   );
 }
 
-function Ubin({ to, ikon, children }: { to: string; ikon: "alat" | "ahli"; children: ReactNode }) {
+function BarisJalur({ to, ikon, utama, children }: { to: string; ikon: "panduan" | "alat"; utama?: boolean; children: ReactNode }) {
   return (
     <Link
       to={to}
-      className="flex min-h-sentuh flex-col items-center justify-center gap-2 rounded-kartu border-2 border-utama bg-white px-2 py-4 text-center text-sm font-semibold text-utama hover:bg-utama-muda"
+      className={`flex min-h-[56px] items-center gap-3 rounded-kartu border-2 border-utama px-4 py-3 text-lg font-semibold ${
+        utama ? "bg-utama-muda text-utama-gelap hover:bg-white" : "bg-white text-utama hover:bg-utama-muda"
+      }`}
     >
-      <IkonBeranda kunci={ikon} className="h-9 w-9" />
-      {children}
+      <IkonBeranda kunci={ikon} className="h-7 w-7" />
+      <span className="flex-1">{children}</span>
+      <ChevronRight className="h-6 w-6 shrink-0" strokeWidth={2.5} aria-hidden="true" focusable="false" />
     </Link>
   );
 }
