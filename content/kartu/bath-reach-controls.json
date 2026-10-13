@@ -2,6 +2,94 @@
   "id": "bath-reach-controls",
   "judul": "Sulit menjangkau sabun, shower, dan keran",
   "situasi": "Sabun, shower, atau keran sulit dijangkau dari posisi duduk.",
+  "kenapa_penting": "Meregang atau memutar badan untuk meraih sabun dan keran membuat keseimbangan terganggu dan memicu jatuh dari kursi.",
+  "solusi": {
+    "tanpa_biaya": {
+      "ringkasan": "Atur ulang letak barang supaya semuanya terjangkau dari posisi duduk.",
+      "sifat": "sementara",
+      "langkah": [
+        "Kumpulkan sabun, sampo, dan handuk dalam satu tempat yang terjangkau saat duduk.",
+        "Siapkan semua perlengkapan sebelum mulai mandi supaya tidak perlu meraih.",
+        "Turunkan barang yang biasanya disimpan di tempat tinggi.",
+        "Coba posisi duduk yang membuat keran atau shower lebih dekat, lalu catat posisi yang paling nyaman."
+      ],
+      "biaya": {
+        "kisaran_rp": "Rp 0"
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Mudah, bisa sendiri"
+      },
+      "barang": []
+    },
+    "alat_tanpa_bongkar": {
+      "ringkasan": "Tambahkan alat yang mendekatkan sabun dan air, tanpa membongkar dinding.",
+      "sifat": "sementara",
+      "langkah": [
+        "Pasang rak atau keranjang gantung yang bisa dilepas pada tinggi yang terjangkau.",
+        "Ganti sabun batang dengan sabun cair berpompa yang lebih mudah dipegang.",
+        "Pertimbangkan shower tangan dengan selang supaya air bisa diarahkan dari posisi duduk."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Sedang, bisa sendiri atau dibantu caregiver"
+      },
+      "barang": [
+        {
+          "nama": "Rak atau keranjang gantung yang bisa dilepas",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek apakah bisa menempel di dinding atau pipa shower yang ada.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        },
+        {
+          "nama": "Shower tangan dengan selang",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek ukuran sambungan keran atau pipa di rumah sebelum membeli.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        }
+      ]
+    },
+    "renovasi": {
+      "ringkasan": "Pindahkan letak keran dan shower secara permanen ke tinggi yang terjangkau.",
+      "sifat": "permanen",
+      "langkah": [
+        "Turunkan posisi keran dan shower agar terjangkau dari posisi duduk.",
+        "Pasang rak atau ceruk dinding di tinggi yang terjangkau.",
+        "Pilih keran yang mudah diputar dengan satu tangan."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Perlu tukang"
+      },
+      "barang": []
+    }
+  },
+  "bantuan": [
+    {
+      "jenis": "tukang",
+      "keterangan": "Memindahkan pipa dan keran, atau memasang rak permanen."
+    },
+    {
+      "jenis": "okupasi_terapis",
+      "keterangan": "Menentukan tinggi dan jarak jangkau yang cocok bagi pengguna."
+    }
+  ],
+  "peran": {
+    "penyandang_disabilitas": "Menentukan barang apa yang perlu selalu terjangkau.",
+    "caregiver": "Menata ulang barang dan membantu memasang alat sederhana."
+  },
+  "peringatan": "Jangan meregang melebihi jangkauan nyaman dari kursi roda. Bila sering hampir jatuh, minta penilaian terapis.",
+  "sumber": [],
   "tag": {
     "fase": [
       "adaptasi_di_rumah"
@@ -21,11 +109,14 @@
       "kos",
       "apartemen"
     ],
-    "tingkat_biaya": [],
+    "tingkat_biaya": [
+      "nol",
+      "rendah",
+      "tinggi"
+    ],
     "kondisi": [
       "amputasi"
     ]
   },
-  "status_validasi": "draf",
-  "isi_menyusul": true
+  "status_validasi": "draf"
 }

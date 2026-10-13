@@ -2,6 +2,86 @@
   "id": "bath-floor-slip",
   "judul": "Lantai licin saat basah",
   "situasi": "Lantai kamar mandi licin saat basah.",
+  "kenapa_penting": "Lantai licin membuat tumpuan tangan dan roda kursi roda tergelincir. Terpeleset saat berpindah adalah salah satu cara paling umum orang jatuh di kamar mandi.",
+  "solusi": {
+    "tanpa_biaya": {
+      "ringkasan": "Jaga lantai tetap kering dan bersih dari benda yang menghalangi.",
+      "sifat": "sementara",
+      "langkah": [
+        "Keringkan lantai dengan pel atau lap setelah dipakai, terutama di dekat kloset dan area mandi.",
+        "Singkirkan ember, botol, dan benda lain dari lantai supaya jalur kursi roda bebas.",
+        "Pakai alas kaki atau kaus kaki dengan tapak karet bila masih berdiri sebentar untuk berpindah.",
+        "Berpindah hanya setelah lantai kering, dan minta pendamping berada di dekat Anda."
+      ],
+      "biaya": {
+        "kisaran_rp": "Rp 0"
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Mudah, bisa sendiri"
+      },
+      "barang": []
+    },
+    "alat_tanpa_bongkar": {
+      "ringkasan": "Tambahkan permukaan anti-slip yang bisa dilepas, cocok untuk kontrakan dan kos.",
+      "sifat": "sementara",
+      "langkah": [
+        "Pasang keset anti-slip atau stiker anti-slip di area berpindah dan area mandi.",
+        "Pastikan lantai bersih dan kering sebelum menempel, lalu cek tepinya tidak terangkat.",
+        "Ganti bila sudah aus atau tepinya mulai terlepas."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Mudah, bisa sendiri atau dibantu caregiver"
+      },
+      "barang": [
+        {
+          "nama": "Keset atau stiker anti-slip",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek jenis lantai dan pastikan bisa menempel kuat saat basah.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        }
+      ]
+    },
+    "renovasi": {
+      "ringkasan": "Ubah lantai secara permanen bila kebutuhan jangka panjang sudah jelas.",
+      "sifat": "permanen",
+      "langkah": [
+        "Ganti lantai dengan permukaan anti-slip yang tetap kasar saat basah.",
+        "Perbaiki kemiringan lantai supaya air mengalir ke saluran dan tidak menggenang.",
+        "Pastikan tidak ada beda tinggi yang membuat roda tersangkut."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Perlu tukang"
+      },
+      "barang": []
+    }
+  },
+  "bantuan": [
+    {
+      "jenis": "tukang",
+      "keterangan": "Mengganti lantai atau memperbaiki kemiringan agar air tidak menggenang."
+    },
+    {
+      "jenis": "okupasi_terapis",
+      "keterangan": "Menilai risiko terpeleset dan memilih perbaikan yang paling berguna."
+    }
+  ],
+  "peran": {
+    "penyandang_disabilitas": "Menentukan seberapa licin yang masih terasa aman dan memilih solusi yang diinginkan.",
+    "caregiver": "Menjaga lantai kering, memasang keset, dan mendampingi tanpa menarik tubuh pengguna."
+  },
+  "peringatan": "Jangan berpindah di lantai basah tanpa pegangan. Bila pernah jatuh atau ada nyeri atau luka, konsultasikan ke dokter atau terapis.",
+  "sumber": [],
   "tag": {
     "fase": [
       "adaptasi_di_rumah"
@@ -21,11 +101,14 @@
       "kos",
       "apartemen"
     ],
-    "tingkat_biaya": [],
+    "tingkat_biaya": [
+      "nol",
+      "rendah",
+      "tinggi"
+    ],
     "kondisi": [
       "amputasi"
     ]
   },
-  "status_validasi": "draf",
-  "isi_menyusul": true
+  "status_validasi": "draf"
 }

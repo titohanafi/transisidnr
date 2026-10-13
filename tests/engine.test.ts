@@ -292,16 +292,17 @@ describe("dengan konten asli", () => {
     onboarding: baca("onboarding.json"), ui: baca("ui.json"),
   });
 
-  it("pindah ke kloset memicu kartu lengkap, kartu kerangka ikut di daftar", () => {
+  it("pindah ke kloset memicu kartu yang bersangkutan, kartu pertama jadi Mulai dari sini", () => {
     const r = buatRencana(
       { ...dasar, prioritas: ["toilet"], jawaban: ya("q-toilet-pindah", "q-toilet-pegangan", "q-toilet-ruang") },
       k.kartu, k.asesmen, k.config,
     );
     expect(ids(r.daftar)).toEqual(["bath-transfer-toilet", "bath-grab-bar", "bath-space-turning"]);
-    expect(ids(r.mulaiDariSini)).toEqual(["bath-transfer-toilet"]);
+    expect(ids(r.mulaiDariSini)[0]).toBe("bath-transfer-toilet");
+    expect(r.mulaiDariSini.length).toBeLessThanOrEqual(k.config.maksMulaiDariSini);
     expect(r.satuHalHariIni?.langkah).toBe("Kosongkan area di samping kloset agar ada ruang untuk berpindah.");
     expect(r.pendamping).toBe("care-assist-transfer");
-    expect(r.total).toEqual({ diketahui: false });
+    expect(r.total).toMatchObject({ diketahui: true, minRp: 0 }); // semua tingkat awal bertanda "Rp 0"
   });
 
   it("tanpa jawaban ya: kosong dengan pendamping", () => {

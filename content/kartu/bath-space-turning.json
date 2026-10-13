@@ -2,6 +2,97 @@
   "id": "bath-space-turning",
   "judul": "Ruang di samping kloset terlalu sempit",
   "situasi": "Ruang di samping kloset terlalu sempit untuk berpindah.",
+  "kenapa_penting": "Ruang yang sempit membuat kursi roda sulit didekatkan ke kloset dan memaksa gerakan yang canggung dan berisiko.",
+  "solusi": {
+    "tanpa_biaya": {
+      "ringkasan": "Bebaskan ruang yang sudah ada.",
+      "sifat": "sementara",
+      "langkah": [
+        "Keluarkan ember, keranjang, dan tempat sampah dari sekitar kloset.",
+        "Coba dekati kloset dari sudut atau sisi yang berbeda dan catat yang paling leluasa.",
+        "Bila pintu menghalangi, coba buka lebar atau lepas sementara tirai atau penghalang lain."
+      ],
+      "biaya": {
+        "kisaran_rp": "Rp 0"
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Mudah, bisa sendiri"
+      },
+      "barang": []
+    },
+    "alat_tanpa_bongkar": {
+      "ringkasan": "Rapikan ruang dengan penyimpanan yang tidak memakan lantai.",
+      "sifat": "sementara",
+      "langkah": [
+        "Pasang rak atau keranjang gantung supaya lantai kosong.",
+        "Pindahkan barang ke dinding yang tidak menghalangi jalur kursi roda.",
+        "Pertimbangkan papan pindah bila ruang tetap sempit, sesuai saran terapis."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Sedang, bisa sendiri atau dibantu caregiver"
+      },
+      "barang": [
+        {
+          "nama": "Rak atau keranjang gantung yang bisa dilepas",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek apakah bisa menempel di dinding atau pipa.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        },
+        {
+          "nama": "Papan pindah",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Minta terapis memastikan cocok dengan cara pindah Anda.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        }
+      ]
+    },
+    "renovasi": {
+      "ringkasan": "Ubah tata ruang kamar mandi secara permanen.",
+      "sifat": "permanen",
+      "langkah": [
+        "Geser letak kloset atau dinding supaya ada ruang berputar dan ruang di samping kloset.",
+        "Pertimbangkan menggabungkan atau memperluas ruang bila memungkinkan.",
+        "Ganti pintu yang memakan ruang dengan pintu geser."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Perlu tukang dan perencanaan"
+      },
+      "barang": []
+    }
+  },
+  "bantuan": [
+    {
+      "jenis": "okupasi_terapis",
+      "keterangan": "Menilai ruang yang dibutuhkan untuk berpindah dengan aman."
+    },
+    {
+      "jenis": "tukang",
+      "keterangan": "Menggeser dinding atau kloset."
+    },
+    {
+      "jenis": "arsitek",
+      "keterangan": "Merencanakan tata ruang bila perubahannya besar."
+    }
+  ],
+  "peran": {
+    "penyandang_disabilitas": "Menentukan sisi pindah yang paling nyaman.",
+    "caregiver": "Merapikan ruang dan mencoba posisi bersama pengguna."
+  },
+  "peringatan": "Jangan membongkar dinding tanpa memeriksa pipa dan struktur; minta tukang berpengalaman. Di kontrakan atau kos, minta izin pemilik dulu.",
+  "sumber": [],
   "tag": {
     "fase": [
       "adaptasi_di_rumah"
@@ -21,11 +112,14 @@
       "kos",
       "apartemen"
     ],
-    "tingkat_biaya": [],
+    "tingkat_biaya": [
+      "nol",
+      "rendah",
+      "tinggi"
+    ],
     "kondisi": [
       "amputasi"
     ]
   },
-  "status_validasi": "draf",
-  "isi_menyusul": true
+  "status_validasi": "draf"
 }

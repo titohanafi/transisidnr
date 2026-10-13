@@ -2,6 +2,93 @@
   "id": "bath-sink-mirror",
   "judul": "Wastafel atau cermin sulit dipakai",
   "situasi": "Wastafel atau cermin terlalu tinggi, atau kaki tidak bisa masuk ke bawah wastafel.",
+  "kenapa_penting": "Menyikat gigi, mencuci muka, dan bercermin adalah bagian dari merasa mandiri dan percaya diri. Wastafel yang tidak terjangkau membuat orang bergantung pada bantuan.",
+  "solusi": {
+    "tanpa_biaya": {
+      "ringkasan": "Pindahkan perlengkapan ke tempat yang terjangkau.",
+      "sifat": "sementara",
+      "langkah": [
+        "Pindahkan sikat gigi, sabun muka, dan handuk ke permukaan yang terjangkau dari posisi duduk.",
+        "Coba dekati wastafel dari sudut yang membuat kaki dan lutut nyaman.",
+        "Gunakan cermin kecil yang dipegang atau disandarkan bila cermin terlalu tinggi."
+      ],
+      "biaya": {
+        "kisaran_rp": "Rp 0"
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Mudah, bisa sendiri"
+      },
+      "barang": []
+    },
+    "alat_tanpa_bongkar": {
+      "ringkasan": "Tambahkan alat yang bisa dilepas untuk menurunkan cermin dan perlengkapan.",
+      "sifat": "sementara",
+      "langkah": [
+        "Pasang cermin tempel atau cermin miring yang lebih rendah.",
+        "Pakai baki, keranjang, atau troli kecil untuk perlengkapan.",
+        "Cek apakah ada ruang kosong di bawah wastafel untuk lutut atau kaki."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Mudah, bisa sendiri atau dibantu caregiver"
+      },
+      "barang": [
+        {
+          "nama": "Cermin tempel atau cermin yang bisa dimiringkan",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek permukaan dinding tempat menempel.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        },
+        {
+          "nama": "Baki atau troli kecil",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek lebar jalur kursi roda di dekat wastafel.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        }
+      ]
+    },
+    "renovasi": {
+      "ringkasan": "Ubah wastafel dan cermin secara permanen.",
+      "sifat": "permanen",
+      "langkah": [
+        "Turunkan cermin ke tinggi yang terlihat dari posisi duduk.",
+        "Pasang wastafel gantung dengan ruang kosong di bawahnya untuk lutut atau kaki.",
+        "Bungkus atau amankan pipa di bawah wastafel agar tidak melukai kaki."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Perlu tukang"
+      },
+      "barang": []
+    }
+  },
+  "bantuan": [
+    {
+      "jenis": "tukang",
+      "keterangan": "Menurunkan cermin atau mengganti wastafel."
+    },
+    {
+      "jenis": "okupasi_terapis",
+      "keterangan": "Menilai tinggi dan jarak yang nyaman."
+    }
+  ],
+  "peran": {
+    "penyandang_disabilitas": "Memilih tinggi cermin dan letak perlengkapan yang paling nyaman.",
+    "caregiver": "Merapikan perlengkapan dan membantu memasang alat sederhana."
+  },
+  "peringatan": "Pipa panas di bawah wastafel dapat melukai kaki; amankan atau tutup sebelum dipakai.",
+  "sumber": [],
   "tag": {
     "fase": [
       "adaptasi_di_rumah"
@@ -21,11 +108,14 @@
       "kos",
       "apartemen"
     ],
-    "tingkat_biaya": [],
+    "tingkat_biaya": [
+      "nol",
+      "rendah",
+      "tinggi"
+    ],
     "kondisi": [
       "amputasi"
     ]
   },
-  "status_validasi": "draf",
-  "isi_menyusul": true
+  "status_validasi": "draf"
 }

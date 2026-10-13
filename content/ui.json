@@ -64,7 +64,16 @@
     "judul": "Kapan harus ke dokter atau IGD",
     "isi": "Hubungi dokter atau IGD bila ada tanda bahaya.",
     "daftarJudul": "Tanda bahaya",
-    "tandaBahaya": [],
+    "tandaBahaya": [
+      "Demam atau menggigil.",
+      "Kulit di sekitar luka atau ujung tungkai memerah, bengkak, terasa hangat, bernanah, atau berbau.",
+      "Luka terbuka yang berdarah terus atau tidak membaik.",
+      "Nyeri yang tiba-tiba memburuk atau tidak hilang.",
+      "Betis atau paha bengkak, nyeri, atau terasa hangat, terutama di satu sisi.",
+      "Jatuh disertai benturan di kepala, atau tidak bisa bergerak setelah jatuh.",
+      "Sesak napas atau nyeri dada.",
+      "Pingsan atau tiba-tiba bingung."
+    ],
     "menyusul": "Daftar tanda bahaya sedang disiapkan bersama tenaga medis. Sampai daftar ini tersedia, bila Anda ragu atau khawatir, hubungi dokter atau IGD terdekat."
   },
   "hapusData": {
@@ -236,6 +245,18 @@
     {
       "kata": "anti-slip",
       "arti": "Permukaan yang tidak licin saat basah."
+    },
+    {
+      "kata": "papan pindah",
+      "arti": "Papan licin yang menjadi jembatan untuk meluncur dari kursi roda ke tempat duduk lain."
+    },
+    {
+      "kata": "roll-in shower",
+      "arti": "Area mandi tanpa bibir sehingga kursi roda bisa masuk atau mendekat."
+    },
+    {
+      "kata": "ramp",
+      "arti": "Bidang miring kecil untuk menggantikan bibir atau anak tangga."
     }
   ],
   "aksi": {

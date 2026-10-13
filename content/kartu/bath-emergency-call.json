@@ -2,6 +2,98 @@
   "id": "bath-emergency-call",
   "judul": "Tidak ada cara memanggil bantuan",
   "situasi": "Tidak ada tombol atau cara memanggil bantuan dari kamar mandi.",
+  "kenapa_penting": "Kamar mandi adalah tempat yang berisiko jatuh dan sering tertutup. Bila terjadi sesuatu, orang perlu cara memanggil bantuan dengan cepat.",
+  "solusi": {
+    "tanpa_biaya": {
+      "ringkasan": "Sepakati cara memanggil bantuan dengan orang di rumah.",
+      "sifat": "sementara",
+      "langkah": [
+        "Sepakati isyarat, misalnya mengetuk atau memanggil nama, dan apa yang dilakukan bila tidak ada jawaban.",
+        "Jangan mengunci pintu dari dalam bila belum ada cara memanggil bantuan.",
+        "Bawa ponsel dalam wadah kering atau taruh di tempat yang terjangkau.",
+        "Atur jadwal mandi saat ada orang lain di rumah."
+      ],
+      "biaya": {
+        "kisaran_rp": "Rp 0"
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Mudah, bisa sendiri"
+      },
+      "barang": []
+    },
+    "alat_tanpa_bongkar": {
+      "ringkasan": "Tambahkan alat panggil yang bisa dilepas.",
+      "sifat": "sementara",
+      "langkah": [
+        "Pertimbangkan bel panggil nirkabel yang bisa dibawa atau ditempel.",
+        "Pertimbangkan peluit atau alarm pribadi sebagai cadangan.",
+        "Uji alatnya bersama caregiver dari ruangan yang berbeda."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Mudah, bisa sendiri atau dibantu caregiver"
+      },
+      "barang": [
+        {
+          "nama": "Bel panggil nirkabel",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek jangkauan sinyal sampai ke ruangan tempat caregiver biasa berada.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        },
+        {
+          "nama": "Peluit atau alarm pribadi",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek apakah mudah dijangkau dari posisi duduk dan dari lantai.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        }
+      ]
+    },
+    "renovasi": {
+      "ringkasan": "Pasang sistem panggil permanen.",
+      "sifat": "permanen",
+      "langkah": [
+        "Pasang tombol panggil di dekat kloset dan area mandi, terjangkau dari posisi duduk dan dari lantai.",
+        "Hubungkan tombol ke bel di ruangan tempat caregiver berada.",
+        "Uji sistem secara berkala."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Perlu tukang listrik"
+      },
+      "barang": []
+    }
+  },
+  "bantuan": [
+    {
+      "jenis": "tukang",
+      "keterangan": "Memasang tombol dan bel panggil permanen."
+    },
+    {
+      "jenis": "okupasi_terapis",
+      "keterangan": "Menilai risiko jatuh dan cara memanggil bantuan yang cocok."
+    },
+    {
+      "jenis": "komunitas",
+      "keterangan": "Bertukar pengalaman sistem panggil dengan sesama pengguna."
+    }
+  ],
+  "peran": {
+    "penyandang_disabilitas": "Memutuskan cara memanggil bantuan yang membuat Anda merasa aman dan tetap punya privasi.",
+    "caregiver": "Menyepakati isyarat dan menjawab panggilan tanpa masuk tanpa izin kecuali darurat."
+  },
+  "peringatan": "Bila terjatuh atau terluka, jangan menunda memanggil bantuan. Hubungi dokter atau IGD.",
+  "sumber": [],
   "tag": {
     "fase": [
       "adaptasi_di_rumah"
@@ -21,11 +113,14 @@
       "kos",
       "apartemen"
     ],
-    "tingkat_biaya": [],
+    "tingkat_biaya": [
+      "nol",
+      "rendah",
+      "tinggi"
+    ],
     "kondisi": [
       "amputasi"
     ]
   },
-  "status_validasi": "draf",
-  "isi_menyusul": true
+  "status_validasi": "draf"
 }

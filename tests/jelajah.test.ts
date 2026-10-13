@@ -13,6 +13,8 @@ const k = validasiKonten({
 });
 const kartu = (id: string) => k.kartu.find((x) => x.id === id)!;
 const semua = [...TINGKAT];
+// Kartu kerangka sintetis, supaya tes tidak bergantung pada kartu mana yang masih kerangka di content/.
+const kerangka = (id = "kerangka-uji") => ({ ...structuredClone(kartu("bath-door")), id, isi_menyusul: true as const, solusi: undefined, bantuan: undefined });
 
 describe("aksi langsung dari kartu", () => {
   it("kartu lengkap: sendiri, beli, tukang memakai tingkat teringan yang mendukung, plus ahli", () => {
@@ -35,7 +37,7 @@ describe("aksi langsung dari kartu", () => {
     expect(aksiKartu(kartu("care-assist-transfer"), semua).map((x) => x.jenis)).toEqual(["sendiri", "ahli"]);
   });
   it("kartu kerangka tidak punya aksi", () => {
-    expect(aksiKartu(kartu("bath-door"), semua)).toEqual([]);
+    expect(aksiKartu(kerangka(), semua)).toEqual([]);
   });
 });
 
@@ -43,11 +45,19 @@ describe("filter", () => {
   it("semua menampilkan semua kartu, termasuk kerangka", () => {
     expect(k.kartu.every((c) => cocokFilter(c, semua, "semua"))).toBe(true);
   });
-  it.each(["alat", "tukang"] as const)("%s hanya kartu yang benar-benar punya aksi itu", (f) => {
-    expect(k.kartu.filter((c) => cocokFilter(c, semua, f)).map((c) => c.id)).toEqual(["bath-transfer-toilet"]);
+  it.each(["alat", "tukang", "ahli"] as const)("%s tidak menyertakan kartu kerangka", (f) => {
+    expect(cocokFilter(kerangka(), semua, f)).toBe(false);
   });
-  it("ahli: kartu dengan bantuan (lengkap dan pendamping), bukan kerangka", () => {
-    expect(k.kartu.filter((c) => cocokFilter(c, semua, "ahli")).map((c) => c.id).sort()).toEqual(["bath-transfer-toilet", "care-assist-transfer"]);
+  it("alat dan tukang hanya kartu yang punya barang atau tingkat tukang", () => {
+    const alat = k.kartu.filter((c) => cocokFilter(c, semua, "alat"));
+    expect(alat.length).toBeGreaterThan(0);
+    expect(alat.every((c) => aksiKartu(c, semua).some((a) => a.jenis === "beli"))).toBe(true);
+    expect(k.kartu.some((c) => c.id === "care-assist-transfer" && cocokFilter(c, semua, "alat"))).toBe(false);
+  });
+  it("ahli: kartu yang punya bantuan, termasuk pendamping", () => {
+    const ids = k.kartu.filter((c) => cocokFilter(c, semua, "ahli")).map((c) => c.id);
+    expect(ids).toContain("bath-transfer-toilet");
+    expect(ids).toContain("care-assist-transfer");
   });
 });
 
@@ -74,9 +84,10 @@ describe("pengelompokan", () => {
     expect(ids.sort()).toEqual(k.kartu.map((c) => c.id).sort());
   });
   it("dalam kelompok, kartu berisi lebih dulu daripada kerangka", () => {
-    const toilet = g.find((x) => x.kunci === "toilet")!;
-    expect(toilet.kartu[0].id).toBe("bath-transfer-toilet");
-    expect(toilet.kartu.slice(1).every((c) => c.isi_menyusul)).toBe(true);
+    const k2 = [...k.kartu, { ...kerangka("a-kerangka"), tag: { ...kartu("bath-grab-bar").tag } }];
+    const toilet = kelompokkan(k2, k.asesmen.aktivitas.map((a) => a.id)).find((x) => x.kunci === "toilet")!;
+    expect(toilet.kartu.at(-1)!.id).toBe("a-kerangka");
+    expect(toilet.kartu.slice(0, -1).every((c) => !c.isi_menyusul)).toBe(true);
   });
   it("urutan tidak bergantung pada link atau afiliasi", () => {
     const salinan = structuredClone(k.kartu);

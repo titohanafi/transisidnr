@@ -2,6 +2,94 @@
   "id": "bath-door",
   "judul": "Pintu sempit atau sulit dibuka",
   "situasi": "Pintu kamar mandi sempit atau sulit dibuka dari posisi duduk.",
+  "kenapa_penting": "Pintu yang sempit atau berat memaksa orang membuka sambil mundur, dan sering menjadi alasan kursi roda tersangkut atau tangan terjepit.",
+  "solusi": {
+    "tanpa_biaya": {
+      "ringkasan": "Pastikan pintu bisa dibuka dengan leluasa.",
+      "sifat": "sementara",
+      "langkah": [
+        "Kosongkan area depan pintu supaya kursi roda bisa mendekat.",
+        "Coba buka pintu dari sisi yang gagangnya lebih mudah dijangkau.",
+        "Buka pintu sepenuhnya dan ganjal agar tidak menutup sendiri.",
+        "Bila pintu tidak perlu dikunci, gunakan tirai sementara supaya privasi tetap terjaga."
+      ],
+      "biaya": {
+        "kisaran_rp": "Rp 0"
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Mudah, bisa sendiri"
+      },
+      "barang": []
+    },
+    "alat_tanpa_bongkar": {
+      "ringkasan": "Tambahkan alat yang bisa dilepas.",
+      "sifat": "sementara",
+      "langkah": [
+        "Pasang tali atau pegangan tambahan di gagang supaya mudah ditarik dari posisi duduk.",
+        "Pertimbangkan engsel khusus yang membuat pintu terbuka lebih lebar.",
+        "Pasang ganjal pintu agar tidak menutup sendiri."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Mudah, bisa sendiri atau dibantu caregiver"
+      },
+      "barang": [
+        {
+          "nama": "Pegangan atau tali tambahan di gagang pintu",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek bentuk gagang pintu di rumah.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        },
+        {
+          "nama": "Engsel pelebar bukaan pintu",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek jenis dan ukuran engsel yang terpasang.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        }
+      ]
+    },
+    "renovasi": {
+      "ringkasan": "Ubah pintu secara permanen.",
+      "sifat": "permanen",
+      "langkah": [
+        "Ganti pintu dengan pintu geser atau pintu yang membuka ke luar.",
+        "Lebarkan bukaan pintu bila dinding memungkinkan.",
+        "Pasang gagang yang mudah dioperasikan dengan satu tangan."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Perlu tukang"
+      },
+      "barang": []
+    }
+  },
+  "bantuan": [
+    {
+      "jenis": "tukang",
+      "keterangan": "Mengganti pintu atau melebarkan bukaan."
+    },
+    {
+      "jenis": "okupasi_terapis",
+      "keterangan": "Menilai lebar dan jenis pintu yang cocok."
+    }
+  ],
+  "peran": {
+    "penyandang_disabilitas": "Memilih jenis pintu dan cara membukanya yang paling nyaman.",
+    "caregiver": "Merapikan area depan pintu dan memasang alat sederhana."
+  },
+  "peringatan": "Jangan mengunci pintu kamar mandi dari dalam bila belum ada cara memanggil bantuan. Minta izin pemilik sebelum mengubah pintu di kontrakan atau kos.",
+  "sumber": [],
   "tag": {
     "fase": [
       "adaptasi_di_rumah"
@@ -21,11 +109,14 @@
       "kos",
       "apartemen"
     ],
-    "tingkat_biaya": [],
+    "tingkat_biaya": [
+      "nol",
+      "rendah",
+      "tinggi"
+    ],
     "kondisi": [
       "amputasi"
     ]
   },
-  "status_validasi": "draf",
-  "isi_menyusul": true
+  "status_validasi": "draf"
 }

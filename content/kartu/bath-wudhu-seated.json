@@ -2,6 +2,99 @@
   "id": "bath-wudhu-seated",
   "judul": "Sulit berwudhu sambil duduk",
   "situasi": "Sulit berwudhu dalam posisi duduk di kamar mandi atau tempat wudhu.",
+  "kenapa_penting": "Wudhu adalah kegiatan harian yang penting bagi banyak orang. Bila sulit dilakukan, orang bisa kehilangan kemandirian dalam beribadah.",
+  "solusi": {
+    "tanpa_biaya": {
+      "ringkasan": "Bawa air ke posisi duduk, bukan memaksakan diri ke tempat wudhu.",
+      "sifat": "sementara",
+      "langkah": [
+        "Isi gayung atau ember kecil lalu taruh di sisi tempat duduk.",
+        "Berwudhu dari posisi duduk yang stabil, dengan rem kursi roda terkunci.",
+        "Siapkan handuk dalam jangkauan sebelum mulai.",
+        "Bila ada pertanyaan tata cara dalam kondisi tertentu, tanyakan kepada ustaz atau tokoh agama yang Anda percaya."
+      ],
+      "biaya": {
+        "kisaran_rp": "Rp 0"
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Mudah, bisa sendiri"
+      },
+      "barang": []
+    },
+    "alat_tanpa_bongkar": {
+      "ringkasan": "Tambahkan alat yang bisa dilepas untuk wudhu sambil duduk.",
+      "sifat": "sementara",
+      "langkah": [
+        "Pertimbangkan kursi atau bangku wudhu yang stabil dan tidak licin.",
+        "Sediakan meja kecil atau rak untuk wadah air dan handuk.",
+        "Pertimbangkan selang dengan keran supaya air bisa diarahkan dari posisi duduk.",
+        "Pasang anti-slip di lantai sekitar tempat wudhu."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Sedang, bisa sendiri atau dibantu caregiver"
+      },
+      "barang": [
+        {
+          "nama": "Kursi atau bangku wudhu",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek lebar tempat wudhu dan pastikan kakinya tidak licin.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        },
+        {
+          "nama": "Meja kecil atau rak untuk wadah air",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek ruang yang tersisa untuk kursi roda.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        }
+      ]
+    },
+    "renovasi": {
+      "ringkasan": "Siapkan tempat wudhu duduk secara permanen.",
+      "sifat": "permanen",
+      "langkah": [
+        "Pasang keran wudhu yang rendah dan terjangkau dari posisi duduk.",
+        "Buat bangku wudhu permanen dengan lantai miring dan anti-slip.",
+        "Pastikan ada ruang untuk kursi roda mendekat."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Perlu tukang"
+      },
+      "barang": []
+    }
+  },
+  "bantuan": [
+    {
+      "jenis": "okupasi_terapis",
+      "keterangan": "Menilai posisi duduk yang nyaman dan aman untuk wudhu."
+    },
+    {
+      "jenis": "tukang",
+      "keterangan": "Memasang keran rendah atau bangku wudhu permanen."
+    },
+    {
+      "jenis": "komunitas",
+      "keterangan": "Bertukar cara dengan sesama pengguna kursi roda."
+    }
+  ],
+  "peran": {
+    "penyandang_disabilitas": "Memilih cara wudhu yang paling nyaman.",
+    "caregiver": "Menyiapkan air dan handuk, lalu membantu hanya bila diminta."
+  },
+  "peringatan": "Lantai tempat wudhu sering basah; jaga tetap anti-slip dan kunci rem kursi roda sebelum mulai.",
+  "sumber": [],
   "tag": {
     "fase": [
       "adaptasi_di_rumah"
@@ -21,11 +114,14 @@
       "kos",
       "apartemen"
     ],
-    "tingkat_biaya": [],
+    "tingkat_biaya": [
+      "nol",
+      "rendah",
+      "tinggi"
+    ],
     "kondisi": [
       "amputasi"
     ]
   },
-  "status_validasi": "draf",
-  "isi_menyusul": true
+  "status_validasi": "draf"
 }

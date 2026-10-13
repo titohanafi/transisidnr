@@ -2,6 +2,94 @@
   "id": "bath-grab-bar",
   "judul": "Tidak ada pegangan di dekat kloset",
   "situasi": "Tidak ada pegangan di dekat kloset.",
+  "kenapa_penting": "Pegangan memberi tumpuan saat berpindah, duduk, dan berdiri. Tanpa pegangan, orang cenderung bertumpu pada benda yang tidak aman.",
+  "solusi": {
+    "tanpa_biaya": {
+      "ringkasan": "Atur kebiasaan berpindah supaya tidak bergantung pada benda yang tidak aman.",
+      "sifat": "sementara",
+      "langkah": [
+        "Jangan bertumpu pada gantungan handuk, wastafel, atau pipa; benda itu tidak dirancang untuk menahan beban.",
+        "Dekatkan kursi roda sejajar dengan kloset, lalu kunci rem sebelum berpindah.",
+        "Minta pendamping berdiri di dekat Anda tanpa menarik tubuh.",
+        "Latih urutan pindah bersama terapis."
+      ],
+      "biaya": {
+        "kisaran_rp": "Rp 0"
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Perlu latihan bersama terapis"
+      },
+      "barang": []
+    },
+    "alat_tanpa_bongkar": {
+      "ringkasan": "Pasang pegangan yang bisa dilepas, cocok untuk kontrakan dan kos.",
+      "sifat": "sementara",
+      "langkah": [
+        "Pertimbangkan grab bar jenis klem atau tempel di sisi kloset.",
+        "Pertimbangkan rangka pegangan berdiri yang mengapit kloset.",
+        "Cek jenis dinding dan keramik sebelum membeli, lalu uji dengan tekanan perlahan sebelum dipakai bertumpu."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Sedang, bisa sendiri atau dibantu caregiver"
+      },
+      "barang": [
+        {
+          "nama": "Grab bar klem atau tempel",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek jenis dinding dan permukaan keramik sebelum membeli.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        },
+        {
+          "nama": "Rangka pegangan kloset (berdiri di lantai)",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek bentuk kloset dan ruang di sekitarnya.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        }
+      ]
+    },
+    "renovasi": {
+      "ringkasan": "Pasang pegangan permanen bila kebutuhan jangka panjang sudah jelas.",
+      "sifat": "permanen",
+      "langkah": [
+        "Pasang grab bar permanen yang tertanam kuat di dinding.",
+        "Pilih tinggi dan posisi pegangan bersama terapis sesuai cara pindah Anda.",
+        "Pastikan dinding mampu menahan beban sebelum dipasang."
+      ],
+      "biaya": {
+        "kisaran_rp": null
+      },
+      "usaha": {
+        "waktu": null,
+        "kesulitan": "Perlu tukang"
+      },
+      "barang": []
+    }
+  },
+  "bantuan": [
+    {
+      "jenis": "okupasi_terapis",
+      "keterangan": "Menentukan posisi pegangan yang cocok dengan cara pindah."
+    },
+    {
+      "jenis": "tukang",
+      "keterangan": "Memasang grab bar permanen di dinding yang kuat."
+    }
+  ],
+  "peran": {
+    "penyandang_disabilitas": "Menentukan letak pegangan yang paling nyaman.",
+    "caregiver": "Memeriksa dinding dan membantu memasang tanpa menarik tubuh pengguna."
+  },
+  "peringatan": "Grab bar harus tertanam kuat; jangan memakai gantungan handuk sebagai pegangan.",
+  "sumber": [],
   "tag": {
     "fase": [
       "adaptasi_di_rumah"
@@ -21,11 +109,14 @@
       "kos",
       "apartemen"
     ],
-    "tingkat_biaya": [],
+    "tingkat_biaya": [
+      "nol",
+      "rendah",
+      "tinggi"
+    ],
     "kondisi": [
       "amputasi"
     ]
   },
-  "status_validasi": "draf",
-  "isi_menyusul": true
+  "status_validasi": "draf"
 }
