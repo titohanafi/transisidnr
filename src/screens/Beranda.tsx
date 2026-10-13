@@ -1,8 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
-import { IlustrasiBeranda } from "../components/Ikon";
-import { TombolLink } from "../components/Tombol";
+import { IkonAksi, IlustrasiBeranda } from "../components/Ikon";
 import { konten } from "../domain/content";
 
 const { app, beranda, umum } = konten.ui;
@@ -13,66 +12,74 @@ export function Beranda() {
     <Halaman judul={app.nama}>
       <p className="mt-2 text-lg">{beranda.manfaat}</p>
 
+      <IlustrasiBeranda className="mt-4" />
+
       <h2 className="sr-only">{pilih.judul}</h2>
 
-      {/* Dua jalur dengan bobot setara: dipandu, atau langsung ke yang dicari. */}
-      <section className="mt-4 rounded-kartu border border-garis bg-white p-4" aria-labelledby="jalur-susun">
-        <h3 id="jalur-susun" className="text-lg font-semibold">
+      {/* Dua jalur: dipandu (utama), atau langsung ke yang dicari. */}
+      <section className="mt-4 rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-susun">
+        <h3 id="jalur-susun" className="text-xl font-bold">
           {pilih.susun.judul}
         </h3>
-        <p className="mt-1 text-redup">{pilih.susun.isi}</p>
-        <TombolLink to="/mulai/1" className="mt-3 w-full">
+        <p className="mt-1">{pilih.susun.isi}</p>
+        <Link
+          to="/mulai/1"
+          className="mt-3 inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-base font-semibold text-utama-gelap hover:bg-utama-muda"
+        >
           {pilih.susun.tombol}
-        </TombolLink>
+        </Link>
       </section>
 
-      <section className="mt-3 rounded-kartu border border-garis bg-white p-4" aria-labelledby="jalur-tahu">
-        <h3 id="jalur-tahu" className="text-lg font-semibold">
+      <section className="mt-5" aria-labelledby="jalur-tahu">
+        <h3 id="jalur-tahu" className="font-semibold">
           {pilih.tahu.judul}
         </h3>
-        <p className="mt-1 text-redup">{pilih.tahu.isi}</p>
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          <TombolLink to="/jelajah/alat" gayaTombol="sekunder" className="!px-1">
+        <div className="mt-2 grid grid-cols-3 gap-2">
+          <Ubin to="/jelajah/alat" ikon="alat">
             {pilih.tahu.alat}
-          </TombolLink>
-          <TombolLink to="/jelajah/tukang" gayaTombol="sekunder" className="!px-1">
+          </Ubin>
+          <Ubin to="/jelajah/tukang" ikon="tukang">
             {pilih.tahu.tukang}
-          </TombolLink>
-          <TombolLink to="/jelajah/ahli" gayaTombol="sekunder" className="!px-1">
+          </Ubin>
+          <Ubin to="/jelajah/ahli" ikon="ahli">
             {pilih.tahu.ahli}
-          </TombolLink>
+          </Ubin>
         </div>
-        <Link to="/jelajah" className="mt-2 inline-flex min-h-sentuh items-center text-utama underline">
+        <Link to="/jelajah" className="mt-1 inline-flex min-h-sentuh items-center text-utama underline">
           {pilih.tahu.semua}
         </Link>
       </section>
 
-      <p className="mt-3 text-sm text-redup">{umum.privasi}</p>
+      <ol className="mt-4 flex gap-2" aria-label={beranda.caraKerja}>
+        {beranda.langkah.map((l, i) => (
+          <li key={l.judul} className="flex flex-1 flex-col items-center gap-1 text-center text-sm font-medium">
+            <span aria-hidden="true" className="flex h-7 w-7 items-center justify-center rounded-full bg-utama-muda font-bold text-utama-gelap">
+              {i + 1}
+            </span>
+            {l.judul}
+          </li>
+        ))}
+      </ol>
 
-      <IlustrasiBeranda className="mt-5" />
+      <p className="mt-5 text-sm text-redup">{umum.privasi}</p>
 
-      <details className="mt-5 rounded-kartu border border-garis bg-white p-3">
-        <summary className="flex min-h-sentuh cursor-pointer items-center font-semibold">{beranda.caraKerja}</summary>
-        <ol className="mt-2 space-y-3">
-          {beranda.langkah.map((l, i) => (
-            <li key={l.judul} className="flex gap-3">
-              <span aria-hidden="true" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-utama font-bold text-white">
-                {i + 1}
-              </span>
-              <div>
-                <p className="font-semibold">{l.judul}</p>
-                <p className="text-redup">{l.isi}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </details>
-
-      <nav aria-label={umum.tautanLain} className="mt-auto flex flex-col pt-8">
+      <nav aria-label={umum.tautanLain} className="mt-auto flex flex-col pt-6">
         <TautanKecil to="/igd">{beranda.tautanIgd}</TautanKecil>
         <TautanKecil to="/hapus">{beranda.tautanHapus}</TautanKecil>
       </nav>
     </Halaman>
+  );
+}
+
+function Ubin({ to, ikon, children }: { to: string; ikon: "alat" | "tukang" | "ahli"; children: ReactNode }) {
+  return (
+    <Link
+      to={to}
+      className="flex min-h-sentuh flex-col items-center justify-center gap-1 rounded-kartu border-2 border-utama bg-white px-1 py-3 text-center text-sm font-semibold text-utama hover:bg-utama-muda"
+    >
+      <IkonAksi kunci={ikon} className="h-9 w-9" />
+      {children}
+    </Link>
   );
 }
 

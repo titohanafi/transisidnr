@@ -3,7 +3,7 @@
     "nama": "Transisi"
   },
   "beranda": {
-    "manfaat": "Ubah panduan jadi rencana yang bisa dikerjakan untuk membuat kamar mandi lebih aman dan nyaman.",
+    "manfaat": "Rencana kamar mandi yang lebih aman dan nyaman, langkah demi langkah.",
     "langkah": [
       {
         "judul": "Jawab pertanyaan",
@@ -25,7 +25,7 @@
       "judul": "Apa yang ingin Anda lakukan?",
       "susun": {
         "judul": "Susun rencana untuk saya",
-        "isi": "Jawab pertanyaan ya atau tidak. Hasilnya urutan langkah dari yang paling ringan.",
+        "isi": "Jawab ya atau tidak. Mulai dari yang paling ringan.",
         "tombol": "Mulai"
       },
       "tahu": {

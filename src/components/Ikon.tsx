@@ -71,6 +71,38 @@ export function Ikon({ kunci, className = "h-10 w-10" }: { kunci: KunciKelompok;
   );
 }
 
+const ikonAksi = {
+  // Batang pegangan di dinding
+  alat: (
+    <g {...garis}>
+      <path d="M6 20h36M12 20v12M36 20v12" />
+      <path d="M6 12h36" opacity=".35" />
+    </g>
+  ),
+  // Palu
+  tukang: (
+    <g {...garis}>
+      <path d="M8 10h22v10H8z" />
+      <path d="M30 15h8M19 20v22" />
+    </g>
+  ),
+  // Gelembung percakapan
+  ahli: (
+    <g {...garis}>
+      <path d="M8 10h32v22H23l-9 8v-8H8z" />
+      <path d="M16 19h16M16 25h10" />
+    </g>
+  ),
+} as const;
+
+export function IkonAksi({ kunci, className = "h-10 w-10" }: { kunci: keyof typeof ikonAksi; className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={`shrink-0 text-utama ${className}`} aria-hidden="true" focusable="false">
+      {ikonAksi[kunci]}
+    </svg>
+  );
+}
+
 /**
  * Ilustrasi Beranda: alat bantu gerak yang ditanyakan di onboarding (kursi roda, kruk, walker).
  * Hanya benda, tanpa gambar orang. Warna mengikuti token tailwind.
