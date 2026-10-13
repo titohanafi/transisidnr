@@ -35,10 +35,12 @@ export interface State {
   checkin: string | null;
   /** id panduan -> hasil setelah dicoba ("sudah cukup" atau "masih sulit"). */
   hasil: Record<string, HasilPanduan>;
+  /** id ruangan yang sedang dibereskan (dari config.json); null bila belum dipilih. */
+  ruangan: string | null;
 }
 
 export const asesmenAwal = (): AsesmenState => ({ status: {}, prioritas: [], jawaban: {} });
-export const stateAwal = (): State => ({ versi: 1, onboarding: {}, asesmen: asesmenAwal(), checklist: {}, checkin: null, hasil: {} });
+export const stateAwal = (): State => ({ versi: 1, onboarding: {}, asesmen: asesmenAwal(), checklist: {}, checkin: null, hasil: {}, ruangan: null });
 
 // Validasi tulisan tangan (tanpa pustaka) agar bundel kecil. Data yang bentuknya salah ditolak seluruhnya.
 const adalahObjek = (x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
@@ -85,7 +87,9 @@ export function parseState(x: unknown): State | null {
 
   // Hanya bidang yang dikenal yang dibawa (hasil dibersihkan dari kunci asing).
   const bersih = Object.fromEntries(Object.entries(hasil).map(([k, v]) => [k, { status: v.status, tingkat: v.tingkat }]));
-  return { versi: 1, onboarding, asesmen, checklist, checkin, hasil: bersih };
+  const ruangan = x.ruangan === undefined || x.ruangan === null ? null : adalahTeks(x.ruangan) ? x.ruangan : undefined;
+  if (ruangan === undefined) return null;
+  return { versi: 1, onboarding, asesmen, checklist, checkin, hasil: bersih, ruangan };
 }
 
 type Gudang = Pick<Storage, "getItem" | "setItem" | "removeItem">;

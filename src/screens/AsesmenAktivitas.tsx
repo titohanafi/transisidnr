@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { BarisRuangan } from "../components/BarisRuangan";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
 import { NavBawah } from "../components/NavBawah";
@@ -7,6 +8,7 @@ import { konten } from "../domain/content";
 import { kandidatPrioritas, perluTahapPrioritas } from "../state/asesmen";
 import { STATUS_AKTIVITAS } from "../state/storage";
 import { useStore } from "../state/store";
+import { useRuangan } from "../state/useRuangan";
 
 const { asesmen: t } = konten.ui;
 const { aktivitas: ta } = t;
@@ -16,6 +18,7 @@ export function AsesmenAktivitas() {
   const navigate = useNavigate();
   const { state, setStatusAktivitas } = useStore();
   const { status } = state.asesmen;
+  const { ruangan } = useRuangan();
   const aktivitas = konten.asesmen.aktivitas.filter(
     (a) => a.bisaDipilihPrioritas,
   );
@@ -28,8 +31,11 @@ export function AsesmenAktivitas() {
         : "/asesmen/pertanyaan/1",
     );
 
+  if (!ruangan) return <Navigate to="/ruangan" replace />;
+
   return (
     <Halaman judul={ta.judul}>
+      <BarisRuangan />
       <p className="mt-2 text-redup">{ta.bantuan}</p>
 
       <div className="mt-4 space-y-3">
@@ -74,9 +80,7 @@ export function AsesmenAktivitas() {
         </p>
       )}
       <NavBawah
-        onKembali={() =>
-          navigate("/mulai/" + konten.onboarding.pertanyaan.length)
-        }
+        onKembali={() => navigate("/ruangan")}
         onLanjut={lanjut}
         lanjutNonaktif={!adaPilihan}
       />

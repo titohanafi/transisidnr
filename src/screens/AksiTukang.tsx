@@ -11,7 +11,7 @@ const t = konten.ui.aksi.tukang;
 
 // Nama ruangan dari tag kartu; id yang belum punya nama diubah jadi teks biasa.
 const namaRuangan = (id: string | undefined): string | null =>
-  id ? (konten.ui.ruangan[id] ?? id.replace(/_/g, " ")) : null;
+  id ? (konten.config.ruangan.find((r) => r.id === id)?.nama ?? id.replace(/_/g, " ")) : null;
 
 async function salinKeClipboard(teks: string): Promise<boolean> {
   try {

@@ -11,6 +11,7 @@ import { Jelajah } from "./screens/Jelajah";
 import { HapusData } from "./screens/HapusData";
 import { Igd } from "./screens/Igd";
 import { Onboarding } from "./screens/Onboarding";
+import { PilihRuangan } from "./screens/PilihRuangan";
 import { Rencana } from "./screens/Rencana";
 import { StoreProvider } from "./state/store";
 
@@ -21,6 +22,7 @@ export function App() {
         <Route path="/" element={<Beranda />} />
         <Route path="/jelajah/:filter?" element={<Jelajah />} />
         <Route path="/mulai/:langkah" element={<Onboarding />} />
+        <Route path="/ruangan" element={<PilihRuangan />} />
         <Route path="/asesmen" element={<Navigate to="/asesmen/aktivitas" replace />} />
         <Route path="/asesmen/aktivitas" element={<AsesmenAktivitas />} />
         <Route path="/asesmen/prioritas" element={<AsesmenPrioritas />} />

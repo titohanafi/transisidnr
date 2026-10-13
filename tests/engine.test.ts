@@ -6,6 +6,7 @@ import { validasiKonten } from "../src/domain/validasi";
 import type { Aktivitas, Asesmen, Config, Kartu, TingkatSolusi } from "../src/domain/schema";
 
 const config: Config = {
+  ruangan: [{ id: "kamar_mandi", nama: "Kamar mandi", tersedia: true }],
   faseAwalBulan: 3,
   maksMulaiDariSini: 3,
   budget: [

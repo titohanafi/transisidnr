@@ -106,6 +106,7 @@ export const asesmenSchema = z.object({
 });
 
 export const configSchema = z.object({
+  ruangan: z.array(z.object({ id: teks, nama: teks, tersedia: z.boolean() })).min(1),
   faseAwalBulan: z.number().int().positive(),
   maksMulaiDariSini: z.number().int().positive(),
   budget: z.array(
@@ -162,6 +163,8 @@ export const uiSchema = z
     }),
     onboarding: z.object({ judul: teks, indikator: teks, lanjutTerakhir: teks }),
     asesmen: z.object({
+      ruangan: teks,
+      ubahRuangan: teks,
       judul: teks,
       aktivitas: z.object({
         judul: teks, bantuan: teks, tidakRelevan: teks, minimal: teks,
@@ -218,8 +221,7 @@ export const uiSchema = z
       filter: z.object({ semua: teks, alat: teks, tukang: teks, ahli: teks }),
     }),
     istilah: z.array(z.object({ kata: teks, arti: teks })),
-    /** id ruangan (tag kartu) -> nama yang tampil. */
-    ruangan: z.record(z.string(), teks),
+    pilihRuangan: z.object({ judul: teks, segera: teks, lanjut: teks }),
     checkin: z.object({
       pertanyaan: teks,
       pilihan: z.array(opsi.extend({ balasan: teks })).min(1),

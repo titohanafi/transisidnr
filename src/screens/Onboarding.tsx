@@ -27,7 +27,7 @@ export function Onboarding() {
   const indikator = isi(teks.indikator, { n, total: soal.length });
 
   const respons = pilihanPertanyaan(q, konten.config).find((p) => dipilih.includes(p.id) && p.respons)?.respons;
-  const lanjut = () => navigate(terakhir ? "/asesmen/aktivitas" : `/mulai/${n + 1}`);
+  const lanjut = () => navigate(terakhir ? "/ruangan" : `/mulai/${n + 1}`);
   const kembali = () => navigate(n === 1 ? "/" : `/mulai/${n - 1}`);
 
   return (

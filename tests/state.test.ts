@@ -91,6 +91,7 @@ describe("parseState (validasi tulisan tangan)", () => {
     checklist: { "x:tanpa_biaya": [0, 2] },
     checkin: "soal_biaya",
     hasil: { "bath-door": { status: "cukup", tingkat: "tanpa_biaya" } },
+    ruangan: "kamar_mandi",
   };
   it("menerima data sah apa adanya", () => {
     expect(parseState(sah)).toEqual(sah);
@@ -119,6 +120,7 @@ describe("parseState (validasi tulisan tangan)", () => {
     ["hasil status tidak dikenal", { ...sah, hasil: { a: { status: "mungkin", tingkat: "tanpa_biaya" } } }],
     ["hasil tingkat tidak dikenal", { ...sah, hasil: { a: { status: "cukup", tingkat: "mewah" } } }],
     ["hasil bukan objek", { ...sah, hasil: { a: "cukup" } }],
+    ["ruangan bukan teks", { ...sah, ruangan: 3 }],
   ])("menolak: %s", (_n, x) => {
     expect(parseState(x)).toBeNull();
   });

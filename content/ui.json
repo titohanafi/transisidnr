@@ -119,7 +119,7 @@
   "onboarding": {
     "judul": "Beberapa pertanyaan singkat",
     "indikator": "Pertanyaan {n} dari {total}",
-    "lanjutTerakhir": "Selesai"
+    "lanjutTerakhir": "Lanjut"
   },
   "asesmen": {
     "judul": "Mengenali kebutuhan di rumah",
@@ -156,7 +156,9 @@
       "gagalBaca": "Berkas ini tidak bisa dibuka sebagai foto.",
       "selesai": "Selesai",
       "lewati": "Lewati"
-    }
+    },
+    "ruangan": "Ruangan: {nama}",
+    "ubahRuangan": "Ganti"
   },
   "rencana": {
     "judul": "Rencana Saya",
@@ -367,7 +369,9 @@
     "ajakanRencana": "Lihat Rencana Saya",
     "aksiKartu": "Aksi untuk panduan ini"
   },
-  "ruangan": {
-    "kamar_mandi": "Kamar mandi"
+  "pilihRuangan": {
+    "judul": "Ruangan mana yang ingin dibereskan lebih dulu?",
+    "segera": "Segera",
+    "lanjut": "Lanjut"
   }
 }

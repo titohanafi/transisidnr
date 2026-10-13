@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { BarisRuangan } from "../components/BarisRuangan";
 import { BilahKemajuan } from "../components/BilahKemajuan";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
@@ -103,6 +104,7 @@ export function Rencana() {
 
   return (
     <Halaman judul={t.judul}>
+      <BarisRuangan />
       {h.jumlahPanduan > 0 && (
         <section
           className="mt-3 rounded-kartu bg-aksen-muda p-3"
