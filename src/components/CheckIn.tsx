@@ -10,7 +10,7 @@ export function CheckIn() {
   const pilihan = t.pilihan.find((p) => p.id === state.checkin);
 
   return (
-    <fieldset className="mt-3 rounded-kartu border border-garis bg-white p-3">
+    <fieldset className="rounded-kartu border border-garis bg-white p-3">
       <legend className="px-1 font-semibold">{t.pertanyaan}</legend>
       <div className="mt-2 space-y-2">
         {t.pilihan.map((p) => (

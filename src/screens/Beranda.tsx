@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
 import { IkonAksi } from "../components/Ikon";
 import { TombolLink } from "../components/Tombol";
@@ -46,6 +47,10 @@ export function Beranda() {
         <TombolLink to="/jelajah" gayaTombol="sekunder" className="mt-3 w-full">
           {pilih.tahu.semua}
         </TombolLink>
+      </section>
+
+      <section className="mt-5">
+        <CheckIn />
       </section>
 
       <nav aria-label={umum.tautanLain} className="mt-auto flex flex-col pt-6">

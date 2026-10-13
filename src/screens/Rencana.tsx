@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { BarisRuangan } from "../components/BarisRuangan";
 import { BilahKemajuan } from "../components/BilahKemajuan";
-import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
 import { KartuRingkas } from "../components/KartuRingkas";
@@ -241,7 +240,6 @@ export function Rencana() {
               <span className="sr-only">: {pendamping.judul}</span>
             </TombolLink>
           </article>
-          <CheckIn />
         </section>
       )}
       <PeringatanNonMedis />
