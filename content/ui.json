@@ -4,7 +4,6 @@
   },
   "beranda": {
     "spandukDraf": "Konten masih draf dan belum ditinjau ahli.",
-    "tautanHapus": "Hapus data saya",
     "pilih": {
       "judul": "Apa yang ingin Anda lakukan?",
       "susun": {
@@ -42,6 +41,7 @@
     "tautanLain": "Tautan lain",
     "tautanIgd": "Kapan harus ke dokter atau IGD",
     "menuUtama": "Menu utama",
+    "dataPrivasi": "Data dan privasi",
     "tabBeranda": "Beranda",
     "tabPanduan": "Panduan",
     "tabRencana": "Rencana",
@@ -65,7 +65,7 @@
     "menyusul": "Daftar tanda bahaya sedang disiapkan bersama tenaga medis. Sampai daftar ini tersedia, bila Anda ragu atau khawatir, hubungi dokter atau IGD terdekat."
   },
   "hapusData": {
-    "judul": "Hapus data saya",
+    "judul": "Data dan privasi",
     "penjelasan": "Semua jawaban, centang, dan foto Anda tersimpan hanya di perangkat ini. Tombol ini menghapus semuanya.",
     "tombol": "Hapus semua data saya",
     "selesai": "Data Anda sudah dihapus dari perangkat ini.",

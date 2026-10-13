@@ -23,7 +23,8 @@ export function HapusData() {
         </>
       ) : (
         <>
-          <p className="mt-4">{t.penjelasan}</p>
+          <p className="mt-4">{umum.privasi}</p>
+          <p className="mt-3">{t.penjelasan}</p>
           {tahap === "awal" ? (
             <Tombol gayaTombol="bahaya" className="mt-6" onClick={() => setTahap("yakin")}>
               {t.tombol}

@@ -6,7 +6,7 @@ import { ChevronRight } from "lucide-react";
 import { IkonBeranda } from "../components/IkonBeranda";
 import { konten } from "../domain/content";
 
-const { app, beranda, umum } = konten.ui;
+const { app, beranda } = konten.ui;
 const { pilih } = beranda;
 
 export function Beranda() {
@@ -51,9 +51,6 @@ export function Beranda() {
         <CheckIn />
       </section>
 
-      <nav aria-label={umum.tautanLain} className="mt-auto flex flex-col pt-6">
-        <TautanKecil to="/hapus">{beranda.tautanHapus}</TautanKecil>
-      </nav>
     </Halaman>
   );
 }
@@ -69,14 +66,6 @@ function BarisJalur({ to, ikon, utama, children }: { to: string; ikon: "panduan"
       <IkonBeranda kunci={ikon} className="h-7 w-7" />
       <span className="flex-1">{children}</span>
       <ChevronRight className="h-6 w-6 shrink-0" strokeWidth={2.5} aria-hidden="true" focusable="false" />
-    </Link>
-  );
-}
-
-function TautanKecil({ to, children }: { to: string; children: ReactNode }) {
-  return (
-    <Link to={to} className="inline-flex min-h-sentuh items-center text-utama underline">
-      {children}
     </Link>
   );
 }

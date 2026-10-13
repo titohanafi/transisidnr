@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from "react";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ShieldCheck } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BilahTab } from "./BilahTab";
 import { konten } from "../domain/content";
@@ -42,6 +42,13 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
         )}
         <Link to="/" className={`inline-flex min-h-sentuh items-center text-lg font-bold text-utama ${dalam ? "" : "px-2"}`}>
           {app.nama}
+        </Link>
+        <Link
+          to="/hapus"
+          aria-label={umum.dataPrivasi}
+          className="ml-auto inline-flex h-sentuh w-sentuh items-center justify-center rounded-tombol text-utama"
+        >
+          <ShieldCheck className="h-6 w-6" strokeWidth={2} aria-hidden="true" focusable="false" />
         </Link>
       </header>
       <main id="isi" className="flex flex-1 flex-col px-4 py-5">

@@ -320,3 +320,8 @@
 - Alamat lama `/jelajah/tukang` diarahkan ke daftar ahli supaya tautan lama tidak patah.
 
 - Tautan "Kapan harus ke dokter atau IGD" dihapus dari Beranda atas permintaan pemilik. Halamannya tetap bisa dibuka lewat tab Darurat dan lewat peringatan non-medis di panduan.
+
+## "Hapus data saya" pindah ke ikon Data dan privasi di header
+- Tautan teks di dasar Beranda diganti ikon perisai (Lucide `ShieldCheck`) di kanan header, tersedia di semua layar. Alasannya: tindakan yang jarang dipakai dan berisiko tidak perlu memakai ruang Beranda atau satu slot tab, tetapi tetap mudah ditemukan dan konsisten dengan pola aplikasi ponsel.
+- Layar tujuannya (`/hapus`) diberi judul "Data dan privasi", menampilkan kalimat privasi (data hanya di perangkat) sebelum tombol hapus. Tombol dan konfirmasi hapus tidak berubah.
+- Alternatif yang tidak dipilih: tab kelima "Pengaturan" (terlalu berat untuk satu fungsi).
