@@ -17,7 +17,7 @@
         "judul": "Atau lewati pertanyaan, langsung cari:",
         "isi": "Langsung ke yang Anda butuhkan.",
         "alat": "Cari alat",
-        "tukang": "Cari tukang",
+        "tukang": "Pesan ke tukang",
         "ahli": "Tanya ahli",
         "semua": "Lihat semua panduan"
       }
@@ -289,7 +289,7 @@
     "tombol": {
       "sendiri": "Lakukan sendiri",
       "beli": "Lihat alat",
-      "tukang": "Cari tukang",
+      "tukang": "Pesan ke tukang",
       "ahli": "Tanya ahli"
     },
     "kembaliKeKartu": "Kembali ke panduan",
@@ -323,7 +323,7 @@
       "kosong": "Tingkat ini belum punya daftar barang."
     },
     "tukang": {
-      "judul": "Brief untuk tukang",
+      "judul": "Pesan untuk tukang",
       "bantuan": "Centang butir yang ikut dan ubah teksnya bila perlu. Jangan menulis data medis.",
       "ikutkan": "Ikutkan",
       "ubahTeks": "Teks",
@@ -370,7 +370,7 @@
     "filter": {
       "semua": "Semua",
       "alat": "Cari alat",
-      "tukang": "Cari tukang",
+      "tukang": "Pesan ke tukang",
       "ahli": "Tanya ahli"
     },
     "kosongFilter": "Belum ada panduan dengan isi lengkap untuk pilihan ini. Isi panduan masih disusun.",
@@ -389,7 +389,7 @@
     "pengantarFilter": {
       "semua": "Buka panduan untuk melihat langkahnya. Urutan panduan tidak dipengaruhi pembayaran.",
       "alat": "Daftar alat dari semua panduan. Baca cara cek kecocokan sebelum membeli. Urutan tidak dipengaruhi pembayaran.",
-      "tukang": "Panduan yang punya tingkat renovasi atau alat yang perlu dipasang. Buka panduan lalu pilih Cari tukang.",
+      "tukang": "Panduan yang punya tingkat renovasi atau alat yang perlu dipasang. Buka panduan lalu pilih Pesan ke tukang.",
       "ahli": "Jenis ahli yang bisa membantu, dan untuk panduan apa."
     },
     "alat": {
