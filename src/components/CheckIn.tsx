@@ -17,33 +17,28 @@ export function CheckIn() {
 
   if (pilihan && !mengubah) {
     return (
-      <section aria-label={t.label} className="rounded-kartu border border-garis bg-white p-4">
-        <div className="relative">
-          <span aria-hidden="true" className="block text-5xl leading-none">
-            {pilihan.emoji}
-          </span>
-          <p className="mt-2 font-semibold">
+      <section aria-label={t.label} className="flex items-center gap-3 rounded-kartu border border-garis bg-white px-4 py-3">
+        <span aria-hidden="true" className="text-3xl leading-none">
+          {pilihan.emoji}
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold">
             {t.hariIni}: {pilihan.label}
           </p>
-          <p aria-live="polite" className="mt-1 text-sm text-redup">
-            {pilihan.balasan}
-          </p>
-          <button
-            type="button"
-            onClick={() => setMengubah(true)}
-            className="absolute -right-2 -top-2 min-h-sentuh min-w-sentuh px-2 text-sm font-semibold text-utama-gelap underline"
+          <Link
+            to={pilihan.bantuan.panduan ? `/kartu/${pilihan.bantuan.panduan}` : (pilihan.bantuan.ke ?? "/")}
+            className="inline-flex min-h-sentuh items-center text-sm font-semibold text-utama-gelap underline"
           >
-            {t.ubah}
-          </button>
+            {pilihan.bantuan.tombol}
+          </Link>
         </div>
-        <Link
-          to={pilihan.bantuan.panduan ? `/kartu/${pilihan.bantuan.panduan}` : (pilihan.bantuan.ke ?? "/")}
-          className="mt-3 flex min-h-sentuh items-center justify-between gap-2 rounded-tombol bg-utama-muda px-3 py-2 font-semibold text-utama-gelap"
+        <button
+          type="button"
+          onClick={() => setMengubah(true)}
+          className="-mr-2 min-h-sentuh min-w-sentuh shrink-0 px-2 text-sm font-semibold text-utama-gelap underline"
         >
-          <span>{pilihan.bantuan.tombol}</span>
-          <span aria-hidden="true">→</span>
-        </Link>
-        <Riwayat />
+          {t.ubah}
+        </button>
       </section>
     );
   }
@@ -86,19 +81,15 @@ export function CheckIn() {
   );
 }
 
-function Riwayat() {
+/** Deretan 7 hari terakhir. Dipakai di layar Saya. */
+export function RiwayatCheckin() {
   const { state } = useStore();
   const hariIni = kunciHari();
   const hari = hariTerakhir(7);
   const cari = (id: string | undefined) => t.pilihan.find((p) => p.id === id);
   return (
-    <details className="group mt-2">
-      <summary className="flex min-h-sentuh cursor-pointer list-none items-center justify-between text-sm text-redup [&::-webkit-details-marker]:hidden">
-        <span>{t.riwayatJudul}</span>
-        <span aria-hidden="true" className="group-open:hidden">+</span>
-        <span aria-hidden="true" className="hidden group-open:inline">−</span>
-      </summary>
-      <ol className="grid grid-cols-7 gap-1 pb-2 text-center text-xs">
+    <div>
+      <ol className="grid grid-cols-7 gap-1 text-center text-xs">
         {[...hari].reverse().map((h) => {
           const p = cari(state.riwayatCheckin[h]);
           const ini = h === hariIni;
@@ -125,7 +116,7 @@ function Riwayat() {
           );
         })}
       </ol>
-      <p className="pb-3 text-xs text-redup">{t.penutup}</p>
-    </details>
+      <p className="mt-3 text-xs text-redup">{t.penutup}</p>
+    </div>
   );
 }

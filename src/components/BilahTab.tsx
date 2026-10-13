@@ -1,4 +1,4 @@
-import { BookOpen, House, ListChecks, ShieldAlert, type LucideIcon } from "lucide-react";
+import { BookOpen, House, ListChecks, ShieldAlert, UserRound, type LucideIcon } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { konten } from "../domain/content";
 
@@ -9,6 +9,7 @@ const TAB: { ke: string; label: string; ujung?: boolean; Ikon: LucideIcon }[] = 
   { ke: "/jelajah", label: umum.tabPanduan, Ikon: BookOpen },
   { ke: "/rencana", label: umum.tabRencana, Ikon: ListChecks },
   { ke: "/igd", label: umum.tabDarurat, Ikon: ShieldAlert },
+  { ke: "/saya", label: umum.tabSaya, Ikon: UserRound },
 ];
 
 // Layar alur pertanyaan dan cetak punya bilah sendiri (atau tanpa bilah), jadi tab disembunyikan.

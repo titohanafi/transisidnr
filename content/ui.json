@@ -45,6 +45,7 @@
     "tabBeranda": "Beranda",
     "tabPanduan": "Panduan",
     "tabRencana": "Rencana",
+    "tabSaya": "Saya",
     "tabDarurat": "Darurat",
     "halamanSebelumnya": "Halaman sebelumnya"
   },
@@ -63,6 +64,20 @@
       "Pingsan atau tiba-tiba bingung."
     ],
     "menyusul": "Daftar tanda bahaya sedang disiapkan bersama tenaga medis. Sampai daftar ini tersedia, bila Anda ragu atau khawatir, hubungi dokter atau IGD terdekat."
+  },
+  "saya": {
+    "judul": "Saya",
+    "jawabanJudul": "Jawaban Anda",
+    "belumJawab": "Anda belum mengisi pertanyaan awal. Dengan beberapa pertanyaan ya atau tidak, rencana bisa disesuaikan dengan rumah Anda.",
+    "mulai": "Mulai pertanyaan",
+    "ruangan": "Ruangan",
+    "aktivitas": "Aktivitas",
+    "prioritas": "Prioritas",
+    "belumDipilih": "Belum dipilih",
+    "ubah": "Ubah jawaban",
+    "riwayatJudul": "Check-in 7 hari terakhir",
+    "riwayatKosong": "Belum ada check-in. Isi satu di Beranda, hanya perlu satu sentuhan.",
+    "dataIsi": "Kelola data yang tersimpan di perangkat ini."
   },
   "hapusData": {
     "judul": "Data dan privasi",

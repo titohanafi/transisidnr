@@ -12,6 +12,7 @@ import { HapusData } from "./screens/HapusData";
 import { Igd } from "./screens/Igd";
 import { Onboarding } from "./screens/Onboarding";
 import { PilihRuangan } from "./screens/PilihRuangan";
+import { Saya } from "./screens/Saya";
 import { Rencana } from "./screens/Rencana";
 import { StoreProvider } from "./state/store";
 
@@ -33,6 +34,7 @@ export function App() {
         <Route path="/cetak" element={<Cetak />} />
         <Route path="/kartu/:id/:tingkat?" element={<DetailKartu />} />
         <Route path="/igd" element={<Igd />} />
+        <Route path="/saya" element={<Saya />} />
         <Route path="/hapus" element={<HapusData />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

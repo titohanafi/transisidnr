@@ -154,6 +154,10 @@ export const uiSchema = z
     }),
     umum: rekamTeks,
     igd: z.object({ judul: teks, isi: teks, daftarJudul: teks, tandaBahaya: z.array(teks), menyusul: teks }),
+    saya: z.object({
+      judul: teks, jawabanJudul: teks, belumJawab: teks, mulai: teks, ruangan: teks, aktivitas: teks, prioritas: teks,
+      belumDipilih: teks, ubah: teks, riwayatJudul: teks, riwayatKosong: teks, dataIsi: teks,
+    }),
     hapusData: z.object({
       judul: teks, penjelasan: teks, tombol: teks, selesai: teks, konfirmasi: teks, ya: teks, batal: teks,
     }),
