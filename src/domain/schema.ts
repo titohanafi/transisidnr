@@ -216,9 +216,9 @@ export const uiSchema = z
     jelajah: z.object({
       judul: teks, pengantar: teks, filterLabel: teks, kosongFilter: teks, caregiver: teks,
       ajakanBelum: teks, ajakanMulai: teks, ajakanSudah: teks, ajakanRencana: teks, aksiKartu: teks,
-      filter: z.object({ semua: teks, alat: teks, tukang: teks, ahli: teks }),
-      judulFilter: z.object({ semua: teks, alat: teks, tukang: teks, ahli: teks }),
-      pengantarFilter: z.object({ semua: teks, alat: teks, tukang: teks, ahli: teks }),
+      filter: z.object({ semua: teks, alat: teks, ahli: teks }),
+      judulFilter: z.object({ semua: teks, alat: teks, ahli: teks }),
+      pengantarFilter: z.object({ semua: teks, alat: teks, ahli: teks }),
       alat: z.object({ dipakaiDi: teks, kosong: teks, detailMenyusul: teks }),
       ahli: z.object({ membantuDi: teks, kosong: teks }),
     }),

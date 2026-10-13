@@ -3,7 +3,7 @@ import { aksiTersedia } from "./aksi";
 import { AKTIVITAS, JENIS_BANTUAN, TINGKAT, type Aktivitas, type Tingkat } from "./konstanta";
 import type { Kartu } from "./schema";
 
-export type Filter = "semua" | "alat" | "tukang" | "ahli";
+export type Filter = "semua" | "alat" | "ahli";
 export type KunciKelompok = Aktivitas | "caregiver";
 
 export interface AksiKartu {
@@ -30,7 +30,7 @@ export function aksiKartu(kartu: Kartu, tingkatTampil: readonly Tingkat[]): Aksi
   return hasil;
 }
 
-const jenisFilter: Record<Exclude<Filter, "semua">, JenisAksi> = { alat: "beli", tukang: "tukang", ahli: "ahli" };
+const jenisFilter: Record<Exclude<Filter, "semua">, JenisAksi> = { alat: "beli", ahli: "ahli" };
 
 /**
  * Aksi langsung yang ditampilkan di daftar. Tanpa filter tidak ada (pengguna belum menyatakan niat;
@@ -108,10 +108,9 @@ export interface AhliItem {
   panduan: { id: string; judul: string; keterangan: string }[];
 }
 
-/** Jenis ahli dari semua panduan (tukang tidak dihitung; ada jalurnya sendiri), urut sesuai JENIS_BANTUAN. */
+/** Jenis ahli dari semua panduan, termasuk tukang (pertama), urut sesuai JENIS_BANTUAN. */
 export function kumpulkanAhli(kartu: readonly Kartu[]): AhliItem[] {
-  return JENIS_BANTUAN.filter((j) => j !== "tukang")
-    .map((jenis) => ({
+  return JENIS_BANTUAN.map((jenis) => ({
       jenis,
       panduan: kartu.flatMap((k) =>
         k.isi_menyusul ? [] : (k.bantuan ?? []).filter((b) => b.jenis === jenis).map((b) => ({ id: k.id, judul: k.judul, keterangan: b.keterangan })),

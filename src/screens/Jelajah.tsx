@@ -25,13 +25,13 @@ import { useRencana } from "../state/useRencana";
 import { useStore } from "../state/store";
 
 const { jelajah: t, umum, rencana: tr } = konten.ui;
-const FILTER: Filter[] = ["semua", "alat", "tukang", "ahli"];
+const FILTER: Filter[] = ["semua", "alat", "ahli"];
 
 // Jalur pintas: langsung ke panduan dan aksinya tanpa mengisi pertanyaan.
-// Alamat /jelajah/alat, /jelajah/tukang, dan /jelajah/ahli membuka daftar yang sudah disaring.
+// Alamat /jelajah/alat dan /jelajah/ahli membuka daftar yang sudah disaring. /jelajah/tukang (alamat lama) menuju ahli.
 export function Jelajah() {
   const { filter } = useParams();
-  const awal = FILTER.find((f) => f === filter) ?? "semua";
+  const awal = FILTER.find((f) => f === (filter === "tukang" ? "ahli" : filter)) ?? "semua";
   return <Daftar key={awal} awal={awal} />;
 }
 

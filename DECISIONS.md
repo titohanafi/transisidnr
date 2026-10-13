@@ -314,3 +314,7 @@
 - Di halaman `/aksi/ahli/<panduan>`, baris Tukang (yang memang sudah tercantum di bantuan panduan) kini punya tombol "Pesan ke tukang" ke draf WhatsApp, memakai tingkat paling ringan yang mendukungnya.
 - Tombol "Pesan ke tukang" di tiap tingkat pada halaman detail panduan dihapus supaya tidak ada dua pintu ke hal yang sama. Yang tetap ada: tombol utama di kartu Rencana untuk tingkat renovasi (agar tidak menambah satu langkah), dan saringan `/jelajah/tukang`.
 - Fungsi `aksiTersedia` tidak diubah; penyaringan hanya di tampilan detail panduan.
+
+## Filter tukang digabung ke ahli di halaman Panduan
+- Pil "Pesan ke tukang" di `/jelajah` dihapus. Tukang kini satu jenis di daftar "Kenali peran ahli" (tampil pertama), lengkap dengan arti dan panduan yang melibatkannya. Pesan WhatsApp-nya diakses dari halaman peran ahli tiap panduan.
+- Alamat lama `/jelajah/tukang` diarahkan ke daftar ahli supaya tautan lama tidak patah.

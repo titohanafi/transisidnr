@@ -363,12 +363,11 @@
   },
   "jelajah": {
     "judul": "Semua panduan",
-    "pengantar": "Buka panduan untuk melihat langkahnya. Bila sudah tahu ingin mencari alat, tukang, atau ahli, pilih saringan di bawah. Urutan panduan tidak dipengaruhi pembayaran.",
+    "pengantar": "Buka panduan untuk melihat langkahnya. Bila sudah tahu ingin mencari alat atau mengenali peran ahli dan tukang, pilih saringan di bawah. Urutan panduan tidak dipengaruhi pembayaran.",
     "filterLabel": "Tampilkan",
     "filter": {
       "semua": "Semua",
       "alat": "Cari alat",
-      "tukang": "Pesan ke tukang",
       "ahli": "Kenali peran ahli"
     },
     "kosongFilter": "Belum ada panduan dengan isi lengkap untuk pilihan ini. Isi panduan masih disusun.",
@@ -381,14 +380,12 @@
     "judulFilter": {
       "semua": "Semua panduan",
       "alat": "Alat yang mungkin Anda butuhkan",
-      "tukang": "Panduan yang melibatkan tukang",
       "ahli": "Siapa yang bisa membantu"
     },
     "pengantarFilter": {
       "semua": "Buka panduan untuk melihat langkahnya. Urutan panduan tidak dipengaruhi pembayaran.",
       "alat": "Daftar alat dari semua panduan. Baca cara cek kecocokan sebelum membeli. Urutan tidak dipengaruhi pembayaran.",
-      "tukang": "Panduan yang punya tingkat renovasi atau alat yang perlu dipasang. Buka panduan lalu pilih Pesan ke tukang.",
-      "ahli": "Jenis ahli yang bisa membantu, dan untuk panduan apa."
+      "ahli": "Jenis ahli dan tukang yang bisa membantu, dan untuk panduan apa. Buka panduan lalu pilih Kenali peran ahli."
     },
     "alat": {
       "dipakaiDi": "Dipakai di panduan",

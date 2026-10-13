@@ -45,10 +45,10 @@ describe("filter", () => {
   it("semua menampilkan semua kartu, termasuk kerangka", () => {
     expect(k.kartu.every((c) => cocokFilter(c, semua, "semua"))).toBe(true);
   });
-  it.each(["alat", "tukang", "ahli"] as const)("%s tidak menyertakan kartu kerangka", (f) => {
+  it.each(["alat", "ahli"] as const)("%s tidak menyertakan kartu kerangka", (f) => {
     expect(cocokFilter(kerangka(), semua, f)).toBe(false);
   });
-  it("alat dan tukang hanya kartu yang punya barang atau tingkat tukang", () => {
+  it("alat hanya kartu yang punya barang", () => {
     const alat = k.kartu.filter((c) => cocokFilter(c, semua, "alat"));
     expect(alat.length).toBeGreaterThan(0);
     expect(alat.every((c) => aksiKartu(c, semua).some((a) => a.jenis === "beli"))).toBe(true);
@@ -66,11 +66,11 @@ describe("aksi di daftar", () => {
   it("tanpa filter tidak ada tombol aksi (cukup buka panduan)", () => {
     expect(aksiUntukFilter(aksi, "semua")).toEqual([]);
   });
-  it.each([["alat", "beli"], ["tukang", "tukang"], ["ahli", "ahli"]] as const)("filter %s hanya menampilkan aksi %s", (f, jenis) => {
+  it.each([["alat", "beli"], ["ahli", "ahli"]] as const)("filter %s hanya menampilkan aksi %s", (f, jenis) => {
     expect(aksiUntukFilter(aksi, f).map((a) => a.jenis)).toEqual([jenis]);
   });
   it("lakukan sendiri tidak pernah ditampilkan di daftar", () => {
-    for (const f of ["semua", "alat", "tukang", "ahli"] as const) expect(aksiUntukFilter(aksi, f).some((a) => a.jenis === "sendiri")).toBe(false);
+    for (const f of ["semua", "alat", "ahli"] as const) expect(aksiUntukFilter(aksi, f).some((a) => a.jenis === "sendiri")).toBe(false);
   });
 });
 
@@ -118,9 +118,9 @@ describe("daftar alat dan ahli", () => {
     for (const c of salinan) for (const t of TINGKAT) for (const b of c.solusi?.[t]?.barang ?? []) { b.afiliasi = true; b.link = "https://x.example"; }
     expect(kumpulkanAlat(salinan, tampilSemua).map((a) => a.nama)).toEqual(kumpulkanAlat(k.kartu, tampilSemua).map((a) => a.nama));
   });
-  it("ahli: tukang tidak dihitung, tiap jenis punya panduan", () => {
+  it("ahli: tukang ikut dihitung dan tampil pertama, tiap jenis punya panduan", () => {
     const ahli = kumpulkanAhli(k.kartu);
-    expect(ahli.map((a) => a.jenis)).not.toContain("tukang");
+    expect(ahli[0].jenis).toBe("tukang");
     expect(ahli.map((a) => a.jenis)).toContain("okupasi_terapis");
     expect(ahli.every((a) => a.panduan.length > 0)).toBe(true);
   });
