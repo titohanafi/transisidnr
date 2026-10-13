@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
+import { KartuKerangka } from "../components/KartuKerangka";
 import { Ikon } from "../components/Ikon";
 import { LencanaStatus, Tanda } from "../components/Lencana";
 import { TombolAksi } from "../components/TombolAksi";
@@ -82,6 +83,7 @@ function Daftar({ awal }: { awal: Filter }) {
             {g.kartu.map((k) => {
               const tingkat = tingkatDari(k.id);
               const aksi = aksiUntukFilter(aksiKartu(k, tingkat.filter((x) => x.tampil).map((x) => x.tingkat)), filter);
+              if (k.isi_menyusul) return <KartuKerangka key={k.id} kartu={k} />;
               return (
                 <article key={k.id} className="rounded-kartu border border-garis bg-white p-4">
                   <h3 className="text-lg font-semibold leading-snug">{k.judul}</h3>

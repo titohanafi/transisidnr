@@ -1,4 +1,5 @@
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { BilahKemajuan } from "../components/BilahKemajuan";
 import { Halaman } from "../components/Halaman";
 import { NavBawah } from "../components/NavBawah";
 import { Pilihan } from "../components/Pilihan";
@@ -38,7 +39,7 @@ export function AsesmenPertanyaan() {
       <p className="mt-2 text-sm text-redup" aria-live="polite">
         {kelompok} · {indikator}
       </p>
-      <progress className="mt-1 h-2 w-full accent-utama" max={daftar.length} value={n} aria-label={indikator} />
+      <BilahKemajuan n={n} total={daftar.length} label={indikator} />
 
       <fieldset className="mt-5">
         <legend className="sr-only">{q.pertanyaan}</legend>

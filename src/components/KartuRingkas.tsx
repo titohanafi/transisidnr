@@ -6,6 +6,7 @@ import { kunciKelompok } from "../domain/jelajah";
 import { LencanaSifat, LencanaStatus, Tanda } from "./Lencana";
 import { aksiUtama } from "../domain/aksi";
 import { TombolAksi } from "./TombolAksi";
+import { KartuKerangka } from "./KartuKerangka";
 
 const { rencana: tr, umum, kartu: tk } = konten.ui;
 
@@ -18,6 +19,7 @@ export function tingkatUtama(k: KartuRencana): TingkatRencana | undefined {
 export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRencana; judulTingkat?: "h2" | "h3" }) {
   const data = konten.kartu.find((k) => k.id === kartu.id);
   if (!data) return null;
+  if (kartu.isiMenyusul) return <KartuKerangka kartu={data} />;
   const Judul = judulTingkat;
   const utama = tingkatUtama(kartu);
 
