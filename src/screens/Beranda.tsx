@@ -13,10 +13,6 @@ export function Beranda() {
     <Halaman judul={app.nama}>
       <p className="mt-2 text-lg">{beranda.manfaat}</p>
 
-      <p role="note" className="mt-3 rounded-kartu border border-draf bg-draf-muda p-2 text-sm text-draf">
-        {beranda.spandukDraf}
-      </p>
-
       <h2 className="sr-only">{pilih.judul}</h2>
 
       {/* Dua jalur dengan bobot setara: dipandu, atau langsung ke yang dicari. */}
