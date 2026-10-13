@@ -2,13 +2,13 @@ import { Halaman } from "../components/Halaman";
 import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
 
-const { asesmen, umum } = konten.ui;
+const { rencana, umum } = konten.ui;
 
-// Penampung sementara; layar sebenarnya dibangun di milestone 4.
-export function Asesmen() {
+// Penampung sementara; layar sebenarnya dibangun di milestone 5.
+export function Rencana() {
   return (
-    <Halaman judul={asesmen.judul}>
-      <p className="mt-4">{asesmen.sementara}</p>
+    <Halaman judul={rencana.judul}>
+      <p className="mt-4">{rencana.sementara}</p>
       <TombolLink to="/" gayaTombol="sekunder" className="mt-6">
         {umum.keBeranda}
       </TombolLink>

@@ -153,7 +153,20 @@ export const uiSchema = z
       judul: teks, penjelasan: teks, tombol: teks, selesai: teks, konfirmasi: teks, ya: teks, batal: teks,
     }),
     onboarding: z.object({ judul: teks, indikator: teks, lanjutTerakhir: teks }),
-    asesmen: z.object({ judul: teks, sementara: teks }),
+    asesmen: z.object({
+      judul: teks,
+      aktivitas: z.object({
+        judul: teks, bantuan: teks, tidakRelevan: teks, minimal: teks,
+        status: z.object({ bisa_sendiri: teks, sulit: teks, ingin_belum_bisa: teks }),
+      }),
+      prioritas: z.object({ judul: teks, bantuan: teks, maksimal: teks }),
+      pertanyaan: z.object({ indikator: teks, ya: teks, tidak: teks, penjelasanJudul: teks }),
+      foto: z.object({
+        judul: teks, penjelasan: teks, pilih: teks, ganti: teks, hapus: teks, alt: teks,
+        gagalSimpan: teks, gagalBaca: teks, selesai: teks, lewati: teks,
+      }),
+    }),
+    rencana: z.object({ judul: teks, sementara: teks }),
     checkin: z.object({
       pertanyaan: teks,
       pilihan: z.array(opsi.extend({ balasan: teks })).min(1),

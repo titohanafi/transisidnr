@@ -1,12 +1,13 @@
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
-import { Tombol } from "../components/Tombol";
+import { NavBawah } from "../components/NavBawah";
+import { Pilihan } from "../components/Pilihan";
 import { konten } from "../domain/content";
 import { isi } from "../lib/teks";
 import { bisaLanjut, ubahPilihan } from "../state/onboarding";
 import { useStore } from "../state/store";
 
-const { onboarding: teks, umum } = konten.ui;
+const { onboarding: teks } = konten.ui;
 const soal = konten.onboarding.pertanyaan;
 
 export function Onboarding() {
@@ -23,7 +24,7 @@ export function Onboarding() {
   const tipe = q.banyakPilihan ? "checkbox" : "radio";
   const indikator = isi(teks.indikator, { n, total: soal.length });
 
-  const lanjut = () => navigate(terakhir ? "/asesmen" : `/mulai/${n + 1}`);
+  const lanjut = () => navigate(terakhir ? "/asesmen/aktivitas" : `/mulai/${n + 1}`);
   const kembali = () => navigate(n === 1 ? "/" : `/mulai/${n - 1}`);
 
   return (
@@ -40,34 +41,25 @@ export function Onboarding() {
           {q.pilihan.map((p) => {
             const aktif = dipilih.includes(p.id);
             return (
-              <label
+              <Pilihan
                 key={p.id}
-                className={`flex min-h-sentuh cursor-pointer items-center gap-3 rounded-kartu border-2 p-3 ${
-                  aktif ? "border-utama bg-utama-muda font-semibold" : "border-garis bg-white"
-                }`}
-              >
-                <input
-                  type={tipe}
-                  name={q.id}
-                  checked={aktif}
-                  onChange={() => setJawabanOnboarding(q.id, ubahPilihan(q.banyakPilihan, dipilih, p.id))}
-                  className="h-6 w-6 shrink-0 accent-utama"
-                />
-                <span>{p.label}</span>
-              </label>
+                tipe={tipe}
+                nama={q.id}
+                label={p.label}
+                aktif={aktif}
+                onUbah={() => setJawabanOnboarding(q.id, ubahPilihan(q.banyakPilihan, dipilih, p.id))}
+              />
             );
           })}
         </div>
       </fieldset>
 
-      <div className="sticky bottom-0 mt-auto flex gap-3 bg-kertas pb-4 pt-6">
-        <Tombol gayaTombol="sekunder" onClick={kembali} className="flex-1">
-          {umum.kembali}
-        </Tombol>
-        <Tombol onClick={lanjut} disabled={!bisaLanjut(dipilih)} className="flex-1">
-          {terakhir ? teks.lanjutTerakhir : umum.lanjut}
-        </Tombol>
-      </div>
+      <NavBawah
+        onKembali={kembali}
+        onLanjut={lanjut}
+        lanjutNonaktif={!bisaLanjut(dipilih)}
+        teksLanjut={terakhir ? teks.lanjutTerakhir : undefined}
+      />
     </Halaman>
   );
 }

@@ -93,7 +93,44 @@
     "lanjutTerakhir": "Selesai"
   },
   "asesmen": {
-    "sementara": "Jawaban Anda sudah tersimpan di perangkat ini. Asesmen kamar mandi akan hadir di tahap berikutnya.",
-    "judul": "Asesmen kamar mandi"
+    "judul": "Asesmen kamar mandi",
+    "aktivitas": {
+      "judul": "Aktivitas apa yang relevan?",
+      "bantuan": "Untuk tiap aktivitas, pilih kondisi saat ini. Aktivitas yang tidak relevan boleh dilewati.",
+      "tidakRelevan": "Tidak relevan",
+      "status": {
+        "bisa_sendiri": "Bisa sendiri",
+        "sulit": "Bisa, tapi sulit",
+        "ingin_belum_bisa": "Ingin, tapi belum bisa"
+      },
+      "minimal": "Pilih kondisi untuk minimal satu aktivitas."
+    },
+    "prioritas": {
+      "judul": "Mana yang paling penting?",
+      "bantuan": "Pilih satu atau dua aktivitas yang ingin dibereskan lebih dulu. Keputusan ada pada penyandang disabilitas.",
+      "maksimal": "Anda sudah memilih dua. Lepas satu bila ingin mengganti."
+    },
+    "pertanyaan": {
+      "indikator": "Pertanyaan {n} dari {total}",
+      "ya": "Ya",
+      "tidak": "Tidak",
+      "penjelasanJudul": "Artinya:"
+    },
+    "foto": {
+      "judul": "Foto kamar mandi (boleh dilewati)",
+      "penjelasan": "Foto membantu tukang atau terapis melihat ruangnya. Foto hanya disimpan di perangkat ini, ikut tampil di versi cetak, dan tidak diunggah.",
+      "pilih": "Pilih atau ambil foto",
+      "ganti": "Ganti foto",
+      "hapus": "Hapus foto",
+      "alt": "Foto kamar mandi Anda",
+      "gagalSimpan": "Foto tidak bisa disimpan di perangkat ini. Coba foto lain atau lewati langkah ini.",
+      "gagalBaca": "Berkas ini tidak bisa dibuka sebagai foto.",
+      "selesai": "Selesai",
+      "lewati": "Lewati"
+    }
+  },
+  "rencana": {
+    "judul": "Rencana Saya",
+    "sementara": "Jawaban Anda sudah tersimpan di perangkat ini. Rencana Anda akan hadir di tahap berikutnya."
   }
 }

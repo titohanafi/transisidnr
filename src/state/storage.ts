@@ -1,15 +1,32 @@
 import { z } from "zod";
+import { AKTIVITAS } from "../domain/schema";
 
 export const KUNCI = "transisi:v1";
+// Foto disimpan terpisah supaya foto besar tidak menggagalkan penyimpanan jawaban.
+export const KUNCI_FOTO = "transisi:v1:foto";
+
+export const STATUS_AKTIVITAS = ["bisa_sendiri", "sulit", "ingin_belum_bisa"] as const;
+
+export const asesmenStateSchema = z.object({
+  /** Aktivitas yang relevan -> kondisi. Yang tidak ada = tidak relevan. */
+  status: z.partialRecord(z.enum(AKTIVITAS), z.enum(STATUS_AKTIVITAS)).default({}),
+  /** Satu atau dua aktivitas, urut dari yang terpenting. */
+  prioritas: z.array(z.enum(AKTIVITAS)).max(2).default([]),
+  /** id pertanyaan -> true (ya) / false (tidak). */
+  jawaban: z.record(z.string(), z.boolean()).default({}),
+});
 
 export const stateSchema = z.object({
   versi: z.literal(1),
   /** id pertanyaan onboarding -> id pilihan (satu atau lebih). */
   onboarding: z.record(z.string(), z.array(z.string())).default({}),
+  asesmen: asesmenStateSchema.default({ status: {}, prioritas: [], jawaban: {} }),
 });
 export type State = z.infer<typeof stateSchema>;
+export type AsesmenState = z.infer<typeof asesmenStateSchema>;
 
-export const stateAwal = (): State => ({ versi: 1, onboarding: {} });
+export const asesmenAwal = (): AsesmenState => ({ status: {}, prioritas: [], jawaban: {} });
+export const stateAwal = (): State => ({ versi: 1, onboarding: {}, asesmen: asesmenAwal() });
 
 type Gudang = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
@@ -42,10 +59,38 @@ export function simpan(state: State, gudang: Gudang | null = gudangBawaan()): bo
   }
 }
 
-export function hapus(gudang: Gudang | null = gudangBawaan()): void {
+export function muatFoto(gudang: Gudang | null = gudangBawaan()): string | null {
   try {
-    gudang?.removeItem(KUNCI);
+    const f = gudang?.getItem(KUNCI_FOTO);
+    return f && f.startsWith("data:image/") ? f : null;
   } catch {
-    /* tidak ada yang bisa dilakukan */
+    return null;
+  }
+}
+
+export function simpanFoto(dataUrl: string, gudang: Gudang | null = gudangBawaan()): boolean {
+  try {
+    gudang?.setItem(KUNCI_FOTO, dataUrl);
+    return !!gudang;
+  } catch {
+    return false; // biasanya kuota penuh
+  }
+}
+
+export function hapusFoto(gudang: Gudang | null = gudangBawaan()): void {
+  try {
+    gudang?.removeItem(KUNCI_FOTO);
+  } catch {
+    /* abaikan */
+  }
+}
+
+export function hapus(gudang: Gudang | null = gudangBawaan()): void {
+  for (const k of [KUNCI, KUNCI_FOTO]) {
+    try {
+      gudang?.removeItem(k);
+    } catch {
+      /* tidak ada yang bisa dilakukan */
+    }
   }
 }
