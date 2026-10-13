@@ -1,15 +1,26 @@
 import { Navigate, useParams } from "react-router-dom";
 import { AksiHalaman } from "../components/AksiHalaman";
+import { TombolAksi } from "../components/TombolAksi";
 import { konten } from "../domain/content";
+import { susunTingkat } from "../domain/engine";
+import { aksiKartu } from "../domain/jelajah";
+import { useRencana } from "../state/useRencana";
 
 const { aksi, kartu: tk } = konten.ui;
 const t = aksi.ahli;
 
-// Tanya ahli: menjelaskan jenis ahli yang cocok. Direktori terverifikasi belum ada di MVP.
+// Kenali peran ahli: menjelaskan jenis ahli yang cocok (termasuk tukang, dengan tombol pesan WhatsApp). Direktori terverifikasi belum ada di MVP.
 export function AksiAhli() {
   const { id } = useParams();
+  const { konteks } = useRencana();
   const kartu = konten.kartu.find((k) => k.id === id);
   if (!kartu) return <Navigate to="/rencana" replace />;
+
+  // Tombol pesan ke tukang memakai tingkat paling ringan yang mendukungnya (sama seperti daftar Panduan).
+  const tampil = susunTingkat(kartu, konteks)
+    .filter((x) => x.tampil)
+    .map((x) => x.tingkat);
+  const tingkatTukang = aksiKartu(kartu, tampil).find((a) => a.jenis === "tukang")?.tingkat;
 
   return (
     <AksiHalaman judul={t.judul} kartu={kartu}>
@@ -22,6 +33,9 @@ export function AksiAhli() {
                 <h2 className="font-semibold">{tk.jenisBantuan[b.jenis].nama}</h2>
                 <p className="text-sm text-redup">{tk.jenisBantuan[b.jenis].arti}</p>
                 <p className="mt-1">{b.keterangan}</p>
+                {b.jenis === "tukang" && tingkatTukang && (
+                  <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={tingkatTukang} gayaTombol="sekunder" className="mt-3 w-full" />
+                )}
               </li>
             ))}
           </ul>

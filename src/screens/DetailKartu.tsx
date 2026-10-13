@@ -176,7 +176,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                         </div>
                       )}
                       <div className="mt-5 flex flex-col gap-2">
-                        {aksiTersedia(kartu, x.tingkat).map((j) => (
+                        {/* Tukang tidak diulang di sini: tombolnya ada di "Kenali peran ahli", pada baris Tukang. */}
+                        {aksiTersedia(kartu, x.tingkat).filter((j) => j !== "tukang").map((j) => (
                           <TombolAksi
                             key={j}
                             jenis={j}

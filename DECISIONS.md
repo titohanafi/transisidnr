@@ -309,3 +309,8 @@
 - Tombolnya saya biarkan di Beranda karena sifatnya informasi ringan, bukan langkah yang mahal. Bila ingin disamakan dengan tukang (dihapus dari Beranda), Beranda hanya tersisa satu tombol cepat.
 
 - "Kenali peran ahli" dihapus dari Beranda (halamannya tetap ada lewat Panduan). Beranda kini menonjolkan "Lihat semua panduan" sebagai baris besar berlatar hijau muda dengan ikon buku, diikuti baris "Cari alat". Keduanya baris lebar dengan panah, bukan ubin kecil.
+
+## Tukang digabung ke "Kenali peran ahli"
+- Di halaman `/aksi/ahli/<panduan>`, baris Tukang (yang memang sudah tercantum di bantuan panduan) kini punya tombol "Pesan ke tukang" ke draf WhatsApp, memakai tingkat paling ringan yang mendukungnya.
+- Tombol "Pesan ke tukang" di tiap tingkat pada halaman detail panduan dihapus supaya tidak ada dua pintu ke hal yang sama. Yang tetap ada: tombol utama di kartu Rencana untuk tingkat renovasi (agar tidak menambah satu langkah), dan saringan `/jelajah/tukang`.
+- Fungsi `aksiTersedia` tidak diubah; penyaringan hanya di tampilan detail panduan.
