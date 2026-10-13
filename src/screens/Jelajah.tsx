@@ -87,7 +87,7 @@ function Daftar({ awal }: { awal: Filter }) {
               return (
                 <article key={k.id} className="rounded-kartu border border-garis bg-white p-4">
                   <h3 className="text-lg font-semibold leading-snug">{k.judul}</h3>
-                  <div className="mt-2">
+                  <div className="mt-2 empty:hidden">
                     <LencanaStatus status={k.status_validasi} />
                   </div>
                   <p className="mt-2 text-redup">{k.situasi}</p>

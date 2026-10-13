@@ -29,7 +29,7 @@ export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRenca
         <Ikon kunci={kunciKelompok(data)} className="mt-0.5 h-9 w-9" />
         <Judul className="text-lg font-semibold leading-snug">{data.judul}</Judul>
       </div>
-      <div className="mt-2 flex flex-wrap gap-2">
+      <div className="mt-2 flex flex-wrap gap-2 empty:hidden">
         <LencanaStatus status={data.status_validasi} />
       </div>
       <p className="mt-2 text-redup">{data.situasi}</p>

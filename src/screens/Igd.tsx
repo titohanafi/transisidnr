@@ -1,5 +1,4 @@
 import { Halaman } from "../components/Halaman";
-import { LencanaStatus } from "../components/Lencana";
 import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
 
@@ -16,9 +15,6 @@ export function Igd() {
           <h2 id="judul-tanda-bahaya" className="text-xl font-semibold">
             {igd.daftarJudul}
           </h2>
-          <p className="mt-2">
-            <LencanaStatus status="draf" />
-          </p>
           <ul className="mt-3 list-disc space-y-2 pl-6">
             {igd.tandaBahaya.map((t) => (
               <li key={t}>{t}</li>

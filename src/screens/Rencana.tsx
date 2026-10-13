@@ -135,7 +135,7 @@ export function Rencana() {
               <Ikon kunci="caregiver" className="mt-0.5 h-9 w-9" />
               <h3 className="text-lg font-semibold leading-snug">{pendamping.judul}</h3>
             </div>
-            <div className="mt-2">
+            <div className="mt-2 empty:hidden">
               <LencanaStatus status={pendamping.status_validasi} />
             </div>
             <p className="mt-2 text-redup">{pendamping.situasi}</p>

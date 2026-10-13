@@ -6,10 +6,11 @@ const { umum } = konten.ui;
 
 const dasar = "inline-block rounded-full border px-2 py-0.5 text-sm font-medium";
 
+// Lencana "Draf" sengaja tidak ditampilkan (keputusan pemilik untuk PoC, lihat DECISIONS.md).
 export function LencanaStatus({ status }: { status: Kartu["status_validasi"] }) {
-  const label = { draf: umum.lencanaDraf, ditinjau_ahli: umum.lencanaDitinjau, disetujui: umum.lencanaDisetujui }[status];
-  const warna = status === "draf" ? "border-draf bg-draf-muda text-draf" : "border-utama bg-utama-muda text-utama-gelap";
-  return <span className={`${dasar} ${warna}`}>{label}</span>;
+  if (status === "draf") return null;
+  const label = status === "ditinjau_ahli" ? umum.lencanaDitinjau : umum.lencanaDisetujui;
+  return <span className={`${dasar} border-utama bg-utama-muda text-utama-gelap`}>{label}</span>;
 }
 
 export function LencanaSifat({ sifat }: { sifat: "sementara" | "permanen" }) {

@@ -57,7 +57,7 @@ export function Cetak() {
           return (
             <article key={id} className="mt-6 break-inside-avoid border-t border-garis pt-4">
               <h2 className="text-xl font-bold leading-snug">{k.judul}</h2>
-              <div className="mt-1">
+              <div className="mt-1 empty:hidden">
                 <LencanaStatus status={k.status_validasi} />
               </div>
               <p className="mt-2">{k.situasi}</p>
