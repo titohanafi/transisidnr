@@ -11,7 +11,7 @@
       "id": "q-mandi-masuk",
       "aktivitas": "mandi",
       "pertanyaan": "Apakah bak atau area shower sulit dimasuki karena ada bibir atau tinggi?",
-      "penjelasan": "Bibir atau tinggi di pintu area mandi membuat kursi roda atau kaki sulit melewatinya.",
+      "penjelasan": "Bibir atau tinggi di pintu area mandi membuat kursi roda sulit melewatinya.",
       "memicu_kartu": ["bath-shower-entry"]
     },
     {
