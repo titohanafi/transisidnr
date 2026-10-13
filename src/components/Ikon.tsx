@@ -21,13 +21,12 @@ const isi: Record<KunciKelompok, JSX.Element> = {
       <path d="M28 25v4M32 25v6M36 25v4M30 35v4M34 36v4" />
     </g>
   ),
-  // Kloset dengan batang pegangan di sisinya
+  // Kloset: tangki, dudukan, dan alas
   toilet: (
     <g {...garis}>
-      <rect x="18" y="6" width="22" height="10" rx="2" />
-      <path d="M14 21h30c0 8-4 14-10 14h-10c-6 0-10-6-10-14z" />
-      <path d="M26 35v7h10v-7" />
-      <path d="M6 16v18M4 16h4M4 34h4" />
+      <rect x="14" y="5" width="20" height="11" rx="2" />
+      <path d="M8 21h32c0 8-4 14-10 14H18c-6 0-10-6-10-14z" />
+      <path d="M19 35v7h10v-7" />
     </g>
   ),
   // Keran dengan air mengalir
@@ -38,21 +37,22 @@ const isi: Record<KunciKelompok, JSX.Element> = {
       <path d="M36 29v4M36 37v4M30 33v3M42 33v3" />
     </g>
   ),
-  // Cermin dan wastafel
+  // Cermin persegi di atas wastafel dengan keran
   grooming: (
     <g {...garis}>
-      <ellipse cx="24" cy="13" rx="9" ry="9" />
-      <path d="M24 22v7" />
-      <path d="M6 31h36c0 6-5 11-11 11H17c-6 0-11-5-11-11z" />
+      <rect x="12" y="4" width="24" height="18" rx="3" />
+      <path d="M18 17l6-8M24 17l4-5" />
+      <path d="M24 29v-3h5" />
+      <path d="M6 31h36l-4 10H10z" />
     </g>
   ),
-  // Pintu dengan titik panggilan bantuan
+  // Pintu: bingkai, panel, dan gagang
   umum: (
     <g {...garis}>
-      <rect x="10" y="6" width="22" height="36" rx="2" />
-      <circle cx="27" cy="25" r="1.5" fill="currentColor" />
-      <circle cx="39" cy="13" r="3" />
-      <path d="M34 8a8 8 0 0 1 10 0M34 18a8 8 0 0 0 10 0" />
+      <rect x="12" y="5" width="24" height="37" rx="2" />
+      <rect x="17" y="10" width="14" height="12" rx="1" />
+      <circle cx="31" cy="30" r="1.8" fill="currentColor" />
+      <path d="M6 42h36" />
     </g>
   ),
   // Hati: pendampingan
