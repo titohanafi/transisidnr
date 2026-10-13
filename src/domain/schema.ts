@@ -148,8 +148,6 @@ export const uiSchema = z
       tautanIgd: teks,
       tautanHapus: teks,
       konteks: teks,
-      janji: z.array(teks).length(3),
-      janjiLabel: teks,
       pilih: z.object({
         judul: teks,
         susun: z.object({ judul: teks, isi: teks, tombol: teks }),

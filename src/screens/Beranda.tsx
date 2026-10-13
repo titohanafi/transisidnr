@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { IkonAksi, IlustrasiBeranda } from "../components/Ikon";
-import { Tanda } from "../components/Lencana";
 import { konten } from "../domain/content";
 
 const { app, beranda, umum } = konten.ui;
@@ -12,13 +11,6 @@ export function Beranda() {
   return (
     <Halaman judul={app.nama}>
       <p className="mt-2 text-lg">{beranda.konteks}</p>
-      <ul className="mt-3 flex flex-wrap gap-2" aria-label={beranda.janjiLabel}>
-        {beranda.janji.map((j) => (
-          <li key={j}>
-            <Tanda>{j}</Tanda>
-          </li>
-        ))}
-      </ul>
 
       <IlustrasiBeranda className="mt-4" />
 
