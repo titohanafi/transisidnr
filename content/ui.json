@@ -76,6 +76,7 @@
     "batal": "Batal"
   },
   "checkin": {
+    "label": "Untuk caregiver",
     "sapaan": "Merawat itu pekerjaan yang besar. Anda juga penting.",
     "pertanyaan": "Bagaimana perasaan Anda hari ini?",
     "pilihan": [

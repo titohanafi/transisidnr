@@ -11,7 +11,10 @@ export function CheckIn() {
 
   return (
     <fieldset className="rounded-kartu bg-aksen-muda p-4">
-      <legend className="px-1 text-xl font-bold">{t.pertanyaan}</legend>
+      <legend className="px-1">
+        <span className="block text-sm font-semibold uppercase tracking-wide text-aksen">{t.label}</span>
+        <span className="block text-xl font-bold">{t.pertanyaan}</span>
+      </legend>
       <p className="mt-1 text-redup">{t.sapaan}</p>
       <div className="mt-2 space-y-2">
         {t.pilihan.map((p) => (
