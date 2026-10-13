@@ -42,7 +42,13 @@
     "lewatiKeIsi": "Lewati ke isi",
     "privasi": "Jawaban Anda hanya tersimpan di perangkat ini dan tidak dikirim ke mana pun.",
     "tautanLain": "Tautan lain",
-    "tautanIgd": "Kapan harus ke dokter atau IGD"
+    "tautanIgd": "Kapan harus ke dokter atau IGD",
+    "menuUtama": "Menu utama",
+    "tabBeranda": "Beranda",
+    "tabPanduan": "Panduan",
+    "tabRencana": "Rencana",
+    "tabDarurat": "Darurat",
+    "halamanSebelumnya": "Halaman sebelumnya"
   },
   "igd": {
     "judul": "Kapan harus ke dokter atau IGD",

@@ -1,11 +1,15 @@
 import { useEffect, useRef, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { BilahTab } from "./BilahTab";
 import { konten } from "../domain/content";
 
 const { app, umum } = konten.ui;
 
 // Kerangka semua layar: header, tautan lewati, dan fokus ke judul saat layar berganti.
 export function Halaman({ judul, children, kunciFokus }: { judul: string; children: ReactNode; kunciFokus?: string | number }) {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const dalam = !["/", "/jelajah", "/rencana", "/igd"].includes(pathname);
   const h1 = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     h1.current?.focus();
@@ -24,8 +28,20 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
       >
         {umum.lewatiKeIsi}
       </a>
-      <header className="border-b border-garis px-4 py-3 print:hidden">
-        <Link to="/" className="inline-flex min-h-sentuh items-center text-lg font-bold text-utama">
+      <header className="sticky top-0 z-10 flex items-center gap-1 border-b border-garis bg-white px-2 py-1 print:hidden">
+        {dalam && (
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            aria-label={umum.halamanSebelumnya}
+            className="inline-flex h-sentuh w-sentuh items-center justify-center rounded-tombol text-utama"
+          >
+            <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 5l-7 7 7 7" />
+            </svg>
+          </button>
+        )}
+        <Link to="/" className={`inline-flex min-h-sentuh items-center text-lg font-bold text-utama ${dalam ? "" : "px-2"}`}>
           {app.nama}
         </Link>
       </header>
@@ -40,6 +56,7 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
         </h1>
         {children}
       </main>
+      <BilahTab />
     </div>
   );
 }
