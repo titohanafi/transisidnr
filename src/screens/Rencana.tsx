@@ -37,6 +37,7 @@ export function Rencana() {
 
   return (
     <Halaman judul={t.judul}>
+      <p className="mt-2 text-lg">{t.sapaan}</p>
       <div className="mt-2 flex flex-wrap items-center gap-2">
         {masukan.prioritas.map((a) => (
           <Tanda key={a}>{labelAkt(a)}</Tanda>
@@ -61,6 +62,7 @@ export function Rencana() {
                 {t.satuHal}
               </h2>
               <p className="mt-2 text-lg">{satuHal.langkah}</p>
+              <p className="mt-1 text-redup">{t.satuHalCatatan}</p>
               <p className="mt-2 text-sm text-redup">{isi(t.dariKartu, { judul: dataKartu(satuHal.kartuId)?.judul ?? "" })}</p>
               <TombolLink to={`/kartu/${satuHal.kartuId}/${satuHal.tingkat}`} className="mt-3">
                 {t.lihatKartu}

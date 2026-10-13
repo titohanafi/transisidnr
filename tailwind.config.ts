@@ -19,7 +19,7 @@ export default {
       fontFamily: {
         sans: ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
       },
-      borderRadius: { kartu: "12px", tombol: "10px" },
+      borderRadius: { kartu: "16px", tombol: "12px" },
       spacing: { sentuh: "44px" },
       minHeight: { sentuh: "44px" },
       minWidth: { sentuh: "44px" },

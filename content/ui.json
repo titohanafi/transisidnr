@@ -3,7 +3,7 @@
     "nama": "Transisi"
   },
   "beranda": {
-    "manfaat": "Rencana kamar mandi yang lebih aman dan nyaman, langkah demi langkah.",
+    "manfaat": "Kita atur kamar mandi yang lebih aman dan nyaman, selangkah demi selangkah. Anda yang menentukan.",
     "langkah": [
       {
         "judul": "Jawab pertanyaan",
@@ -24,12 +24,12 @@
     "pilih": {
       "judul": "Apa yang ingin Anda lakukan?",
       "susun": {
-        "judul": "Susun rencana untuk saya",
-        "isi": "Jawab ya atau tidak. Mulai dari yang paling ringan.",
-        "tombol": "Mulai"
+        "judul": "Mari susun rencananya",
+        "isi": "Beberapa pertanyaan singkat. Tanpa mengukur apa pun.",
+        "tombol": "Mari mulai"
       },
       "tahu": {
-        "judul": "Saya sudah tahu yang dicari",
+        "judul": "Sudah tahu yang dicari?",
         "isi": "Langsung ke yang Anda butuhkan.",
         "alat": "Cari alat",
         "tukang": "Cari tukang",
@@ -37,7 +37,8 @@
         "semua": "Lihat semua panduan"
       }
     },
-    "caraKerja": "Cara kerja Transisi"
+    "caraKerja": "Cara kerja Transisi",
+    "sapaan": "Halo. Perubahan besar butuh waktu, dan Anda tidak perlu mengurus semuanya sekarang."
   },
   "umum": {
     "kembali": "Kembali",
@@ -125,7 +126,7 @@
     "judul": "Asesmen kamar mandi",
     "aktivitas": {
       "judul": "Aktivitas apa yang relevan?",
-      "bantuan": "Untuk tiap aktivitas, pilih kondisi saat ini. Aktivitas yang tidak relevan boleh dilewati.",
+      "bantuan": "Pilih yang sesuai dengan keseharian Anda. Tidak ada jawaban benar atau salah, dan boleh dilewati.",
       "tidakRelevan": "Tidak relevan",
       "status": {
         "bisa_sendiri": "Bisa sendiri",
@@ -136,7 +137,7 @@
     },
     "prioritas": {
       "judul": "Mana yang paling penting?",
-      "bantuan": "Pilih satu atau dua aktivitas yang ingin dibereskan lebih dulu. Keputusan ada pada penyandang disabilitas.",
+      "bantuan": "Anda yang paling tahu mana yang terpenting. Pilih satu atau dua untuk dibereskan lebih dulu. Keputusan ada pada penyandang disabilitas.",
       "maksimal": "Anda sudah memilih dua. Lepas satu bila ingin mengganti."
     },
     "pertanyaan": {
@@ -171,12 +172,14 @@
     "kosongIsi": "Jawaban bisa diubah kapan saja. Panduan untuk caregiver tetap ada di bawah.",
     "belumJelas": "Kebutuhan setelah amputasi sering berubah. Solusi permanen diberi tanda \"tunggu dulu\".",
     "total": "Perkiraan biaya langkah pertama: {rentang}",
-    "pendampingJudul": "Untuk caregiver",
+    "pendampingJudul": "Untuk Anda yang mendampingi",
     "bukaKartu": "Buka panduan",
     "cocokSewa": "Cocok untuk kontrakan dan kos",
     "cetak": "Cetak rencana",
     "sedangDisusun": "Sedang disusun",
-    "belumAdaSiap": "Panduan untuk prioritas Anda belum siap. Isinya sedang disusun; daftarnya ada di bawah."
+    "belumAdaSiap": "Panduan untuk prioritas Anda belum siap. Isinya sedang disusun; daftarnya ada di bawah.",
+    "sapaan": "Terima kasih sudah menjawab. Ini rencana awal Anda, boleh diubah kapan saja.",
+    "satuHalCatatan": "Cukup ini dulu. Sisanya bisa menunggu."
   },
   "kartu": {
     "tingkat": {

@@ -10,6 +10,7 @@ const { pilih } = beranda;
 export function Beranda() {
   return (
     <Halaman judul={app.nama}>
+      <p className="mt-3 text-2xl font-bold leading-snug text-utama-gelap">{beranda.sapaan}</p>
       <p className="mt-2 text-lg">{beranda.manfaat}</p>
 
       <IlustrasiBeranda className="mt-4" />
