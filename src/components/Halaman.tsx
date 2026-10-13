@@ -17,7 +17,7 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
   }, [judul, kunciFokus]);
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col bg-kertas md:border-x md:border-garis md:shadow-lg print:shadow-none">
       <a
         href="#isi"
         onClick={(e) => {

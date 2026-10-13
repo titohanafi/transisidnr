@@ -4,7 +4,7 @@
 
 @layer base {
   html { font-size: 16px; }
-  body { @apply bg-kertas text-tinta font-sans; }
+  body { @apply bg-luar text-tinta font-sans; }
   :focus-visible { outline: 3px solid theme("colors.utama.DEFAULT"); outline-offset: 2px; }
 }
 

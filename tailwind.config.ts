@@ -6,7 +6,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        kertas: "#FAF8F5", // latar hangat
+        kertas: "#FAF8F5", // latar hangat (area aplikasi)
+        luar: "#DCE3E5", // latar di luar area aplikasi pada layar lebar
         tinta: "#1F2933", // teks utama (kontras tinggi)
         redup: "#4A5560", // teks sekunder
         garis: "#CBD2D9", // pembatas dekoratif
