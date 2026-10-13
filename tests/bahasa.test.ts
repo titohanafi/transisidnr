@@ -40,3 +40,14 @@ describe("teks antarmuka hanya di content/ui.json", () => {
     expect(temuan).toEqual([]);
   });
 });
+
+describe("istilah untuk pengguna", () => {
+  // Di antarmuka satu unit isi disebut "panduan", bukan "kartu" (istilah internal tim konten).
+  const nilai = (x: unknown): string[] =>
+    typeof x === "string" ? [x] : Array.isArray(x) ? x.flatMap(nilai) : x && typeof x === "object" ? Object.values(x).flatMap(nilai) : [];
+
+  it("teks di ui.json tidak memakai kata 'kartu'", () => {
+    const ui = JSON.parse(readFileSync(join(root, "content", "ui.json"), "utf8"));
+    expect(nilai(ui).filter((t) => /\bkartu\b/i.test(t))).toEqual([]);
+  });
+});

@@ -10,7 +10,7 @@ Platform web mobile-first untuk caregiver dan penyandang disabilitas yang baru m
 
 ## Panduan untuk tim konten
 
-Semua isi ada di `content/`. Tidak perlu membuka kode. Setelah mengedit, jalankan `npm run validasi`. Bila ada kesalahan, pesannya menyebut file dan bagian yang salah.
+Semua isi ada di `content/`. Tidak perlu membuka kode. Catatan istilah: di dalam proyek satu unit isi disebut "kartu" (folder `content/kartu/`), tetapi **di layar pengguna disebut "panduan"**. Saat menulis teks di `ui.json`, pakai "panduan" (tes akan menolak kata "kartu"). Setelah mengedit, jalankan `npm run validasi`. Bila ada kesalahan, pesannya menyebut file dan bagian yang salah.
 
 ### Aturan keras
 - **Jangan mengarang** ukuran, harga, tautan produk, atau klaim medis. Belum tahu? Isi `null` atau tulis "menyusul".

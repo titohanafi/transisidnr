@@ -19,7 +19,7 @@ export function App() {
     <StoreProvider>
       <Routes>
         <Route path="/" element={<Beranda />} />
-        <Route path="/jelajah" element={<Jelajah />} />
+        <Route path="/jelajah/:filter?" element={<Jelajah />} />
         <Route path="/mulai/:langkah" element={<Onboarding />} />
         <Route path="/asesmen" element={<Navigate to="/asesmen/aktivitas" replace />} />
         <Route path="/asesmen/aktivitas" element={<AsesmenAktivitas />} />

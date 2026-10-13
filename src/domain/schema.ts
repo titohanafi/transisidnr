@@ -145,11 +145,15 @@ export const uiSchema = z
     beranda: z.object({
       manfaat: teks,
       langkah: z.array(z.object({ judul: teks, isi: teks })).length(3),
-      tombolMulai: teks,
       spandukDraf: teks,
       tautanIgd: teks,
       tautanHapus: teks,
-      jelajah: z.object({ judul: teks, isi: teks, tombol: teks }),
+      pilih: z.object({
+        judul: teks,
+        susun: z.object({ judul: teks, isi: teks, tombol: teks }),
+        tahu: z.object({ judul: teks, isi: teks, alat: teks, tukang: teks, ahli: teks, semua: teks }),
+      }),
+      caraKerja: teks,
     }),
     umum: rekamTeks,
     igd: z.object({ judul: teks, isi: teks }),

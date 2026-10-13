@@ -18,15 +18,26 @@
         "isi": "Kerjakan sendiri, beli alat, panggil tukang, atau tanya ahli."
       }
     ],
-    "tombolMulai": "Mulai",
     "spandukDraf": "Konten masih draf dan belum ditinjau ahli.",
     "tautanIgd": "Kapan harus ke dokter atau IGD",
     "tautanHapus": "Hapus data saya",
-    "jelajah": {
-      "judul": "Sudah tahu apa yang dicari?",
-      "isi": "Lewati pertanyaan dan langsung buka kartu yang Anda butuhkan: cari alat, cari tukang, atau tanya ahli.",
-      "tombol": "Lihat semua kartu"
-    }
+    "pilih": {
+      "judul": "Apa yang ingin Anda lakukan?",
+      "susun": {
+        "judul": "Susun rencana untuk saya",
+        "isi": "Jawab pertanyaan ya atau tidak. Hasilnya urutan langkah dari yang paling ringan.",
+        "tombol": "Mulai"
+      },
+      "tahu": {
+        "judul": "Saya sudah tahu yang dicari",
+        "isi": "Langsung ke yang Anda butuhkan.",
+        "alat": "Cari alat",
+        "tukang": "Cari tukang",
+        "ahli": "Tanya ahli",
+        "semua": "Lihat semua panduan"
+      }
+    },
+    "caraKerja": "Cara kerja Transisi"
   },
   "umum": {
     "kembali": "Kembali",
@@ -42,7 +53,7 @@
     "menyusul": "menyusul",
     "biayaMenyusul": "Biaya menyusul",
     "diAtasBudget": "Kisaran di atas budget Anda",
-    "isiMenyusul": "Isi kartu ini sedang disusun",
+    "isiMenyusul": "Isi panduan ini sedang disusun",
     "keBeranda": "Kembali ke beranda",
     "lewatiKeIsi": "Lewati ke isi",
     "privasi": "Jawaban Anda hanya tersimpan di perangkat ini dan tidak dikirim ke mana pun.",
@@ -140,16 +151,16 @@
     "prioritas": "Prioritas Anda: {daftar}",
     "ubahJawaban": "Ubah jawaban",
     "satuHal": "Satu hal untuk hari ini",
-    "dariKartu": "Dari kartu: {judul}",
-    "lihatKartu": "Lihat kartu",
+    "dariKartu": "Dari panduan: {judul}",
+    "lihatKartu": "Lihat panduan",
     "mulaiDariSini": "Mulai dari sini",
     "semuaRekomendasi": "Rekomendasi lainnya",
     "kosongJudul": "Dari jawaban Anda, belum ada hambatan besar di kamar mandi",
-    "kosongIsi": "Jawaban bisa diubah kapan saja. Kartu untuk caregiver tetap ada di bawah.",
+    "kosongIsi": "Jawaban bisa diubah kapan saja. Panduan untuk caregiver tetap ada di bawah.",
     "belumJelas": "Kebutuhan setelah amputasi sering berubah. Solusi permanen diberi tanda \"tunggu dulu\".",
     "total": "Perkiraan biaya langkah pertama: {rentang}",
     "pendampingJudul": "Untuk caregiver",
-    "bukaKartu": "Buka kartu",
+    "bukaKartu": "Buka panduan",
     "cocokSewa": "Cocok untuk kontrakan dan kos",
     "cetak": "Cetak rencana"
   },
@@ -159,7 +170,7 @@
       "alat_tanpa_bongkar": "Alat tanpa bongkar",
       "renovasi": "Renovasi"
     },
-    "tidakDitemukan": "Kartu tidak ditemukan",
+    "tidakDitemukan": "Panduan tidak ditemukan",
     "kembaliKeRencana": "Kembali ke rencana",
     "situasi": "Situasi",
     "kenapa": "Kenapa penting",
@@ -206,7 +217,7 @@
       }
     },
     "direktoriMenyusul": "Direktori menyusul",
-    "kembaliKeJelajah": "Kembali ke semua kartu"
+    "kembaliKeJelajah": "Kembali ke semua panduan"
   },
   "istilah": [
     {
@@ -229,7 +240,7 @@
       "tukang": "Cari tukang",
       "ahli": "Tanya ahli"
     },
-    "kembaliKeKartu": "Kembali ke kartu",
+    "kembaliKeKartu": "Kembali ke panduan",
     "sendiri": {
       "judul": "Lakukan sendiri",
       "bantuan": "Centang langkah yang sudah selesai. Centang tersimpan di perangkat ini.",
@@ -271,9 +282,9 @@
     },
     "ahli": {
       "judul": "Tanya ahli",
-      "bantuan": "Jenis ahli yang cocok untuk kartu ini:",
+      "bantuan": "Jenis ahli yang cocok untuk panduan ini:",
       "nyeri": "Untuk nyeri, luka, atau protesis, tanyakan ke dokter rehabilitasi medik atau prostetis-ortotis. Platform ini tidak menjawabnya.",
-      "kosong": "Kartu ini belum punya saran ahli."
+      "kosong": "Panduan ini belum punya saran ahli."
     },
     "cetak": {
       "judulKertas": "Rencana kamar mandi",
@@ -281,27 +292,27 @@
       "penjelasan": "Tombol ini membuka jendela cetak. Pilih \"Simpan sebagai PDF\" bila ingin berkas.",
       "foto": "Foto kamar mandi",
       "satuHal": "Satu hal untuk hari ini",
-      "kosong": "Belum ada kartu di rencana Anda.",
+      "kosong": "Belum ada panduan di rencana Anda.",
       "langkahSelesai": "Selesai:",
       "langkahBelum": "Belum:"
     }
   },
   "jelajah": {
-    "judul": "Semua kartu",
-    "pengantar": "Pilih kartu lalu langsung ke aksi yang Anda butuhkan. Urutan kartu tidak dipengaruhi pembayaran.",
-    "filterLabel": "Tampilkan kartu untuk",
+    "judul": "Semua panduan",
+    "pengantar": "Pilih panduan lalu langsung ke aksi yang Anda butuhkan. Urutan panduan tidak dipengaruhi pembayaran.",
+    "filterLabel": "Tampilkan panduan untuk",
     "filter": {
       "semua": "Semua",
       "alat": "Cari alat",
       "tukang": "Cari tukang",
       "ahli": "Tanya ahli"
     },
-    "kosongFilter": "Belum ada kartu dengan isi lengkap untuk pilihan ini. Isi kartu masih disusun.",
+    "kosongFilter": "Belum ada panduan dengan isi lengkap untuk pilihan ini. Isi panduan masih disusun.",
     "caregiver": "Untuk caregiver",
     "ajakanBelum": "Ingin rencana yang disesuaikan dengan rumah Anda? Jawab beberapa pertanyaan singkat.",
     "ajakanMulai": "Mulai pertanyaan",
     "ajakanSudah": "Anda sudah punya jawaban. Lihat rencana yang disusun dari jawaban itu.",
     "ajakanRencana": "Lihat Rencana Saya",
-    "aksiKartu": "Aksi untuk kartu ini"
+    "aksiKartu": "Aksi untuk panduan ini"
   }
 }

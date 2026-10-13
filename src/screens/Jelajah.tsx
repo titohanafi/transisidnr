@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
 import { LencanaStatus, Tanda } from "../components/Lencana";
@@ -13,11 +14,18 @@ import { useStore } from "../state/store";
 const { jelajah: t, umum, rencana: tr } = konten.ui;
 const FILTER: Filter[] = ["semua", "alat", "tukang", "ahli"];
 
-// Jalur pintas: langsung ke kartu dan aksinya tanpa mengisi pertanyaan.
+// Jalur pintas: langsung ke panduan dan aksinya tanpa mengisi pertanyaan.
+// Alamat /jelajah/alat, /jelajah/tukang, dan /jelajah/ahli membuka daftar yang sudah disaring.
 export function Jelajah() {
+  const { filter } = useParams();
+  const awal = FILTER.find((f) => f === filter) ?? "semua";
+  return <Daftar key={awal} awal={awal} />;
+}
+
+function Daftar({ awal }: { awal: Filter }) {
   const { state } = useStore();
   const { konteks } = useRencana();
-  const [filter, setFilter] = useState<Filter>("semua");
+  const [filter, setFilter] = useState<Filter>(awal);
 
   const adaJawaban = Object.keys(state.asesmen.status).length > 0;
   const label = (kunci: string) =>
