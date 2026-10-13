@@ -1,0 +1,31 @@
+{
+  "id": "bath-shower-entry",
+  "judul": "Sulit masuk ke area mandi",
+  "situasi": "Bak atau area shower sulit dimasuki karena ada bibir atau tinggi.",
+  "tag": {
+    "fase": [
+      "adaptasi_di_rumah"
+    ],
+    "ruangan": [
+      "kamar_mandi"
+    ],
+    "aktivitas": [
+      "mandi"
+    ],
+    "alat_bantu": [
+      "kursi_roda"
+    ],
+    "hunian": [
+      "milik_sendiri",
+      "kontrakan",
+      "kos",
+      "apartemen"
+    ],
+    "tingkat_biaya": [],
+    "kondisi": [
+      "amputasi"
+    ]
+  },
+  "status_validasi": "draf",
+  "isi_menyusul": true
+}

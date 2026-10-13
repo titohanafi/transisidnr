@@ -1,0 +1,31 @@
+{
+  "id": "bath-emergency-call",
+  "judul": "Tidak ada cara memanggil bantuan",
+  "situasi": "Tidak ada tombol atau cara memanggil bantuan dari kamar mandi.",
+  "tag": {
+    "fase": [
+      "adaptasi_di_rumah"
+    ],
+    "ruangan": [
+      "kamar_mandi"
+    ],
+    "aktivitas": [
+      "umum"
+    ],
+    "alat_bantu": [
+      "kursi_roda"
+    ],
+    "hunian": [
+      "milik_sendiri",
+      "kontrakan",
+      "kos",
+      "apartemen"
+    ],
+    "tingkat_biaya": [],
+    "kondisi": [
+      "amputasi"
+    ]
+  },
+  "status_validasi": "draf",
+  "isi_menyusul": true
+}

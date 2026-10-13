@@ -1,0 +1,31 @@
+{
+  "id": "bath-wudhu-seated",
+  "judul": "Sulit berwudhu sambil duduk",
+  "situasi": "Sulit berwudhu dalam posisi duduk di kamar mandi atau tempat wudhu.",
+  "tag": {
+    "fase": [
+      "adaptasi_di_rumah"
+    ],
+    "ruangan": [
+      "kamar_mandi"
+    ],
+    "aktivitas": [
+      "wudhu"
+    ],
+    "alat_bantu": [
+      "kursi_roda"
+    ],
+    "hunian": [
+      "milik_sendiri",
+      "kontrakan",
+      "kos",
+      "apartemen"
+    ],
+    "tingkat_biaya": [],
+    "kondisi": [
+      "amputasi"
+    ]
+  },
+  "status_validasi": "draf",
+  "isi_menyusul": true
+}

@@ -1,0 +1,11 @@
+{
+  "faseAwalBulan": 3,
+  "maksMulaiDariSini": 3,
+  "budget": [
+    { "id": "di_bawah_500rb", "label": "Di bawah Rp 500 ribu", "minRp": 0, "maksRp": 500000 },
+    { "id": "500rb_2jt", "label": "Rp 500 ribu - 2 juta", "minRp": 500000, "maksRp": 2000000 },
+    { "id": "2jt_10jt", "label": "Rp 2 - 10 juta", "minRp": 2000000, "maksRp": 10000000 },
+    { "id": "di_atas_10jt", "label": "Di atas Rp 10 juta", "minRp": 10000000, "maksRp": null },
+    { "id": "belum_tahu", "label": "Belum tahu", "minRp": null, "maksRp": null }
+  ]
+}

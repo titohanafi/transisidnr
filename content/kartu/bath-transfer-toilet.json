@@ -1,0 +1,103 @@
+{
+  "id": "bath-transfer-toilet",
+  "judul": "Sulit pindah dari kursi roda ke kloset",
+  "situasi": "Pengguna harus bertumpu pada tangan atau digendong untuk pindah. Ruang di samping kloset sempit, tidak ada pegangan, lantai licin.",
+  "kenapa_penting": "Pindah ke kloset adalah salah satu momen paling berisiko jatuh, dan sering membuat orang menunda ke kamar mandi atau minta dibantu terus.",
+  "solusi": {
+    "tanpa_biaya": {
+      "ringkasan": "Atur ruang dan kebiasaan tanpa membeli apa pun.",
+      "sifat": "sementara",
+      "langkah": [
+        "Kosongkan area di samping kloset agar ada ruang untuk berpindah.",
+        "Pindahkan keranjang dan ember dari jalur kursi roda.",
+        "Letakkan keset anti-slip di lantai yang kering.",
+        "Latih urutan pindah bersama terapis."
+      ],
+      "biaya": { "kisaran_rp": "Rp 0" },
+      "usaha": { "waktu": "15 menit", "kesulitan": "Mudah, bisa sendiri" },
+      "ukuran": [
+        { "label": "Ruang kosong di samping kloset", "nilai": "sekitar 90", "satuan": "cm" }
+      ],
+      "barang": []
+    },
+    "alat_tanpa_bongkar": {
+      "ringkasan": "Tambahkan alat yang bisa dilepas, cocok untuk kontrakan dan kos.",
+      "sifat": "sementara",
+      "langkah": [
+        "Pasang grab bar jenis klem atau tempel di sisi kloset.",
+        "Tambahkan dudukan kloset tambahan bila kloset terlalu rendah.",
+        "Sediakan bangku mandi lipat.",
+        "Tempel stiker atau keset anti-slip."
+      ],
+      "biaya": { "kisaran_rp": null },
+      "usaha": { "waktu": "1-2 jam", "kesulitan": "Sedang, bisa sendiri atau dibantu caregiver" },
+      "barang": [
+        {
+          "nama": "Grab bar klem atau tempel",
+          "spesifikasi": "Beban maksimal, bahan, dan cara pasang di keramik atau bata ringan: menyusul setelah survei.",
+          "cek_kecocokan": "Cek jenis dinding dan permukaan keramik sebelum membeli.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        },
+        {
+          "nama": "Dudukan kloset tambahan (raised toilet seat)",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek bentuk dan tinggi kloset di rumah.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        },
+        {
+          "nama": "Bangku mandi lipat",
+          "spesifikasi": "Menyusul setelah survei.",
+          "cek_kecocokan": "Cek lebar area mandi.",
+          "link": null,
+          "kisaran_harga": null,
+          "afiliasi": false
+        }
+      ]
+    },
+    "renovasi": {
+      "ringkasan": "Ubah kamar mandi secara permanen bila kebutuhan jangka panjang sudah jelas.",
+      "sifat": "permanen",
+      "langkah": [
+        "Pasang grab bar permanen di dinding.",
+        "Naikkan atau ganti kloset agar setinggi dudukan kursi roda.",
+        "Ganti lantai dengan permukaan anti-slip.",
+        "Ganti pintu menjadi pintu geser atau pintu yang membuka ke luar."
+      ],
+      "biaya": { "kisaran_rp": null },
+      "usaha": { "waktu": "1-3 hari", "kesulitan": "Perlu tukang" },
+      "ukuran": [
+        { "label": "Tinggi kloset (kira-kira setinggi dudukan kursi roda)", "nilai": "45-50", "satuan": "cm" }
+      ],
+      "barang": []
+    }
+  },
+  "bantuan": [
+    { "jenis": "okupasi_terapis", "keterangan": "Menilai cara pindah yang aman dan memilih alat." },
+    { "jenis": "tukang", "keterangan": "Memasang grab bar atau mengubah kloset dan lantai." },
+    { "jenis": "komunitas", "keterangan": "Menanyakan rekomendasi tukang ke sesama pengguna kursi roda." }
+  ],
+  "peran": {
+    "penyandang_disabilitas": "Memilih tingkat solusi dan menentukan cara pindah yang paling nyaman.",
+    "caregiver": "Menyiapkan area, berbelanja, dan mendampingi percobaan pertama tanpa menarik tubuh pengguna."
+  },
+  "peringatan": "Grab bar harus tertanam kuat; jangan memakai gantungan handuk sebagai pegangan. Bila ada nyeri, luka terbuka, atau pernah jatuh saat pindah, konsultasikan ke dokter atau terapis sebelum mencoba sendiri.",
+  "sumber": [
+    { "judul": "Permen PUPR No. 14/PRT/M/2017 (perlu diterjemahkan ke skala rumah)" },
+    { "judul": "WHO Disability-Inclusive Health Services Toolkit" },
+    { "judul": "I-HOPE (In Home Occupational Performance Evaluation)" }
+  ],
+  "tag": {
+    "fase": ["adaptasi_di_rumah"],
+    "ruangan": ["kamar_mandi"],
+    "aktivitas": ["toilet"],
+    "alat_bantu": ["kursi_roda"],
+    "hunian": ["milik_sendiri", "kontrakan", "kos", "apartemen"],
+    "tingkat_biaya": ["nol", "rendah", "tinggi"],
+    "kondisi": ["amputasi"]
+  },
+  "status_validasi": "draf"
+}

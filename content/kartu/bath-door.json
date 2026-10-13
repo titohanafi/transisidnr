@@ -1,0 +1,31 @@
+{
+  "id": "bath-door",
+  "judul": "Pintu sempit atau sulit dibuka",
+  "situasi": "Pintu kamar mandi sempit atau sulit dibuka dari posisi duduk.",
+  "tag": {
+    "fase": [
+      "adaptasi_di_rumah"
+    ],
+    "ruangan": [
+      "kamar_mandi"
+    ],
+    "aktivitas": [
+      "umum"
+    ],
+    "alat_bantu": [
+      "kursi_roda"
+    ],
+    "hunian": [
+      "milik_sendiri",
+      "kontrakan",
+      "kos",
+      "apartemen"
+    ],
+    "tingkat_biaya": [],
+    "kondisi": [
+      "amputasi"
+    ]
+  },
+  "status_validasi": "draf",
+  "isi_menyusul": true
+}

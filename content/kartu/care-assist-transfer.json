@@ -1,0 +1,42 @@
+{
+  "id": "care-assist-transfer",
+  "judul": "Mendampingi saat pindah, tanpa mengambil alih",
+  "situasi": "Caregiver ingin membantu saat penyandang disabilitas berpindah, tetapi tidak ingin mengambil alih atau melukai.",
+  "kenapa_penting": "Keputusan tetap di tangan penyandang disabilitas. Caregiver yang tahu cara mendampingi juga lebih terlindungi dari cedera.",
+  "solusi": {
+    "tanpa_biaya": {
+      "ringkasan": "Kebiasaan sederhana sebelum, saat, dan sesudah pindah.",
+      "sifat": "sementara",
+      "langkah": [
+        "Tanyakan dulu: \"Mau dibantu atau mau coba sendiri dulu?\" Jangan langsung mengambil alih.",
+        "Sepakati isyarat sebelum pindah, misalnya hitungan atau kata \"berhenti\".",
+        "Jangan menarik lengan atau bagian tubuh yang terluka; ikuti teknik dari terapis.",
+        "Perhatikan postur Anda sendiri supaya tidak cedera, dan minta terapis mengajarkan teknik pindah.",
+        "Setelah selesai, tanyakan apa yang terasa nyaman dan apa yang tidak."
+      ],
+      "biaya": { "kisaran_rp": "Rp 0" },
+      "usaha": { "waktu": null, "kesulitan": "Perlu latihan bersama terapis" },
+      "barang": []
+    }
+  },
+  "bantuan": [
+    { "jenis": "okupasi_terapis", "keterangan": "Mengajarkan teknik pindah yang aman untuk pengguna dan caregiver." }
+  ],
+  "peran": {
+    "penyandang_disabilitas": "Memutuskan apakah ingin dibantu dan bagaimana caranya.",
+    "caregiver": "Mendampingi sesuai permintaan, menjaga postur sendiri, dan bertanya setelahnya."
+  },
+  "peringatan": "Teknik pindah yang spesifik harus berasal dari terapis.",
+  "sumber": [],
+  "tag": {
+    "fase": ["adaptasi_di_rumah"],
+    "ruangan": ["kamar_mandi"],
+    "aktivitas": ["toilet"],
+    "alat_bantu": ["kursi_roda"],
+    "hunian": ["milik_sendiri", "kontrakan", "kos", "apartemen"],
+    "tingkat_biaya": [],
+    "kondisi": ["amputasi"],
+    "peran": ["caregiver"]
+  },
+  "status_validasi": "draf"
+}

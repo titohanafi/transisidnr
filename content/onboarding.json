@@ -1,0 +1,71 @@
+{
+  "pertanyaan": [
+    {
+      "id": "pengisi",
+      "pertanyaan": "Siapa yang mengisi?",
+      "banyakPilihan": false,
+      "pilihan": [
+        { "id": "penyandang", "label": "Penyandang disabilitas" },
+        { "id": "caregiver", "label": "Caregiver" },
+        { "id": "berdua", "label": "Berdua" }
+      ]
+    },
+    {
+      "id": "kejadian",
+      "pertanyaan": "Kapan kejadiannya?",
+      "banyakPilihan": false,
+      "pilihan": [
+        { "id": "kurang_1_bulan", "label": "Kurang dari 1 bulan", "bulanMaks": 1 },
+        { "id": "1_3_bulan", "label": "1-3 bulan", "bulanMaks": 3 },
+        { "id": "3_6_bulan", "label": "3-6 bulan", "bulanMaks": 6 },
+        { "id": "lebih_6_bulan", "label": "Lebih dari 6 bulan", "bulanMaks": null }
+      ]
+    },
+    {
+      "id": "alat_bantu",
+      "pertanyaan": "Alat bantu apa yang dipakai?",
+      "bantuan": "Boleh pilih lebih dari satu.",
+      "banyakPilihan": true,
+      "pilihan": [
+        { "id": "kursi_roda", "label": "Kursi roda" },
+        { "id": "kruk", "label": "Kruk" },
+        { "id": "walker", "label": "Walker" },
+        { "id": "belum_ada", "label": "Belum ada / belum tahu" }
+      ]
+    },
+    {
+      "id": "protesis",
+      "pertanyaan": "Apakah ada rencana memakai protesis?",
+      "banyakPilihan": false,
+      "pilihan": [
+        { "id": "ya", "label": "Ya" },
+        { "id": "belum_tahu", "label": "Belum tahu" },
+        { "id": "tidak", "label": "Tidak" }
+      ]
+    },
+    {
+      "id": "hunian",
+      "pertanyaan": "Jenis tempat tinggal Anda?",
+      "banyakPilihan": false,
+      "pilihan": [
+        { "id": "milik_sendiri", "label": "Milik sendiri" },
+        { "id": "kontrakan", "label": "Kontrakan" },
+        { "id": "kos", "label": "Kos" },
+        { "id": "apartemen", "label": "Apartemen" }
+      ]
+    },
+    {
+      "id": "budget",
+      "pertanyaan": "Kira-kira berapa budget Anda?",
+      "bantuan": "Hanya untuk catatan. Budget tidak menyaring rekomendasi.",
+      "banyakPilihan": false,
+      "pilihan": [
+        { "id": "di_bawah_500rb", "label": "Di bawah Rp 500 ribu" },
+        { "id": "500rb_2jt", "label": "Rp 500 ribu - 2 juta" },
+        { "id": "2jt_10jt", "label": "Rp 2 - 10 juta" },
+        { "id": "di_atas_10jt", "label": "Di atas Rp 10 juta" },
+        { "id": "belum_tahu", "label": "Belum tahu" }
+      ]
+    }
+  ]
+}

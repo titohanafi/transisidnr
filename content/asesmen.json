@@ -1,0 +1,81 @@
+{
+  "aktivitas": [
+    { "id": "mandi", "label": "Mandi", "bisaDipilihPrioritas": true },
+    { "id": "toilet", "label": "Toilet", "bisaDipilihPrioritas": true },
+    { "id": "wudhu", "label": "Wudhu", "bisaDipilihPrioritas": true },
+    { "id": "grooming", "label": "Grooming (sikat gigi, cuci muka, bercermin)", "bisaDipilihPrioritas": true },
+    { "id": "umum", "label": "Umum", "bisaDipilihPrioritas": false }
+  ],
+  "pertanyaan": [
+    {
+      "id": "q-mandi-masuk",
+      "aktivitas": "mandi",
+      "pertanyaan": "Apakah bak atau area shower sulit dimasuki karena ada bibir atau tinggi?",
+      "penjelasan": "Bibir atau tinggi di pintu area mandi membuat kursi roda atau kaki sulit melewatinya.",
+      "memicu_kartu": ["bath-shower-entry"]
+    },
+    {
+      "id": "q-mandi-licin",
+      "aktivitas": "mandi",
+      "pertanyaan": "Apakah lantai licin saat basah?",
+      "penjelasan": "Lantai yang licin membuat risiko terpeleset lebih besar, terutama saat berpindah.",
+      "memicu_kartu": ["bath-floor-slip"]
+    },
+    {
+      "id": "q-mandi-jangkau",
+      "aktivitas": "mandi",
+      "pertanyaan": "Apakah sulit menjangkau sabun, shower, atau keran dari posisi duduk?",
+      "penjelasan": "Letak sabun, shower, atau keran yang tinggi atau jauh membuat Anda harus meregang atau berdiri.",
+      "memicu_kartu": ["bath-reach-controls"]
+    },
+    {
+      "id": "q-toilet-pindah",
+      "aktivitas": "toilet",
+      "pertanyaan": "Apakah sulit pindah dari kursi roda ke kloset tanpa dibantu?",
+      "penjelasan": "Berpindah dari kursi roda ke kloset butuh tenaga, keseimbangan, dan ruang yang cukup.",
+      "memicu_kartu": ["bath-transfer-toilet"]
+    },
+    {
+      "id": "q-toilet-pegangan",
+      "aktivitas": "toilet",
+      "pertanyaan": "Apakah tidak ada pegangan di dekat kloset?",
+      "penjelasan": "Pegangan memberi tumpuan saat berpindah, duduk, dan berdiri.",
+      "memicu_kartu": ["bath-grab-bar"]
+    },
+    {
+      "id": "q-toilet-ruang",
+      "aktivitas": "toilet",
+      "pertanyaan": "Apakah ruang di samping kloset terlalu sempit untuk berpindah?",
+      "penjelasan": "Ruang yang sempit membuat kursi roda sulit didekatkan ke kloset dan sulit berputar.",
+      "memicu_kartu": ["bath-transfer-toilet", "bath-space-turning"]
+    },
+    {
+      "id": "q-wudhu-duduk",
+      "aktivitas": "wudhu",
+      "pertanyaan": "Apakah sulit berwudhu dalam posisi duduk di kamar mandi atau tempat wudhu?",
+      "penjelasan": "Keran dan tempat wudhu sering dibuat untuk orang yang berdiri atau berjongkok.",
+      "memicu_kartu": ["bath-wudhu-seated"]
+    },
+    {
+      "id": "q-grooming-wastafel",
+      "aktivitas": "grooming",
+      "pertanyaan": "Apakah wastafel atau cermin terlalu tinggi, atau kaki tidak bisa masuk ke bawah wastafel?",
+      "penjelasan": "Wastafel dan cermin yang tinggi atau tertutup lemari di bawahnya sulit dipakai dari kursi roda.",
+      "memicu_kartu": ["bath-sink-mirror"]
+    },
+    {
+      "id": "q-umum-pintu",
+      "aktivitas": "umum",
+      "pertanyaan": "Apakah pintu sempit atau sulit dibuka dari posisi duduk?",
+      "penjelasan": "Pintu yang sempit atau berat membuat kursi roda sulit masuk dan keluar.",
+      "memicu_kartu": ["bath-door"]
+    },
+    {
+      "id": "q-umum-panggil",
+      "aktivitas": "umum",
+      "pertanyaan": "Apakah ada tombol atau cara memanggil bantuan dari kamar mandi?",
+      "penjelasan": "Bila terjatuh atau butuh bantuan, Anda perlu cara memberi tahu orang lain tanpa harus berteriak.",
+      "memicu_kartu": ["bath-emergency-call"]
+    }
+  ]
+}

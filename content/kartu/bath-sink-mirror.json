@@ -1,0 +1,31 @@
+{
+  "id": "bath-sink-mirror",
+  "judul": "Wastafel atau cermin sulit dipakai",
+  "situasi": "Wastafel atau cermin terlalu tinggi, atau kaki tidak bisa masuk ke bawah wastafel.",
+  "tag": {
+    "fase": [
+      "adaptasi_di_rumah"
+    ],
+    "ruangan": [
+      "kamar_mandi"
+    ],
+    "aktivitas": [
+      "grooming"
+    ],
+    "alat_bantu": [
+      "kursi_roda"
+    ],
+    "hunian": [
+      "milik_sendiri",
+      "kontrakan",
+      "kos",
+      "apartemen"
+    ],
+    "tingkat_biaya": [],
+    "kondisi": [
+      "amputasi"
+    ]
+  },
+  "status_validasi": "draf",
+  "isi_menyusul": true
+}
