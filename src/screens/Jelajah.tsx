@@ -80,21 +80,23 @@ function Daftar({ awal }: { awal: Filter }) {
     <Halaman judul={t.judulFilter[filter]}>
       <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>
 
-      <div
-        role="radiogroup"
-        aria-label={t.filterLabel}
-        className="mt-4 flex flex-wrap gap-2"
-      >
-        {FILTER.map((f) => (
-          <PilihanPil
-            key={f}
-            nama="filter"
-            label={t.filter[f]}
-            aktif={filter === f}
-            onUbah={() => setFilter(f)}
-          />
-        ))}
-      </div>
+      {awal === "semua" && (
+        <div
+          role="radiogroup"
+          aria-label={t.filterLabel}
+          className="mt-4 flex flex-wrap gap-2"
+        >
+          {FILTER.map((f) => (
+            <PilihanPil
+              key={f}
+              nama="filter"
+              label={t.filter[f]}
+              aktif={filter === f}
+              onUbah={() => setFilter(f)}
+            />
+          ))}
+        </div>
+      )}
 
       {filter === "alat" ? (
         <DaftarAlat alat={alat} />
