@@ -34,12 +34,10 @@ const jenisFilter: Record<Exclude<Filter, "semua">, JenisAksi> = { alat: "beli",
 
 /**
  * Aksi langsung yang ditampilkan di daftar. Tanpa filter tidak ada (pengguna belum menyatakan niat;
- * langkah dan bantuan ada di panduan). Dengan filter alat atau tukang, hanya satu aksi yang sesuai.
- * Filter "ahli" tidak punya aksi sendiri: daftar jenis ahli ada di bagian "Siapa yang bisa membantu"
- * pada panduan, jadi kartu cukup membuka panduan.
+ * langkah dan bantuan ada di panduan). Dengan filter, hanya satu aksi yang sesuai dengan filter itu.
  */
 export function aksiUntukFilter(aksi: readonly AksiKartu[], filter: Filter): AksiKartu[] {
-  if (filter === "semua" || filter === "ahli") return [];
+  if (filter === "semua") return [];
   return aksi.filter((a) => a.jenis === jenisFilter[filter]);
 }
 

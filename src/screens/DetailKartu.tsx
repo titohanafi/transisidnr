@@ -195,21 +195,9 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
           </section>
 
           {kartu.bantuan && kartu.bantuan.length > 0 && (
-            <section className="mt-5" aria-labelledby="bantuan">
-              <h2 id="bantuan" className="text-xl font-bold">
-                {t.bantuan}
-              </h2>
-              <ul className="mt-2 space-y-3">
-                {kartu.bantuan.map((b) => (
-                  <li key={b.jenis}>
-                    <p className="font-semibold">{t.jenisBantuan[b.jenis].nama}</p>
-                    <p className="text-sm text-redup">{t.jenisBantuan[b.jenis].arti}</p>
-                    <p>{b.keterangan}</p>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-3 text-redup">{t.direktoriMenyusul}</p>
-            </section>
+            <div className="mt-5">
+              <TombolAksi jenis="ahli" kartuId={kartu.id} gayaTombol="sekunder" className="w-full" />
+            </div>
           )}
 
           {kartu.peran && (

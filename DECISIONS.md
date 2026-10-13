@@ -136,7 +136,6 @@
 - Ikon `alat`, `tukang`, `ahli` ditambahkan ke `Ikon.tsx` (SVG sebaris, dekoratif, tanpa gambar orang). Ikon ini sketsa awal; desainer sebaiknya menggantinya.
 - Kalimat deskripsi langkah "cara kerja" dan "Langsung ke yang Anda butuhkan" tidak lagi ditampilkan (tetap ada di `ui.json` karena skema masih mewajibkan).
 
-## "Tanya ahli" tidak lagi berupa tombol terpisah
-- Halaman `/aksi/ahli/:id` hanya mengulang isi bagian "Siapa yang bisa membantu" di panduan. Tombol "Tanya ahli" di panduan dihapus; bagian itu sudah menjadi tujuannya.
-- Saringan "Tanya ahli" di Jelajah kini menampilkan kartu dengan tombol "Buka panduan" saja.
-- Rute `/aksi/ahli/:id` dibiarkan (tautan lama tidak patah). Bila direktori ahli sudah ada, tombol aksi nyata bisa kembali di bagian itu.
+## "Siapa yang bisa membantu" pindah ke halaman Tanya ahli
+- Di panduan, bagian "Siapa yang bisa membantu" dihapus; diganti satu tombol "Tanya ahli" (hanya bila panduan punya saran bantuan). Daftar jenis ahli, artinya, dan "Direktori menyusul" hanya ada di halaman `/aksi/ahli/:id`, jadi tidak ada duplikasi dan panduan lebih pendek.
+- Saringan "Tanya ahli" di Jelajah kembali menampilkan tombol "Tanya ahli" (kembali ke perilaku sebelumnya).
