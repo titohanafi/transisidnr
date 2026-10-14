@@ -124,24 +124,6 @@ export function Kontak() {
                 ) : null,
               )}
             </ul>
-            <div className="mt-3 overflow-hidden rounded-kartu border border-utama-redup bg-white">
-              <LipatBaris judul={t.keteranganSumber}>
-                <ul className="space-y-3">
-                  {darurat.entri.map((e) => (
-                    <li key={e.id}>
-                      <p className="font-semibold">{e.nama}</p>
-                      {e.catatan && <p className="text-kecil text-redup">{e.catatan}</p>}
-                      {e.sumber && (
-                        <a href={e.sumber} target="_blank" rel="noopener noreferrer" className="text-kecil text-utama underline">
-                          {t.sumber}
-                          <span className="sr-only">: {e.nama}</span>
-                        </a>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </LipatBaris>
-            </div>
           </section>
         )}
 
