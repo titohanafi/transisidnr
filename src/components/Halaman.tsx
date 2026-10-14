@@ -28,7 +28,7 @@ export function Halaman({
   /** Elemen di atas judul di dalam kepala (mis. ikon). */
   atasJudul?: ReactNode;
   /** Kepala berupa hero abu kehijauan muda selebar layar (tanpa kotak), sama dengan latar halaman Panduan. */
-  kepalaPita?: boolean;
+  kepalaPita?: boolean | "hijau";
   /** Hiasan di sisi kanan judul pada kepala pita (mis. ilustrasi). Dekoratif. */
   hiasan?: ReactNode;
   /** Latar halaman putih (bawaan: abu kehijauan muda). Dipakai Beranda, yang punya pita pencarian berwarna. */
@@ -96,7 +96,7 @@ export function Halaman({
         {/* Di Beranda judulnya sama dengan nama aplikasi di header: tetap ada untuk pembaca layar, tidak ditampilkan dua kali. */}
         {kepala ? (
           <>
-            <div className={kepalaPita ? "bg-permukaan px-4 pb-6 pt-6" : "px-4 pb-5 pt-6"}>
+            <div className={kepalaPita ? `${kepalaPita === "hijau" ? "bg-utama-muda" : "bg-permukaan"} px-4 pb-6 pt-6` : "px-4 pb-5 pt-6"}>
               {hiasan ? (
                 <div className="flex items-center gap-2">
                   <div className="min-w-0 flex-1">
