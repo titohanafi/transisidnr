@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
-import { Jembatan } from "../components/Jembatan";
 import { HasilLangkah, LangkahChecklist } from "../components/LangkahChecklist";
 import { LipatBaris } from "../components/Lipat";
 import { LencanaStatus, Tanda } from "../components/Lencana";
@@ -188,9 +187,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                               />
                             )}
                             {x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang") && (
-                              <Jembatan teks={t.jembatanRenovasi}>
-                                <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" className="w-full" />
-                              </Jembatan>
+                              <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" className="w-full" />
                             )}
                           </div>
                         )}
