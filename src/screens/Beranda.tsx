@@ -115,7 +115,7 @@ export function Beranda() {
           {kartu.judul}
         </h3>
       </div>
-      <p className="mt-2 text-isi">{kartu.deskripsi}</p>
+      <p className="mt-2 text-isi text-utama-redup">{kartu.deskripsi}</p>
       <Link
         to={adaJawaban ? "/rencana" : "/mulai/1"}
         className="tekan mt-isi inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-isi font-semibold text-utama-gelap hover:bg-utama-muda"
