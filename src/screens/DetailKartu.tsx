@@ -23,7 +23,7 @@ import { useRencana } from "../state/useRencana";
 
 const { kartu: t, umum, rencana: tr } = konten.ui;
 
-// Setiap tingkat solusi punya ikon sendiri; latar kartunya satu warna tipis yang sama (tanpa bayangan). Nama tingkat tetap tertulis.
+// Setiap tingkat solusi punya ikon sendiri; latar kartunya satu warna netral tipis yang sama (tanpa bayangan). Nama tingkat tetap tertulis.
 const IKON_TINGKAT: Record<Tingkat, LucideIcon> = {
   tanpa_biaya: Hand,
   alat_tanpa_bongkar: Wrench,
@@ -115,7 +115,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
               <h2 id="solusi" className="text-subjudul">
                 {t.solusi}
               </h2>
-              <div className="mt-3 space-y-3">
+              <div className="mt-isi space-y-5">
                 {tampil.map((x) => {
                   const s = kartu.solusi?.[x.tingkat];
                   if (!s) return null;
@@ -123,7 +123,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   const idPanel = `panel-${x.tingkat}`;
                   const IkonTingkat = IKON_TINGKAT[x.tingkat];
                   return (
-                    <div key={x.tingkat} className="rounded-kartu bg-utama-muda">
+                    <div key={x.tingkat} className="rounded-kartu bg-permukaan">
                       <h3>
                         <button
                           type="button"
