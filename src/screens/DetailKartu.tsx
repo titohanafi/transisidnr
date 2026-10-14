@@ -1,4 +1,4 @@
-import { HeartHandshake, TriangleAlert, User } from "lucide-react";
+import { ChevronDown, Clock, Hammer, Hand, HeartHandshake, TriangleAlert, User, Wallet, Wrench, type LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
@@ -22,6 +22,13 @@ import { useStore } from "../state/store";
 import { useRencana } from "../state/useRencana";
 
 const { kartu: t, umum, rencana: tr } = konten.ui;
+
+// Setiap tingkat solusi punya warna latar tipis dan ikon sendiri (tanpa bayangan); nama tingkat tetap tertulis, jadi tidak bergantung warna saja.
+const WARNA_TINGKAT: Record<Tingkat, { latar: string; Ikon: LucideIcon }> = {
+  tanpa_biaya: { latar: "bg-utama-muda", Ikon: Hand },
+  alat_tanpa_bongkar: { latar: "bg-info-muda", Ikon: Wrench },
+  renovasi: { latar: "bg-aksen-muda", Ikon: Hammer },
+};
 
 export function DetailKartu() {
   const { id, tingkat: tingkatParam } = useParams();
@@ -114,31 +121,47 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   if (!s) return null;
                   const buka = terbuka.has(x.tingkat);
                   const idPanel = `panel-${x.tingkat}`;
+                  const warna = WARNA_TINGKAT[x.tingkat];
                   return (
-                    <div key={x.tingkat} className="rounded-kartu border border-garis/70 bg-white shadow-kartu">
+                    <div key={x.tingkat} className={`rounded-kartu ${warna.latar}`}>
                       <h3>
                         <button
                           type="button"
                           aria-expanded={buka}
                           aria-controls={idPanel}
                           onClick={() => ubah(x.tingkat)}
-                          className="flex min-h-sentuh w-full items-center justify-between gap-2 px-4 py-3 text-left text-judulKartu"
+                          className="flex min-h-sentuh w-full items-center gap-3 rounded-kartu px-4 pb-2 pt-4 text-left text-judulKartu"
                         >
-                          <span>{t.tingkat[x.tingkat]}</span>
-                          <span aria-hidden="true">{buka ? "−" : "+"}</span>
+                          <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white">
+                            <warna.Ikon className="h-5 w-5 text-utama-gelap" strokeWidth={2} focusable="false" />
+                          </span>
+                          <span className="flex-1">{t.tingkat[x.tingkat]}</span>
+                          <ChevronDown
+                            className={`h-5 w-5 shrink-0 text-utama-gelap motion-safe:transition-transform ${buka ? "rotate-180" : ""}`}
+                            strokeWidth={2}
+                            aria-hidden="true"
+                            focusable="false"
+                          />
                         </button>
                       </h3>
                       <p className="px-4 text-redup">{s.ringkasan}</p>
-                      <p className="mt-2 px-4 text-sm font-medium">
-                        {s.biaya.kisaran_rp ?? umum.biayaMenyusul} · {s.usaha.waktu ?? umum.menyusul}
-                      </p>
-                      <div className="mt-2 flex flex-wrap gap-2 px-4 pb-4">
+                      <div className="mt-3 flex flex-wrap gap-2 px-4">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-kecil font-medium">
+                          <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
+                          {s.biaya.kisaran_rp ?? umum.biayaMenyusul}
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-kecil font-medium">
+                          <Clock className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
+                          {s.usaha.waktu ?? umum.menyusul}
+                        </span>
+                      </div>
+                      <div className="mt-2 flex flex-wrap gap-2 px-4 pb-4 empty:hidden">
                         <LencanaSifat sifat={x.sifat} />
                         {x.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
                         {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
                         {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                       </div>
-                      <div id={idPanel} hidden={!buka} className="border-t border-garis/70 p-4">
+                      <div id={idPanel} hidden={!buka} className="mx-3 mb-3 rounded-tombol bg-white p-4">
                         <h4 className="font-semibold">{t.langkah}</h4>
                         <ol className="mt-2 space-y-2">
                           {s.langkah.map((l, i) => (
