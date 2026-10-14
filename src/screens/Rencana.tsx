@@ -86,6 +86,37 @@ export function Rencana() {
   return (
     <Halaman judul={t.judul} kepala={kepala} kepalaPita="hijau" kepalaTumpang latarPutih>
       <div className="flex flex-col gap-bagian">
+        {rencana.kosong ? (
+          <section className="rounded-kartu bg-utama-muda p-5" aria-labelledby="kosong">
+            <h2 id="kosong" className="text-subjudul">
+              {t.kosongJudul}
+            </h2>
+            <p className="mt-2">{t.kosongIsi}</p>
+          </section>
+        ) : (
+          <>
+            {satuHal && (
+              <KartuHero
+                id="satu-hal"
+                ikon={<Sun className="h-9 w-9 shrink-0 text-daun" strokeWidth={2} aria-hidden="true" focusable="false" />}
+                judul={t.satuHal}
+              >
+                <p className="relative mt-2.5 text-lg">{satuHal.langkah}</p>
+                <p className="relative mt-2 text-kecil text-utama-redup">
+                  {isi(t.dariKartu, { judul: dataKartu(satuHal.kartuId)?.judul ?? "" })}
+                </p>
+                <TautanHero to={`/kartu/${satuHal.kartuId}/${satuHal.tingkat}`}>{t.lihatKartu}</TautanHero>
+              </KartuHero>
+            )}
+
+            {!satuHal && h.mulai.length === 0 && (
+              <p role="note" className="rounded-kartu border border-draf bg-draf-muda p-4 text-draf">
+                {t.belumAdaSiap}
+              </p>
+            )}
+          </>
+        )}
+
         {h.jumlahPanduan > 0 && (
           <section className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu" aria-label={t.beres.judul}>
             <div className="flex items-center gap-3">
@@ -157,37 +188,6 @@ export function Rencana() {
               </ul>
             </details>
           </section>
-        )}
-
-        {rencana.kosong ? (
-          <section className="rounded-kartu bg-utama-muda p-5" aria-labelledby="kosong">
-            <h2 id="kosong" className="text-subjudul">
-              {t.kosongJudul}
-            </h2>
-            <p className="mt-2">{t.kosongIsi}</p>
-          </section>
-        ) : (
-          <>
-            {satuHal && (
-              <KartuHero
-                id="satu-hal"
-                ikon={<Sun className="h-9 w-9 shrink-0 text-daun" strokeWidth={2} aria-hidden="true" focusable="false" />}
-                judul={t.satuHal}
-              >
-                <p className="relative mt-2.5 text-lg">{satuHal.langkah}</p>
-                <p className="relative mt-2 text-kecil text-utama-redup">
-                  {isi(t.dariKartu, { judul: dataKartu(satuHal.kartuId)?.judul ?? "" })}
-                </p>
-                <TautanHero to={`/kartu/${satuHal.kartuId}/${satuHal.tingkat}`}>{t.lihatKartu}</TautanHero>
-              </KartuHero>
-            )}
-
-            {!satuHal && h.mulai.length === 0 && (
-              <p role="note" className="rounded-kartu border border-draf bg-draf-muda p-4 text-draf">
-                {t.belumAdaSiap}
-              </p>
-            )}
-          </>
         )}
 
         <ul className="space-y-3">
