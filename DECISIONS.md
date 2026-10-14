@@ -524,3 +524,4 @@
 - Untuk tingkat "Alat tanpa bongkar", pesan ke tukang punya butir tambahan "Alat ingin dibuat khusus sesuai ukuran dan kondisi di rumah, bukan beli jadi." Butir ini TIDAK dicentang dari awal dan baru masuk pesan bila pengguna mencentangnya (teksnya bisa disunting). Tidak muncul di tingkat lain. Kalimatnya ditulis asisten (`aksi.brief.alatKhusus`); perlu ditinjau.
 
 - Pembaruan: pengantar dan tombol "Pesan ke tukang" untuk tingkat Alat tanpa bongkar dipindah dari panel di Detail Panduan ke halaman "Lihat alat" (di bawah daftar barang), karena di sanalah orang memutuskan membeli, memasang, atau membuat khusus. Di panel Detail Panduan, tukang hanya tampil di tingkat Renovasi. Komponen `Jembatan` kini dipakai bersama.
+- Daftar "Barang yang dibutuhkan" (nama, cek kecocokan, spesifikasi, harga) dihapus dari panel di Detail Panduan karena isinya sama dengan halaman "Lihat alat" yang dibuka tombolnya. Informasi barang kini hanya ada di satu tempat.

@@ -200,32 +200,6 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           </div>
                         )}
 
-                        {s.barang.length > 0 && (
-                          <div className="mt-4">
-                            <h4 className="font-semibold">{t.barang}</h4>
-                            <ul className="mt-2 space-y-3">
-                              {s.barang.map((b) => (
-                                <li key={b.nama} className="rounded-tombol bg-permukaan p-3">
-                                  <p className="font-medium">{b.nama}</p>
-                                  <p className="mt-1">
-                                    <span className="font-semibold">{t.cek}:</span> {b.cek_kecocokan}
-                                  </p>
-                                  <p className="mt-1">
-                                    <span className="font-semibold">{t.spesifikasi}:</span> {b.spesifikasi}
-                                  </p>
-                                  <p className="mt-1">
-                                    <span className="font-semibold">{t.harga}:</span> {b.kisaran_harga ?? umum.menyusul}
-                                  </p>
-                                  {b.afiliasi && (
-                                    <p className="mt-1">
-                                      <Tanda>{t.afiliasi}</Tanda>
-                                    </p>
-                                  )}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
                         <div className="mt-6 flex flex-col gap-5">
                           {aksiTersedia(kartu, x.tingkat).includes("beli") && (
                             <TombolAksi
