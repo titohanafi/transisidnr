@@ -49,26 +49,24 @@ export function LangkahChecklist({
 
   return (
     <div>
-      <p className="font-semibold" aria-live="polite">
+      <div className="flex items-center gap-3">
+        <BilahKemajuan n={selesai.length} total={langkah.length} label={progres} className="flex-1" />
+        <span aria-hidden="true" className="text-kecil font-medium tabular-nums text-redup">
+          {selesai.length}/{langkah.length}
+        </span>
+      </div>
+      <p className="sr-only" aria-live="polite">
         {progres}
       </p>
-      <BilahKemajuan n={selesai.length} total={langkah.length} label={progres} />
-      <ul className="mt-3 space-y-2">
+      <ul className="mt-1 divide-y divide-garis/70">
         {langkah.map((l, i) => {
           const centang = selesai.includes(i);
           return (
             <li key={i}>
-              <label
-                className={`flex min-h-sentuh cursor-pointer items-start gap-3 rounded-tombol p-3 ${centang ? "bg-utama-muda" : "bg-permukaan"}`}
-              >
-                <input
-                  type="checkbox"
-                  checked={centang}
-                  onChange={() => toggleLangkah(kunci, i)}
-                  className="mt-0.5 h-6 w-6 shrink-0 accent-utama"
-                />
-                <span>
-                  <span className={centang ? "line-through" : ""}>{l}</span>
+              <label className="flex min-h-sentuh cursor-pointer items-start gap-3 py-3.5">
+                <input type="checkbox" checked={centang} onChange={() => toggleLangkah(kunci, i)} className="kotak-centang mt-0.5" />
+                <span className={`flex-1 ${centang ? "text-redup" : ""}`}>
+                  <span className={centang ? "line-through decoration-redup/60" : ""}>{l}</span>
                   {peran?.[i] && <PenandaPeran peran={peran[i]} />}
                 </span>
               </label>

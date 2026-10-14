@@ -65,10 +65,18 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   const tampilkanUkuran = bolehTampilkanUkuran(kartu.status_validasi, TAMPILKAN_ANGKA_DRAF);
   const istilah = istilahDalam(JSON.stringify(kartu), konten.ui.istilah);
 
+  const kunciGrup = kunciKelompok(kartu);
+  const namaGrup =
+    kunciGrup === "caregiver"
+      ? konten.ui.jelajah.caregiver
+      : (konten.asesmen.aktivitas.find((a) => a.id === kunciGrup)?.label.split(" (")[0] ?? "");
   const atasJudul = (
-    <span className="mb-3 flex h-14 w-14 items-center justify-center rounded-kartu bg-white">
-      <Ikon kunci={kunciKelompok(kartu)} className="h-9 w-9" />
-    </span>
+    <div className="mb-3 flex items-center gap-3">
+      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-kartu bg-white shadow-kartu">
+        <Ikon kunci={kunciGrup} className="h-7 w-7" />
+      </span>
+      {namaGrup && <span className="text-kecil font-semibold uppercase tracking-wide text-utama-gelap">{namaGrup}</span>}
+    </div>
   );
 
   // Situasi digabung dengan "kenapa penting" bila isinya berbeda, supaya tidak ada dua bagian yang saling mengulang.
