@@ -113,9 +113,7 @@ export function Beranda() {
       <span aria-hidden="true" className="pointer-events-none absolute -bottom-16 -left-10 h-36 w-36 rounded-full bg-utama-gelap/30" />
 
       <div className="relative flex items-center gap-3">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-daun">
-          <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-5 w-5 text-white" />
-        </span>
+        <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-9 w-9 text-daun" />
         <h3 id="jalur-utama" className="text-judulKartu font-bold">
           {kartu.judul}
         </h3>

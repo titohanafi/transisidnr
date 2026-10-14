@@ -18,7 +18,7 @@ export default {
         info: { DEFAULT: "#1D4E89", muda: "#E6F0FA" }, // biru, khusus banner informasi
         draf: { DEFAULT: "#7A4B00", muda: "#FFF1CC" },
         catatan: { DEFAULT: "#5C3D00", muda: "#FFF3C4", garis: "#E8CF7A" }, // kuning lembut untuk catatan yang bisa ditutup
-        daun: "#388E3C", // hijau daun, latar lingkaran ikon kartu utama (ikon putih di atasnya, kontras ≥ 3:1)
+        daun: "#8FD27A", // hijau daun muda, warna ikon kartu utama di atas teal (kontras ≈ 4,2:1)
         bahaya: "#A32020",
       },
       fontFamily: {
