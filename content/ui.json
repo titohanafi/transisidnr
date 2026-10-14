@@ -68,6 +68,7 @@
   },
   "saya": {
     "judul": "Saya",
+    "pengantar": "Ringkasan jawaban dan check-in Anda. Semuanya tersimpan hanya di perangkat ini.",
     "jawabanJudul": "Jawaban Anda",
     "belumJawab": "Anda belum mengisi pertanyaan awal. Dengan beberapa pertanyaan ya atau tidak, panduan bisa disesuaikan dengan kondisi Anda.",
     "mulai": "Mulai pertanyaan",

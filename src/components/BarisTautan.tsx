@@ -2,7 +2,7 @@ import { ChevronRight, type LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // Baris tautan berikon dalam kartu putih, untuk tujuan sekunder (daftar alat, cetak, dan sejenisnya).
-export function BarisTautan({ ke, teks, Ikon }: { ke: string; teks: string; Ikon: LucideIcon }) {
+export function BarisTautan({ ke, teks, keterangan, Ikon }: { ke: string; teks: string; keterangan?: string; Ikon: LucideIcon }) {
   return (
     <Link
       to={ke}
@@ -11,7 +11,10 @@ export function BarisTautan({ ke, teks, Ikon }: { ke: string; teks: string; Ikon
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
         <Ikon className="h-6 w-6 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
       </span>
-      <span className="flex-1 font-semibold">{teks}</span>
+      <span className="flex-1">
+        <span className="block font-semibold">{teks}</span>
+        {keterangan && <span className="block text-kecil text-redup">{keterangan}</span>}
+      </span>
       <ChevronRight className="h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
     </Link>
   );
