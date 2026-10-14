@@ -130,7 +130,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           aria-expanded={buka}
                           aria-controls={idPanel}
                           onClick={() => ubah(x.tingkat)}
-                          className="flex min-h-sentuh w-full items-center gap-3 rounded-kartu px-4 pb-2 pt-4 text-left text-judulKartu"
+                          className="flex min-h-sentuh w-full items-center gap-3 rounded-kartu px-4 pb-4 pt-4 text-left text-judulKartu"
                         >
                           <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white">
                             <IkonTingkat className="h-5 w-5 text-utama-gelap" strokeWidth={2} focusable="false" />
@@ -144,13 +144,15 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           />
                         </button>
                       </h3>
-                      <div className={`flex flex-wrap gap-2 px-4 ${buka ? "pb-3" : "pb-4"}`}>
-                        <LencanaSifat sifat={x.sifat} />
-                        {x.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
+                      <div className={`flex flex-wrap gap-2 px-4 -mt-2 empty:hidden ${buka ? "pb-3" : "pb-4"}`}>
                         {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
                         {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                       </div>
                       <div id={idPanel} hidden={!buka} className="mx-3 mb-3 rounded-tombol bg-white p-4">
+                        <div className="mb-3 flex flex-wrap gap-2">
+                          <LencanaSifat sifat={x.sifat} />
+                          {x.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
+                        </div>
                         <p className="text-redup">{s.ringkasan}</p>
                         <div className="mt-3 flex flex-wrap gap-2">
                           <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
