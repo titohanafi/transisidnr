@@ -409,3 +409,5 @@
 - Judul kolom cari di Beranda dinaikkan dari 18px ke 24px (text-2xl), setara judul layar lain.
 
 - Tautan "Lihat panduan yang tersedia" dipindah tepat setelah teks info cakupan (di atas kolom cari), menggantikan "Lihat semua panduan" di bawah kartu hijau. Jarak judul ke teks info dilonggarkan (12px).
+
+- Info cakupan dan tautan "Lihat panduan yang tersedia" dijadikan banner informasi (latar hijau muda, ikon info) di paling atas Beranda, di atas judul kolom cari. Catatan: warnanya sama dengan kartu check-in; bila terasa mirip, ganti salah satunya.

@@ -22,24 +22,26 @@ export function Beranda() {
 
       <form
         role="search"
-        className="-mt-2"
+        className="mt-1"
         onSubmit={(e) => {
           e.preventDefault();
           const q = new FormData(e.currentTarget).get("q");
           navigate("/jelajah", { state: { cari: typeof q === "string" ? q.trim() : "" } });
         }}
       >
+        <aside className="mb-4 rounded-kartu bg-utama-muda px-3 py-2 text-sm text-tinta">
+          <p className="flex items-start gap-2">
+            <Info className="mt-0.5 h-4 w-4 shrink-0 text-utama-gelap" strokeWidth={2} aria-hidden="true" focusable="false" />
+            <span>{pilih.cakupan}</span>
+          </p>
+          <Link to="/jelajah" className="ml-6 inline-flex min-h-sentuh items-center font-semibold text-utama-gelap underline">
+            {pilih.semua}
+          </Link>
+        </aside>
         <label htmlFor="cari-beranda" className="text-2xl font-bold leading-snug text-tinta">
           {pilih.cari.label}
         </label>
-        <p className="mt-3 flex items-start gap-2 text-sm text-redup">
-          <Info className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
-          <span>{pilih.cakupan}</span>
-        </p>
-        <Link to="/jelajah" className="inline-flex min-h-sentuh items-center text-utama underline">
-          {pilih.semua}
-        </Link>
-        <div className="flex gap-3">
+        <div className="mt-3 flex gap-3">
           <input
             id="cari-beranda"
             name="q"
