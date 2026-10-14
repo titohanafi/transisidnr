@@ -24,7 +24,6 @@ import {
   type Filter,
 } from "../domain/jelajah";
 import { useRencana } from "../state/useRencana";
-import { useStore } from "../state/store";
 
 const { jelajah: t, umum, rencana: tr } = konten.ui;
 const FILTER: Filter[] = ["semua", "alat", "ahli"];
@@ -38,14 +37,12 @@ export function Jelajah() {
 }
 
 function Daftar({ awal }: { awal: Filter }) {
-  const { state } = useStore();
   const { konteks } = useRencana();
   const filter: Filter = awal;
   // Kata kunci bisa datang dari kolom cari di Beranda (lewat state riwayat, bukan alamat).
   const dariBeranda = (useLocation().state as { cari?: string } | null)?.cari;
   const [cari, setCari] = useState(dariBeranda ?? "");
 
-  const adaJawaban = Object.keys(state.asesmen.status).length > 0;
   const label = (kunci: string) =>
     kunci === "caregiver" ? t.caregiver : (konten.asesmen.aktivitas.find((a) => a.id === kunci)?.label.split(" (")[0] ?? kunci);
 
@@ -116,19 +113,10 @@ function Daftar({ awal }: { awal: Filter }) {
       }
     >
       {filter === "semua" && cari.trim() !== "" && (
-        <aside className="mb-isi flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda p-3 text-catatan">
+        <aside className="flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda p-3 text-catatan">
           <Info className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
           <p className="text-kecil">{t.cari.cakupan}</p>
         </aside>
-      )}
-
-      {filter === "semua" && (
-        <section className="rounded-kartu bg-utama-muda p-5" aria-label={t.ajakanJudul}>
-          <p>{adaJawaban ? t.ajakanSudah : t.ajakanBelum}</p>
-          <TombolLink to={adaJawaban ? "/rencana" : "/mulai/1"} className="mt-3 w-full">
-            {adaJawaban ? t.ajakanRencana : t.ajakanMulai}
-          </TombolLink>
-        </section>
       )}
 
       {filter === "alat" ? (

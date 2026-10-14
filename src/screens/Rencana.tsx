@@ -32,7 +32,7 @@ export function Rencana() {
     track("rencana_dibuat", { jumlah_kartu: jumlahKartu });
   }, [jumlahKartu]);
 
-  // Belum menjawab: tab ini menampilkan semua panduan dengan ajakan menyusun rencana, bukan langsung ke pertanyaan.
+  // Belum menjawab: tab ini menampilkan semua panduan, bukan langsung ke pertanyaan.
   if (Object.keys(state.asesmen.status).length === 0) return <Jelajah />;
 
   // Bila caregiver bilang sedang lelah, tampilkan satu hal saja dan simpan sisanya di lipatan.
