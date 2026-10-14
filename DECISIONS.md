@@ -479,3 +479,8 @@
 - Catatan "Saat ini baru tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda" tampil lagi di Beranda, di atas sapaan "Selamat pagi", sebagai kartu kuning lembut selebar isi (bukan tepi ke tepi) dengan tombol tutup. Tetap ada juga di hasil pencarian dan pertanyaan pertama asesmen.
 - Keputusan paling sederhana: status "ditutup" hanya disimpan di memori halaman, jadi catatan muncul lagi saat halaman dimuat ulang. Tidak ada data baru di localStorage. Bila ingin tetap tertutup, perlu satu bidang baru di `transisi:v1`.
 - Token warna baru `catatan` (teks #5C3D00, latar #FFF3C4, garis #E8CF7A). Kontras teks di atas latar sekitar 8,9:1.
+
+## Prettier dipasang
+- Prettier ditambahkan sebagai dependensi dev dengan `.prettierrc.json` (`printWidth` 140 agar sesuai gaya kode yang sudah ada, `trailingComma: all`). Perintah: `npm run format` dan `npm run format:cek`.
+- Diformat: `src/`, `tests/`, dan berkas konfigurasi di akar. Tidak diformat (lihat `.prettierignore`): `content/` (teks yang diedit tim non-teknis), berkas Markdown, dan `package-lock.json`.
+- Seluruh kode diformat sekali dalam satu commit terpisah; tidak ada perubahan perilaku (lint, typecheck, tes, dan build lulus).
