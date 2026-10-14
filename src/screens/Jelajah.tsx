@@ -129,7 +129,7 @@ function Daftar({ awal }: { awal: Filter }) {
               className="mt-bagian overflow-hidden rounded-kartu border border-garis/70 bg-white shadow-kartu first:mt-0"
               aria-labelledby={`grup-${g.kunci}`}
             >
-              <h2 id={`grup-${g.kunci}`} className="flex items-center gap-3 p-4 text-subjudul">
+              <h2 id={`grup-${g.kunci}`} className="flex items-center gap-3 p-4 text-judulKartu">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
                   <Ikon kunci={g.kunci} className="h-6 w-6" />
                 </span>
