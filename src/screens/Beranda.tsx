@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Info, Search } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
@@ -50,16 +50,12 @@ export function Beranda() {
             <Search className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" focusable="false" />
           </button>
         </div>
-        <p id="cakupan-judul" className="mt-3 text-sm text-redup">
-          {pilih.cakupanJudul}
+        <p className="mt-3 flex items-start gap-2 text-sm text-redup">
+          <Info className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+          <span>
+            {pilih.cakupanJudul}: {pilih.cakupan.map((c) => c.nilai.toLowerCase()).join(", ")}.
+          </span>
         </p>
-        <ul aria-labelledby="cakupan-judul" className="mt-1 flex flex-wrap gap-2">
-          {pilih.cakupan.map((c) => (
-            <li key={c.label} className="rounded-full bg-utama-muda px-3 py-1 text-sm text-utama-gelap">
-              <span className="font-semibold">{c.label}:</span> {c.nilai}
-            </li>
-          ))}
-        </ul>
       </form>
 
       <section className="mt-6 rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-utama">

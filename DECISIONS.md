@@ -399,3 +399,5 @@
 - Label cakupan di bawah kolom cari kini dua pil: "Ruang: Kamar mandi" dan "Disabilitas: Pengguna kursi roda". Disimpan sebagai daftar `beranda.pilih.cakupan` ({label, nilai}) di `content/ui.json`, jadi menambah ruang atau jenis disabilitas cukup menambah satu butir atau mengubah nilainya. Pembaca layar mendengar daftar berjudul "Tersedia untuk".
 
 - Di atas dua pil cakupan ada judul kecil "Ruang lingkup pengembangan saat ini" (`beranda.pilih.cakupanJudul`).
+
+- Info cakupan di bawah kolom cari diganti dari dua pil menjadi satu baris teks polos berikon info (Lucide `Info`): "Ruang lingkup pengembangan saat ini: kamar mandi, pengguna kursi roda." Pil dihindari karena terbaca sebagai riwayat pencarian atau filter yang bisa diketuk. Nilai diambil dari daftar `beranda.pilih.cakupan` (label tidak ditampilkan).
