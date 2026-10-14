@@ -132,7 +132,7 @@ export function Rencana() {
               className="mt-3"
             />
             {h.beres.length === 0 && <p className="mt-3 text-kecil text-redup">{t.beres.kosong}</p>}
-            <details className="group -mx-4 -mb-4 mt-4 border-t border-garis/60">
+            <details open className="group -mx-4 -mb-4 mt-4 border-t border-garis/60">
               <summary className="flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-2 px-4 font-semibold text-utama [&::-webkit-details-marker]:hidden">
                 <span>{t.beres.rincian}</span>
                 <ChevronDown

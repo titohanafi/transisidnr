@@ -658,3 +658,4 @@
 - **Beranda: kartu "Lanjutkan panduan Anda" di bawah segmen pencarian** (permintaan pemilik). Urutannya kini sama untuk pengunjung baru dan yang sudah menjawab: segmen pencarian (berisi catatan cakupan dan sapaan), lalu kartu utama, lalu check-in. Bagi yang sudah menjawab, kartu tidak menimpa pita pencarian (jarak biasa).
 - Beranda: tinggi pita pencarian dan tumpang tindih kartu utama kini sama sebelum dan sesudah asesmen diisi (pita dengan ruang bawah 72px, kartu menimpa sekitar 40px, bayangan `shadow-angkat`).
 - Panduan Saya: urutan kartu ditukar (permintaan pemilik): "Satu hal untuk hari ini" (hero teal) di atas, lalu kartu kemajuan "n dari total masalah teratasi" dengan rincian, lalu tautan cetak dan semua panduan. Hero kini yang menimpa tepi bawah pita kepala.
+- "Lihat rincian" di kartu kemajuan Panduan Saya terbuka secara bawaan (permintaan pemilik); pengguna tetap bisa menutupnya.
