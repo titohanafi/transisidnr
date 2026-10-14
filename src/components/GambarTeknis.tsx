@@ -109,6 +109,28 @@ export function UkurTegak({ x, y1, y2, angka }: { x: number; y1: number; y2: num
   );
 }
 
+/** Kloset tampak depan; `x` = sumbu tengah, tanah di y = 138. */
+export function KlosetDepan({ x }: { x: number }) {
+  return (
+    <g transform={`translate(${x - 110} 0)`} className="stroke-tinta" strokeWidth="3" strokeLinejoin="round">
+      <rect x="88" y="36" width="44" height="42" rx="4" className="fill-white" />
+      <circle cx="110" cy="36" r="3.500" className="fill-tinta" stroke="none" />
+      <rect x="76" y="84" width="68" height="8" rx="4" className="fill-white" />
+      <path d="M80 92H140Q140 112 126 118V138H94V118Q80 112 80 92Z" className="fill-white" />
+    </g>
+  );
+}
+
+/** Tanda "jangan": lingkaran bergaris miring di atas benda yang tidak boleh dijadikan tumpuan. */
+export function Larang({ x, y }: { x: number; y: number }) {
+  return (
+    <g transform={`translate(${x} ${y})`} className="stroke-tinta" strokeWidth="3" {...garisTinta}>
+      <circle r="13" className="fill-white" fillOpacity="0.85" />
+      <path d="M-9 -9L9 9" />
+    </g>
+  );
+}
+
 /** Dinding tampak atas: batang hitam tebal. */
 export const Dinding = ({ x1, x2, y }: { x1: number; x2: number; y: number }) => (
   <rect x={x1} y={y} width={x2 - x1} height="8" className="fill-tinta" />

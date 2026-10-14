@@ -1,7 +1,19 @@
 import type { ReactNode } from "react";
 import { konten } from "../domain/content";
 import type { Tingkat } from "../domain/konstanta";
-import { Dinding, KursiRodaAtas, Kanvas, Panah, Pengguna, UkurMendatar, UkurTegak, angka, garisTinta } from "./GambarTeknis";
+import {
+  Dinding,
+  KlosetDepan,
+  KursiRodaAtas,
+  Kanvas,
+  Larang,
+  Panah,
+  Pengguna,
+  UkurMendatar,
+  UkurTegak,
+  angka,
+  garisTinta,
+} from "./GambarTeknis";
 
 // Ilustrasi selebar panel untuk pilihan solusi. Dibuat bertahap, satu panduan demi satu panduan: panduan yang belum ada di
 // daftar ini tidak menampilkan apa pun (kunci "idKartu:tingkat"). Gaya: petunjuk perabot hitam-putih (garis tinta tegas,
@@ -84,6 +96,84 @@ const GAMBAR: Record<string, () => ReactNode> = {
       <Panah x={168} y={110} arah={8} />
       <Panah x={192} y={110} arah={172} />
       <Pengguna x={64} y={111} skala={0.62} tangan={[16, -56]} />
+    </Kanvas>
+  ),
+  // Atur kebiasaan berpindah, tampak dari atas: kursi roda sejajar kloset dengan rem terkunci; wastafel dan gantungan handuk
+  // bukan tumpuan.
+  "bath-grab-bar:tanpa_biaya": () => (
+    <Kanvas>
+      <Dinding x1={0} x2={360} y={6} />
+      <g transform="translate(0 34)">
+        <rect x="30" y="14" width="56" height="26" rx="6" className="fill-white stroke-tinta" strokeWidth="3" />
+        <ellipse cx="58" cy="29" rx="16" ry="8" fill="none" strokeWidth="2" className="stroke-tinta" />
+        <Larang x={58} y={60} />
+        <path d="M112 16V32M134 16V32" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+        <path d="M108 32H138" {...garisTinta} strokeWidth="4" className="stroke-tinta" />
+        <Larang x={123} y={60} />
+        <rect x="196" y="14" width="40" height="14" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+        <ellipse cx="216" cy="52" rx="17" ry="20" className="fill-white stroke-tinta" strokeWidth="3" />
+        <ellipse cx="216" cy="54" rx="9" ry="11" fill="none" strokeWidth="2" className="stroke-tinta" />
+        <KursiRodaAtas x={274} y={62} />
+        <path d="M268 40Q250 22 236 40" {...garisTinta} strokeWidth="2.500" strokeDasharray="3 6" className="stroke-tinta" />
+        <Panah x={234} y={44} arah={140} />
+        <g className="stroke-tinta" strokeWidth="3" {...garisTinta}>
+          <rect x="304" y="62" width="22" height="18" rx="3" className="fill-white" />
+          <path d="M309 62V56a6 6 0 0 1 12 0v6" />
+          <circle cx="315" cy="71" r="1.500" className="fill-tinta" />
+        </g>
+      </g>
+    </Kanvas>
+  ),
+  // Pasang pegangan yang bisa dilepas: rangka berdiri di lantai yang mengapit kloset, dan pegangan klem atau tempel di dinding.
+  "bath-grab-bar:alat_tanpa_bongkar": () => (
+    <Kanvas>
+      <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <KlosetDepan x={110} />
+      <path d="M44 138V74H72V138M148 74H176V138" className="stroke-tinta" {...garisTinta} strokeWidth="5" />
+      <path d="M38 138h12M168 138h12" {...garisTinta} strokeWidth="5" className="stroke-tinta" />
+      <rect x="236" y="20" width="104" height="118" fill="none" strokeWidth="3" className="stroke-tinta" />
+      <path d="M236 54H340M236 88H340M268 20V138M304 20V138" {...garisTinta} strokeWidth="1.500" className="stroke-tinta" opacity="0.35" />
+      <path d="M258 72H318" {...garisTinta} strokeWidth="10" className="stroke-tinta" />
+      <path d="M258 72H318" {...garisTinta} strokeWidth="4" className="stroke-white" />
+      <circle cx="258" cy="72" r="8" className="fill-white stroke-tinta" strokeWidth="3" />
+      <circle cx="318" cy="72" r="8" className="fill-white stroke-tinta" strokeWidth="3" />
+      <circle cx="258" cy="72" r="2.500" className="fill-tinta" />
+      <circle cx="318" cy="72" r="2.500" className="fill-tinta" />
+    </Kanvas>
+  ),
+  // Pasang pegangan permanen yang tertanam kuat: dua pegangan di dinding samping kloset, dengan sorotan pengikat ke dinding.
+  "bath-grab-bar:renovasi": () => (
+    <Kanvas>
+      <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <path
+        d="M30 20H230M30 54H230M30 88H230M30 20V138M97 20V138M164 20V138M230 20V138"
+        {...garisTinta}
+        strokeWidth="1.500"
+        className="stroke-tinta"
+        opacity="0.3"
+      />
+      <KlosetDepan x={130} />
+      <g {...garisTinta} className="stroke-tinta" strokeWidth="5">
+        <path d="M54 72H100M160 72H206" />
+      </g>
+      <g className="stroke-tinta" strokeWidth="3">
+        <rect x="46" y="64" width="8" height="16" rx="2" className="fill-white" />
+        <rect x="206" y="64" width="8" height="16" rx="2" className="fill-white" />
+      </g>
+      <path
+        d="M214 68L252 54M214 76L252 100"
+        {...garisTinta}
+        strokeWidth="1.500"
+        strokeDasharray="3 4"
+        className="stroke-tinta"
+        opacity="0.6"
+      />
+      <circle cx="298" cy="76" r="48" className="fill-white stroke-tinta" strokeWidth="3" />
+      <rect x="256" y="50" width="22" height="52" className="fill-tinta" />
+      <rect x="278" y="62" width="8" height="28" rx="2" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M286 76H336" {...garisTinta} strokeWidth="10" className="stroke-tinta" />
+      <path d="M286 76H336" {...garisTinta} strokeWidth="4" className="stroke-white" />
+      <path d="M284 70H266M284 82H266" {...garisTinta} strokeWidth="3" className="stroke-white" />
     </Kanvas>
   ),
   // Pastikan pintu bisa dibuka leluasa: pintu terbuka penuh dan diganjal, jalur di depan pintu kosong.
