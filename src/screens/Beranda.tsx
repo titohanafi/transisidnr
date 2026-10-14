@@ -20,14 +20,14 @@ export function Beranda() {
     <Halaman judul={app.nama}>
       <h2 className="sr-only">{pilih.judul}</h2>
 
-      <aside className="-mx-4 -mt-5 flex gap-3 border-b border-aksen/25 bg-aksen-muda px-4 py-3">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-aksen">
+      <aside className="-mx-4 -mt-5 flex gap-3 border-b border-info/25 bg-info-muda px-4 py-3">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-info">
           <Info className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-sm leading-relaxed text-tinta">
             {pilih.cakupan}{" "}
-            <Link to="/jelajah" className="whitespace-nowrap py-2 font-semibold text-aksen underline">
+            <Link to="/jelajah" className="whitespace-nowrap py-2 font-semibold text-info underline">
               {pilih.semua}
             </Link>
           </p>

@@ -417,3 +417,6 @@
 - Banner: kalimat menjadi "Saat ini baru tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda." dan tautannya diperpendek menjadi "Lihat panduan", disatukan dalam paragraf yang sama dengan kalimat (tautan sebaris, berwarna aksen dan bergaris bawah; ikon panah dihapus).
 
 - Banner informasi kini selebar layar: menempel ke header di atas dan ke tepi kiri-kanan (tanpa sudut membulat, hanya garis bawah tipis). Letaknya di luar formulir cari.
+
+## Banner biru
+- Banner informasi di Beranda diganti biru dengan token baru `info` (#1D4E89) dan `info-muda` (#E6F0FA) di `tailwind.config.ts`, khusus untuk informasi netral. Kontrasnya diuji (info di info-muda, tinta di info-muda, info di putih). Perubahan token Tailwind memerlukan server dev dimulai ulang.

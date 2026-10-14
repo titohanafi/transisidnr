@@ -14,6 +14,7 @@ export default {
         garisKontrol: "#6B7580", // batas kontrol formulir (kontras ≥ 3:1)
         utama: { DEFAULT: "#0F5E63", gelap: "#0A4549", muda: "#E3F1F1" }, // teal tenang
         aksen: { DEFAULT: "#9A4A12", muda: "#FBEBDD" }, // hangat
+        info: { DEFAULT: "#1D4E89", muda: "#E6F0FA" }, // biru, khusus banner informasi
         draf: { DEFAULT: "#7A4B00", muda: "#FFF1CC" },
         bahaya: "#A32020",
       },
