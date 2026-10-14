@@ -395,6 +395,7 @@ export const uiSchema = z
     jelajah: z.object({
       judul: teks,
       pengantar: teks,
+      status: z.object({ cukup: teks, masih_sulit: teks }),
       kosongFilter: teks,
       caregiver: teks,
       aksiKartu: teks,

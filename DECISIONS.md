@@ -555,3 +555,6 @@
 
 - Tombol ke halaman Kontak setelah menjawab "Masih sulit" di tingkat terakhir dihapus (permintaan pemilik). Tersisa kalimat saja: "Ini sudah pilihan terakhir di panduan ini. Pertimbangkan bertanya ke ahli lewat menu Kontak." Satu-satunya jalan ke Kontak dari panduan kini lewat tab Kontak di bilah bawah.
 - Urutan isi panel solusi sekarang: ringkasan dan pil, langkah bercentang, ukuran (bila ada), ajakan bertindak ("Lihat alat" dan, di Renovasi, "Pesan ke tukang"), lalu pertanyaan "Bagaimana hasilnya?" di paling bawah (hanya muncul setelah semua langkah tercentang). Komponen dipecah menjadi `LangkahChecklist` dan `HasilLangkah`.
+
+## Penanda hasil di daftar Panduan
+- Jawaban "Bagaimana hasilnya?" (Sudah cukup / Masih sulit) kini juga tampil sebagai penanda di baris panduan pada halaman Panduan: "Beres" (ikon centang) atau "Masih sulit" (ikon peringatan). Panduan yang belum dicatat tidak diberi penanda. Datanya sama dengan yang dipakai Panduan Saya (`state.hasil`), tersimpan di perangkat. Teks penanda ada di `jelajah.status`.

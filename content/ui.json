@@ -398,6 +398,7 @@
   "jelajah": {
     "judul": "Semua panduan",
     "pengantar": "Buka panduan untuk melihat langkahnya. Bila sudah tahu ingin mencari alat atau mengenali peran ahli dan tukang, pilih saringan di bawah. Urutan panduan tidak dipengaruhi pembayaran.",
+    "status": { "cukup": "Beres", "masih_sulit": "Masih sulit" },
     "kosongFilter": "Belum ada panduan dengan isi lengkap untuk pilihan ini. Isi panduan masih disusun.",
     "caregiver": "Untuk caregiver",
     "aksiKartu": "Aksi untuk panduan ini",
