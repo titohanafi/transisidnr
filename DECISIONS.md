@@ -488,3 +488,6 @@
 ## "Situasi" dan "Kenapa penting" digabung di hero Detail Panduan
 - Di hero Detail Panduan, judul dan "Situasi" sering nyaris sama, sedangkan "Kenapa ini penting" dulu berupa bagian lipat terpisah. Keduanya kini digabung: kotak kuning Situasi menampilkan `situasi`, lalu `kenapa_penting` di kalimat berikutnya bila isinya berbeda (tidak ditampilkan dua kali bila sama atau sudah terkandung). Tidak ada teks baru yang ditulis; seluruhnya dari bidang yang sudah ada di kartu.
 - Daftar, Panduan Saya, Cetak, dan pencarian tidak berubah.
+
+## Lencana "Sementara, bisa dibatalkan" dihapus
+- Lencana ini dihapus di Detail Panduan dan di kartu Panduan Saya (permintaan pemilik). Hanya solusi permanen yang diberi lencana "Permanen", sehingga prinsip 5 ("solusi permanen ditandai") tetap terpenuhi: yang tidak bertanda adalah solusi yang bisa dibatalkan. Teks `umum.sementara` di `content/ui.json` kini tidak terpakai.

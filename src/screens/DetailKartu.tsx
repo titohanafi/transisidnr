@@ -148,7 +148,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                         {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                       </div>
                       <div id={idPanel} hidden={!buka} className="mx-3 mb-3 rounded-tombol bg-white p-4">
-                        <div className="mb-3 flex flex-wrap gap-2">
+                        <div className="mb-3 flex flex-wrap gap-2 empty:hidden">
                           <LencanaSifat sifat={x.sifat} />
                           {x.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
                         </div>

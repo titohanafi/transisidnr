@@ -59,7 +59,7 @@ export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRenca
             .map((t) => (
               <li key={t.tingkat} className="rounded-tombol bg-permukaan p-3">
                 <p className="font-medium">{tk.tingkat[t.tingkat]}</p>
-                <div className="mt-1 flex flex-wrap gap-2">
+                <div className="mt-1 flex flex-wrap gap-2 empty:hidden">
                   <LencanaSifat sifat={t.sifat} />
                   {t.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
                   {t.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}

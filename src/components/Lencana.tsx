@@ -13,12 +13,10 @@ export function LencanaStatus({ status }: { status: Kartu["status_validasi"] }) 
   return <span className={`${dasar} border-utama bg-utama-muda text-utama-gelap`}>{label}</span>;
 }
 
+// Hanya solusi permanen yang ditandai (prinsip 5). Solusi sementara adalah keadaan bawaan, jadi tidak perlu lencana.
 export function LencanaSifat({ sifat }: { sifat: "sementara" | "permanen" }) {
-  return sifat === "sementara" ? (
-    <span className={`${dasar} border-utama bg-utama-muda text-utama-gelap`}>{umum.sementara}</span>
-  ) : (
-    <span className={`${dasar} border-aksen bg-aksen-muda text-aksen`}>{umum.permanen}</span>
-  );
+  if (sifat === "sementara") return null;
+  return <span className={`${dasar} border-aksen bg-aksen-muda text-aksen`}>{umum.permanen}</span>;
 }
 
 export function Tanda({ children }: { children: ReactNode }) {
