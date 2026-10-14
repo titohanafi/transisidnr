@@ -33,10 +33,7 @@ export function AksiBeli() {
 
                   <div className="mt-4 flex gap-3 rounded-tombol border border-catatan-garis bg-catatan-muda p-4 text-catatan">
                     <ClipboardCheck className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
-                    <p>
-                      <span className="font-semibold">{tk.cek}</span>
-                      <span className="mt-0.5 block">{b.cek_kecocokan}</span>
-                    </p>
+                    <p>{b.cek_kecocokan}</p>
                   </div>
                 </div>
 

@@ -610,3 +610,5 @@
 - Hero halaman "Pakai Alat": ilustrasi dihapus; kartu alat pertama kini sedikit menimpa tepi bawah hero (pengaturan `kepalaTumpang` di kerangka halaman: hero diberi ruang bawah ekstra, isi naik 32px).
 
 - Kotak "Cek kecocokan dulu" di halaman "Pakai Alat" berwarna kuning lembut (token `catatan`), sama dengan kotak peringatan di Detail Panduan, supaya terpisah dari hero hijau muda.
+
+- Judul "Cek kecocokan dulu" dihapus dari kotak kuning di halaman "Pakai Alat"; kotak hanya berisi ikon papan centang dan teks pemeriksaannya.
