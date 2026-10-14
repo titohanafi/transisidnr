@@ -656,3 +656,4 @@
 - Peringatan non-medis di Panduan Saya memakai gaya `polos` (teks kecil abu dengan ikon, tanpa kotak berwarna), sama dengan Detail panduan. Layar Cetak tetap memakai kotak berwarna.
 - **Profil memakai pita hijau muda** (konsisten dengan Panduan Saya dan Produk Disabilitas), berisi lingkaran avatar ikon orang di tengah; kartu pertama menimpa tepi bawah pita. Tanpa judul atau teks di pita (judul tetap ada untuk pembaca layar). Latar halaman tetap putih.
 - **Beranda: kartu "Lanjutkan panduan Anda" di bawah segmen pencarian** (permintaan pemilik). Urutannya kini sama untuk pengunjung baru dan yang sudah menjawab: segmen pencarian (berisi catatan cakupan dan sapaan), lalu kartu utama, lalu check-in. Bagi yang sudah menjawab, kartu tidak menimpa pita pencarian (jarak biasa).
+- Beranda: tinggi pita pencarian dan tumpang tindih kartu utama kini sama sebelum dan sesudah asesmen diisi (pita dengan ruang bawah 72px, kartu menimpa sekitar 40px, bayangan `shadow-angkat`).

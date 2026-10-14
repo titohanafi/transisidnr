@@ -101,9 +101,9 @@ export function Beranda() {
       </aside>
     );
 
-  // Segmen pencarian selebar layar, selalu di atas kartu utama. Bagi pengunjung baru, kartu utama menimpa tepi bawahnya sekitar 40px.
+  // Segmen pencarian selebar layar, selalu di atas kartu utama. Kartu utama menimpa tepi bawahnya sekitar 40px, sebelum maupun sesudah asesmen diisi.
   const segmenCari = (
-    <div className={`-mx-4 -mt-6 bg-permukaan px-4 pt-6 ${adaJawaban ? "pb-6" : "pb-[72px]"}`}>
+    <div className="-mx-4 -mt-6 bg-permukaan px-4 pb-[72px] pt-6">
       {cakupan("mb-isi")}
       {sapaan("mb-isi")}
       {cari}
@@ -115,7 +115,7 @@ export function Beranda() {
       id="jalur-utama"
       ikon={<IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-9 w-9 text-daun" />}
       judul={kartu.judul}
-      className={adaJawaban ? "" : "-mt-16 shadow-angkat"}
+      className="-mt-16 shadow-angkat"
     >
       <p className="relative mt-2.5 text-isi text-utama-redup">{kartu.deskripsi}</p>
       <TautanHero to={adaJawaban ? "/rencana" : "/mulai/1"}>{kartu.tombol}</TautanHero>
