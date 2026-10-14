@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
-import { Lipat } from "../components/Lipat";
+import { LipatBaris } from "../components/Lipat";
 import { LencanaSifat, LencanaStatus, Tanda } from "../components/Lencana";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { TombolLink } from "../components/Tombol";
@@ -19,7 +19,6 @@ import { TombolAksi } from "../components/TombolAksi";
 import { aksiTersedia } from "../domain/aksi";
 import { ringkasRp } from "../lib/format";
 import { track } from "../lib/events";
-import { useStore } from "../state/store";
 import { useRencana } from "../state/useRencana";
 
 const { kartu: t, umum, rencana: tr } = konten.ui;
@@ -41,8 +40,6 @@ export function DetailKartu() {
 
 function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   const { konteks } = useRencana();
-  const { state } = useStore();
-  const adaJawaban = Object.keys(state.asesmen.status).length > 0;
   useEffect(() => {
     track("kartu_dibuka", { kartu_id: kartu.id });
   }, [kartu.id]);
@@ -53,13 +50,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   const awal =
     tampil.find((x) => x.tingkat === tingkatAwal) ?? tingkatUtama({ id: kartu.id, prioritas: false, isiMenyusul: false, tingkat });
   const [terbuka, setTerbuka] = useState<Set<Tingkat>>(new Set(awal ? [awal.tingkat] : []));
-  const ubah = (x: Tingkat) =>
-    setTerbuka((s) => {
-      const n = new Set(s);
-      if (n.has(x)) n.delete(x);
-      else n.add(x);
-      return n;
-    });
+  // Satu tingkat terbuka pada satu waktu supaya halaman tidak memanjang dan pengguna fokus pada satu pilihan.
+  const ubah = (x: Tingkat) => setTerbuka((sekarang) => (sekarang.has(x) ? new Set() : new Set([x])));
 
   const tampilkanUkuran = bolehTampilkanUkuran(kartu.status_validasi, TAMPILKAN_ANGKA_DRAF);
   const istilah = istilahDalam(JSON.stringify(kartu), konten.ui.istilah);
@@ -109,21 +101,21 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
               <h2 id="solusi" className="text-subjudul">
                 {t.solusi}
               </h2>
-              <div className="mt-isi space-y-5">
+              <div className="mt-isi divide-y divide-garis/70 overflow-hidden rounded-kartu border border-garis bg-white">
                 {tampil.map((x) => {
                   const s = kartu.solusi?.[x.tingkat];
                   if (!s) return null;
                   const buka = terbuka.has(x.tingkat);
                   const idPanel = `panel-${x.tingkat}`;
                   return (
-                    <div key={x.tingkat} className="rounded-kartu border border-garis bg-white">
+                    <div key={x.tingkat}>
                       <h3>
                         <button
                           type="button"
                           aria-expanded={buka}
                           aria-controls={idPanel}
                           onClick={() => ubah(x.tingkat)}
-                          className="flex min-h-sentuh w-full items-center justify-between gap-3 rounded-kartu px-4 pb-3 pt-4 text-left text-judulKartu"
+                          className="flex min-h-sentuh w-full items-center justify-between gap-3 px-4 pb-3 pt-4 text-left text-judulKartu"
                         >
                           <span>{t.tingkat[x.tingkat]}</span>
                           <ChevronDown
@@ -252,25 +244,19 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                 <h2 id="peran" className="sr-only">
                   {t.peranPenyandang} / {t.peranCaregiver}
                 </h2>
-                <div className="space-y-3">
-                  <div className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
-                    <div className="mb-2 flex items-center gap-3">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
-                        <User className="h-6 w-6 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-                      </span>
-                      <h3 className="text-judulKartu">{t.peranPenyandang}</h3>
+                <div className="divide-y divide-garis/70 overflow-hidden rounded-kartu border border-garis bg-white">
+                  {[
+                    { Ikon: User, judul: t.peranPenyandang, isi: kartu.peran.penyandang_disabilitas },
+                    { Ikon: HeartHandshake, judul: t.peranCaregiver, isi: kartu.peran.caregiver },
+                  ].map(({ Ikon: IkonPeran, judul, isi }) => (
+                    <div key={judul} className="flex gap-3 p-4">
+                      <IkonPeran className="mt-0.5 h-6 w-6 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+                      <div>
+                        <h3 className="font-semibold">{judul}</h3>
+                        <p className="mt-0.5">{isi}</p>
+                      </div>
                     </div>
-                    <p>{kartu.peran.penyandang_disabilitas}</p>
-                  </div>
-                  <div className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
-                    <div className="mb-2 flex items-center gap-3">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
-                        <HeartHandshake className="h-6 w-6 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-                      </span>
-                      <h3 className="text-judulKartu">{t.peranCaregiver}</h3>
-                    </div>
-                    <p>{kartu.peran.caregiver}</p>
-                  </div>
+                  ))}
                 </div>
               </section>
             )}
@@ -287,46 +273,43 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
               </section>
             )}
 
-            {istilah.length > 0 && (
-              <Lipat className="" judul={t.istilah}>
-                <dl className="space-y-2">
-                  {istilah.map((i) => (
-                    <div key={i.kata}>
-                      <dt className="font-semibold">{i.kata}</dt>
-                      <dd>{i.arti}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </Lipat>
-            )}
-
-            <Lipat className="" judul={t.sumber}>
-              {kartu.sumber && kartu.sumber.length > 0 ? (
-                <ul className="list-disc space-y-1 pl-6">
-                  {kartu.sumber.map((s) => (
-                    <li key={s.judul}>
-                      {s.url ? (
-                        <a href={s.url} className="text-utama underline" rel="noopener noreferrer">
-                          {s.judul}
-                        </a>
-                      ) : (
-                        s.judul
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-redup">{t.sumberMenyusul}</p>
+            <div className="divide-y divide-garis/70 overflow-hidden rounded-kartu border border-garis bg-white">
+              {istilah.length > 0 && (
+                <LipatBaris judul={t.istilah}>
+                  <dl className="space-y-2">
+                    {istilah.map((i) => (
+                      <div key={i.kata}>
+                        <dt className="font-semibold">{i.kata}</dt>
+                        <dd>{i.arti}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </LipatBaris>
               )}
-            </Lipat>
+              <LipatBaris judul={t.sumber}>
+                {kartu.sumber && kartu.sumber.length > 0 ? (
+                  <ul className="list-disc space-y-1 pl-6">
+                    {kartu.sumber.map((s) => (
+                      <li key={s.judul}>
+                        {s.url ? (
+                          <a href={s.url} className="text-utama underline" rel="noopener noreferrer">
+                            {s.judul}
+                          </a>
+                        ) : (
+                          s.judul
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-redup">{t.sumberMenyusul}</p>
+                )}
+              </LipatBaris>
+            </div>
           </>
         )}
 
-        <PeringatanNonMedis className="" />
-
-        <TombolLink to={adaJawaban ? "/rencana" : "/jelajah"} gayaTombol="sekunder">
-          {adaJawaban ? t.kembaliKeRencana : t.kembaliKeJelajah}
-        </TombolLink>
+        <PeringatanNonMedis className="" polos />
       </div>
     </Halaman>
   );

@@ -502,3 +502,8 @@
 - Atas permintaan pemilik, pil biaya di Detail Panduan dan Cetak kini menampilkan "Rp x rb - y jt" (awalnya dengan kata "Estimasi", lalu kata itu diganti tanda "~" di depan angka atas permintaan pemilik; angka tetap perkiraan) untuk tingkat Alat tanpa bongkar dan Renovasi yang belum punya `kisaran_rp`. Angkanya disimpan di bidang BARU `biaya.estimasi_rp` (opsional, hanya tampilan). Mesin rekomendasi tetap hanya membaca `kisaran_rp`, jadi total biaya, "di atas anggaran", dan urutan rekomendasi TIDAK terpengaruh.
 - Angka ini adalah perkiraan kasar saya dari pengetahuan umum tentang harga barang di Indonesia, bukan dari survei atau sumber. Kisarannya sengaja lebar. Semua kartu masih `draf`. Perlu diganti dengan angka dari survei sebelum dipakai pengguna sungguhan; bila `kisaran_rp` diisi, ia menggantikan estimasi.
 - Tiga renovasi (`bath-space-turning`, `bath-shower-entry`, `bath-emergency-call`) dan kartu pendamping tidak diberi estimasi karena biayanya sangat bergantung pada kondisi rumah; pilnya tetap "Biaya menyusul".
+
+## Detail Panduan: struktur disederhanakan (kurangi beban kognitif)
+- Sebelumnya halaman memuat sekitar 12 blok terpisah (3 kartu solusi, 2 kartu peran, peringatan, 2 bagian lipat, catatan non-medis, dua tombol). Sekarang: hero, satu wadah solusi (3 baris berpemisah), tombol ahli, peringatan, satu wadah peran (2 baris), satu wadah "istilah dan sumber" (2 baris lipat), dan catatan non-medis sebagai teks kecil tanpa kotak.
+- Hanya satu tingkat solusi terbuka pada satu waktu (membuka satu menutup yang lain). Tombol "Kembali ke ..." di dasar dihapus karena header sudah punya panah kembali.
+- Peringatan keselamatan sengaja tetap terlihat (tidak dilipat) dan berwarna.
