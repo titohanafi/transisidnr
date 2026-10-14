@@ -379,3 +379,5 @@
 - Label kolom cari di Beranda dinaikkan menjadi teks 18px tebal berwarna tinta (gelap) agar menjadi kalimat pertama yang terbaca.
 
 - Kolom cari di Beranda dinaikkan (jarak atas dikurangi) dan diberi jarak lebih longgar: label ke kolom 12px, kolom ke tombol cari 12px.
+
+- Jarak kolom cari ke kartu hijau ditambah (16px menjadi 24px).

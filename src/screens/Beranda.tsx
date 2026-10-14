@@ -52,7 +52,7 @@ export function Beranda() {
         </div>
       </form>
 
-      <section className="mt-4 rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-utama">
+      <section className="mt-6 rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-utama">
         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-utama">
           <IkonBeranda kunci="rencana" />
         </span>
