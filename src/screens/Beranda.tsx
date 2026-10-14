@@ -58,7 +58,7 @@ export function Beranda() {
         </span>
         {!adaJawaban && (
           <p className="mt-3">
-            <span className="inline-block rounded-full border border-white px-3 py-1 text-sm font-semibold">{pilih.susun.cakupan}</span>
+            <span className="inline-block rounded-2xl border border-white px-3 py-1 text-sm font-semibold leading-snug [text-wrap:balance]">{pilih.susun.cakupan}</span>
           </p>
         )}
         <h3 id="jalur-utama" className="mt-3 text-xl font-bold leading-snug">
