@@ -107,7 +107,7 @@ function Daftar({ awal }: { awal: Filter }) {
     >
       <div className={filter === "semua" ? "-mt-9" : undefined}>
         {filter === "semua" && cari.trim() !== "" && (
-          <aside className="mt-isi flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda p-3 text-catatan">
+          <aside className="mb-bagian flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda p-3 text-catatan">
             <Info className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
             <p className="text-kecil">{t.cari.cakupan}</p>
           </aside>
@@ -126,7 +126,7 @@ function Daftar({ awal }: { awal: Filter }) {
             {kelompok.map((g) => (
               <section
                 key={g.kunci}
-                className="mt-bagian overflow-hidden rounded-kartu border border-garis/70 bg-white shadow-kartu first:mt-0"
+                className="mt-bagian overflow-hidden rounded-kartu border border-garis/70 bg-white shadow-kartu first-of-type:mt-0"
                 aria-labelledby={`grup-${g.kunci}`}
               >
                 <h2 id={`grup-${g.kunci}`} className="flex items-center gap-3 p-4 text-judulKartu">
