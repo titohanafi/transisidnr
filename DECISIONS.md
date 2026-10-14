@@ -552,3 +552,5 @@
 - Lencana "Permanen" dan "Tunggu dulu, kebutuhan Anda mungkin berubah" dihapus dari panel solusi di Detail Panduan (permintaan pemilik): nama tingkat "Renovasi" dan urutan dari yang paling ringan sudah menyiratkannya. Lencana yang sama masih tampil di kartu rencana pada Panduan Saya.
 
 - Tombol "Lihat kontak ahli" dihapus dari panel tingkat Renovasi karena sudah ada menu Kontak; yang tersisa hanya "Pesan ke tukang" dengan pengantar `kartu.jembatanRenovasi`. Tombol ke Kontak tetap muncul setelah pengguna menjawab "Masih sulit" di tingkat terakhir.
+
+- Tombol ke halaman Kontak setelah menjawab "Masih sulit" di tingkat terakhir dihapus (permintaan pemilik). Tersisa kalimat saja: "Ini sudah pilihan terakhir di panduan ini. Pertimbangkan bertanya ke ahli lewat menu Kontak." Satu-satunya jalan ke Kontak dari panduan kini lewat tab Kontak di bilah bawah.

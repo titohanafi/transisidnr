@@ -123,14 +123,10 @@ export function LangkahChecklist({
             {hasilIni === "masih_sulit" && (
               <>
                 <p className="mt-3 motion-safe:animate-muncul">{berikut ? t.hasil.balasSulit : t.hasil.terakhir}</p>
-                {berikut ? (
+                {berikut && (
                   <Tombol className="mt-3 w-full" onClick={() => keTingkat(berikut)}>
                     {t.hasil.berikutnya}
                   </Tombol>
-                ) : (
-                  <TombolLink to={`/aksi/ahli/${kartu.id}`} className="mt-3 w-full">
-                    {konten.ui.aksi.tombol.ahli}
-                  </TombolLink>
                 )}
               </>
             )}
