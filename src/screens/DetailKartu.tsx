@@ -1,8 +1,9 @@
 import { Clock, HeartHandshake, TriangleAlert, User } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
+import { Jembatan } from "../components/Jembatan";
 import { LangkahChecklist } from "../components/LangkahChecklist";
 import { LipatBaris } from "../components/Lipat";
 import { LencanaSifat, LencanaStatus, Tanda } from "../components/Lencana";
@@ -37,16 +38,6 @@ export function DetailKartu() {
     );
   }
   return <Isi kartu={kartu} tingkatAwal={TINGKAT.find((x) => x === tingkatParam)} />;
-}
-
-/** Kalimat pengantar singkat di atas tombol, supaya orang tahu kenapa tombol itu ada. */
-function Jembatan({ teks, children }: { teks: string; children: ReactNode }) {
-  return (
-    <div>
-      <p className="mb-2 text-redup">{teks}</p>
-      {children}
-    </div>
-  );
 }
 
 function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
@@ -244,14 +235,9 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                               gayaTombol={x.tingkat === "renovasi" ? "sekunder" : "utama"}
                             />
                           )}
-                          {aksiTersedia(kartu, x.tingkat).includes("tukang") && (
-                            <Jembatan teks={x.tingkat === "renovasi" ? t.jembatanTukang : t.jembatanPasang}>
-                              <TombolAksi
-                                jenis="tukang"
-                                kartuId={kartu.id}
-                                tingkat={x.tingkat}
-                                gayaTombol={x.tingkat === "renovasi" ? "utama" : "sekunder"}
-                              />
+                          {x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang") && (
+                            <Jembatan teks={t.jembatanTukang}>
+                              <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" />
                             </Jembatan>
                           )}
                           {x.tingkat === "renovasi" && kartu.bantuan && kartu.bantuan.length > 0 && (

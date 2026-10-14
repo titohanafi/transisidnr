@@ -1,3 +1,6 @@
+import { Jembatan } from "../components/Jembatan";
+import { TombolAksi } from "../components/TombolAksi";
+import { aksiTersedia } from "../domain/aksi";
 import { AksiHalaman, KembaliKeRencana, useKonteksAksi } from "../components/AksiHalaman";
 import { Tanda } from "../components/Lencana";
 import { Tombol } from "../components/Tombol";
@@ -63,6 +66,11 @@ export function AksiBeli() {
               </li>
             ))}
           </ul>
+          {aksiTersedia(ctx.kartu, ctx.tingkat).includes("tukang") && (
+            <Jembatan teks={tk.jembatanPasang}>
+              <TombolAksi jenis="tukang" kartuId={ctx.kartu.id} tingkat={ctx.tingkat} gayaTombol="sekunder" className="w-full" />
+            </Jembatan>
+          )}
         </>
       )}
     </AksiHalaman>
