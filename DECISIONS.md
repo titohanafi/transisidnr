@@ -608,3 +608,5 @@
 - Kepala halaman "Pakai Alat" kini berwarna hijau muda (`utama-muda`) dan memakai ilustrasi kelompok panduan di sisi kanan judul, seperti hero Detail Panduan. Pengaturan `kepalaPita` di kerangka halaman kini menerima `"hijau"` selain `true` (abu kehijauan).
 
 - Hero halaman "Pakai Alat": ilustrasi dihapus; kartu alat pertama kini sedikit menimpa tepi bawah hero (pengaturan `kepalaTumpang` di kerangka halaman: hero diberi ruang bawah ekstra, isi naik 32px).
+
+- Kotak "Cek kecocokan dulu" di halaman "Pakai Alat" berwarna kuning lembut (token `catatan`), sama dengan kotak peringatan di Detail Panduan, supaya terpisah dari hero hijau muda.

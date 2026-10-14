@@ -31,10 +31,10 @@ export function AksiBeli() {
                   </div>
                   {b.afiliasi && <p className="mt-1 text-kecil text-redup">{t.afiliasiPenjelasan}</p>}
 
-                  <div className="mt-4 flex gap-3 rounded-tombol bg-utama-muda p-4">
-                    <ClipboardCheck className="mt-0.5 h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+                  <div className="mt-4 flex gap-3 rounded-tombol border border-catatan-garis bg-catatan-muda p-4 text-catatan">
+                    <ClipboardCheck className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
                     <p>
-                      <span className="font-semibold text-utama-gelap">{tk.cek}</span>
+                      <span className="font-semibold">{tk.cek}</span>
                       <span className="mt-0.5 block">{b.cek_kecocokan}</span>
                     </p>
                   </div>
