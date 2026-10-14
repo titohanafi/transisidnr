@@ -113,7 +113,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
               <div
                 role="tablist"
                 aria-labelledby="solusi"
-                className="mt-isi grid gap-2"
+                className="mt-isi grid gap-1 rounded-kartu bg-permukaan p-1"
                 style={{ gridTemplateColumns: `repeat(${tampil.length}, minmax(0, 1fr))` }}
               >
                 {tampil.map((x, i) => {
@@ -139,8 +139,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           pilihTab(-1, i);
                         }
                       }}
-                      className={`tekan flex min-h-[64px] items-start rounded-kartu border p-3 text-left ${
-                        dipilih ? "border-utama bg-utama-muda" : "border-garis bg-white"
+                      className={`tekan flex min-h-[52px] items-center justify-center rounded-tombol px-2 py-2 text-center motion-safe:transition-colors ${
+                        dipilih ? "bg-white text-utama-gelap shadow-kartu" : "text-redup hover:text-tinta"
                       }`}
                     >
                       <span className="text-kecil font-semibold leading-snug">{t.tingkat[x.tingkat]}</span>
