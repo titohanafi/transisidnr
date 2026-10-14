@@ -104,26 +104,27 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
         </h2>
         <p className="mt-1 text-isi">{uraian}</p>
       </section>
-      {kartu.peringatan && (
-        <section
-          className="mt-3 flex items-start gap-3 rounded-kartu border border-catatan-garis bg-catatan-muda p-4 text-catatan"
-          aria-labelledby="peringatan"
-        >
-          <TriangleAlert className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
-          <div>
-            <h2 id="peringatan" className="text-kecil font-semibold">
-              {t.peringatan}
-            </h2>
-            <p className="mt-0.5 text-kecil">{kartu.peringatan}</p>
-          </div>
-        </section>
-      )}
     </>
   );
 
   return (
     <Halaman judul={kartu.judul} kepala={kepala} atasJudul={atasJudul} kepalaPita latarPutih>
       <div className="flex flex-col gap-bagian">
+        {kartu.peringatan && (
+          <section
+            className="flex items-start gap-3 rounded-kartu border border-catatan-garis bg-catatan-muda p-4 text-catatan"
+            aria-labelledby="peringatan"
+          >
+            <TriangleAlert className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+            <div>
+              <h2 id="peringatan" className="text-kecil font-semibold">
+                {t.peringatan}
+              </h2>
+              <p className="mt-0.5 text-kecil">{kartu.peringatan}</p>
+            </div>
+          </section>
+        )}
+
         {kartu.isi_menyusul || !kartu.solusi ? (
           <p className="rounded-kartu border border-draf bg-draf-muda p-4 font-medium text-draf">{umum.isiMenyusul}</p>
         ) : (

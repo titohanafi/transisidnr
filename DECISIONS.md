@@ -576,3 +576,5 @@
 - Saat semua langkah tercentang, pesan "Semua langkah selesai..." diberi emoji 🎉 di depannya (hiasan; disembunyikan dari pembaca layar karena kalimatnya sudah jelas).
 
 - Hero Detail Panduan: "Perhatian" kini berwarna kuning lembut (token `catatan`), "Situasi" berganti hijau muda, dan label "Situasi" serta nama kelompok tidak lagi huruf kapital semua.
+
+- "Perhatian" dipindah dari hero ke tepat di atas bagian "Pilihan solusi" (permintaan pemilik), tetap kuning. Tampil di semua panduan yang punya peringatan, termasuk yang isinya menyusul.
