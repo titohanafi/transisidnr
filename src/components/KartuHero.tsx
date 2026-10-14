@@ -53,3 +53,17 @@ export function HiasanLingkaran() {
     </>
   );
 }
+
+/**
+ * Lingkaran hiasan untuk pita kepala gelap. Lebih kecil dan diletakkan di bagian atas pita, jadi tidak terpotong
+ * garis lurus tepi atas atau tertutup kartu yang menimpa tepi bawah; hanya tepi layar yang memotongnya. Induk harus relative dan overflow-hidden.
+ */
+export function HiasanPita() {
+  return (
+    <>
+      <span aria-hidden="true" className="pointer-events-none absolute -right-4 top-3 h-16 w-16 rounded-full bg-utama-gelap/40" />
+      <span aria-hidden="true" className="pointer-events-none absolute right-14 top-9 h-10 w-10 rounded-full bg-utama-gelap/30" />
+      <span aria-hidden="true" className="pointer-events-none absolute -left-3 top-6 h-14 w-14 rounded-full bg-utama-gelap/30" />
+    </>
+  );
+}

@@ -2,12 +2,12 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BilahTab, namaMenu } from "./BilahTab";
-import { HiasanLingkaran } from "./KartuHero";
+import { HiasanPita } from "./KartuHero";
 import { konten } from "../domain/content";
 
 const { app, umum } = konten.ui;
 
-// Warna pita kepala. "gelap" sama dengan kartu hero teal, lengkap dengan lingkaran hiasan.
+// Warna pita kepala. "gelap" sama dengan kartu hero teal, lengkap dengan lingkaran hiasan kecil.
 const warnaPita = {
   biasa: "bg-permukaan",
   hijau: "bg-utama-muda",
@@ -131,7 +131,7 @@ export function Halaman({
                   : "px-4 pb-5 pt-6"
               }
             >
-              {kepalaPita === "gelap" && <HiasanLingkaran />}
+              {kepalaPita === "gelap" && <HiasanPita />}
               <div className="relative">
                 {hiasan ? (
                   <div className="flex items-center gap-2">
