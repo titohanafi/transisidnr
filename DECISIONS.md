@@ -572,3 +572,5 @@
 ## Penyempurnaan tampilan setelah melihat hasil render (Chrome headless)
 - Detail Panduan: hero diberi label kelompok (mis. "MANDI") di sebelah ikon; checklist memakai kotak centang kustom (garis tipis, terisi teal dengan tanda centang), pemisah tipis antarlangkah tanpa blok abu, bilah kemajuan tipis dengan hitungan n/N.
 - Kontak: nomor darurat kini di paling atas sebagai kisi tombol telepon dua kolom (nomor besar + nama), karena sebelumnya daftar tanda bahaya yang panjang mendorong nomor ke bawah. Tanda bahaya dan keterangan/sumber nomor dilipat. Dalam keadaan darurat orang perlu menelepon dulu, membaca kemudian.
+
+- Saat semua langkah tercentang, pesan "Semua langkah selesai..." diberi emoji 🎉 di depannya (hiasan; disembunyikan dari pembaca layar karena kalimatnya sudah jelas).

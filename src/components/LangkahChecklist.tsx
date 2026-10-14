@@ -76,8 +76,13 @@ export function LangkahChecklist({
       </ul>
       <div aria-live="polite">
         {dorongan && (
-          <p key={dorongan} className="mt-3 rounded-tombol bg-utama-muda p-4 font-medium motion-safe:animate-muncul">
-            {dorongan}
+          <p key={dorongan} className="mt-3 flex items-start gap-3 rounded-tombol bg-utama-muda p-4 font-medium motion-safe:animate-muncul">
+            {kodeDorongan === "selesai" && (
+              <span aria-hidden="true" className="text-2xl leading-none">
+                🎉
+              </span>
+            )}
+            <span>{dorongan}</span>
           </p>
         )}
       </div>
