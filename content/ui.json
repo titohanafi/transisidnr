@@ -523,5 +523,12 @@
         "kartu": "bath-reach-controls"
       }
     ]
+  },
+  "ilustrasi": {
+    "catatanAngka": "Angka di gambar adalah acuan umum (standar ADA 2010), bukan penilaian ahli. Ukuran di rumah Anda bisa berbeda.",
+    "angka": {
+      "bukaanPintu": "≥ 81 cm",
+      "tinggiGagang": "86–122 cm"
+    }
   }
 }

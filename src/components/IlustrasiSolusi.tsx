@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
+import { konten } from "../domain/content";
 import type { Tingkat } from "../domain/konstanta";
+import { Dinding, KursiRodaAtas, Kanvas, Panah, Pengguna, UkurMendatar, UkurTegak, angka, garisTinta } from "./GambarTeknis";
 
 // Ilustrasi selebar panel untuk pilihan solusi. Dibuat bertahap: baru panduan yang ada di daftar ini yang punya
 // ilustrasi (kunci "idKartu:tingkat"); panduan lain tidak menampilkan apa pun. Gaya: garis tipis (seperti gambar teknik),
@@ -100,15 +102,67 @@ const GAMBAR: Record<string, () => ReactNode> = {
       </g>
     </Ruang>
   ),
+  // Pastikan pintu bisa dibuka leluasa: pintu terbuka penuh dan diganjal, jalur di depan pintu kosong.
+  "bath-door:tanpa_biaya": () => (
+    <Kanvas>
+      <Dinding x1={0} x2={160} y={56} />
+      <Dinding x1={220} x2={360} y={56} />
+      <path d="M160 64A60 60 0 0 1 220 4" {...garisTinta} strokeWidth="1.500" strokeDasharray="4 5" className="stroke-tinta" />
+      <path d="M220 64V4" {...garisTinta} strokeWidth="5" className="stroke-tinta" />
+      <path d="M160 94V146M220 94V146" {...garisTinta} strokeWidth="1.500" strokeDasharray="4 5" className="stroke-tinta" opacity="0.5" />
+      <UkurMendatar x1={160} x2={220} y={86} angka={angka("bukaanPintu")} />
+      <KursiRodaAtas x={190} y={126} />
+      <path d="M190 106V96" {...garisTinta} strokeWidth="2.500" className="stroke-tinta" />
+      <Panah x={190} y={94} arah={-90} />
+    </Kanvas>
+  ),
+  // Tambahkan alat yang bisa dilepas: tali di gagang supaya pintu bisa ditarik dari posisi duduk, ganjal di lantai.
+  "bath-door:alat_tanpa_bongkar": () => (
+    <Kanvas>
+      <g transform="translate(-30 0)">
+        <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+        <rect x="244" y="6" width="8" height="132" className="fill-white stroke-tinta" strokeWidth="3" />
+        <path d="M244 38h-12" {...garisTinta} strokeWidth="5" className="stroke-tinta" />
+        <path d="M229 38V64q0 10-7 10t-7-10V44" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+        <path d="M232 138h12v-9z" className="fill-tinta" />
+        <Pengguna x={170} y={138} tangan={[222, 58]} />
+        <path d="M252 16H282M252 52H282" {...garisTinta} strokeWidth="1.500" strokeDasharray="4 4" className="stroke-tinta" opacity="0.5" />
+        <UkurTegak x={286} y1={16} y2={52} angka={angka("tinggiGagang")} />
+      </g>
+    </Kanvas>
+  ),
+  // Ubah pintu secara permanen: pintu geser, bukaan lega tanpa ruang putar daun pintu.
+  "bath-door:renovasi": () => (
+    <Kanvas>
+      <Dinding x1={0} x2={120} y={56} />
+      <Dinding x1={200} x2={360} y={56} />
+      <path d="M200 68H300" {...garisTinta} strokeWidth="5" className="stroke-tinta" />
+      <path d="M120 68H200" {...garisTinta} strokeWidth="2" strokeDasharray="4 4" className="stroke-tinta" opacity="0.6" />
+      <path d="M226 68h14" {...garisTinta} strokeWidth="2" className="stroke-white" />
+      <path d="M134 80H178" {...garisTinta} strokeWidth="2.500" className="stroke-tinta" />
+      <Panah x={190} y={80} arah={0} />
+      <UkurMendatar x1={120} x2={200} y={100} angka={angka("bukaanPintu")} />
+      <path d="M160 116V108" {...garisTinta} strokeWidth="2.500" className="stroke-tinta" />
+      <Panah x={160} y={106} arah={-90} />
+      <KursiRodaAtas x={160} y={132} />
+    </Kanvas>
+  ),
 };
+
+/** Gambar yang memuat angka ukuran; di bawahnya tampil catatan bahwa angka hanya acuan umum. */
+const BERANGKA = new Set(["bath-door:tanpa_biaya", "bath-door:alat_tanpa_bongkar", "bath-door:renovasi"]);
 
 /** Ilustrasi selebar panel untuk satu pilihan solusi; null bila panduan itu belum punya ilustrasi. */
 export function IlustrasiSolusi({ kartuId, tingkat }: { kartuId: string; tingkat: Tingkat }) {
-  const Gambar = GAMBAR[`${kartuId}:${tingkat}`];
+  const kunci = `${kartuId}:${tingkat}`;
+  const Gambar = GAMBAR[kunci];
   if (!Gambar) return null;
   return (
-    <svg viewBox="0 0 360 150" className="block h-auto w-full" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
-      <Gambar />
-    </svg>
+    <>
+      <svg viewBox="0 0 360 150" className="block h-auto w-full" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
+        <Gambar />
+      </svg>
+      {BERANGKA.has(kunci) && <p className="px-4 pt-2 text-mikro text-redup">{konten.ui.ilustrasi.catatanAngka}</p>}
+    </>
   );
 }
