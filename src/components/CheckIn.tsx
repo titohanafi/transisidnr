@@ -53,13 +53,13 @@ export function CheckIn() {
   }
 
   return (
-    <fieldset className="rounded-kartu border border-garis bg-white px-3 py-4">
+    <fieldset className="rounded-kartu border border-garis/70 bg-white px-3 py-5 shadow-kartu">
       <legend className="sr-only">{t.label}</legend>
       <p aria-hidden="true" className="px-1 text-kecil font-semibold text-utama-gelap">
         {t.label}
       </p>
-      <p className="mt-0.5 px-1 text-subjudul">{t.pertanyaan}</p>
-      <div className="mt-3 grid grid-cols-5 gap-1">
+      <p className="mt-1 px-1 text-subjudul">{t.pertanyaan}</p>
+      <div className="mt-4 grid grid-cols-5 gap-1.5">
         {t.pilihan.map((p) => (
           <button
             key={p.id}
@@ -70,8 +70,8 @@ export function CheckIn() {
               setCheckin(p.id);
               setMengubah(false);
             }}
-            className={`tekan flex min-h-[76px] flex-col items-center justify-center gap-1 rounded-tombol border px-0 py-2 ${
-              jawabanHariIni === p.id ? "border-utama bg-utama-muda ring-1 ring-utama" : "border-garis bg-white"
+            className={`tekan flex min-h-[80px] flex-col items-center justify-center gap-1.5 rounded-tombol px-0 py-2.5 ${
+              jawabanHariIni === p.id ? "bg-utama-muda text-utama-gelap ring-1 ring-inset ring-utama" : "bg-permukaan hover:bg-utama-muda"
             }`}
           >
             <span aria-hidden="true" className="text-2xl leading-none">
