@@ -198,8 +198,9 @@ export function Rencana() {
             <BarisTautan ke="/jelajah" teks={t.semuaPanduan} Ikon={BookOpen} />
           </li>
         </ul>
+
+        <PeringatanNonMedis className="" polos />
       </div>
-      <PeringatanNonMedis />
     </Halaman>
   );
 }
