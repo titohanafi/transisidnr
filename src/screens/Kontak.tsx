@@ -183,7 +183,7 @@ export function Kontak() {
           </div>
         </fieldset>
 
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-bagian">
           {tampil.map((g) => {
             const info = ahli.find((a) => a.jenis === g.kategori.id);
             const saran = kartu?.bantuan?.find((b) => b.jenis === g.kategori.id);
@@ -191,18 +191,18 @@ export function Kontak() {
             return (
               <section
                 key={g.kategori.id}
-                className="overflow-hidden rounded-kartu border border-garis bg-white shadow-kartu"
+                className="overflow-hidden rounded-kartu border border-garis/70 bg-white shadow-kartu"
                 aria-labelledby={`kat-${g.kategori.id}`}
               >
-                <div className="flex gap-3 p-4">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-tombol bg-utama-muda text-utama">
+                <h2 id={`kat-${g.kategori.id}`} className="flex items-center gap-3 p-4 text-judulKartu">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda text-utama">
                     <Ikon className="h-6 w-6" strokeWidth={2} aria-hidden="true" focusable="false" />
                   </span>
-                  <div className="min-w-0 flex-1">
-                    <h2 id={`kat-${g.kategori.id}`} className="text-judulKartu">
-                      {g.kategori.nama}
-                    </h2>
-                    <p className="mt-1 text-kecil text-redup">{g.kategori.arti}</p>
+                  {g.kategori.nama}
+                </h2>
+                <div className="divide-y divide-garis/60 border-t border-garis/60">
+                  <div className="px-4 py-3">
+                    <p className="text-kecil text-redup">{g.kategori.arti}</p>
                     {saran && (
                       <div className="mt-3">
                         <Tanda>{t.saranUntukPanduan}</Tanda>
@@ -210,13 +210,11 @@ export function Kontak() {
                       </div>
                     )}
                   </div>
-                </div>
-                <div className="divide-y divide-garis/70 border-t border-garis/70">
                   {g.entri.length === 0 ? (
-                    <p className="p-4 text-redup">{t.kosong}</p>
+                    <p className="px-4 py-3 text-redup">{t.kosong}</p>
                   ) : (
                     g.entri.map((e) => (
-                      <div key={e.id} className="p-4">
+                      <div key={e.id} className="px-4 py-3">
                         <p className="font-semibold">{e.nama}</p>
                         {(e.kota || e.alamat) && (
                           <p className="mt-1 flex items-start gap-1.5 text-kecil text-redup">
