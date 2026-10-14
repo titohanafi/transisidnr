@@ -563,3 +563,4 @@
 
 - Urutan panel solusi diperbarui lagi: ringkasan dan pil, ajakan bertindak ("Lihat alat" dan, di Renovasi, "Pesan ke tukang") DI ATAS langkah, lalu langkah bercentang, ukuran, dan "Bagaimana hasilnya?" di paling bawah.
 - Biaya dipindah dari kartu tab solusi ke dalam panel solusi, sejajar dengan pil waktu. Kartu tab kini hanya berisi nama tingkat (lebih pendek). Konsekuensinya biaya tiga tingkat tidak lagi bisa dibandingkan sekilas tanpa berpindah tab.
+- Nama tingkat "Alat tanpa bongkar" di antarmuka diganti "Pakai alat" supaya sejajar dengan "Tanpa biaya" dan "Renovasi" (dua kata, pola sama). Kunci data `alat_tanpa_bongkar` dan prinsip "tanpa bongkar" tidak berubah. Maksud "tanpa bongkar" tetap dijelaskan di ringkasan tiap solusi ("alat yang bisa dilepas").
