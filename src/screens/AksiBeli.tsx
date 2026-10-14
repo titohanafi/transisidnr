@@ -1,9 +1,8 @@
-import { Jembatan } from "../components/Jembatan";
-import { TombolAksi } from "../components/TombolAksi";
-import { aksiTersedia } from "../domain/aksi";
+import { ClipboardCheck, ExternalLink, Hammer } from "lucide-react";
 import { AksiHalaman, KembaliKeRencana, useKonteksAksi } from "../components/AksiHalaman";
 import { Tanda } from "../components/Lencana";
-import { Tombol } from "../components/Tombol";
+import { TombolAksi } from "../components/TombolAksi";
+import { aksiTersedia } from "../domain/aksi";
 import { konten } from "../domain/content";
 import { track } from "../lib/events";
 
@@ -17,59 +16,73 @@ export function AksiBeli() {
   const barang = ctx.kartu.solusi![ctx.tingkat]!.barang;
 
   return (
-    <AksiHalaman judul={t.judul} kartu={ctx.kartu} tingkat={ctx.tingkat} pengantar={barang.length > 0 ? t.bantuan : undefined}>
+    <AksiHalaman judul={t.judul} kartu={ctx.kartu} tingkat={ctx.tingkat} pengantar={barang.length > 0 ? t.bantuan : undefined} latarPutih>
       {barang.length === 0 ? (
         <p>{t.kosong}</p>
       ) : (
         <>
-          <ul className="space-y-4">
+          <ul className="space-y-5">
             {barang.map((b) => (
-              <li key={b.nama} className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
-                <h2 className="text-judulKartu">{b.nama}</h2>
-                <p className="mt-2 rounded-tombol bg-aksen-muda p-3">
-                  <span className="font-semibold">{tk.cek}:</span> {b.cek_kecocokan}
-                </p>
-                <p className="mt-2">
-                  <span className="font-semibold">{tk.spesifikasi}:</span> {b.spesifikasi}
-                </p>
-                <p className="mt-1">
-                  <span className="font-semibold">{tk.harga}:</span> {b.kisaran_harga ?? umum.menyusul}
-                </p>
-                {b.afiliasi && (
-                  <div className="mt-2">
-                    <Tanda>{t.afiliasi}</Tanda>
-                    <p className="mt-1 text-sm text-redup">{t.afiliasiPenjelasan}</p>
+              <li key={b.nama} className="overflow-hidden rounded-kartu border border-garis bg-white">
+                <div className="p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <h2 className="text-judulKartu">{b.nama}</h2>
+                    {b.afiliasi && <Tanda>{t.afiliasi}</Tanda>}
                   </div>
-                )}
-                <div className="mt-4">
+                  {b.afiliasi && <p className="mt-1 text-kecil text-redup">{t.afiliasiPenjelasan}</p>}
+
+                  <div className="mt-4 flex gap-3 rounded-tombol bg-utama-muda p-4">
+                    <ClipboardCheck className="mt-0.5 h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+                    <p>
+                      <span className="font-semibold text-utama-gelap">{tk.cek}</span>
+                      <span className="mt-0.5 block">{b.cek_kecocokan}</span>
+                    </p>
+                  </div>
+                </div>
+
+                <dl className="divide-y divide-garis/70 border-t border-garis/70">
+                  <div className="flex items-baseline justify-between gap-4 px-5 py-3.5">
+                    <dt className="text-redup">{tk.spesifikasi}</dt>
+                    <dd className="text-right font-medium">{b.spesifikasi}</dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-4 px-5 py-3.5">
+                    <dt className="text-redup">{tk.harga}</dt>
+                    <dd className="text-right font-medium">{b.kisaran_harga ?? umum.menyusul}</dd>
+                  </div>
+                </dl>
+
+                <div className="border-t border-garis/70 p-5">
                   {b.link ? (
                     <a
                       href={b.link}
                       target="_blank"
                       rel={b.afiliasi ? "noopener noreferrer sponsored" : "noopener noreferrer"}
                       onClick={() => track("aksi_klik", { jenis: "produk", kartu_id: ctx.kartu.id, afiliasi: b.afiliasi })}
-                      className="inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-utama px-5 py-2 font-semibold text-white hover:bg-utama-gelap"
+                      className="tekan inline-flex min-h-sentuh w-full items-center justify-center gap-2 rounded-tombol bg-utama px-5 py-2 font-semibold text-white hover:bg-utama-gelap"
                     >
                       {t.lihatProduk}
+                      <ExternalLink className="h-4 w-4" strokeWidth={2} aria-hidden="true" focusable="false" />
                       <span className="sr-only">: {b.nama}</span>
                     </a>
                   ) : (
-                    <>
-                      <Tombol disabled className="w-full">
-                        {t.lihatProduk}
-                        <span className="sr-only">: {b.nama}</span>
-                      </Tombol>
-                      <p className="mt-1 text-sm text-redup">{t.linkMenyusul}</p>
-                    </>
+                    <p className="flex min-h-sentuh items-center justify-center gap-2 rounded-tombol bg-permukaan px-5 py-2 text-redup">
+                      <ExternalLink className="h-4 w-4" strokeWidth={2} aria-hidden="true" focusable="false" />
+                      {t.linkMenyusul}
+                    </p>
                   )}
                 </div>
               </li>
             ))}
           </ul>
+
           {aksiTersedia(ctx.kartu, ctx.tingkat).includes("tukang") && (
-            <Jembatan teks={tk.jembatanPasang}>
-              <TombolAksi jenis="tukang" kartuId={ctx.kartu.id} tingkat={ctx.tingkat} gayaTombol="sekunder" className="w-full" />
-            </Jembatan>
+            <section className="rounded-kartu bg-permukaan p-5" aria-label={tk.jembatanPasang}>
+              <div className="flex gap-3">
+                <Hammer className="mt-0.5 h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+                <p>{tk.jembatanPasang}</p>
+              </div>
+              <TombolAksi jenis="tukang" kartuId={ctx.kartu.id} tingkat={ctx.tingkat} gayaTombol="sekunder" className="mt-4 w-full" />
+            </section>
           )}
         </>
       )}

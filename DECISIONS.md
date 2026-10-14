@@ -590,3 +590,6 @@
 - Ilustrasi "Tanpa biaya" untuk lantai licin diubah: lantai kini bersih dan kosong (tanpa genangan, ember, atau pel), dengan elemen kamar mandi tetap terlihat (pancuran yang mati, saluran lantai, kloset) dan kilau tipis sebagai tanda kering. Ini sesuai maksud langkahnya, yaitu hasil akhirnya lantai kering dan bebas benda.
 - Ilustrasi solusi tidak lagi memakai isian padat berwarna hijau atau teal (keset, waterpas, dan lantai kini putih atau abu muda dengan garis), supaya tidak bersaing dengan tombol hijau di bawahnya. Jarak di panel diatur ulang: ilustrasi ke deskripsi 20px, deskripsi ke pil biaya dan waktu 16px.
 - Jarak panel solusi dinaikkan 4px: ilustrasi ke deskripsi 24px, deskripsi ke pil 20px, pil ke tombol atau garis pemisah 24px.
+
+## Halaman "Alat yang dibutuhkan" (Lihat alat) didesain ulang
+- Latar putih (pengaturan `latarPutih` di `AksiHalaman`, hanya dipakai halaman ini). Tiap alat berupa kartu bergaris tipis tanpa bayangan: nama dan label afiliasi di atas, kotak hijau muda "Cek kecocokan dulu" berikon, daftar Spesifikasi dan Harga sebagai baris berpemisah (label di kiri, nilai di kanan), lalu tombol "Lihat produk" berikon tautan luar. Bila tautan belum ada, bagian itu berupa kotak abu "Tautan produk menyusul", bukan tombol nonaktif yang pucat. Ajakan "Pesan ke tukang" berada di kotak abu muda dengan ikon palu.

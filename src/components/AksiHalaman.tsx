@@ -27,6 +27,7 @@ export function AksiHalaman({
   kartu,
   tingkat,
   pengantar,
+  latarPutih = false,
   children,
 }: {
   judul: string;
@@ -34,11 +35,14 @@ export function AksiHalaman({
   tingkat?: Tingkat;
   /** Kalimat penjelas di pita kepala, di bawah nama panduan. */
   pengantar?: ReactNode;
+  /** Latar halaman putih (bawaan: abu kehijauan muda). */
+  latarPutih?: boolean;
   children: ReactNode;
 }) {
   return (
     <Halaman
       judul={judul}
+      latarPutih={latarPutih}
       kepala={
         <>
           <p className="mt-2 font-medium text-utama-gelap">
