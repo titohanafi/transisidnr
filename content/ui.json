@@ -302,14 +302,14 @@
   ],
   "aksi": {
     "tombol": {
-      "sendiri": "Lakukan sendiri",
+      "sendiri": "Ikuti langkahnya",
       "beli": "Lihat alat",
       "tukang": "Pesan ke tukang",
       "ahli": "Kenali peran ahli"
     },
     "kembaliKeKartu": "Kembali ke panduan",
     "sendiri": {
-      "judul": "Lakukan sendiri",
+      "judul": "Ikuti langkahnya",
       "bantuan": "Centang langkah yang sudah selesai. Centang tersimpan di perangkat ini.",
       "progres": "{n} dari {total} langkah selesai",
       "selesai": "Semua langkah selesai. Terima kasih sudah mengerjakannya.",

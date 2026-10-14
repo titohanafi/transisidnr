@@ -10,7 +10,7 @@ import { useStore } from "../state/store";
 
 const t = konten.ui.aksi.sendiri;
 
-// Lakukan sendiri: langkah dengan checklist yang tersimpan di perangkat.
+// Ikuti langkahnya: langkah dengan checklist yang tersimpan di perangkat.
 export function AksiSendiri() {
   const ctx = useKonteksAksi();
   const { state, toggleLangkah, setHasil } = useStore();
