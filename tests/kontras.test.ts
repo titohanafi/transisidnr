@@ -63,6 +63,10 @@ describe("kontras warna (WCAG 2.2 AA)", () => {
     expect(rasio(hex("garisKontrol"), putih)).toBeGreaterThanOrEqual(3);
   });
 
+  it("ikon utama-gelap di atas tombol cari hijau daun ≥ 3:1", () => {
+    expect(rasio(hex("utama", "gelap"), hex("daun"))).toBeGreaterThanOrEqual(3);
+  });
+
   it("ikon daun di atas kartu hero (grafis) ≥ 3:1", () => {
     expect(rasio(hex("daun"), hex("utama"))).toBeGreaterThanOrEqual(3);
   });

@@ -51,12 +51,12 @@ export function Beranda() {
           onChange={(e) => setAdaIsi(e.target.value !== "")}
           onFocus={() => setFokus(true)}
           onBlur={() => setFokus(false)}
-          className="h-12 w-full rounded-tombol border border-garisKontrol bg-white pl-4 pr-14 text-isi shadow-kartu placeholder:text-redup"
+          className="h-12 w-full rounded-tombol border border-garis bg-white pl-4 pr-14 text-isi shadow-kartu placeholder:text-redup"
         />
         <button
           type="submit"
           aria-label={pilih.cari.tombol}
-          className="tekan absolute right-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-tombol bg-utama text-white hover:bg-utama-gelap"
+          className="tekan absolute right-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-tombol bg-daun text-utama-gelap hover:brightness-95"
         >
           <Search className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
         </button>

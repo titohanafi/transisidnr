@@ -98,7 +98,7 @@ function Daftar({ awal }: { awal: Filter }) {
               onFocus={() => setFokus(true)}
               onBlur={() => setFokus(false)}
               autoFocus={dariBeranda === ""}
-              className="h-12 w-full rounded-tombol border border-garisKontrol bg-white pl-11 pr-3 text-isi shadow-kartu placeholder:text-redup"
+              className="h-12 w-full rounded-tombol border border-garis bg-white pl-11 pr-3 text-isi shadow-kartu placeholder:text-redup"
             />
           </div>
         </div>
