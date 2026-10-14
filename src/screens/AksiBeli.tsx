@@ -5,6 +5,7 @@ import { TombolAksi } from "../components/TombolAksi";
 import { aksiTersedia } from "../domain/aksi";
 import { konten } from "../domain/content";
 import { track } from "../lib/events";
+import { ringkasRp } from "../lib/format";
 
 const { aksi, kartu: tk, umum } = konten.ui;
 const t = aksi.beli;
@@ -38,13 +39,13 @@ export function AksiBeli() {
                 </div>
 
                 <dl className="divide-y divide-garis/70 border-t border-garis/70">
-                  <div className="flex items-baseline justify-between gap-4 px-5 py-3.5">
+                  <div className="px-5 py-3.5">
                     <dt className="text-redup">{tk.spesifikasi}</dt>
-                    <dd className="text-right font-medium">{b.spesifikasi}</dd>
+                    <dd className="mt-1 font-medium">{b.spesifikasi}</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-4 px-5 py-3.5">
                     <dt className="text-redup">{tk.harga}</dt>
-                    <dd className="text-right font-medium">{b.kisaran_harga ?? umum.menyusul}</dd>
+                    <dd className="text-right font-medium">{b.kisaran_harga ? ringkasRp(b.kisaran_harga) : umum.menyusul}</dd>
                   </div>
                 </dl>
 

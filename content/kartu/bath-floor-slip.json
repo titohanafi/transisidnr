@@ -43,10 +43,10 @@
       "barang": [
         {
           "nama": "Keset atau stiker anti-slip",
-          "spesifikasi": "Menyusul setelah survei.",
+          "spesifikasi": "Karet atau PVC, permukaan bertekstur, tahan air, bisa dilepas dan dicuci. (Data contoh)",
           "cek_kecocokan": "Cek jenis lantai dan pastikan bisa menempel kuat saat basah.",
-          "link": null,
-          "kisaran_harga": null,
+          "link": "https://example.com/contoh-keset-anti-slip",
+          "kisaran_harga": "Rp 30.000 - Rp 150.000",
           "afiliasi": false
         }
       ]

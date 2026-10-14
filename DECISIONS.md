@@ -612,3 +612,8 @@
 - Kotak "Cek kecocokan dulu" di halaman "Pakai Alat" berwarna kuning lembut (token `catatan`), sama dengan kotak peringatan di Detail Panduan, supaya terpisah dari hero hijau muda.
 
 - Judul "Cek kecocokan dulu" dihapus dari kotak kuning di halaman "Pakai Alat"; kotak hanya berisi ikon papan centang dan teks pemeriksaannya.
+
+## Data contoh (dummy) untuk alat di "Lantai licin saat basah"
+- Atas permintaan pemilik, barang "Keset atau stiker anti-slip" di tingkat Pakai alat pada `bath-floor-slip` diisi data CONTOH supaya desain halaman bisa dinilai: spesifikasi umum (ditandai "(Data contoh)" di teksnya), harga "Rp 30.000 - Rp 150.000" (ditampilkan "Rp 30 rb - 150 rb"), dan tautan `https://example.com/contoh-keset-anti-slip` (alamat contoh yang memang tidak mengarah ke toko). Afiliasi tetap `false`. Semuanya WAJIB diganti dengan data asli dari survei sebelum dipakai pengguna sungguhan. Harga alat tidak memengaruhi mesin rekomendasi (hanya tampilan).
+- Harga alat di halaman "Pakai Alat" kini memakai format singkat rb/jt seperti pil biaya.
+- Di halaman "Pakai Alat", spesifikasi alat kini berlabel di atas dan nilai di bawahnya (rata kiri) karena teks spesifikasi bisa panjang; harga tetap satu baris dengan nilai di kanan.
