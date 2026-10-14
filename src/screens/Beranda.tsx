@@ -29,6 +29,12 @@ export function Beranda() {
           navigate("/jelajah", { state: { cari: typeof q === "string" ? q.trim() : "" } });
         }}
       >
+        <p className="mb-2 flex items-center gap-2 text-sm text-redup">
+          <Info className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+          <span>
+            {pilih.cakupanJudul}: {pilih.cakupan.map((c) => c.nilai.toLowerCase()).join(", ")}.
+          </span>
+        </p>
         <label htmlFor="cari-beranda" className="text-lg font-bold leading-snug text-tinta">
           {pilih.cari.label}
         </label>
@@ -50,12 +56,6 @@ export function Beranda() {
             <Search className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" focusable="false" />
           </button>
         </div>
-        <p className="mt-3 flex items-start gap-2 text-sm text-redup">
-          <Info className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
-          <span>
-            {pilih.cakupanJudul}: {pilih.cakupan.map((c) => c.nilai.toLowerCase()).join(", ")}.
-          </span>
-        </p>
       </form>
 
       <section className="mt-6 rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-utama">
