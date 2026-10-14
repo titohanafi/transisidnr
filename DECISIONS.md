@@ -642,3 +642,4 @@
 - Kepala memakai pita hijau muda dan kartu pertama menimpa tepinya (seperti halaman Pakai Alat). Ikon bendera di depan penanda prioritas.
 - Kartu kemajuan dan perkiraan biaya mendapat ikon dalam kotak hijau muda. Judul "Mulai dari sini" dan "Rekomendasi lainnya" menampilkan jumlah panduan dalam pil kecil.
 - Kartu panduan (`KartuRingkas`): ikon dalam kotak hijau muda, tingkat solusi jadi baris bernomor 1-2-3 (urutan dari yang paling ringan), dan garis pemisah di atas tombol.
+- **Revisi Panduan Saya:** latar halaman putih (`latarPutih`); pita kepala hijau muda dan kartu hero teal tetap.

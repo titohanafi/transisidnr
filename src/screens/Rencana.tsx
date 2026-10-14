@@ -122,7 +122,7 @@ export function Rencana() {
   );
 
   return (
-    <Halaman judul={t.judul} kepala={kepala} kepalaPita="hijau" kepalaTumpang>
+    <Halaman judul={t.judul} kepala={kepala} kepalaPita="hijau" kepalaTumpang latarPutih>
       <div className="flex flex-col gap-bagian">
         {ringan && (
           <p role="note" className="rounded-kartu border border-aksen/30 bg-aksen-muda p-4 shadow-kartu motion-safe:animate-muncul">
