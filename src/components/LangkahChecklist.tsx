@@ -1,6 +1,6 @@
 import { kunciChecklist } from "../domain/aksi";
 import { konten } from "../domain/content";
-import { TINGKAT } from "../domain/konstanta";
+import { ringkasLangkah, tingkatSetelah } from "../domain/langkah";
 import type { Kartu, Tingkat } from "../domain/schema";
 import { isi } from "../lib/teks";
 import { useStore } from "../state/store";
@@ -27,14 +27,19 @@ export function LangkahChecklist({
 }) {
   const { state, toggleLangkah, setHasil } = useStore();
   const kunci = kunciChecklist(kartu.id, tingkat);
-  const selesai = (state.checklist[kunci] ?? []).filter((n) => n < langkah.length);
-  const semuaSelesai = langkah.length > 0 && selesai.length === langkah.length;
+  const { selesai, semuaSelesai, dorongan: kodeDorongan } = ringkasLangkah(state.checklist[kunci] ?? [], langkah.length);
   const hasil = state.hasil[kartu.id];
   const hasilIni = hasil && hasil.tingkat === tingkat ? hasil.status : null;
-  const berikut = TINGKAT.find((x) => TINGKAT.indexOf(x) > TINGKAT.indexOf(tingkat) && kartu.solusi?.[x]);
+  const berikut = tingkatSetelah(kartu, tingkat);
   const progres = isi(t.progres, { n: selesai.length, total: langkah.length });
   const dorongan =
-    selesai.length === 0 ? null : semuaSelesai ? t.selesai : selesai.length * 2 >= langkah.length ? t.dorongan.separuh : t.dorongan.mulai;
+    kodeDorongan === "selesai"
+      ? t.selesai
+      : kodeDorongan === "separuh"
+        ? t.dorongan.separuh
+        : kodeDorongan === "mulai"
+          ? t.dorongan.mulai
+          : null;
 
   return (
     <div>

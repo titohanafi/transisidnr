@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { ubahCentang } from "../domain/langkah";
 import { konten } from "../domain/content";
 import type { Aktivitas } from "../domain/schema";
 import { kunciHari, pangkasRiwayat } from "../lib/tanggal";
@@ -83,8 +84,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     (kunci: string, nomor: number) =>
       ubah((s) => {
         const ada = s.checklist[kunci] ?? [];
-        const baru = ada.includes(nomor) ? ada.filter((n) => n !== nomor) : [...ada, nomor].sort((a, b) => a - b);
-        return { ...s, checklist: { ...s.checklist, [kunci]: baru } };
+        return { ...s, checklist: { ...s.checklist, [kunci]: ubahCentang(ada, nomor) } };
       }),
     [ubah],
   );
