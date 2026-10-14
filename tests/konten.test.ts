@@ -10,7 +10,14 @@ function muat(): KontenMentah {
   const kartu = readdirSync(join(root, "kartu"))
     .filter((f) => f.endsWith(".json"))
     .map((f) => baca(join("kartu", f)));
-  return { kartu, asesmen: baca("asesmen.json"), config: baca("config.json"), onboarding: baca("onboarding.json"), ui: baca("ui.json") };
+  return {
+    kartu,
+    asesmen: baca("asesmen.json"),
+    config: baca("config.json"),
+    onboarding: baca("onboarding.json"),
+    ui: baca("ui.json"),
+    kontak: baca("kontak.json"),
+  };
 }
 
 describe("validasi konten", () => {

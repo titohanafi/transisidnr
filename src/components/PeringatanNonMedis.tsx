@@ -13,7 +13,7 @@ export function PeringatanNonMedis({ className = "mt-4", polos = false }: { clas
       <Info className="mt-0.5 h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
       <div>
         <p>{umum.peringatanNonMedis}</p>
-        <Link to="/igd" className="mt-1 inline-flex min-h-sentuh items-center font-semibold text-utama underline print:hidden">
+        <Link to="/kontak" className="mt-1 inline-flex min-h-sentuh items-center font-semibold text-utama underline print:hidden">
           {umum.tautanIgd}
         </Link>
       </div>

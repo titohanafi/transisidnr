@@ -2,11 +2,13 @@ import {
   asesmenSchema,
   configSchema,
   kartuSchema,
+  kontakSchema,
   onboardingSchema,
   uiSchema,
   type Asesmen,
   type Config,
   type Kartu,
+  type Kontak,
   type Onboarding,
   type Ui,
 } from "./schema";
@@ -17,6 +19,7 @@ export interface KontenMentah {
   config: unknown;
   onboarding: unknown;
   ui: unknown;
+  kontak: unknown;
 }
 
 export interface Konten {
@@ -25,6 +28,7 @@ export interface Konten {
   config: Config;
   onboarding: Onboarding;
   ui: Ui;
+  kontak: Kontak;
 }
 
 // Memeriksa seluruh konten. Melempar Error berisi semua masalah sekaligus.
@@ -42,11 +46,13 @@ export function validasiKonten(mentah: KontenMentah): Konten {
   const config = configSchema.safeParse(mentah.config);
   const onboarding = onboardingSchema.safeParse(mentah.onboarding);
   const ui = uiSchema.safeParse(mentah.ui);
+  const kontak = kontakSchema.safeParse(mentah.kontak);
   for (const [nama, r] of [
     ["asesmen", asesmen],
     ["config", config],
     ["onboarding", onboarding],
     ["ui", ui],
+    ["kontak", kontak],
   ] as const) {
     if (!r.success) masalah.push(`${nama}: ${r.error.issues.map((x) => `${x.path.join(".")} ${x.message}`).join("; ")}`);
   }
@@ -71,5 +77,6 @@ export function validasiKonten(mentah: KontenMentah): Konten {
     config: config.data!,
     onboarding: onboarding.data!,
     ui: ui.data!,
+    kontak: kontak.data!,
   };
 }

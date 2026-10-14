@@ -320,6 +320,7 @@ describe("dengan konten asli", () => {
     config: baca("config.json"),
     onboarding: baca("onboarding.json"),
     ui: baca("ui.json"),
+    kontak: baca("kontak.json"),
   });
 
   it("pindah ke kloset memicu kartu yang bersangkutan, kartu pertama jadi Mulai dari sini", () => {

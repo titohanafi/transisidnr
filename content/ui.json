@@ -47,8 +47,20 @@
     "tabBeranda": "Beranda",
     "tabPanduan": "Panduan",
     "tabSaya": "Saya",
-    "tabDarurat": "Darurat",
+    "tabDarurat": "Kontak",
     "halamanSebelumnya": "Halaman sebelumnya"
+  },
+  "kontak": {
+    "judul": "Kontak",
+    "pengantar": "Nomor yang bisa dihubungi saat darurat, dan ahli yang bisa membantu.",
+    "filterSemua": "Semua",
+    "filterJudul": "Pilih jenis kontak",
+    "telepon": "Telepon",
+    "whatsapp": "WhatsApp",
+    "kosong": "Daftar kontak untuk bagian ini sedang disiapkan.",
+    "panduanTerkait": "Dipakai di panduan",
+    "untukPanduan": "Disarankan untuk panduan: {judul}",
+    "saranUntukPanduan": "Disarankan di panduan ini"
   },
   "igd": {
     "judul": "Kapan harus ke dokter atau IGD",
@@ -225,7 +237,7 @@
       "alat_tanpa_bongkar": "Alat tanpa bongkar",
       "renovasi": "Renovasi"
     },
-    "jembatanRenovasi": "Renovasi sering perlu dibantu ahli dan tukang. Pesan ke tukang, atau kenali dulu siapa yang cocok untuk panduan ini.",
+    "jembatanRenovasi": "Renovasi sering perlu dibantu ahli dan tukang. Pesan ke tukang, atau lihat dulu ahli yang cocok untuk panduan ini.",
     "jembatanPasang": "Perlu dipasangkan, atau ingin alatnya dibuat khusus oleh tukang? Siapkan pesan singkat untuk tukang.",
     "tidakDitemukan": "Panduan tidak ditemukan",
     "kembaliKeRencana": "Kembali ke panduan saya",
@@ -307,7 +319,7 @@
       "sendiri": "Lihat langkahnya",
       "beli": "Lihat alat",
       "tukang": "Pesan ke tukang",
-      "ahli": "Kenali peran ahli"
+      "ahli": "Lihat kontak ahli"
     },
     "kembaliKeKartu": "Kembali ke panduan",
     "sendiri": {
@@ -389,7 +401,7 @@
     "aksiKartu": "Aksi untuk panduan ini",
     "semuaPanduan": "Kembali ke semua panduan",
     "cari": { "label": "Cari panduan", "contoh": ["cara mengatasi lantai licin", "pintu sempit", "pegangan kloset"], "tombol": "Cari", "hapus": "Hapus pencarian", "cakupan": "Saat ini baru tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda.", "kosong": "Tidak ada panduan yang cocok. Coba kata lain, atau cek kebutuhan di rumah supaya langkahnya disesuaikan dengan kondisi Anda." },
-    "lainnya": { "judul": "Lainnya", "alat": "Daftar alat", "ahli": "Peran ahli dan tukang" },
+    "lainnya": { "judul": "Lainnya", "alat": "Daftar alat", "ahli": "Kontak ahli dan tukang" },
     "judulFilter": {
       "semua": "Semua panduan",
       "alat": "Alat yang mungkin Anda butuhkan",

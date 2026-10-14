@@ -9,7 +9,7 @@ import { Cetak } from "./screens/Cetak";
 import { DetailKartu } from "./screens/DetailKartu";
 import { Jelajah } from "./screens/Jelajah";
 import { HapusData } from "./screens/HapusData";
-import { Igd } from "./screens/Igd";
+import { Kontak } from "./screens/Kontak";
 import { Onboarding } from "./screens/Onboarding";
 import { PilihRuangan } from "./screens/PilihRuangan";
 import { Saya } from "./screens/Saya";
@@ -33,7 +33,8 @@ export function App() {
         <Route path="/aksi/:jenis/:id/:tingkat?" element={<Aksi />} />
         <Route path="/cetak" element={<Cetak />} />
         <Route path="/kartu/:id/:tingkat?" element={<DetailKartu />} />
-        <Route path="/igd" element={<Igd />} />
+        <Route path="/kontak" element={<Kontak />} />
+        <Route path="/igd" element={<Navigate to="/kontak" replace />} />
         <Route path="/saya" element={<Saya />} />
         <Route path="/hapus" element={<HapusData />} />
         <Route path="*" element={<Navigate to="/" replace />} />

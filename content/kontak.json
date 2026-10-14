@@ -1,0 +1,68 @@
+{
+  "kategori": [
+    {
+      "id": "darurat",
+      "nama": "Darurat",
+      "arti": "Nomor yang bisa dihubungi saat keadaan gawat."
+    },
+    {
+      "id": "dokter_rehabilitasi",
+      "nama": "Dokter rehabilitasi medik",
+      "arti": "Dokter yang menangani pemulihan fungsi tubuh, termasuk nyeri dan luka setelah amputasi."
+    },
+    {
+      "id": "prostetis_ortotis",
+      "nama": "Prostetis-ortotis",
+      "arti": "Tenaga yang membuat dan menyesuaikan kaki palsu (protesis) serta alat penopang."
+    },
+    {
+      "id": "okupasi_terapis",
+      "nama": "Okupasi terapis",
+      "arti": "Tenaga kesehatan yang membantu orang menjalani kegiatan sehari-hari."
+    },
+    {
+      "id": "fisioterapis",
+      "nama": "Fisioterapis",
+      "arti": "Tenaga kesehatan yang melatih gerak dan kekuatan tubuh."
+    },
+    {
+      "id": "tukang",
+      "nama": "Tukang",
+      "arti": "Pekerja bangunan yang memasang atau mengubah bagian rumah."
+    },
+    {
+      "id": "arsitek",
+      "nama": "Arsitek",
+      "arti": "Perancang bangunan."
+    },
+    {
+      "id": "komunitas",
+      "nama": "Komunitas",
+      "arti": "Sesama penyandang disabilitas atau caregiver yang bisa berbagi pengalaman."
+    }
+  ],
+  "entri": [
+    {
+      "id": "nomor-darurat-nasional",
+      "kategori": "darurat",
+      "nama": "Nomor darurat nasional",
+      "telepon": "112",
+      "whatsapp": null,
+      "kota": null,
+      "alamat": null,
+      "catatan": "Untuk keadaan gawat.",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "layanan-darurat-kesehatan",
+      "kategori": "darurat",
+      "nama": "Layanan darurat kesehatan (ambulans)",
+      "telepon": "119",
+      "whatsapp": null,
+      "kota": null,
+      "alamat": null,
+      "catatan": null,
+      "status_validasi": "draf"
+    }
+  ]
+}

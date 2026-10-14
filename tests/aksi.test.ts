@@ -16,6 +16,7 @@ const k = validasiKonten({
   config: baca("config.json"),
   onboarding: baca("onboarding.json"),
   ui: baca("ui.json"),
+  kontak: baca("kontak.json"),
 });
 const t = k.ui.aksi.brief;
 const kartu = k.kartu.find((x) => x.id === "bath-transfer-toilet")!;

@@ -14,10 +14,13 @@ try {
     config: baca("config.json"),
     onboarding: baca("onboarding.json"),
     ui: baca("ui.json"),
+    kontak: baca("kontak.json"),
   });
   const salah = konten.kartu.filter((k, i) => `${k.id}.json` !== basename(files[i]));
   if (salah.length) throw new Error("Nama file harus sama dengan id: " + salah.map((k) => k.id).join(", "));
-  console.log(`Konten valid: ${konten.kartu.length} kartu, ${konten.asesmen.pertanyaan.length} pertanyaan.`);
+  console.log(
+    `Konten valid: ${konten.kartu.length} kartu, ${konten.asesmen.pertanyaan.length} pertanyaan, ${konten.kontak.entri.length} kontak.`,
+  );
 } catch (e) {
   console.error((e as Error).message);
   process.exit(1);

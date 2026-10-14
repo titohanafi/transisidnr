@@ -17,6 +17,7 @@ const k = validasiKonten({
   config: baca("config.json"),
   onboarding: baca("onboarding.json"),
   ui: baca("ui.json"),
+  kontak: baca("kontak.json"),
 });
 
 describe("keMasukan", () => {

@@ -34,7 +34,7 @@ export function Halaman({
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const menu = namaMenu(pathname);
-  const dalam = !["/", "/jelajah", "/rencana", "/igd", "/saya"].includes(pathname);
+  const dalam = !["/", "/jelajah", "/rencana", "/kontak", "/saya"].includes(pathname);
   const h1 = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     h1.current?.focus();

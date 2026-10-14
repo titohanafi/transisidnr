@@ -1,7 +1,6 @@
 import { Info, Search, UsersRound, Wrench } from "lucide-react";
 import { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { DaftarAhli } from "../components/DaftarAhli";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 import { DaftarAlat } from "../components/DaftarAlat";
 import { Halaman } from "../components/Halaman";
 import { BarisTautan } from "../components/BarisTautan";
@@ -11,18 +10,19 @@ import { Ikon } from "../components/Ikon";
 import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
 import { susunTingkat } from "../domain/engine";
-import { cocokCari, cocokFilter, kelompokkan, kumpulkanAhli, kumpulkanAlat, type Filter } from "../domain/jelajah";
+import { cocokCari, cocokFilter, kelompokkan, kumpulkanAlat, type Filter } from "../domain/jelajah";
 import { usePlaceholderBerjalan } from "../lib/placeholderBerjalan";
 import { useRencana } from "../state/useRencana";
 
 const { jelajah: t } = konten.ui;
-const FILTER: Filter[] = ["semua", "alat", "ahli"];
+const FILTER: Filter[] = ["semua", "alat"];
 
 // Jalur pintas: langsung ke panduan dan aksinya tanpa mengisi pertanyaan.
-// Alamat /jelajah/alat dan /jelajah/ahli membuka daftar yang sudah disaring. /jelajah/tukang (alamat lama) menuju ahli.
+// Alamat /jelajah/alat membuka daftar alat. /jelajah/ahli dan /jelajah/tukang (alamat lama) menuju halaman Kontak.
 export function Jelajah() {
   const { filter } = useParams();
-  const awal = FILTER.find((f) => f === (filter === "tukang" ? "ahli" : filter)) ?? "semua";
+  if (filter === "ahli" || filter === "tukang") return <Navigate to="/kontak" replace />;
+  const awal = FILTER.find((f) => f === filter) ?? "semua";
   return <Daftar key={awal} awal={awal} />;
 }
 
@@ -66,7 +66,6 @@ function Daftar({ awal }: { awal: Filter }) {
     konten.kartu.filter((k) => !k.isi_menyusul),
     tampilDari,
   );
-  const ahli = kumpulkanAhli(konten.kartu);
 
   return (
     <Halaman
@@ -112,8 +111,6 @@ function Daftar({ awal }: { awal: Filter }) {
 
       {filter === "alat" ? (
         <DaftarAlat alat={alat} />
-      ) : filter === "ahli" ? (
-        <DaftarAhli ahli={ahli} />
       ) : (
         <>
           <div aria-live="polite">
@@ -149,7 +146,7 @@ function Daftar({ awal }: { awal: Filter }) {
           <ul className="space-y-3">
             {[
               { ke: "/jelajah/alat", teks: t.lainnya.alat, Ikon: Wrench },
-              { ke: "/jelajah/ahli", teks: t.lainnya.ahli, Ikon: UsersRound },
+              { ke: "/kontak", teks: t.lainnya.ahli, Ikon: UsersRound },
             ].map(({ ke, teks, Ikon: IkonBaris }) => (
               <li key={ke}>
                 <BarisTautan ke={ke} teks={teks} Ikon={IkonBaris} />

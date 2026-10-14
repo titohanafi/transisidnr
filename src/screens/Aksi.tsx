@@ -1,5 +1,4 @@
 import { Navigate, useParams } from "react-router-dom";
-import { AksiAhli } from "./AksiAhli";
 import { AksiBeli } from "./AksiBeli";
 import { AksiTukang } from "./AksiTukang";
 
@@ -14,7 +13,8 @@ export function Aksi() {
     case "tukang":
       return <AksiTukang />;
     case "ahli":
-      return <AksiAhli />;
+      // Peran ahli dan kontak kini ada di halaman Kontak; kartuId membuat jenis ahli yang disarankan panduan itu tampil lebih dulu.
+      return <Navigate to="/kontak" state={{ kartuId: id }} replace />;
     default:
       return <Navigate to="/rencana" replace />;
   }

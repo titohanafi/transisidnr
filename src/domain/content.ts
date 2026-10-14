@@ -1,11 +1,12 @@
 import asesmen from "../../content/asesmen.json";
 import config from "../../content/config.json";
+import kontak from "../../content/kontak.json";
 import onboarding from "../../content/onboarding.json";
 import ui from "../../content/ui.json";
 import type { Konten, KontenMentah } from "./validasi";
 
 const kartuMentah = import.meta.glob("../../content/kartu/*.json", { eager: true, import: "default" });
-const mentah: KontenMentah = { kartu: Object.values(kartuMentah), asesmen, config, onboarding, ui };
+const mentah: KontenMentah = { kartu: Object.values(kartuMentah), asesmen, config, onboarding, ui, kontak };
 
 // Konten divalidasi dengan zod saat build (`npm run validasi`, bagian dari `npm run build`) dan di tes.
 // Di peramban produksi zod tidak ikut dimuat supaya bundel kecil; di mode dev validasi tetap jalan

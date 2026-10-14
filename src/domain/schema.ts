@@ -4,6 +4,7 @@ import {
   ALAT_BANTU,
   HUNIAN,
   JENIS_BANTUAN,
+  KATEGORI_KONTAK,
   STATUS_VALIDASI,
   TINGKAT,
   TINGKAT_BIAYA,
@@ -97,6 +98,31 @@ export const kartuSchema = z
     }
   });
 
+const nomorKontak = z
+  .string()
+  .regex(/^\+?\d[\d\s-]{1,18}$/, { message: "nomor telepon tidak valid" })
+  .nullable();
+
+export const kontakSchema = z
+  .object({
+    kategori: z.array(z.object({ id: z.enum(KATEGORI_KONTAK), nama: teks, arti: teks })).min(1),
+    entri: z.array(
+      z.object({
+        id: z.string().regex(/^[a-z0-9-]+$/),
+        kategori: z.enum(KATEGORI_KONTAK),
+        nama: teks,
+        telepon: nomorKontak,
+        whatsapp: nomorKontak,
+        kota: z.string().nullable(),
+        alamat: z.string().nullable(),
+        catatan: z.string().nullable(),
+        status_validasi: z.enum(STATUS_VALIDASI),
+      }),
+    ),
+  })
+  .refine((k) => k.entri.every((e) => k.kategori.some((c) => c.id === e.kategori)), { message: "entri menunjuk kategori yang tidak ada" })
+  .refine((k) => new Set(k.entri.map((e) => e.id)).size === k.entri.length, { message: "id entri kontak ganda" });
+
 export const asesmenSchema = z.object({
   aktivitas: z.array(z.object({ id: z.enum(AKTIVITAS), label: teks, bisaDipilihPrioritas: z.boolean() })).min(1),
   pertanyaan: z
@@ -168,6 +194,18 @@ export const uiSchema = z
       }),
     }),
     umum: rekamTeks,
+    kontak: z.object({
+      judul: teks,
+      pengantar: teks,
+      filterSemua: teks,
+      filterJudul: teks,
+      telepon: teks,
+      whatsapp: teks,
+      kosong: teks,
+      panduanTerkait: teks,
+      untukPanduan: teks,
+      saranUntukPanduan: teks,
+    }),
     igd: z.object({ judul: teks, isi: teks, daftarJudul: teks, tandaBahaya: z.array(teks), menyusul: teks }),
     saya: z.object({
       judul: teks,
@@ -391,6 +429,7 @@ export const uiSchema = z
 export type Kartu = z.infer<typeof kartuSchema>;
 export type TingkatSolusi = z.infer<typeof tingkatSolusiSchema>;
 export type Barang = z.infer<typeof barangSchema>;
+export type Kontak = z.infer<typeof kontakSchema>;
 export type Asesmen = z.infer<typeof asesmenSchema>;
 export type Pertanyaan = Asesmen["pertanyaan"][number];
 export type Config = z.infer<typeof configSchema>;

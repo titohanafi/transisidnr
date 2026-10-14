@@ -13,6 +13,7 @@ const k = validasiKonten({
   config: baca("config.json"),
   onboarding: baca("onboarding.json"),
   ui: baca("ui.json"),
+  kontak: baca("kontak.json"),
 });
 const kartu = (id: string) => k.kartu.find((x) => x.id === id)!;
 const semua = [...TINGKAT];

@@ -12,6 +12,7 @@ const mentah = (): KontenMentah => ({
   config: baca("config.json"),
   onboarding: baca("onboarding.json"),
   ui: baca("ui.json"),
+  kontak: baca("kontak.json"),
 });
 
 describe("pilihan budget dibaca dari config.json", () => {
