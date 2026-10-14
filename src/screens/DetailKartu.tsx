@@ -63,12 +63,15 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   const tampilkanUkuran = bolehTampilkanUkuran(kartu.status_validasi, TAMPILKAN_ANGKA_DRAF);
   const istilah = istilahDalam(JSON.stringify(kartu), konten.ui.istilah);
 
+  const atasJudul = (
+    <span className="mb-3 flex h-14 w-14 items-center justify-center rounded-kartu bg-utama-muda">
+      <Ikon kunci={kunciKelompok(kartu)} className="h-9 w-9" />
+    </span>
+  );
+
   const kepala = (
     <>
-      <div className="mt-3 flex items-center gap-3">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-tombol bg-white shadow-kartu">
-          <Ikon kunci={kunciKelompok(kartu)} className="h-8 w-8" />
-        </span>
+      <div className="mt-2 empty:hidden">
         <LencanaStatus status={kartu.status_validasi} />
       </div>
       <section className="mt-4" aria-labelledby="situasi">
@@ -81,7 +84,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   );
 
   return (
-    <Halaman judul={kartu.judul} kepala={kepala}>
+    <Halaman judul={kartu.judul} kepala={kepala} atasJudul={atasJudul} kepalaKartu>
       <div className="flex flex-col gap-bagian">
         {kartu.isi_menyusul || !kartu.solusi ? (
           <p className="rounded-kartu border border-draf bg-draf-muda p-4 font-medium text-draf">{umum.isiMenyusul}</p>
