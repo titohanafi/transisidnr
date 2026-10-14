@@ -16,7 +16,7 @@
         "deskripsi": "Lihat satu hal untuk hari ini dan langkah berikutnya.",
         "tombol": "Buka rencana"
       },
-      "cakupanJudul": "Tersedia untuk",
+      "cakupanJudul": "Ruang lingkup pengembangan saat ini",
       "cakupan": [
         { "label": "Ruang", "nilai": "Kamar mandi" },
         { "label": "Disabilitas", "nilai": "Pengguna kursi roda" }
