@@ -599,3 +599,6 @@
 - Kalimat "Baca cara cek kecocokan dulu sebelum membeli." dihapus dari halaman "Alat yang dibutuhkan" (permintaan pemilik); kotak "Cek kecocokan dulu" pada tiap alat sudah menyampaikannya. Teksnya dihapus dari konten.
 
 - Tombol "Lihat alat" diganti "Lihat Spesifikasi dan Panduan" (`aksi.tombol.beli`; sempat lebih panjang, dipersingkat atas permintaan pemilik; kapitalisasi mengikuti permintaan pemilik). Teks ini satu sumber, jadi berlaku di panel solusi dan tombol utama kartu rencana di Panduan Saya.
+
+- Header Detail Panduan (`/kartu/...`) dan halaman aksinya (`/aksi/...`) kini bertuliskan "Panduan" (dengan panah kembali) menggantikan logo "Transisi.", seperti halaman menu Panduan.
+- Header halaman "Alat yang dibutuhkan" (`/aksi/beli/...`) bertuliskan "Pakai Alat" (`umum.headerPakaiAlat`), mengikuti nama tingkat solusinya; halaman aksi lain tetap "Panduan".

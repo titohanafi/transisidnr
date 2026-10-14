@@ -36,7 +36,10 @@ export function Halaman({
 }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const menu = namaMenu(pathname);
+  // Header: halaman panduan dan aksinya memakai "Panduan"; halaman alat (beli) memakai "Pakai Alat".
+  const menu =
+    namaMenu(pathname) ??
+    (/^\/aksi\/beli\//.test(pathname) ? umum.headerPakaiAlat : /^\/(kartu|aksi)\//.test(pathname) ? umum.tabPanduan : null);
   const dalam = !["/", "/jelajah", "/rencana", "/kontak", "/saya"].includes(pathname);
   const h1 = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
