@@ -8,25 +8,14 @@ import { BarisTautan } from "../components/BarisTautan";
 import { KartuBaris } from "../components/KartuBaris";
 import { KartuKerangka } from "../components/KartuKerangka";
 import { Ikon } from "../components/Ikon";
-import { LencanaStatus, Tanda } from "../components/Lencana";
-import { TombolAksi } from "../components/TombolAksi";
 import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
 import { susunTingkat } from "../domain/engine";
-import {
-  aksiKartu,
-  aksiUntukFilter,
-  cocokCari,
-  cocokFilter,
-  kelompokkan,
-  kumpulkanAhli,
-  kumpulkanAlat,
-  type Filter,
-} from "../domain/jelajah";
+import { cocokCari, cocokFilter, kelompokkan, kumpulkanAhli, kumpulkanAlat, type Filter } from "../domain/jelajah";
 import { usePlaceholderBerjalan } from "../lib/placeholderBerjalan";
 import { useRencana } from "../state/useRencana";
 
-const { jelajah: t, umum, rencana: tr } = konten.ui;
+const { jelajah: t } = konten.ui;
 const FILTER: Filter[] = ["semua", "alat", "ahli"];
 
 // Jalur pintas: langsung ke panduan dan aksinya tanpa mengisi pertanyaan.
@@ -134,70 +123,22 @@ function Daftar({ awal }: { awal: Filter }) {
           </div>
 
           {kelompok.map((g) => (
-            <section key={g.kunci} className="mt-bagian first:mt-0" aria-labelledby={`grup-${g.kunci}`}>
-              <h2 id={`grup-${g.kunci}`} className="flex items-center gap-3 text-subjudul">
+            <section
+              key={g.kunci}
+              className="mt-bagian overflow-hidden rounded-kartu border border-garis/70 bg-white shadow-kartu first:mt-0"
+              aria-labelledby={`grup-${g.kunci}`}
+            >
+              <h2 id={`grup-${g.kunci}`} className="flex items-center gap-3 p-4 text-subjudul">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
                   <Ikon kunci={g.kunci} className="h-6 w-6" />
                 </span>
                 {label(g.kunci)}
               </h2>
-              <div className="mt-3 space-y-3">
-                {g.kartu.map((k) => {
-                  const tingkat = tingkatDari(k.id);
-                  const aksi = aksiUntukFilter(
-                    aksiKartu(
-                      k,
-                      tingkat.filter((x) => x.tampil).map((x) => x.tingkat),
-                    ),
-                    filter,
-                  );
-                  if (k.isi_menyusul) return <KartuKerangka key={k.id} kartu={k} />;
-                  if (aksi.length === 0) return <KartuBaris key={k.id} kartu={k} />;
-                  return (
-                    <article key={k.id} className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
-                      <h3 className="text-judulKartu">{k.judul}</h3>
-                      <div className="mt-2 empty:hidden">
-                        <LencanaStatus status={k.status_validasi} />
-                      </div>
-                      <p className="mt-2 text-redup">{k.situasi}</p>
-
-                      {k.isi_menyusul ? (
-                        <p className="mt-3 font-medium">{umum.isiMenyusul}</p>
-                      ) : (
-                        aksi.length > 0 && (
-                          <ul className="mt-3 space-y-2" aria-label={t.aksiKartu}>
-                            {aksi.map((a) => {
-                              const tanda = a.tingkat ? tingkat.find((x) => x.tingkat === a.tingkat) : undefined;
-                              return (
-                                <li key={a.jenis}>
-                                  <TombolAksi
-                                    jenis={a.jenis}
-                                    kartuId={k.id}
-                                    tingkat={a.tingkat}
-                                    judulKartu={k.judul}
-                                    gayaTombol="utama"
-                                    className="w-full"
-                                  />
-                                  {tanda?.ditandaiPermanen && (
-                                    <p className="mt-1">
-                                      <Tanda>{umum.menunggu}</Tanda>
-                                    </p>
-                                  )}
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        )
-                      )}
-
-                      <TombolLink to={`/kartu/${k.id}`} gayaTombol={aksi.length > 0 ? "sekunder" : "utama"} className="mt-3 w-full">
-                        {tr.bukaKartu}
-                        <span className="sr-only">: {k.judul}</span>
-                      </TombolLink>
-                    </article>
-                  );
-                })}
-              </div>
+              <ul className="divide-y divide-garis/60 border-t border-garis/60">
+                {g.kartu.map((k) => (
+                  <li key={k.id}>{k.isi_menyusul ? <KartuKerangka kartu={k} /> : <KartuBaris kartu={k} />}</li>
+                ))}
+              </ul>
             </section>
           ))}
         </>

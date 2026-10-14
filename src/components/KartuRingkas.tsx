@@ -22,7 +22,13 @@ export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRenca
   const { state } = useStore();
   const data = konten.kartu.find((k) => k.id === kartu.id);
   if (!data) return null;
-  if (kartu.isiMenyusul) return <KartuKerangka kartu={data} />;
+  if (kartu.isiMenyusul) {
+    return (
+      <div className="overflow-hidden rounded-kartu border border-garis/70 bg-white shadow-kartu">
+        <KartuKerangka kartu={data} />
+      </div>
+    );
+  }
   const Judul = judulTingkat;
   const h = state.hasil[kartu.id];
   const berikut = h?.status === "masih_sulit" ? tingkatBerikutnya(kartu, h.tingkat) : undefined;
