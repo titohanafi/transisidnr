@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import {
   BookOpen,
   ChevronDown,
+  ChevronRight,
   Circle,
   CircleAlert,
   CircleCheck,
@@ -193,19 +194,34 @@ export function Rencana() {
                       ([kunci, nomor]) => kunci.startsWith(`${k.id}:`) && nomor.length > 0,
                     );
                     const status = hasil ?? (setengah ? "sedang" : "belum");
-                    const tampilan = {
-                      cukup: { Ikon: CircleCheck, warna: "text-utama", label: konten.ui.jelajah.status.cukup },
-                      masih_sulit: { Ikon: CircleAlert, warna: "text-aksen", label: konten.ui.jelajah.status.masih_sulit },
-                      sedang: { Ikon: CircleDot, warna: "text-utama-gelap", label: t.beres.sedang },
-                      belum: { Ikon: Circle, warna: "text-redup", label: t.beres.belumDicoba },
+                    // Pil status: ikon + teks + warna lembut (arti tidak bergantung pada warna saja).
+                    const { Ikon, kelas, label } = {
+                      cukup: {
+                        Ikon: CircleCheck,
+                        kelas: "border-utama bg-utama-muda text-utama-gelap",
+                        label: konten.ui.jelajah.status.cukup,
+                      },
+                      masih_sulit: {
+                        Ikon: CircleAlert,
+                        kelas: "border-aksen bg-aksen-muda text-aksen",
+                        label: konten.ui.jelajah.status.masih_sulit,
+                      },
+                      sedang: { Ikon: CircleDot, kelas: "border-info bg-info-muda text-info", label: t.beres.sedang },
+                      belum: { Ikon: Circle, kelas: "border-garisKontrol bg-permukaan text-redup", label: t.beres.belumDicoba },
                     }[status];
-                    const { Ikon, warna } = tampilan;
                     return (
                       <li key={k.id}>
-                        <Link to={`/kartu/${k.id}`} className="tekan flex min-h-[48px] items-center gap-3 py-2">
-                          <Ikon className={`h-5 w-5 shrink-0 ${warna}`} strokeWidth={2} aria-hidden="true" focusable="false" />
-                          <span className="flex-1 leading-snug">{dataKartu(k.id)?.judul}</span>
-                          <span className={`shrink-0 text-kecil font-medium ${warna}`}>{tampilan.label}</span>
+                        <Link to={`/kartu/${k.id}`} className="tekan flex min-h-[56px] items-center gap-3 py-3">
+                          <span className="min-w-0 flex-1">
+                            <span className="block leading-snug">{dataKartu(k.id)?.judul}</span>
+                            <span
+                              className={`mt-1.5 inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-kecil font-medium ${kelas}`}
+                            >
+                              <Ikon className="h-3.5 w-3.5 shrink-0" strokeWidth={2.25} aria-hidden="true" focusable="false" />
+                              {label}
+                            </span>
+                          </span>
+                          <ChevronRight className="h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
                         </Link>
                       </li>
                     );
