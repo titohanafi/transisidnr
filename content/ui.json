@@ -16,7 +16,8 @@
         "deskripsi": "Lihat satu hal untuk hari ini dan langkah berikutnya.",
         "tombol": "Buka rencana"
       },
-      "semua": "Lihat semua panduan"
+      "semua": "Lihat semua panduan",
+      "cari": { "label": "Sudah tahu masalahnya?", "placeholder": "Cari panduan, mis. lantai licin", "tombol": "Cari" }
     },
     "pengantar": "Menyiapkan rumah agar lebih mudah dipakai, mulai dari kamar mandi. Untuk penyandang disabilitas pengguna kursi roda dan caregiver."
   },
@@ -386,6 +387,7 @@
     "ajakanRencana": "Lihat Rencana Saya",
     "aksiKartu": "Aksi untuk panduan ini",
     "semuaPanduan": "Kembali ke semua panduan",
+    "cari": { "label": "Cari panduan", "placeholder": "Mis. lantai licin", "tombol": "Cari", "hapus": "Hapus pencarian", "kosong": "Tidak ada panduan yang cocok. Coba kata lain, atau susun rencana supaya langkahnya disesuaikan dengan rumah Anda." },
     "lainnya": { "judul": "Lainnya", "alat": "Daftar alat", "ahli": "Peran ahli dan tukang" },
     "judulFilter": {
       "semua": "Semua panduan",

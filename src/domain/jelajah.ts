@@ -118,3 +118,13 @@ export function kumpulkanAhli(kartu: readonly Kartu[]): AhliItem[] {
     }))
     .filter((a) => a.panduan.length > 0);
 }
+
+const rapikanTeks = (t: string) => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+/** Semua kata yang diketik harus ada di judul atau situasi panduan (tanpa membedakan huruf besar/kecil). Kosong = semua cocok. */
+export function cocokCari(kartu: Kartu, kataKunci: string): boolean {
+  const kata = rapikanTeks(kataKunci).split(/\s+/).filter(Boolean);
+  if (kata.length === 0) return true;
+  const jerami = rapikanTeks(`${kartu.judul} ${kartu.situasi}`);
+  return kata.every((k) => jerami.includes(k));
+}

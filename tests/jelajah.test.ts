@@ -125,3 +125,19 @@ describe("daftar alat dan ahli", () => {
     expect(ahli.every((a) => a.panduan.length > 0)).toBe(true);
   });
 });
+
+import { cocokCari } from "../src/domain/jelajah";
+describe("cocokCari", () => {
+  const kartuLicin = k.kartu.find((c) => c.id === "bath-floor-slip")!;
+  it("kosong cocok dengan semua", () => {
+    expect(cocokCari(kartuLicin, "")).toBe(true);
+    expect(cocokCari(kartuLicin, "   ")).toBe(true);
+  });
+  it("tanpa membedakan huruf besar/kecil dan semua kata harus ada", () => {
+    expect(cocokCari(kartuLicin, "LANTAI licin")).toBe(true);
+    expect(cocokCari(kartuLicin, "lantai pintu")).toBe(false);
+  });
+  it("kata yang tidak ada tidak cocok", () => {
+    expect(cocokCari(kartuLicin, "xyz")).toBe(false);
+  });
+});

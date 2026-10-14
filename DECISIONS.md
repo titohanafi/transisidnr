@@ -359,3 +359,9 @@
 - Pengantar kunjungan pertama diperpendek menjadi dua kalimat ("Menyiapkan rumah agar lebih mudah dipakai, mulai dari kamar mandi. Untuk penyandang disabilitas pengguna kursi roda dan caregiver.") karena versi empat baris terasa panjang. Frasa "perubahan kondisi gerak" ikut dibuang.
 
 - Kalimat privasi dihapus dari Beranda atas permintaan pemilik. Kalimat itu tetap ada di tab Saya dan halaman Data dan privasi.
+
+## Kolom cari panduan di Beranda
+- Di bawah kartu utama (bukan di atas, agar aksi utama tetap "Buat rencana"): kolom cari tipis berlabel "Sudah tahu masalahnya?" dengan tombol kaca pembesar, dan tautan "Lihat semua panduan" di bawahnya. Menekan Enter atau tombol membuka daftar panduan dengan kata kunci sudah terisi; bila kosong, kolom cari di daftar langsung aktif.
+- Kata kunci dikirim lewat state riwayat peramban, bukan alamat, supaya tidak ada teks pengguna di URL.
+- Pencarian berjalan di perangkat (fungsi murni `cocokCari`, diuji): semua kata harus ada di judul atau situasi panduan, tanpa membedakan huruf besar/kecil. Belum mencari di isi langkah, alat, atau sinonim (mis. "grab bar" untuk pegangan); tambahkan bila uji pengguna menunjukkan orang memakai istilah lain.
+- Hasil kosong menampilkan pesan yang mengarahkan ke "Susun rencana saya".

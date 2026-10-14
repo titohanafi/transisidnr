@@ -1,4 +1,5 @@
-import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import { DaftarAhli } from "../components/DaftarAhli";
 import { DaftarAlat } from "../components/DaftarAlat";
 import { Halaman } from "../components/Halaman";
@@ -13,6 +14,7 @@ import { susunTingkat } from "../domain/engine";
 import {
   aksiKartu,
   aksiUntukFilter,
+  cocokCari,
   cocokFilter,
   kelompokkan,
   kumpulkanAhli,
@@ -37,6 +39,9 @@ function Daftar({ awal }: { awal: Filter }) {
   const { state } = useStore();
   const { konteks } = useRencana();
   const filter: Filter = awal;
+  // Kata kunci bisa datang dari kolom cari di Beranda (lewat state riwayat, bukan alamat).
+  const dariBeranda = (useLocation().state as { cari?: string } | null)?.cari;
+  const [cari, setCari] = useState(dariBeranda ?? "");
 
   const adaJawaban = Object.keys(state.asesmen.status).length > 0;
   const label = (kunci: string) =>
@@ -52,7 +57,7 @@ function Daftar({ awal }: { awal: Filter }) {
   };
 
   const kelompok = kelompokkan(
-    konten.kartu.filter((k) =>
+    konten.kartu.filter((k) => cocokCari(k, filter === "semua" ? cari : "")).filter((k) =>
       cocokFilter(
         k,
         tingkatDari(k.id)
@@ -79,6 +84,25 @@ function Daftar({ awal }: { awal: Filter }) {
       <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>
 
       {filter === "semua" && (
+        <div className="mt-4">
+          <label htmlFor="cari-panduan" className="text-sm font-semibold text-redup">
+            {t.cari.label}
+          </label>
+          <input
+            id="cari-panduan"
+            type="search"
+            value={cari}
+            onChange={(e) => setCari(e.target.value)}
+            autoComplete="off"
+            enterKeyHint="search"
+            placeholder={t.cari.placeholder}
+            autoFocus={dariBeranda === ""}
+            className="mt-1 min-h-sentuh w-full rounded-tombol border-2 border-garisKontrol bg-white px-3 text-base"
+          />
+        </div>
+      )}
+
+      {filter === "semua" && (
         <section className="mt-4 rounded-kartu bg-utama-muda p-4" aria-label={t.ajakanJudul}>
           <p>{adaJawaban ? t.ajakanSudah : t.ajakanBelum}</p>
           <TombolLink to={adaJawaban ? "/rencana" : "/mulai/1"} className="mt-3 w-full">
@@ -97,7 +121,7 @@ function Daftar({ awal }: { awal: Filter }) {
           <div aria-live="polite">
             {kelompok.length === 0 && (
               <p className="mt-5 rounded-kartu bg-draf-muda p-3 text-draf">
-                {t.kosongFilter}
+                {cari.trim() ? t.cari.kosong : t.kosongFilter}
               </p>
             )}
           </div>
