@@ -16,11 +16,7 @@
         "deskripsi": "Lihat satu hal untuk hari ini dan langkah berikutnya.",
         "tombol": "Buka rencana"
       },
-      "cakupanJudul": "Saat ini",
-      "cakupan": [
-        { "label": "Ruang", "nilai": "Kamar mandi" },
-        { "label": "Disabilitas", "nilai": "Pengguna kursi roda" }
-      ],
+      "cakupan": "Saat ini tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda.",
       "semua": "Lihat semua panduan",
       "cari": { "label": "Temukan panduan agar rumah lebih ramah disabilitas", "placeholder": "Mis. lantai licin atau pintu sempit", "tombol": "Cari" }
     }

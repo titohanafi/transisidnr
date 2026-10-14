@@ -403,3 +403,5 @@
 - Info cakupan di bawah kolom cari diganti dari dua pil menjadi satu baris teks polos berikon info (Lucide `Info`): "Ruang lingkup pengembangan saat ini: kamar mandi, pengguna kursi roda." Pil dihindari karena terbaca sebagai riwayat pencarian atau filter yang bisa diketuk. Nilai diambil dari daftar `beranda.pilih.cakupan` (label tidak ditampilkan).
 
 - Info cakupan dipindah ke atas judul kolom cari dan diringkas jadi satu baris: "Saat ini: kamar mandi, pengguna kursi roda." (judul `beranda.pilih.cakupanJudul` = "Saat ini").
+
+- Info cakupan dipindah ke bawah judul kolom cari dan ditulis ulang: "Saat ini tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda." Disimpan sebagai satu kalimat di `beranda.pilih.cakupan` (menggantikan daftar label/nilai), karena kalimat utuh lebih mudah dibaca dan diubah saat layanan bertambah.
