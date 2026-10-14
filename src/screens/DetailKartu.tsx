@@ -173,14 +173,14 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   className="mt-3 overflow-hidden rounded-kartu border border-garis bg-white"
                 >
                   <IlustrasiSolusi kartuId={kartu.id} tingkat={aktif.tingkat} />
-                  <div className="p-4">
+                  <div className="px-4 pb-4 pt-5">
                     {(() => {
                       const s = kartu.solusi![aktif.tingkat]!;
                       const x = aktif;
                       return (
                         <>
                           <p className="text-judulKartu text-tinta">{s.ringkasan}</p>
-                          <div className="mt-3 flex flex-wrap gap-2">
+                          <div className="mt-4 flex flex-wrap gap-2">
                             <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
                               <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
                               {biayaPil(s.biaya)}
