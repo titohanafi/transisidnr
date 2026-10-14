@@ -280,8 +280,6 @@ export const uiSchema = z
       semuaRekomendasi: teks,
       kosongJudul: teks,
       kosongIsi: teks,
-      belumJelas: teks,
-      total: teks,
       pendampingJudul: teks,
       bukaKartu: teks,
       cocokSewa: teks,

@@ -10,7 +10,6 @@ import {
   Flag,
   Printer,
   Sun,
-  Wallet,
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -27,7 +26,6 @@ import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
 import { terapkanHasil } from "../domain/hasil";
 import { track } from "../lib/events";
-import { formatRentang } from "../lib/format";
 import { kunciHari } from "../lib/tanggal";
 import { Jelajah } from "./Jelajah";
 import { isi } from "../lib/teks";
@@ -258,24 +256,6 @@ export function Rencana() {
               <p role="note" className="rounded-kartu border border-draf bg-draf-muda p-4 text-draf">
                 {t.belumAdaSiap}
               </p>
-            )}
-
-            {(rencana.total.diketahui || rencana.kebutuhanJangkaPanjangBelumJelas) && (
-              <div className="flex items-start gap-3 rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda text-utama">
-                  <Wallet className="h-6 w-6" strokeWidth={2} aria-hidden="true" focusable="false" />
-                </span>
-                <div className="min-w-0 flex-1 self-center">
-                  {rencana.total.diketahui && (
-                    <p className="font-medium">
-                      {isi(t.total, { rentang: formatRentang({ min: rencana.total.minRp, max: rencana.total.maksRp }) })}
-                    </p>
-                  )}
-                  {rencana.kebutuhanJangkaPanjangBelumJelas && (
-                    <p className={`text-kecil text-redup ${rencana.total.diketahui ? "mt-1" : ""}`}>{t.belumJelas}</p>
-                  )}
-                </div>
-              </div>
             )}
 
             {ringan ? (
