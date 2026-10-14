@@ -33,22 +33,25 @@ const GAMBAR: Record<KunciKelompok, () => JSX.Element> = {
   wudhu: () => (
     <>
       <Dasar />
-      <path d="M30 40V30q0-8 8-8h26q8 0 8 8v4" fill="none" strokeWidth="6" strokeLinecap="round" className="stroke-utama" />
-      <rect x="60" y="30" width="12" height="9" rx="2" className="fill-utama" />
-      <path d="M66 46q-5 7-5 11a5 5 0 0010 0q0-4-5-11z" className="fill-daun" />
-      <path d="M66 62q-3 4-3 6.5a3 3 0 006 0q0-2.500-3-6.500z" className="fill-daun" opacity="0.6" />
-      <path d="M34 70h26l-3 18H37z" className="fill-utama" />
-      <rect x="31" y="66" width="32" height="6" rx="3" className="fill-utama" />
+      <path d="M22 26h24q10 0 10 10v6" fill="none" strokeWidth="6" strokeLinecap="round" className="stroke-utama" />
+      <rect x="48" y="42" width="12" height="7" rx="2" className="fill-utama" />
+      <path d="M54 52q-4 6-4 9.500a4 4 0 008 0q0-3.500-4-9.500z" className="fill-daun" />
+      <path d="M54 68q-3 4-3 6a3 3 0 006 0q0-2-3-6z" className="fill-daun" opacity="0.6" />
+      <path d="M24 78h50q0 12-13 12H37q-13 0-13-12z" className="fill-utama" />
+      <rect x="22" y="74" width="54" height="6" rx="3" className="fill-utama" />
+      <rect x="82" y="62" width="20" height="6" rx="3" className="fill-daun" />
+      <path d="M86 68v20M98 68v20" strokeWidth="4" strokeLinecap="round" className="stroke-daun" />
     </>
   ),
   grooming: () => (
     <>
       <Dasar />
-      <circle cx="56" cy="42" r="23" strokeWidth="6" className="fill-white stroke-utama" />
-      <path d="M46 34q4-6 11-6" fill="none" strokeWidth="3" strokeLinecap="round" className="stroke-daun" />
-      <rect x="53" y="64" width="6" height="22" rx="3" className="fill-utama" />
-      <path d="M90 22l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" className="fill-daun" />
-      <path d="M26 66l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" className="fill-daun" opacity="0.6" />
+      <rect x="40" y="10" width="40" height="42" rx="8" strokeWidth="5" className="fill-white stroke-utama" />
+      <path d="M50 24l10-8M50 36l20-16" fill="none" strokeWidth="3" strokeLinecap="round" className="stroke-daun" />
+      <rect x="26" y="62" width="68" height="8" rx="4" className="fill-utama" />
+      <path d="M36 70h48q0 12-12 12H48q-12 0-12-12z" className="fill-utama" />
+      <path d="M60 62v-6q0-4 4-4h6" fill="none" strokeWidth="4" strokeLinecap="round" className="stroke-daun" />
+      <path d="M98 20l2.500 6.500 6.500 2.500-6.500 2.500L98 38l-2.500-6.500L89 29l6.500-2.500z" className="fill-daun" />
     </>
   ),
   umum: () => (
