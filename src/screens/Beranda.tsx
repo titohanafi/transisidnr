@@ -32,11 +32,14 @@ export function Beranda() {
         <label htmlFor="cari-beranda" className="text-2xl font-bold leading-snug text-tinta">
           {pilih.cari.label}
         </label>
-        <p className="mt-1 flex items-start gap-2 text-sm text-redup">
+        <p className="mt-3 flex items-start gap-2 text-sm text-redup">
           <Info className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
           <span>{pilih.cakupan}</span>
         </p>
-        <div className="mt-2 flex gap-3">
+        <Link to="/jelajah" className="inline-flex min-h-sentuh items-center text-utama underline">
+          {pilih.semua}
+        </Link>
+        <div className="flex gap-3">
           <input
             id="cari-beranda"
             name="q"
@@ -72,12 +75,9 @@ export function Beranda() {
         </Link>
       </section>
 
-      <Link to="/jelajah" className="mt-2 inline-flex min-h-sentuh items-center text-utama underline">
-        {pilih.semua}
-      </Link>
 
 
-      <section className="mt-3">
+      <section className="mt-6">
         <CheckIn />
       </section>
     </Halaman>
