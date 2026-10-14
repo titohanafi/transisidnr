@@ -290,7 +290,7 @@ export const uiSchema = z
       belumAdaSiap: teks,
       ringan: z.object({ catatan: teks, lihatNanti: teks }),
       kemajuan: teks,
-      beres: z.object({ judul: teks, ringkasan: teks, kosong: teks, lihat: teks }),
+      beres: z.object({ judul: teks, ringkasan: teks, penjelasan: teks, kosong: teks, lihat: teks }),
       perluLagi: teks,
     }),
     kartu: z.object({

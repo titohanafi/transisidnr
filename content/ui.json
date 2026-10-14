@@ -225,6 +225,7 @@
     "beres": {
       "judul": "Yang sudah beres",
       "ringkasan": "{n} dari {total} panduan beres",
+      "penjelasan": "Tiap panduan membahas satu masalah di rumah. Panduan dihitung beres setelah Anda menandainya \"Sudah cukup\" di dalam panduan itu. Yang masih sulit diarahkan ke pilihan berikutnya.",
       "kosong": "Belum ada yang ditandai beres. Setelah mencoba satu panduan, catat hasilnya di sana.",
       "lihat": "Sudah beres ({n})"
     },
