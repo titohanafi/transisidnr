@@ -29,7 +29,7 @@ export function Beranda() {
           navigate("/jelajah", { state: { cari: typeof q === "string" ? q.trim() : "" } });
         }}
       >
-        <label htmlFor="cari-beranda" className="text-sm font-semibold text-redup">
+        <label htmlFor="cari-beranda" className="text-lg font-bold leading-snug text-tinta">
           {pilih.cari.label}
         </label>
         <div className="mt-1 flex gap-2">
