@@ -1,7 +1,6 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { HiasanLingkaran } from "./KartuHero";
 import { BilahTab, namaMenu } from "./BilahTab";
 import { konten } from "../domain/content";
 
@@ -15,7 +14,7 @@ export function Halaman({
   kepala,
   judulTersembunyi = false,
   atasJudul,
-  kepalaHero = false,
+  kepalaPita = false,
   latarPutih = false,
 }: {
   judul: string;
@@ -27,8 +26,8 @@ export function Halaman({
   judulTersembunyi?: boolean;
   /** Elemen di atas judul di dalam kepala (mis. ikon). */
   atasJudul?: ReactNode;
-  /** Kepala berupa hero teal selebar layar (tanpa kotak) dengan hiasan lingkaran dan teks putih. */
-  kepalaHero?: boolean;
+  /** Kepala berupa pita abu kehijauan selebar layar (tanpa kotak), seperti pita pencarian di Beranda. */
+  kepalaPita?: boolean;
   /** Latar halaman putih (bawaan: abu kehijauan muda). Dipakai Beranda, yang punya pita pencarian berwarna. */
   latarPutih?: boolean;
 }) {
@@ -43,13 +42,7 @@ export function Halaman({
   }, [judul, kunciFokus]);
 
   const h1Elemen = (
-    <h1
-      ref={h1}
-      tabIndex={-1}
-      className={
-        judul === app.nama || judulTersembunyi ? "sr-only" : `mb-1 text-judul outline-none ${kepalaHero ? "text-white" : "text-tinta"}`
-      }
-    >
+    <h1 ref={h1} tabIndex={-1} className={judul === app.nama || judulTersembunyi ? "sr-only" : "mb-1 text-judul text-tinta outline-none"}>
       {judul}
     </h1>
   );
@@ -97,13 +90,10 @@ export function Halaman({
         {/* Di Beranda judulnya sama dengan nama aplikasi di header: tetap ada untuk pembaca layar, tidak ditampilkan dua kali. */}
         {kepala ? (
           <>
-            <div className={kepalaHero ? "relative overflow-hidden bg-utama px-4 pb-6 pt-6 text-white" : "px-4 pb-5 pt-6"}>
-              {kepalaHero && <HiasanLingkaran />}
-              <div className="relative">
-                {atasJudul}
-                {h1Elemen}
-                {kepala}
-              </div>
+            <div className={kepalaPita ? "bg-permukaan px-4 pb-6 pt-6" : "px-4 pb-5 pt-6"}>
+              {atasJudul}
+              {h1Elemen}
+              {kepala}
             </div>
             <div className="flex flex-1 flex-col px-4 pt-6">{children}</div>
           </>

@@ -64,7 +64,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   const istilah = istilahDalam(JSON.stringify(kartu), konten.ui.istilah);
 
   const atasJudul = (
-    <span className="mb-3 flex h-14 w-14 items-center justify-center rounded-kartu bg-white">
+    <span className="mb-3 flex h-14 w-14 items-center justify-center rounded-kartu bg-white shadow-kartu">
       <Ikon kunci={kunciKelompok(kartu)} className="h-9 w-9" />
     </span>
   );
@@ -98,7 +98,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   );
 
   return (
-    <Halaman judul={kartu.judul} kepala={kepala} atasJudul={atasJudul} kepalaHero latarPutih>
+    <Halaman judul={kartu.judul} kepala={kepala} atasJudul={atasJudul} kepalaPita latarPutih>
       <div className="flex flex-col gap-bagian">
         {kartu.isi_menyusul || !kartu.solusi ? (
           <p className="rounded-kartu border border-draf bg-draf-muda p-4 font-medium text-draf">{umum.isiMenyusul}</p>
