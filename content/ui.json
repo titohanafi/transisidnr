@@ -223,11 +223,13 @@
     },
     "kemajuan": "Anda sudah menyelesaikan {n} langkah. Terus berjalan, pelan-pelan juga maju.",
     "beres": {
-      "judul": "Yang sudah beres",
-      "ringkasan": "{n} dari {total} panduan beres",
-      "penjelasan": "Tiap panduan membahas satu masalah di rumah. Panduan dihitung beres setelah Anda menandainya \"Sudah cukup\" di dalam panduan itu. Yang masih sulit diarahkan ke pilihan berikutnya.",
-      "kosong": "Belum ada yang ditandai beres. Setelah mencoba satu panduan, catat hasilnya di sana.",
-      "lihat": "Sudah beres ({n})"
+      "judul": "Yang sudah teratasi",
+      "ringkasan": "{n} dari {total} masalah teratasi",
+      "penjelasan": "Tiap panduan membahas satu masalah di rumah. Masalah dihitung teratasi setelah Anda menandai \"Sudah cukup\" di dalam panduannya. Yang masih sulit diarahkan ke pilihan berikutnya.",
+      "kosong": "Belum ada masalah yang teratasi. Setelah mencoba satu panduan, catat hasilnya di sana.",
+      "rincian": "Lihat rincian",
+      "belumDicoba": "Belum dicoba",
+      "lihat": "Sudah teratasi ({n})"
     },
     "perluLagi": "Perlu langkah berikutnya"
   },
@@ -336,7 +338,7 @@
         "judul": "Bagaimana hasilnya?",
         "cukup": "Sudah cukup",
         "sulit": "Masih sulit",
-        "balasCukup": "Kabar baik. Panduan ini ditandai beres di Panduan Saya.",
+        "balasCukup": "Kabar baik. Panduan ini ditandai teratasi di Panduan Saya.",
         "balasSulit": "Tidak apa-apa. Pilihan berikutnya sedikit lebih besar, dan tetap boleh Anda tunda.",
         "berikutnya": "Lihat pilihan berikutnya",
         "terakhir": "Ini sudah pilihan terakhir di panduan ini. Pertimbangkan bertanya ke ahli lewat menu Dukungan."
@@ -396,7 +398,7 @@
   "jelajah": {
     "judul": "Semua panduan",
     "pengantar": "Buka panduan untuk melihat langkahnya. Bila sudah tahu ingin mencari alat atau mengenali peran ahli dan tukang, pilih saringan di bawah. Urutan panduan tidak dipengaruhi pembayaran.",
-    "status": { "cukup": "Beres", "masih_sulit": "Masih sulit" },
+    "status": { "cukup": "Teratasi", "masih_sulit": "Masih sulit" },
     "kosongFilter": "Belum ada panduan dengan isi lengkap untuk pilihan ini. Isi panduan masih disusun.",
     "caregiver": "Untuk caregiver",
     "aksiKartu": "Aksi untuk panduan ini",

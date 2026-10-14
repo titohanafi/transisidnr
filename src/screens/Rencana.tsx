@@ -1,5 +1,17 @@
 import { useEffect } from "react";
-import { BookOpen, CircleCheck, DoorOpen, Flag, Printer, Sun, Wallet, type LucideIcon } from "lucide-react";
+import {
+  BookOpen,
+  ChevronDown,
+  Circle,
+  CircleAlert,
+  CircleCheck,
+  DoorOpen,
+  Flag,
+  Printer,
+  Sun,
+  Wallet,
+  type LucideIcon,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { BarisTautan } from "../components/BarisTautan";
 import { BilahKemajuan } from "../components/BilahKemajuan";
@@ -166,6 +178,41 @@ export function Rencana() {
               className="mt-3"
             />
             <p className="mt-3 text-kecil text-redup">{h.beres.length === 0 ? t.beres.kosong : t.beres.penjelasan}</p>
+            <details className="group mt-2 border-t border-garis/60">
+              <summary className="flex min-h-sentuh cursor-pointer list-none items-center justify-between gap-2 font-semibold text-utama [&::-webkit-details-marker]:hidden">
+                <span>{t.beres.rincian}</span>
+                <ChevronDown
+                  className="h-5 w-5 shrink-0 motion-safe:transition-transform group-open:rotate-180"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                  focusable="false"
+                />
+              </summary>
+              <ul className="divide-y divide-garis/60">
+                {rencana.daftar
+                  .filter((k) => !k.isiMenyusul)
+                  .map((k) => {
+                    const hasil = state.hasil[k.id]?.status;
+                    const Ikon = hasil === "cukup" ? CircleCheck : hasil === "masih_sulit" ? CircleAlert : Circle;
+                    const warna = hasil === "cukup" ? "text-utama" : hasil === "masih_sulit" ? "text-aksen" : "text-redup";
+                    return (
+                      <li key={k.id}>
+                        <Link to={`/kartu/${k.id}`} className="tekan flex min-h-[48px] items-center gap-3 py-2">
+                          <Ikon className={`h-5 w-5 shrink-0 ${warna}`} strokeWidth={2} aria-hidden="true" focusable="false" />
+                          <span className="flex-1 leading-snug">{dataKartu(k.id)?.judul}</span>
+                          <span className={`shrink-0 text-kecil font-medium ${warna}`}>
+                            {hasil === "cukup"
+                              ? konten.ui.jelajah.status.cukup
+                              : hasil === "masih_sulit"
+                                ? konten.ui.jelajah.status.masih_sulit
+                                : t.beres.belumDicoba}
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </details>
           </section>
         )}
 
