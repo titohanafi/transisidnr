@@ -23,5 +23,4 @@ if (import.meta.env.DEV) {
 export const konten = mentah as unknown as Konten;
 
 // Angka teknis kartu draf hanya tampil bila flag dev menyala (tidak pernah di produksi).
-export const TAMPILKAN_ANGKA_DRAF =
-  import.meta.env.DEV && import.meta.env.VITE_TAMPILKAN_ANGKA_DRAF === "true";
+export const TAMPILKAN_ANGKA_DRAF = import.meta.env.DEV && import.meta.env.VITE_TAMPILKAN_ANGKA_DRAF === "true";

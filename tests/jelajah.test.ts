@@ -9,12 +9,21 @@ const root = join(__dirname, "..", "content");
 const baca = (p: string): unknown => JSON.parse(readFileSync(join(root, p), "utf8"));
 const k = validasiKonten({
   kartu: readdirSync(join(root, "kartu")).map((f) => baca(join("kartu", f))),
-  asesmen: baca("asesmen.json"), config: baca("config.json"), onboarding: baca("onboarding.json"), ui: baca("ui.json"),
+  asesmen: baca("asesmen.json"),
+  config: baca("config.json"),
+  onboarding: baca("onboarding.json"),
+  ui: baca("ui.json"),
 });
 const kartu = (id: string) => k.kartu.find((x) => x.id === id)!;
 const semua = [...TINGKAT];
 // Kartu kerangka sintetis, supaya tes tidak bergantung pada kartu mana yang masih kerangka di content/.
-const kerangka = (id = "kerangka-uji") => ({ ...structuredClone(kartu("bath-door")), id, isi_menyusul: true as const, solusi: undefined, bantuan: undefined });
+const kerangka = (id = "kerangka-uji") => ({
+  ...structuredClone(kartu("bath-door")),
+  id,
+  isi_menyusul: true as const,
+  solusi: undefined,
+  bantuan: undefined,
+});
 
 describe("aksi langsung dari kartu", () => {
   it("kartu lengkap: sendiri, beli, tukang memakai tingkat teringan yang mendukung, plus ahli", () => {
@@ -66,7 +75,10 @@ describe("aksi di daftar", () => {
   it("tanpa filter tidak ada tombol aksi (cukup buka panduan)", () => {
     expect(aksiUntukFilter(aksi, "semua")).toEqual([]);
   });
-  it.each([["alat", "beli"], ["ahli", "ahli"]] as const)("filter %s hanya menampilkan aksi %s", (f, jenis) => {
+  it.each([
+    ["alat", "beli"],
+    ["ahli", "ahli"],
+  ] as const)("filter %s hanya menampilkan aksi %s", (f, jenis) => {
     expect(aksiUntukFilter(aksi, f).map((a) => a.jenis)).toEqual([jenis]);
   });
   it("lakukan sendiri tidak pernah ditampilkan di daftar", () => {
@@ -75,7 +87,10 @@ describe("aksi di daftar", () => {
 });
 
 describe("pengelompokan", () => {
-  const g = kelompokkan(k.kartu, k.asesmen.aktivitas.map((a) => a.id));
+  const g = kelompokkan(
+    k.kartu,
+    k.asesmen.aktivitas.map((a) => a.id),
+  );
   it("mengikuti urutan aktivitas asesmen, pendamping di akhir, tanpa kelompok kosong", () => {
     expect(g.map((x) => x.kunci)).toEqual(["mandi", "toilet", "wudhu", "grooming", "umum", "caregiver"]);
   });
@@ -85,14 +100,25 @@ describe("pengelompokan", () => {
   });
   it("dalam kelompok, kartu berisi lebih dulu daripada kerangka", () => {
     const k2 = [...k.kartu, { ...kerangka("a-kerangka"), tag: { ...kartu("bath-grab-bar").tag } }];
-    const toilet = kelompokkan(k2, k.asesmen.aktivitas.map((a) => a.id)).find((x) => x.kunci === "toilet")!;
+    const toilet = kelompokkan(
+      k2,
+      k.asesmen.aktivitas.map((a) => a.id),
+    ).find((x) => x.kunci === "toilet")!;
     expect(toilet.kartu.at(-1)!.id).toBe("a-kerangka");
     expect(toilet.kartu.slice(0, -1).every((c) => !c.isi_menyusul)).toBe(true);
   });
   it("urutan tidak bergantung pada link atau afiliasi", () => {
     const salinan = structuredClone(k.kartu);
-    for (const c of salinan) for (const t of TINGKAT) for (const b of c.solusi?.[t]?.barang ?? []) { b.afiliasi = true; b.link = "https://x.example"; }
-    const g2 = kelompokkan(salinan, k.asesmen.aktivitas.map((a) => a.id));
+    for (const c of salinan)
+      for (const t of TINGKAT)
+        for (const b of c.solusi?.[t]?.barang ?? []) {
+          b.afiliasi = true;
+          b.link = "https://x.example";
+        }
+    const g2 = kelompokkan(
+      salinan,
+      k.asesmen.aktivitas.map((a) => a.id),
+    );
     expect(g2.map((x) => x.kartu.map((c) => c.id))).toEqual(g.map((x) => x.kartu.map((c) => c.id)));
   });
 });
@@ -115,7 +141,12 @@ describe("daftar alat dan ahli", () => {
   });
   it("urutan alat tidak berubah oleh tautan atau afiliasi", () => {
     const salinan = structuredClone(k.kartu);
-    for (const c of salinan) for (const t of TINGKAT) for (const b of c.solusi?.[t]?.barang ?? []) { b.afiliasi = true; b.link = "https://x.example"; }
+    for (const c of salinan)
+      for (const t of TINGKAT)
+        for (const b of c.solusi?.[t]?.barang ?? []) {
+          b.afiliasi = true;
+          b.link = "https://x.example";
+        }
     expect(kumpulkanAlat(salinan, tampilSemua).map((a) => a.nama)).toEqual(kumpulkanAlat(k.kartu, tampilSemua).map((a) => a.nama));
   });
   it("ahli: tukang ikut dihitung dan tampil pertama, tiap jenis punya panduan", () => {

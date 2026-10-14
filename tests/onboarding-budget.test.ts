@@ -8,7 +8,10 @@ const root = join(__dirname, "..", "content");
 const baca = (p: string): unknown => JSON.parse(readFileSync(join(root, p), "utf8"));
 const mentah = (): KontenMentah => ({
   kartu: readdirSync(join(root, "kartu")).map((f) => baca(join("kartu", f))),
-  asesmen: baca("asesmen.json"), config: baca("config.json"), onboarding: baca("onboarding.json"), ui: baca("ui.json"),
+  asesmen: baca("asesmen.json"),
+  config: baca("config.json"),
+  onboarding: baca("onboarding.json"),
+  ui: baca("ui.json"),
 });
 
 describe("pilihan budget dibaca dari config.json", () => {
@@ -48,7 +51,10 @@ describe("pilihan budget dibaca dari config.json", () => {
     const m = mentah();
     const dua = structuredClone(m.onboarding) as { pertanyaan: Record<string, unknown>[] };
     const b = dua.pertanyaan.find((x) => x.id === "budget")!;
-    b.pilihan = [{ id: "a", label: "A" }, { id: "b", label: "B" }];
+    b.pilihan = [
+      { id: "a", label: "A" },
+      { id: "b", label: "B" },
+    ];
     expect(() => validasiKonten({ ...m, onboarding: dua })).toThrow(/tepat satu/);
 
     const nol = structuredClone(m.onboarding) as { pertanyaan: Record<string, unknown>[] };

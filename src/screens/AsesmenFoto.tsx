@@ -18,10 +18,7 @@ export function AsesmenFoto() {
   const input = useRef<HTMLInputElement>(null);
   const [galat, setGalat] = useState<string | null>(null);
 
-  const jumlah = daftarPertanyaan(
-    konten.asesmen,
-    state.asesmen.prioritas,
-  ).length;
+  const jumlah = daftarPertanyaan(konten.asesmen, state.asesmen.prioritas).length;
 
   const pilih = async (berkas: File | undefined) => {
     if (!berkas) return;
@@ -51,13 +48,7 @@ export function AsesmenFoto() {
         </button>
       )}
 
-      {foto && (
-        <img
-          src={foto}
-          alt={t.alt}
-          className="mt-4 max-h-64 w-full rounded-kartu border border-garis object-contain"
-        />
-      )}
+      {foto && <img src={foto} alt={t.alt} className="mt-4 max-h-64 w-full rounded-kartu border border-garis object-contain" />}
 
       <input
         ref={input}

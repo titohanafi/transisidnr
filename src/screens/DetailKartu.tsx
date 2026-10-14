@@ -48,7 +48,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   const tampil = tingkat.filter((x) => x.tampil);
   const adaDisembunyikan = tingkat.some((x) => x.disembunyikanHunian);
 
-  const awal = tampil.find((x) => x.tingkat === tingkatAwal) ?? tingkatUtama({ id: kartu.id, prioritas: false, isiMenyusul: false, tingkat });
+  const awal =
+    tampil.find((x) => x.tingkat === tingkatAwal) ?? tingkatUtama({ id: kartu.id, prioritas: false, isiMenyusul: false, tingkat });
   const [terbuka, setTerbuka] = useState<Set<Tingkat>>(new Set(awal ? [awal.tingkat] : []));
   const ubah = (x: Tingkat) =>
     setTerbuka((s) => {
@@ -123,7 +124,10 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                       <ol className="mt-2 space-y-2">
                         {s.langkah.map((l, i) => (
                           <li key={l} className="flex gap-3">
-                            <span aria-hidden="true" className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-utama-muda text-sm font-bold text-utama-gelap">
+                            <span
+                              aria-hidden="true"
+                              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-utama-muda text-sm font-bold text-utama-gelap"
+                            >
                               {i + 1}
                             </span>
                             <span>{l}</span>
@@ -169,7 +173,11 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                                 <p className="mt-1">
                                   <span className="font-semibold">{t.harga}:</span> {b.kisaran_harga ?? umum.menyusul}
                                 </p>
-                                {b.afiliasi && <p className="mt-1"><Tanda>{t.afiliasi}</Tanda></p>}
+                                {b.afiliasi && (
+                                  <p className="mt-1">
+                                    <Tanda>{t.afiliasi}</Tanda>
+                                  </p>
+                                )}
                               </li>
                             ))}
                           </ul>
@@ -177,15 +185,17 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                       )}
                       <div className="mt-6 flex flex-col gap-2">
                         {/* Tukang tidak diulang di sini: tombolnya ada di "Kenali peran ahli", pada baris Tukang. */}
-                        {aksiTersedia(kartu, x.tingkat).filter((j) => j !== "tukang").map((j) => (
-                          <TombolAksi
-                            key={j}
-                            jenis={j}
-                            kartuId={kartu.id}
-                            tingkat={x.tingkat}
-                            gayaTombol={j === "sendiri" ? "utama" : "sekunder"}
-                          />
-                        ))}
+                        {aksiTersedia(kartu, x.tingkat)
+                          .filter((j) => j !== "tukang")
+                          .map((j) => (
+                            <TombolAksi
+                              key={j}
+                              jenis={j}
+                              kartuId={kartu.id}
+                              tingkat={x.tingkat}
+                              gayaTombol={j === "sendiri" ? "utama" : "sekunder"}
+                            />
+                          ))}
                       </div>
                     </div>
                   </div>

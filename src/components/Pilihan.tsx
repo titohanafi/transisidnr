@@ -1,7 +1,16 @@
 import type { ReactNode } from "react";
 
 // Satu pilihan besar (radio atau checkbox) dengan area sentuh luas.
-export function Pilihan({ tipe, nama, label, aktif, nonaktif, onUbah, ikon, lencana }: {
+export function Pilihan({
+  tipe,
+  nama,
+  label,
+  aktif,
+  nonaktif,
+  onUbah,
+  ikon,
+  lencana,
+}: {
   tipe: "radio" | "checkbox";
   nama: string;
   label: string;
@@ -19,14 +28,7 @@ export function Pilihan({ tipe, nama, label, aktif, nonaktif, onUbah, ikon, lenc
         aktif ? "border-utama bg-utama-muda font-semibold" : "border-garis bg-white shadow-kartu"
       } ${nonaktif ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
     >
-      <input
-        type={tipe}
-        name={nama}
-        checked={aktif}
-        disabled={nonaktif}
-        onChange={onUbah}
-        className="h-6 w-6 shrink-0 accent-utama"
-      />
+      <input type={tipe} name={nama} checked={aktif} disabled={nonaktif} onChange={onUbah} className="h-6 w-6 shrink-0 accent-utama" />
       {ikon}
       <span className="flex-1">{label}</span>
       {lencana}
@@ -35,12 +37,7 @@ export function Pilihan({ tipe, nama, label, aktif, nonaktif, onUbah, ikon, lenc
 }
 
 /** Pilihan ringkas berbentuk pil, untuk kelompok pilihan pendek yang boleh membungkus ke baris berikutnya. */
-export function PilihanPil({ nama, label, aktif, onUbah }: {
-  nama: string;
-  label: string;
-  aktif: boolean;
-  onUbah: () => void;
-}) {
+export function PilihanPil({ nama, label, aktif, onUbah }: { nama: string; label: string; aktif: boolean; onUbah: () => void }) {
   return (
     <label className="relative inline-flex">
       <input type="radio" name={nama} checked={aktif} onChange={onUbah} className="peer sr-only" />

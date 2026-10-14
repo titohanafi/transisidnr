@@ -8,8 +8,7 @@ const { kartu: tk, umum, jelajah: tj, aksi } = konten.ui;
 const t = aksi.beli;
 
 // Spesifikasi dan harga sama-sama belum ada: cukup satu baris, bukan dua baris "menyusul".
-const belumAdaDetail = (b: AlatItem) =>
-  b.kisaran_harga === null && /^menyusul/i.test(b.spesifikasi);
+const belumAdaDetail = (b: AlatItem) => b.kisaran_harga === null && /^menyusul/i.test(b.spesifikasi);
 
 // Daftar alat dari semua panduan. Cara cek kecocokan tampil di atas tombol; tombol produk aktif hanya bila ada tautan.
 export function DaftarAlat({ alat }: { alat: AlatItem[] }) {
@@ -17,10 +16,7 @@ export function DaftarAlat({ alat }: { alat: AlatItem[] }) {
   return (
     <ul className="mt-5 space-y-4">
       {alat.map((b) => (
-        <li
-          key={b.nama}
-          className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4"
-        >
+        <li key={b.nama} className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4">
           <h2 className="text-subjudul">{b.nama}</h2>
           <p className="mt-2 rounded-tombol bg-aksen-muda p-2">
             <span className="font-semibold">{tk.cek}:</span> {b.cek_kecocokan}
@@ -30,12 +26,10 @@ export function DaftarAlat({ alat }: { alat: AlatItem[] }) {
           ) : (
             <>
               <p className="mt-2">
-                <span className="font-semibold">{tk.spesifikasi}:</span>{" "}
-                {b.spesifikasi}
+                <span className="font-semibold">{tk.spesifikasi}:</span> {b.spesifikasi}
               </p>
               <p className="mt-1">
-                <span className="font-semibold">{tk.harga}:</span>{" "}
-                {b.kisaran_harga ?? umum.menyusul}
+                <span className="font-semibold">{tk.harga}:</span> {b.kisaran_harga ?? umum.menyusul}
               </p>
             </>
           )}
@@ -50,10 +44,7 @@ export function DaftarAlat({ alat }: { alat: AlatItem[] }) {
             {b.panduan.map((p, i) => (
               <span key={p.id}>
                 {i > 0 && ", "}
-                <Link
-                  to={`/kartu/${p.id}/${p.tingkat}`}
-                  className="text-utama underline"
-                >
+                <Link to={`/kartu/${p.id}/${p.tingkat}`} className="text-utama underline">
                   {p.judul}
                 </Link>
               </span>
@@ -64,11 +55,7 @@ export function DaftarAlat({ alat }: { alat: AlatItem[] }) {
               <a
                 href={b.link}
                 target="_blank"
-                rel={
-                  b.afiliasi
-                    ? "noopener noreferrer sponsored"
-                    : "noopener noreferrer"
-                }
+                rel={b.afiliasi ? "noopener noreferrer sponsored" : "noopener noreferrer"}
                 onClick={() =>
                   track("aksi_klik", {
                     jenis: "produk",

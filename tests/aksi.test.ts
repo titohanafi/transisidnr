@@ -12,13 +12,23 @@ const root = join(__dirname, "..", "content");
 const baca = (p: string): unknown => JSON.parse(readFileSync(join(root, p), "utf8"));
 const k = validasiKonten({
   kartu: readdirSync(join(root, "kartu")).map((f) => baca(join("kartu", f))),
-  asesmen: baca("asesmen.json"), config: baca("config.json"), onboarding: baca("onboarding.json"), ui: baca("ui.json"),
+  asesmen: baca("asesmen.json"),
+  config: baca("config.json"),
+  onboarding: baca("onboarding.json"),
+  ui: baca("ui.json"),
 });
 const t = k.ui.aksi.brief;
 const kartu = k.kartu.find((x) => x.id === "bath-transfer-toilet")!;
 const bahan = (o: Partial<BahanBrief> = {}): BahanBrief => ({
-  kartu, tingkat: "renovasi", hunianId: "milik_sendiri", hunianLabel: "Milik sendiri",
-  budgetLabel: "Rp 2 - 10 juta", budgetBelumTahu: false, adaFoto: false, ruanganLabel: "Kamar mandi", ...o,
+  kartu,
+  tingkat: "renovasi",
+  hunianId: "milik_sendiri",
+  hunianLabel: "Milik sendiri",
+  budgetLabel: "Rp 2 - 10 juta",
+  budgetBelumTahu: false,
+  adaFoto: false,
+  ruanganLabel: "Kamar mandi",
+  ...o,
 });
 
 describe("aksi per tingkat", () => {
@@ -80,7 +90,9 @@ describe("brief untuk tukang", () => {
     for (const kata of ["amputasi", "protesis", "bulan", "kejadian", "nyeri", "luka"]) expect(semua).not.toContain(kata);
   });
   it("butir yang tidak dicentang atau dikosongkan tidak ikut", () => {
-    const b = butirBrief(bahan(), t).map((x) => (x.id === "budget" ? { ...x, ikut: false } : x.id === "ruangan" ? { ...x, teks: "  " } : x));
+    const b = butirBrief(bahan(), t).map((x) =>
+      x.id === "budget" ? { ...x, ikut: false } : x.id === "ruangan" ? { ...x, teks: "  " } : x,
+    );
     const x = susunBrief(b);
     expect(x).not.toContain("Budget");
     expect(x).not.toContain("Ruangan");

@@ -17,13 +17,22 @@ const config: Config = {
 };
 
 const tag = (aktivitas: Aktivitas): Kartu["tag"] => ({
-  fase: [], ruangan: ["kamar_mandi"], aktivitas: [aktivitas], alat_bantu: ["kursi_roda"],
-  hunian: ["milik_sendiri"], tingkat_biaya: [], kondisi: [],
+  fase: [],
+  ruangan: ["kamar_mandi"],
+  aktivitas: [aktivitas],
+  alat_bantu: ["kursi_roda"],
+  hunian: ["milik_sendiri"],
+  tingkat_biaya: [],
+  kondisi: [],
 });
 
 const tingkat = (sifat: "sementara" | "permanen", kisaran: string | null, langkah: string): TingkatSolusi => ({
-  ringkasan: "r", langkah: [langkah, "langkah kedua"], sifat,
-  biaya: { kisaran_rp: kisaran }, usaha: { waktu: null, kesulitan: null }, barang: [],
+  ringkasan: "r",
+  langkah: [langkah, "langkah kedua"],
+  sifat,
+  biaya: { kisaran_rp: kisaran },
+  usaha: { waktu: null, kesulitan: null },
+  barang: [],
 });
 
 function kartu(id: string, akt: Aktivitas, solusi: Kartu["solusi"], extra: Partial<Kartu> = {}): Kartu {
@@ -37,12 +46,21 @@ const lengkap = (id: string, akt: Aktivitas, kisaran: string | null = "Rp 0") =>
     renovasi: tingkat("permanen", null, "renovasi"),
   });
 
-const pendamping = kartu("pendamping", "toilet", { tanpa_biaya: tingkat("sementara", "Rp 0", "tanya dulu") }, {
-  tag: { ...tag("toilet"), peran: ["caregiver"] },
-});
+const pendamping = kartu(
+  "pendamping",
+  "toilet",
+  { tanpa_biaya: tingkat("sementara", "Rp 0", "tanya dulu") },
+  {
+    tag: { ...tag("toilet"), peran: ["caregiver"] },
+  },
+);
 
 const soal = (id: string, aktivitas: Aktivitas, kartuId: string[]) => ({
-  id, aktivitas, pertanyaan: "?", penjelasan: "p", memicu_kartu: kartuId,
+  id,
+  aktivitas,
+  pertanyaan: "?",
+  penjelasan: "p",
+  memicu_kartu: kartuId,
 });
 
 const asesmen: Asesmen = {
@@ -57,14 +75,23 @@ const asesmen: Asesmen = {
 };
 
 const semuaKartu = [
-  lengkap("a", "mandi"), lengkap("b", "toilet"), lengkap("c", "wudhu"),
-  lengkap("d", "grooming"), lengkap("e", "umum"), pendamping,
+  lengkap("a", "mandi"),
+  lengkap("b", "toilet"),
+  lengkap("c", "wudhu"),
+  lengkap("d", "grooming"),
+  lengkap("e", "umum"),
+  pendamping,
 ];
 
 // Kebutuhan jangka panjang sudah jelas, milik sendiri, tidak ada budget.
 const dasar: Masukan = {
-  hunian: "milik_sendiri", protesis: "tidak", kejadianBulanMaks: null, budget: null,
-  statusAktivitas: {}, prioritas: [], jawaban: {},
+  hunian: "milik_sendiri",
+  protesis: "tidak",
+  kejadianBulanMaks: null,
+  budget: null,
+  statusAktivitas: {},
+  prioritas: [],
+  jawaban: {},
 };
 const ya = (...ids: string[]) => Object.fromEntries(ids.map((i) => [i, true]));
 const buat = (m: Partial<Masukan>, k = semuaKartu) => buatRencana({ ...dasar, ...m }, k, asesmen, config);
@@ -289,14 +316,18 @@ describe("dengan konten asli", () => {
   const baca = (p: string): unknown => JSON.parse(readFileSync(join(root, p), "utf8"));
   const k = validasiKonten({
     kartu: readdirSync(join(root, "kartu")).map((f) => baca(join("kartu", f))),
-    asesmen: baca("asesmen.json"), config: baca("config.json"),
-    onboarding: baca("onboarding.json"), ui: baca("ui.json"),
+    asesmen: baca("asesmen.json"),
+    config: baca("config.json"),
+    onboarding: baca("onboarding.json"),
+    ui: baca("ui.json"),
   });
 
   it("pindah ke kloset memicu kartu yang bersangkutan, kartu pertama jadi Mulai dari sini", () => {
     const r = buatRencana(
       { ...dasar, prioritas: ["toilet"], jawaban: ya("q-toilet-pindah", "q-toilet-pegangan", "q-toilet-ruang") },
-      k.kartu, k.asesmen, k.config,
+      k.kartu,
+      k.asesmen,
+      k.config,
     );
     expect(ids(r.daftar)).toEqual(["bath-transfer-toilet", "bath-grab-bar", "bath-space-turning"]);
     expect(ids(r.mulaiDariSini)[0]).toBe("bath-transfer-toilet");

@@ -19,7 +19,11 @@ export function labelHari(kunci: string): string {
 
 /** Menyimpan paling banyak `maks` hari terbaru. */
 export function pangkasRiwayat(r: Record<string, string>, maks = 90): Record<string, string> {
-  return Object.fromEntries(Object.entries(r).sort(([a], [b]) => (a < b ? 1 : -1)).slice(0, maks));
+  return Object.fromEntries(
+    Object.entries(r)
+      .sort(([a], [b]) => (a < b ? 1 : -1))
+      .slice(0, maks),
+  );
 }
 
 /** Nama hari singkat, mis. "Sel". */

@@ -5,7 +5,14 @@ import { track } from "../lib/events";
 import { TombolLink } from "./Tombol";
 
 // Tombol menuju halaman aksi; mencatat kejadian aksi_klik (tanpa data pribadi).
-export function TombolAksi({ jenis, kartuId, tingkat, judulKartu, gayaTombol = "utama", className }: {
+export function TombolAksi({
+  jenis,
+  kartuId,
+  tingkat,
+  judulKartu,
+  gayaTombol = "utama",
+  className,
+}: {
   jenis: JenisAksi;
   kartuId: string;
   tingkat?: Tingkat;

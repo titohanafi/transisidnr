@@ -13,7 +13,10 @@ const root = join(__dirname, "..", "content");
 const baca = (p: string): unknown => JSON.parse(readFileSync(join(root, p), "utf8"));
 const k = validasiKonten({
   kartu: readdirSync(join(root, "kartu")).map((f) => baca(join("kartu", f))),
-  asesmen: baca("asesmen.json"), config: baca("config.json"), onboarding: baca("onboarding.json"), ui: baca("ui.json"),
+  asesmen: baca("asesmen.json"),
+  config: baca("config.json"),
+  onboarding: baca("onboarding.json"),
+  ui: baca("ui.json"),
 });
 
 describe("keMasukan", () => {
@@ -28,8 +31,13 @@ describe("keMasukan", () => {
       asesmen: { status: { toilet: "sulit" as const }, prioritas: ["toilet" as const], jawaban: { "q-toilet-pindah": true } },
     };
     expect(keMasukan(s, k.onboarding)).toEqual({
-      hunian: "kos", protesis: "tidak", kejadianBulanMaks: 3, budget: "500rb_2jt",
-      statusAktivitas: { toilet: "sulit" }, prioritas: ["toilet"], jawaban: { "q-toilet-pindah": true },
+      hunian: "kos",
+      protesis: "tidak",
+      kejadianBulanMaks: 3,
+      budget: "500rb_2jt",
+      statusAktivitas: { toilet: "sulit" },
+      prioritas: ["toilet"],
+      jawaban: { "q-toilet-pindah": true },
     });
   });
   it("'lebih dari 6 bulan' -> null; protesis tak dikenal -> null", () => {

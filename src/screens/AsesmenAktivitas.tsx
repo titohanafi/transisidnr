@@ -19,17 +19,11 @@ export function AsesmenAktivitas() {
   const { state, setStatusAktivitas } = useStore();
   const { status } = state.asesmen;
   const { ruangan } = useRuangan();
-  const aktivitas = konten.asesmen.aktivitas.filter(
-    (a) => a.bisaDipilihPrioritas,
-  );
+  const aktivitas = konten.asesmen.aktivitas.filter((a) => a.bisaDipilihPrioritas);
   const adaPilihan = aktivitas.some((a) => status[a.id]);
 
   const lanjut = () =>
-    navigate(
-      perluTahapPrioritas(kandidatPrioritas(konten.asesmen, status))
-        ? "/asesmen/prioritas"
-        : "/asesmen/pertanyaan/1",
-    );
+    navigate(perluTahapPrioritas(kandidatPrioritas(konten.asesmen, status)) ? "/asesmen/prioritas" : "/asesmen/pertanyaan/1");
 
   if (!ruangan) return <Navigate to="/ruangan" replace />;
 
@@ -46,10 +40,7 @@ export function AsesmenAktivitas() {
             aria-labelledby={`akt-judul-${a.id}`}
             className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-3"
           >
-            <p
-              id={`akt-judul-${a.id}`}
-              className="flex items-center gap-3 text-lg font-semibold"
-            >
+            <p id={`akt-judul-${a.id}`} className="flex items-center gap-3 text-lg font-semibold">
               <Ikon kunci={a.id} className="h-9 w-9" />
               {a.label}
             </p>
@@ -79,11 +70,7 @@ export function AsesmenAktivitas() {
           {ta.minimal}
         </p>
       )}
-      <NavBawah
-        onKembali={() => navigate("/ruangan")}
-        onLanjut={lanjut}
-        lanjutNonaktif={!adaPilihan}
-      />
+      <NavBawah onKembali={() => navigate("/ruangan")} onLanjut={lanjut} lanjutNonaktif={!adaPilihan} />
     </Halaman>
   );
 }

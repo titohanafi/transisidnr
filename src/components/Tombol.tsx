@@ -15,7 +15,12 @@ export function Tombol({ gayaTombol = "utama", className = "", ...p }: ButtonHTM
   return <button type="button" className={`${dasar} ${gaya[gayaTombol]} ${className}`} {...p} />;
 }
 
-export function TombolLink({ gayaTombol = "utama", className = "", children, ...p }: LinkProps & { gayaTombol?: Gaya; children: ReactNode }) {
+export function TombolLink({
+  gayaTombol = "utama",
+  className = "",
+  children,
+  ...p
+}: LinkProps & { gayaTombol?: Gaya; children: ReactNode }) {
   return (
     <Link className={`${dasar} ${gaya[gayaTombol]} ${className}`} {...p}>
       {children}

@@ -97,9 +97,7 @@ export interface Konteks {
 
 export function buatKonteks(masukan: Masukan, config: Config): Konteks {
   return {
-    belumJelas:
-      (masukan.kejadianBulanMaks !== null && masukan.kejadianBulanMaks <= config.faseAwalBulan) ||
-      masukan.protesis !== "tidak",
+    belumJelas: (masukan.kejadianBulanMaks !== null && masukan.kejadianBulanMaks <= config.faseAwalBulan) || masukan.protesis !== "tidak",
     sewa: masukan.hunian === "kontrakan" || masukan.hunian === "kos",
     maksBudget: config.budget.find((b) => b.id === masukan.budget)?.maksRp ?? null,
   };
@@ -149,9 +147,7 @@ export function buatRencana(masukan: Masukan, kartu: Kartu[], asesmen: Asesmen, 
     return idx.length ? Math.min(...idx) : Infinity;
   };
 
-  const urutan = [...pemicu.keys()]
-    .map((id, i) => ({ id, i, r: peringkat(id) }))
-    .sort((a, b) => a.r - b.r || a.i - b.i);
+  const urutan = [...pemicu.keys()].map((id, i) => ({ id, i, r: peringkat(id) })).sort((a, b) => a.r - b.r || a.i - b.i);
 
   const daftar: KartuRencana[] = urutan.map(({ id, r }) => {
     const k = kartuPerId.get(id)!;

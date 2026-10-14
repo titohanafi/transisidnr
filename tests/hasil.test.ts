@@ -9,10 +9,17 @@ const root = join(__dirname, "..", "content");
 const baca = (p: string): unknown => JSON.parse(readFileSync(join(root, p), "utf8"));
 const k = validasiKonten({
   kartu: readdirSync(join(root, "kartu")).map((f) => baca(join("kartu", f))),
-  asesmen: baca("asesmen.json"), config: baca("config.json"), onboarding: baca("onboarding.json"), ui: baca("ui.json"),
+  asesmen: baca("asesmen.json"),
+  config: baca("config.json"),
+  onboarding: baca("onboarding.json"),
+  ui: baca("ui.json"),
 });
 const masukan: Masukan = {
-  hunian: "milik_sendiri", protesis: "tidak", kejadianBulanMaks: null, budget: null, statusAktivitas: {},
+  hunian: "milik_sendiri",
+  protesis: "tidak",
+  kejadianBulanMaks: null,
+  budget: null,
+  statusAktivitas: {},
   prioritas: ["toilet"],
   jawaban: { "q-toilet-pindah": true, "q-toilet-pegangan": true },
 };
@@ -45,7 +52,11 @@ describe("terapkanHasil", () => {
 describe("tingkatBerikutnya", () => {
   const t = (tingkat: string, tampil = true) => ({ tingkat: tingkat as never, tampil });
   it("melompati tingkat yang tersembunyi", () => {
-    expect(tingkatBerikutnya({ tingkat: [t("tanpa_biaya"), t("alat_tanpa_bongkar"), t("renovasi", false)] as never }, "tanpa_biaya")).toBe("alat_tanpa_bongkar");
-    expect(tingkatBerikutnya({ tingkat: [t("tanpa_biaya"), t("alat_tanpa_bongkar"), t("renovasi", false)] as never }, "alat_tanpa_bongkar")).toBeUndefined();
+    expect(tingkatBerikutnya({ tingkat: [t("tanpa_biaya"), t("alat_tanpa_bongkar"), t("renovasi", false)] as never }, "tanpa_biaya")).toBe(
+      "alat_tanpa_bongkar",
+    );
+    expect(
+      tingkatBerikutnya({ tingkat: [t("tanpa_biaya"), t("alat_tanpa_bongkar"), t("renovasi", false)] as never }, "alat_tanpa_bongkar"),
+    ).toBeUndefined();
   });
 });

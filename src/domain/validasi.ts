@@ -42,7 +42,12 @@ export function validasiKonten(mentah: KontenMentah): Konten {
   const config = configSchema.safeParse(mentah.config);
   const onboarding = onboardingSchema.safeParse(mentah.onboarding);
   const ui = uiSchema.safeParse(mentah.ui);
-  for (const [nama, r] of [["asesmen", asesmen], ["config", config], ["onboarding", onboarding], ["ui", ui]] as const) {
+  for (const [nama, r] of [
+    ["asesmen", asesmen],
+    ["config", config],
+    ["onboarding", onboarding],
+    ["ui", ui],
+  ] as const) {
     if (!r.success) masalah.push(`${nama}: ${r.error.issues.map((x) => `${x.path.join(".")} ${x.message}`).join("; ")}`);
   }
 

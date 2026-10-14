@@ -60,8 +60,7 @@ export function kunciKelompok(k: Kartu, urutanAktivitas: readonly Aktivitas[] = 
 export function kelompokkan(kartu: Kartu[], urutanAktivitas: readonly Aktivitas[] = AKTIVITAS): { kunci: KunciKelompok; kartu: Kartu[] }[] {
   const kunciDari = (k: Kartu) => kunciKelompok(k, urutanAktivitas);
   const urut = [...urutanAktivitas, "caregiver" as const];
-  const banding = (a: Kartu, b: Kartu) =>
-    Number(!!a.isi_menyusul) - Number(!!b.isi_menyusul) || a.id.localeCompare(b.id);
+  const banding = (a: Kartu, b: Kartu) => Number(!!a.isi_menyusul) - Number(!!b.isi_menyusul) || a.id.localeCompare(b.id);
 
   return urut
     .map((kunci) => ({ kunci, kartu: kartu.filter((k) => kunciDari(k) === kunci).sort(banding) }))
@@ -111,20 +110,52 @@ export interface AhliItem {
 /** Jenis ahli dari semua panduan, termasuk tukang (pertama), urut sesuai JENIS_BANTUAN. */
 export function kumpulkanAhli(kartu: readonly Kartu[]): AhliItem[] {
   return JENIS_BANTUAN.map((jenis) => ({
-      jenis,
-      panduan: kartu.flatMap((k) =>
-        k.isi_menyusul ? [] : (k.bantuan ?? []).filter((b) => b.jenis === jenis).map((b) => ({ id: k.id, judul: k.judul, keterangan: b.keterangan })),
-      ),
-    }))
-    .filter((a) => a.panduan.length > 0);
+    jenis,
+    panduan: kartu.flatMap((k) =>
+      k.isi_menyusul
+        ? []
+        : (k.bantuan ?? []).filter((b) => b.jenis === jenis).map((b) => ({ id: k.id, judul: k.judul, keterangan: b.keterangan })),
+    ),
+  })).filter((a) => a.panduan.length > 0);
 }
 
-const rapikanTeks = (t: string) => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const rapikanTeks = (t: string) =>
+  t
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
 // Kata penghubung dan kata tanya yang lazim diketik ("cara mengatasi lantai licin") tetapi tidak ada di judul panduan.
 const KATA_ABAI = new Set([
-  "cara", "mengatasi", "atasi", "mengatur", "memperbaiki", "bagaimana", "gimana", "apa", "kenapa", "yang", "di", "ke", "dari", "untuk",
-  "agar", "supaya", "saat", "ketika", "dan", "atau", "dengan", "pada", "kalau", "jika", "bila", "tentang", "soal", "panduan", "solusi",
+  "cara",
+  "mengatasi",
+  "atasi",
+  "mengatur",
+  "memperbaiki",
+  "bagaimana",
+  "gimana",
+  "apa",
+  "kenapa",
+  "yang",
+  "di",
+  "ke",
+  "dari",
+  "untuk",
+  "agar",
+  "supaya",
+  "saat",
+  "ketika",
+  "dan",
+  "atau",
+  "dengan",
+  "pada",
+  "kalau",
+  "jika",
+  "bila",
+  "tentang",
+  "soal",
+  "panduan",
+  "solusi",
 ]);
 
 /**
@@ -132,7 +163,9 @@ const KATA_ABAI = new Set([
  * Kata penghubung/kata tanya diabaikan. Kosong atau hanya kata abai = semua cocok.
  */
 export function cocokCari(kartu: Kartu, kataKunci: string): boolean {
-  const kata = rapikanTeks(kataKunci).split(/\s+/).filter((k) => k && !KATA_ABAI.has(k));
+  const kata = rapikanTeks(kataKunci)
+    .split(/\s+/)
+    .filter((k) => k && !KATA_ABAI.has(k));
   if (kata.length === 0) return true;
   const jerami = rapikanTeks(`${kartu.judul} ${kartu.situasi}`);
   return kata.every((k) => jerami.includes(k));

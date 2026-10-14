@@ -45,7 +45,10 @@ function Brief({ kartu, tingkat }: NonNullable<ReturnType<typeof useKonteksAksi>
   const { state, foto } = useStore();
   const jawab = (id: string) => state.onboarding[id]?.[0] ?? null;
   const label = (qid: string, id: string | null) =>
-    pilihanPertanyaan(konten.onboarding.pertanyaan.find((q) => q.id === qid), konten.config).find((p) => p.id === id)?.label ?? null;
+    pilihanPertanyaan(
+      konten.onboarding.pertanyaan.find((q) => q.id === qid),
+      konten.config,
+    ).find((p) => p.id === id)?.label ?? null;
 
   const awal = useMemo(
     () =>
@@ -110,7 +113,9 @@ function Brief({ kartu, tingkat }: NonNullable<ReturnType<typeof useKonteksAksi>
 
       <h2 className="mt-6 text-lg font-bold">{t.pratinjau}</h2>
       {pesan ? (
-        <pre className="mt-2 whitespace-pre-wrap break-words rounded-kartu border border-garis/70 bg-white shadow-kartu p-3 font-sans text-base">{pesan}</pre>
+        <pre className="mt-2 whitespace-pre-wrap break-words rounded-kartu border border-garis/70 bg-white shadow-kartu p-3 font-sans text-base">
+          {pesan}
+        </pre>
       ) : (
         <p className="mt-2 text-redup">{t.kosong}</p>
       )}

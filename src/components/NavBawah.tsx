@@ -2,7 +2,12 @@ import { konten } from "../domain/content";
 import { Tombol } from "./Tombol";
 
 // Tombol kembali/lanjut di bagian bawah layar, mudah dijangkau satu tangan.
-export function NavBawah({ onKembali, onLanjut, lanjutNonaktif, teksLanjut }: {
+export function NavBawah({
+  onKembali,
+  onLanjut,
+  lanjutNonaktif,
+  teksLanjut,
+}: {
   onKembali: () => void;
   onLanjut: () => void;
   lanjutNonaktif?: boolean;

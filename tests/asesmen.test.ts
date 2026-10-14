@@ -3,9 +3,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { asesmenSchema, type Aktivitas } from "../src/domain/schema";
 import { ukuranBaru } from "../src/lib/foto";
-import {
-  daftarPertanyaan, kandidatPrioritas, perluTahapPrioritas, rapikan, ubahPrioritas,
-} from "../src/state/asesmen";
+import { daftarPertanyaan, kandidatPrioritas, perluTahapPrioritas, rapikan, ubahPrioritas } from "../src/state/asesmen";
 import { KUNCI_FOTO, hapus, muat, muatFoto, simpan, simpanFoto, stateAwal, type AsesmenState } from "../src/state/storage";
 
 const asesmen = asesmenSchema.parse(JSON.parse(readFileSync(join(__dirname, "..", "content", "asesmen.json"), "utf8")));
@@ -38,9 +36,14 @@ describe("daftar pertanyaan", () => {
   it("prioritas dulu (sesuai urutan prioritas), umum selalu terakhir", () => {
     const d = daftarPertanyaan(asesmen, ["toilet", "mandi"]);
     expect(ids(d)).toEqual([
-      "q-toilet-pindah", "q-toilet-pegangan", "q-toilet-ruang",
-      "q-mandi-masuk", "q-mandi-licin", "q-mandi-jangkau",
-      "q-umum-pintu", "q-umum-panggil",
+      "q-toilet-pindah",
+      "q-toilet-pegangan",
+      "q-toilet-ruang",
+      "q-mandi-masuk",
+      "q-mandi-licin",
+      "q-mandi-jangkau",
+      "q-umum-pintu",
+      "q-umum-panggil",
     ]);
   });
   it("tanpa prioritas hanya pertanyaan umum", () => {
@@ -70,7 +73,9 @@ describe("rapikan", () => {
       prioritas: ["mandi", "toilet", "wudhu"] as Aktivitas[],
     };
     expect(rapikan(asesmen, s).prioritas).toEqual(["mandi", "toilet"]);
-    expect(rapikan(asesmen, { ...s, status: { toilet: "sulit", wudhu: "sulit" }, prioritas: ["mandi", "toilet"] }).prioritas).toEqual(["toilet"]);
+    expect(rapikan(asesmen, { ...s, status: { toilet: "sulit", wudhu: "sulit" }, prioritas: ["mandi", "toilet"] }).prioritas).toEqual([
+      "toilet",
+    ]);
   });
   it("membuang jawaban untuk pertanyaan yang tidak lagi ditanyakan (tidak ada 'ya' basi)", () => {
     const s: AsesmenState = {
@@ -90,11 +95,19 @@ describe("rapikan", () => {
 describe("penyimpanan asesmen dan foto", () => {
   const gudang = () => {
     const d = new Map<string, string>();
-    return { d, getItem: (k: string) => d.get(k) ?? null, setItem: (k: string, v: string) => void d.set(k, v), removeItem: (k: string) => void d.delete(k) };
+    return {
+      d,
+      getItem: (k: string) => d.get(k) ?? null,
+      setItem: (k: string, v: string) => void d.set(k, v),
+      removeItem: (k: string) => void d.delete(k),
+    };
   };
   it("asesmen tersimpan dan terbaca kembali", () => {
     const g = gudang();
-    const s = { ...stateAwal(), asesmen: { status: { toilet: "sulit" as const }, prioritas: ["toilet" as const], jawaban: { "q-toilet-pindah": true } } };
+    const s = {
+      ...stateAwal(),
+      asesmen: { status: { toilet: "sulit" as const }, prioritas: ["toilet" as const], jawaban: { "q-toilet-pindah": true } },
+    };
     simpan(s, g);
     expect(muat(g)).toEqual(s);
   });
@@ -113,7 +126,13 @@ describe("penyimpanan asesmen dan foto", () => {
     expect(muatFoto(g)).toBeNull();
   });
   it("foto gagal disimpan saat kuota penuh tanpa melempar", () => {
-    const penuh = { getItem: () => null, setItem: () => { throw new Error("QuotaExceeded"); }, removeItem: () => {} };
+    const penuh = {
+      getItem: () => null,
+      setItem: () => {
+        throw new Error("QuotaExceeded");
+      },
+      removeItem: () => {},
+    };
     expect(simpanFoto("data:image/jpeg;base64,AAAA", penuh)).toBe(false);
   });
   it("isi bukan gambar diabaikan", () => {

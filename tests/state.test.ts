@@ -45,9 +45,15 @@ describe("penyimpanan lokal", () => {
     expect(simpan(stateAwal(), null)).toBe(false);
     expect(() => hapus(null)).not.toThrow();
     const rusak = {
-      getItem: () => { throw new Error("x"); },
-      setItem: () => { throw new Error("penuh"); },
-      removeItem: () => { throw new Error("x"); },
+      getItem: () => {
+        throw new Error("x");
+      },
+      setItem: () => {
+        throw new Error("penuh");
+      },
+      removeItem: () => {
+        throw new Error("x");
+      },
     };
     expect(muat(rusak)).toEqual(stateAwal());
     expect(simpan(stateAwal(), rusak)).toBe(false);

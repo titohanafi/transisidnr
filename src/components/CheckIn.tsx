@@ -20,7 +20,10 @@ export function CheckIn() {
     return (
       <section aria-label={t.label} className="rounded-kartu bg-utama-muda p-4">
         <div className="flex items-start gap-3">
-          <span aria-hidden="true" className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-3xl leading-none">
+          <span
+            aria-hidden="true"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-3xl leading-none"
+          >
             {pilihan.emoji}
           </span>
           <div className="min-w-0 flex-1 pt-0.5">
@@ -81,7 +84,11 @@ export function CheckIn() {
         ))}
       </div>
       {mengubah && (
-        <button type="button" onClick={() => setMengubah(false)} className="mt-2 min-h-sentuh text-sm font-semibold text-utama-gelap underline">
+        <button
+          type="button"
+          onClick={() => setMengubah(false)}
+          className="mt-2 min-h-sentuh text-sm font-semibold text-utama-gelap underline"
+        >
           {konten.ui.umum.kembali}
         </button>
       )}

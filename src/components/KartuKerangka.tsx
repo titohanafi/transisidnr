@@ -18,7 +18,9 @@ export function KartuKerangka({ kartu }: { kartu: Kartu }) {
         <span className="block font-semibold leading-snug">{kartu.judul}</span>
         <span className="block text-sm text-redup">{umum.isiMenyusul}</span>
       </span>
-      <span aria-hidden className="text-xl text-redup">›</span>
+      <span aria-hidden className="text-xl text-redup">
+        ›
+      </span>
     </Link>
   );
 }

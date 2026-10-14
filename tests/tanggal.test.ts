@@ -15,10 +15,17 @@ describe("tanggal", () => {
 });
 
 describe("bagianHari", () => {
-  it.each([[3, "malam"], [4, "pagi"], [10, "pagi"], [11, "siang"], [14, "siang"], [15, "sore"], [17, "sore"], [18, "malam"], [23, "malam"]] as const)(
-    "jam %i adalah %s",
-    (jam, bagian) => {
-      expect(bagianHari(new Date(2026, 0, 5, jam, 30))).toBe(bagian);
-    },
-  );
+  it.each([
+    [3, "malam"],
+    [4, "pagi"],
+    [10, "pagi"],
+    [11, "siang"],
+    [14, "siang"],
+    [15, "sore"],
+    [17, "sore"],
+    [18, "malam"],
+    [23, "malam"],
+  ] as const)("jam %i adalah %s", (jam, bagian) => {
+    expect(bagianHari(new Date(2026, 0, 5, jam, 30))).toBe(bagian);
+  });
 });

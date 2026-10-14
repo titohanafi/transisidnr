@@ -4,8 +4,17 @@ import type { Aktivitas } from "../domain/schema";
 import { kunciHari, pangkasRiwayat } from "../lib/tanggal";
 import { rapikan, ubahPrioritas } from "./asesmen";
 import {
-  hapus, hapusFoto, muat, muatFoto, simpan, simpanFoto, stateAwal,
-  type AsesmenState, type HasilPanduan, type State, STATUS_AKTIVITAS,
+  hapus,
+  hapusFoto,
+  muat,
+  muatFoto,
+  simpan,
+  simpanFoto,
+  stateAwal,
+  type AsesmenState,
+  type HasilPanduan,
+  type State,
+  STATUS_AKTIVITAS,
 } from "./storage";
 
 type StatusAkt = (typeof STATUS_AKTIVITAS)[number];
@@ -43,8 +52,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     });
   }, []);
   const ubahAsesmen = useCallback(
-    (fn: (a: AsesmenState) => AsesmenState) =>
-      ubah((s) => ({ ...s, asesmen: rapikan(konten.asesmen, fn(s.asesmen)) })),
+    (fn: (a: AsesmenState) => AsesmenState) => ubah((s) => ({ ...s, asesmen: rapikan(konten.asesmen, fn(s.asesmen)) })),
     [ubah],
   );
 
@@ -123,8 +131,34 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const nilai = useMemo(
-    () => ({ state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, toggleLangkah, setCheckin, setRuangan, setHasil, setFoto, hapusSemua }),
-    [state, foto, setJawabanOnboarding, setStatusAktivitas, togglePrioritas, setJawaban, toggleLangkah, setCheckin, setRuangan, setHasil, setFoto, hapusSemua],
+    () => ({
+      state,
+      foto,
+      setJawabanOnboarding,
+      setStatusAktivitas,
+      togglePrioritas,
+      setJawaban,
+      toggleLangkah,
+      setCheckin,
+      setRuangan,
+      setHasil,
+      setFoto,
+      hapusSemua,
+    }),
+    [
+      state,
+      foto,
+      setJawabanOnboarding,
+      setStatusAktivitas,
+      togglePrioritas,
+      setJawaban,
+      toggleLangkah,
+      setCheckin,
+      setRuangan,
+      setHasil,
+      setFoto,
+      hapusSemua,
+    ],
   );
   return <Konteks.Provider value={nilai}>{children}</Konteks.Provider>;
 }

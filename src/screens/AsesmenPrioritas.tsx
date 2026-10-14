@@ -4,11 +4,7 @@ import { Ikon } from "../components/Ikon";
 import { NavBawah } from "../components/NavBawah";
 import { Pilihan } from "../components/Pilihan";
 import { konten } from "../domain/content";
-import {
-  MAKS_PRIORITAS,
-  kandidatPrioritas,
-  perluTahapPrioritas,
-} from "../state/asesmen";
+import { MAKS_PRIORITAS, kandidatPrioritas, perluTahapPrioritas } from "../state/asesmen";
 import { useStore } from "../state/store";
 
 const { asesmen: t } = konten.ui;
@@ -20,12 +16,10 @@ export function AsesmenPrioritas() {
   const { status, prioritas } = state.asesmen;
   const kandidat = kandidatPrioritas(konten.asesmen, status);
 
-  if (!perluTahapPrioritas(kandidat))
-    return <Navigate to="/asesmen/pertanyaan/1" replace />;
+  if (!perluTahapPrioritas(kandidat)) return <Navigate to="/asesmen/pertanyaan/1" replace />;
 
   const penuh = prioritas.length >= MAKS_PRIORITAS;
-  const label = (id: string) =>
-    konten.asesmen.aktivitas.find((a) => a.id === id)?.label ?? id;
+  const label = (id: string) => konten.asesmen.aktivitas.find((a) => a.id === id)?.label ?? id;
 
   return (
     <Halaman judul={t.prioritas.judul}>

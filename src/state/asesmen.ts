@@ -33,8 +33,7 @@ export function daftarPertanyaan(asesmen: Asesmen, prioritas: Aktivitas[]) {
  */
 export function rapikan(asesmen: Asesmen, s: AsesmenState): AsesmenState {
   const kandidat = kandidatPrioritas(asesmen, s.status);
-  const prioritas =
-    kandidat.length === 1 ? kandidat : s.prioritas.filter((p) => kandidat.includes(p)).slice(0, MAKS_PRIORITAS);
+  const prioritas = kandidat.length === 1 ? kandidat : s.prioritas.filter((p) => kandidat.includes(p)).slice(0, MAKS_PRIORITAS);
   const ditanya = new Set(daftarPertanyaan(asesmen, prioritas).map((p) => p.id));
   const jawaban = Object.fromEntries(Object.entries(s.jawaban).filter(([id]) => ditanya.has(id)));
   return { status: s.status, prioritas, jawaban };

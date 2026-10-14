@@ -7,9 +7,7 @@ const PROTESIS = new Set(["ya", "belum_tahu", "tidak"]);
 /** Mengubah jawaban tersimpan menjadi masukan mesin rekomendasi. Jawaban yang belum ada menjadi null. */
 export function keMasukan(state: State, onboarding: Onboarding): Masukan {
   const satu = (id: string): string | null => state.onboarding[id]?.[0] ?? null;
-  const kejadian = onboarding.pertanyaan
-    .find((q) => q.id === "kejadian")
-    ?.pilihan?.find((p) => p.id === satu("kejadian"));
+  const kejadian = onboarding.pertanyaan.find((q) => q.id === "kejadian")?.pilihan?.find((p) => p.id === satu("kejadian"));
   const protesis = satu("protesis");
   return {
     hunian: satu("hunian"),

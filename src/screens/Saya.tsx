@@ -40,7 +40,9 @@ export function Saya() {
                     {status.map(([id, st]) => (
                       <li key={id} className="flex justify-between gap-3">
                         <span className="font-medium">{namaAktivitas(id)}</span>
-                        <span className="text-right text-redup">{asesmen.aktivitas.status[st as keyof typeof asesmen.aktivitas.status]}</span>
+                        <span className="text-right text-redup">
+                          {asesmen.aktivitas.status[st as keyof typeof asesmen.aktivitas.status]}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -74,10 +76,7 @@ export function Saya() {
         <div className="mt-3">{adaCheckin ? <RiwayatCheckin /> : <p className="text-redup">{t.riwayatKosong}</p>}</div>
       </section>
 
-      <Link
-        to="/hapus"
-        className="mt-5 flex min-h-[56px] items-center gap-3 rounded-kartu border border-garis bg-white px-4 py-3"
-      >
+      <Link to="/hapus" className="mt-5 flex min-h-[56px] items-center gap-3 rounded-kartu border border-garis bg-white px-4 py-3">
         <ShieldCheck className="h-6 w-6 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
         <span className="flex-1">
           <span className="block font-semibold">{umum.dataPrivasi}</span>

@@ -22,12 +22,7 @@ export function useKonteksAksi(): KonteksAksi | null {
   return { kartu, tingkat: t };
 }
 
-export function AksiHalaman({ judul, kartu, tingkat, children }: {
-  judul: string;
-  kartu: Kartu;
-  tingkat?: Tingkat;
-  children: ReactNode;
-}) {
+export function AksiHalaman({ judul, kartu, tingkat, children }: { judul: string; kartu: Kartu; tingkat?: Tingkat; children: ReactNode }) {
   return (
     <Halaman judul={judul}>
       <p className="mt-2 text-redup">

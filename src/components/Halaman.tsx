@@ -44,19 +44,20 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
         {menu ? (
           <span className="inline-flex min-h-sentuh items-center px-2 text-lg font-bold text-utama">{menu}</span>
         ) : (
-          <Link to="/" className={`inline-flex min-h-sentuh items-center text-xl font-extrabold tracking-tight text-utama ${dalam ? "" : "px-2"}`}>
+          <Link
+            to="/"
+            className={`inline-flex min-h-sentuh items-center text-xl font-extrabold tracking-tight text-utama ${dalam ? "" : "px-2"}`}
+          >
             {app.nama}
-            <span aria-hidden="true" className="text-aksen">.</span>
+            <span aria-hidden="true" className="text-aksen">
+              .
+            </span>
           </Link>
         )}
       </header>
       <main id="isi" className="flex flex-1 flex-col px-4 pb-8 pt-6">
         {/* Di Beranda judulnya sama dengan nama aplikasi di header: tetap ada untuk pembaca layar, tidak ditampilkan dua kali. */}
-        <h1
-          ref={h1}
-          tabIndex={-1}
-          className={judul === app.nama ? "sr-only" : "mb-1 text-judul text-tinta outline-none"}
-        >
+        <h1 ref={h1} tabIndex={-1} className={judul === app.nama ? "sr-only" : "mb-1 text-judul text-tinta outline-none"}>
           {judul}
         </h1>
         {children}

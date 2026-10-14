@@ -46,11 +46,7 @@ function Daftar({ awal }: { awal: Filter }) {
 
   const adaJawaban = Object.keys(state.asesmen.status).length > 0;
   const label = (kunci: string) =>
-    kunci === "caregiver"
-      ? t.caregiver
-      : (konten.asesmen.aktivitas
-          .find((a) => a.id === kunci)
-          ?.label.split(" (")[0] ?? kunci);
+    kunci === "caregiver" ? t.caregiver : (konten.asesmen.aktivitas.find((a) => a.id === kunci)?.label.split(" (")[0] ?? kunci);
 
   const tingkatDari = (id: string) => {
     const k = konten.kartu.find((x) => x.id === id)!;
@@ -58,15 +54,17 @@ function Daftar({ awal }: { awal: Filter }) {
   };
 
   const kelompok = kelompokkan(
-    konten.kartu.filter((k) => cocokCari(k, filter === "semua" ? cari : "")).filter((k) =>
-      cocokFilter(
-        k,
-        tingkatDari(k.id)
-          .filter((x) => x.tampil)
-          .map((x) => x.tingkat),
-        filter,
+    konten.kartu
+      .filter((k) => cocokCari(k, filter === "semua" ? cari : ""))
+      .filter((k) =>
+        cocokFilter(
+          k,
+          tingkatDari(k.id)
+            .filter((x) => x.tampil)
+            .map((x) => x.tingkat),
+          filter,
+        ),
       ),
-    ),
     konten.asesmen.aktivitas.map((a) => a.id),
   );
 
@@ -119,7 +117,6 @@ function Daftar({ awal }: { awal: Filter }) {
         </section>
       )}
 
-
       {filter === "alat" ? (
         <DaftarAlat alat={alat} />
       ) : filter === "ahli" ? (
@@ -128,22 +125,13 @@ function Daftar({ awal }: { awal: Filter }) {
         <>
           <div aria-live="polite">
             {kelompok.length === 0 && (
-              <p className="mt-5 rounded-kartu bg-draf-muda p-4 text-draf">
-                {cari.trim() ? t.cari.kosong : t.kosongFilter}
-              </p>
+              <p className="mt-5 rounded-kartu bg-draf-muda p-4 text-draf">{cari.trim() ? t.cari.kosong : t.kosongFilter}</p>
             )}
           </div>
 
           {kelompok.map((g) => (
-            <section
-              key={g.kunci}
-              className="mt-6"
-              aria-labelledby={`grup-${g.kunci}`}
-            >
-              <h2
-                id={`grup-${g.kunci}`}
-                className="flex items-center gap-3 text-xl font-bold"
-              >
+            <section key={g.kunci} className="mt-6" aria-labelledby={`grup-${g.kunci}`}>
+              <h2 id={`grup-${g.kunci}`} className="flex items-center gap-3 text-xl font-bold">
                 <Ikon kunci={g.kunci} className="h-9 w-9" />
                 {label(g.kunci)}
               </h2>
@@ -157,18 +145,11 @@ function Daftar({ awal }: { awal: Filter }) {
                     ),
                     filter,
                   );
-                  if (k.isi_menyusul)
-                    return <KartuKerangka key={k.id} kartu={k} />;
-                  if (aksi.length === 0)
-                    return <KartuBaris key={k.id} kartu={k} />;
+                  if (k.isi_menyusul) return <KartuKerangka key={k.id} kartu={k} />;
+                  if (aksi.length === 0) return <KartuBaris key={k.id} kartu={k} />;
                   return (
-                    <article
-                      key={k.id}
-                      className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4"
-                    >
-                      <h3 className="text-judulKartu">
-                        {k.judul}
-                      </h3>
+                    <article key={k.id} className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4">
+                      <h3 className="text-judulKartu">{k.judul}</h3>
                       <div className="mt-2 empty:hidden">
                         <LencanaStatus status={k.status_validasi} />
                       </div>
@@ -178,14 +159,9 @@ function Daftar({ awal }: { awal: Filter }) {
                         <p className="mt-3 font-medium">{umum.isiMenyusul}</p>
                       ) : (
                         aksi.length > 0 && (
-                          <ul
-                            className="mt-3 space-y-2"
-                            aria-label={t.aksiKartu}
-                          >
+                          <ul className="mt-3 space-y-2" aria-label={t.aksiKartu}>
                             {aksi.map((a) => {
-                              const tanda = a.tingkat
-                                ? tingkat.find((x) => x.tingkat === a.tingkat)
-                                : undefined;
+                              const tanda = a.tingkat ? tingkat.find((x) => x.tingkat === a.tingkat) : undefined;
                               return (
                                 <li key={a.jenis}>
                                   <TombolAksi
@@ -208,11 +184,7 @@ function Daftar({ awal }: { awal: Filter }) {
                         )
                       )}
 
-                      <TombolLink
-                        to={`/kartu/${k.id}`}
-                        gayaTombol={aksi.length > 0 ? "sekunder" : "utama"}
-                        className="mt-3 w-full"
-                      >
+                      <TombolLink to={`/kartu/${k.id}`} gayaTombol={aksi.length > 0 ? "sekunder" : "utama"} className="mt-3 w-full">
                         {tr.bukaKartu}
                         <span className="sr-only">: {k.judul}</span>
                       </TombolLink>

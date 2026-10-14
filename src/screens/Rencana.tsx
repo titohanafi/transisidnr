@@ -35,22 +35,15 @@ export function Rencana() {
   // Bila caregiver bilang sedang lelah, tampilkan satu hal saja dan simpan sisanya di lipatan.
   // Yang dihitung hanya jawaban hari ini, supaya "lelah" minggu lalu tidak terus mengurangi rencana.
   const hariIni = state.riwayatCheckin[kunciHari()];
-  const ringan =
-    hariIni === "capek_fisik" ||
-    hariIni === "capek_emosi" ||
-    hariIni === "butuh_istirahat";
+  const ringan = hariIni === "capek_fisik" || hariIni === "capek_emosi" || hariIni === "butuh_istirahat";
   const h = terapkanHasil(rencana, state.hasil, konten.kartu);
 
   const dataKartu = (id: string) => konten.kartu.find((k) => k.id === id);
   const lainnya = h.lainnya.filter((k) => !k.isiMenyusul);
   const disusun = h.lainnya.filter((k) => k.isiMenyusul);
-  const pendamping = rencana.pendamping
-    ? dataKartu(rencana.pendamping)
-    : undefined;
+  const pendamping = rencana.pendamping ? dataKartu(rencana.pendamping) : undefined;
   const satuHal = h.satuHal;
-  const labelAkt = (id: string) =>
-    konten.asesmen.aktivitas.find((a) => a.id === id)?.label.split(" (")[0] ??
-    id;
+  const labelAkt = (id: string) => konten.asesmen.aktivitas.find((a) => a.id === id)?.label.split(" (")[0] ?? id;
 
   const daftarLengkap = (
     <>
@@ -91,10 +84,7 @@ export function Rencana() {
       )}
 
       {disusun.length > 0 && (
-        <Lipat
-          judul={`${t.sedangDisusun} (${disusun.length})`}
-          buka={h.mulai.length === 0 && lainnya.length === 0}
-        >
+        <Lipat judul={`${t.sedangDisusun} (${disusun.length})`} buka={h.mulai.length === 0 && lainnya.length === 0}>
           <div className="space-y-3">
             {disusun.map((k) => (
               <KartuRingkas key={k.id} kartu={k} />
@@ -109,10 +99,7 @@ export function Rencana() {
     <Halaman judul={t.judul}>
       <BarisRuangan />
       {h.jumlahPanduan > 0 && (
-        <section
-          className="mt-3 rounded-kartu bg-aksen-muda p-4"
-          aria-label={t.beres.judul}
-        >
+        <section className="mt-3 rounded-kartu bg-aksen-muda p-4" aria-label={t.beres.judul}>
           <p className="font-semibold">
             {isi(t.beres.ringkasan, {
               n: h.beres.length,
@@ -130,10 +117,7 @@ export function Rencana() {
         </section>
       )}
       {ringan && (
-        <p
-          role="note"
-          className="mt-2 rounded-kartu bg-aksen-muda p-4 motion-safe:animate-muncul"
-        >
+        <p role="note" className="mt-2 rounded-kartu bg-aksen-muda p-4 motion-safe:animate-muncul">
           {t.ringan.catatan}
         </p>
       )}
@@ -141,19 +125,13 @@ export function Rencana() {
         {masukan.prioritas.map((a) => (
           <Tanda key={a}>{labelAkt(a)}</Tanda>
         ))}
-        <Link
-          to="/asesmen/aktivitas"
-          className="inline-flex min-h-sentuh items-center text-utama underline"
-        >
+        <Link to="/asesmen/aktivitas" className="inline-flex min-h-sentuh items-center text-utama underline">
           {t.ubahJawaban}
         </Link>
       </div>
 
       {rencana.kosong ? (
-        <section
-          className="mt-5 rounded-kartu border border-utama bg-utama-muda p-4"
-          aria-labelledby="kosong"
-        >
+        <section className="mt-5 rounded-kartu border border-utama bg-utama-muda p-4" aria-labelledby="kosong">
           <h2 id="kosong" className="text-subjudul">
             {t.kosongJudul}
           </h2>
@@ -162,10 +140,7 @@ export function Rencana() {
       ) : (
         <>
           {satuHal && (
-            <section
-              className="mt-5 rounded-kartu border border-utama bg-utama-muda p-4"
-              aria-labelledby="satu-hal"
-            >
+            <section className="mt-5 rounded-kartu border border-utama bg-utama-muda p-4" aria-labelledby="satu-hal">
               <h2 id="satu-hal" className="text-subjudul">
                 {t.satuHal}
               </h2>
@@ -175,20 +150,14 @@ export function Rencana() {
                   judul: dataKartu(satuHal.kartuId)?.judul ?? "",
                 })}
               </p>
-              <TombolLink
-                to={`/kartu/${satuHal.kartuId}/${satuHal.tingkat}`}
-                className="mt-3"
-              >
+              <TombolLink to={`/kartu/${satuHal.kartuId}/${satuHal.tingkat}`} className="mt-3">
                 {t.lihatKartu}
               </TombolLink>
             </section>
           )}
 
           {!satuHal && h.mulai.length === 0 && (
-            <p
-              role="note"
-              className="mt-5 rounded-kartu border border-draf bg-draf-muda p-4 text-draf"
-            >
+            <p role="note" className="mt-5 rounded-kartu border border-draf bg-draf-muda p-4 text-draf">
               {t.belumAdaSiap}
             </p>
           )}
@@ -203,9 +172,7 @@ export function Rencana() {
               })}
             </p>
           )}
-          {rencana.kebutuhanJangkaPanjangBelumJelas && (
-            <p className="mt-3 text-sm text-redup">{t.belumJelas}</p>
-          )}
+          {rencana.kebutuhanJangkaPanjangBelumJelas && <p className="mt-3 text-sm text-redup">{t.belumJelas}</p>}
 
           {ringan ? (
             <Lipat judul={t.ringan.lihatNanti}>
@@ -231,9 +198,7 @@ export function Rencana() {
           <article className="mt-3 rounded-kartu border border-garis/70 bg-white shadow-kartu p-4">
             <div className="flex items-start gap-3">
               <Ikon kunci="caregiver" className="mt-0.5 h-9 w-9" />
-              <h3 className="text-judulKartu">
-                {pendamping.judul}
-              </h3>
+              <h3 className="text-judulKartu">{pendamping.judul}</h3>
             </div>
             <div className="mt-2 empty:hidden">
               <LencanaStatus status={pendamping.status_validasi} />
