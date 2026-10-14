@@ -51,6 +51,9 @@ export function Halaman({
   const menu = /^\/(aksi\/beli|jelajah\/alat)(\/|$)/.test(pathname)
     ? umum.headerPakaiAlat
     : (namaMenu(pathname) ?? (/^\/(kartu|aksi)\//.test(pathname) ? umum.tabPanduan : null));
+  // Pita kepala gelap: bilah atas ikut berwarna teal (tanpa garis bawah), dan cincin fokus diputihkan supaya tetap terlihat.
+  const gelap = kepalaPita === "gelap";
+  const fokusHeader = gelap ? "focus-visible:outline-white" : "";
   const dalam = !["/", "/jelajah", "/rencana", "/kontak", "/saya"].includes(pathname);
   const h1 = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
@@ -78,26 +81,30 @@ export function Halaman({
       >
         {umum.lewatiKeIsi}
       </a>
-      <header className="sticky top-0 z-10 flex items-center gap-1 border-b border-garis bg-white px-2 py-1 print:hidden">
+      <header
+        className={`sticky top-0 z-10 flex items-center gap-1 px-2 py-1 print:hidden ${
+          gelap ? "bg-utama text-white" : "border-b border-garis bg-white text-utama"
+        }`}
+      >
         {dalam && (
           <button
             type="button"
             onClick={() => navigate(-1)}
             aria-label={umum.halamanSebelumnya}
-            className="inline-flex h-sentuh w-sentuh items-center justify-center rounded-tombol text-utama"
+            className={`inline-flex h-sentuh w-sentuh items-center justify-center rounded-tombol ${fokusHeader}`}
           >
             <ChevronLeft className="h-7 w-7" strokeWidth={2} aria-hidden="true" focusable="false" />
           </button>
         )}
         {menu ? (
-          <span className="inline-flex min-h-sentuh items-center px-2 text-lg font-bold text-utama">{menu}</span>
+          <span className="inline-flex min-h-sentuh items-center px-2 text-lg font-bold">{menu}</span>
         ) : (
           <Link
             to="/"
-            className={`inline-flex min-h-sentuh items-center text-xl font-extrabold tracking-tight text-utama ${dalam ? "" : "px-2"}`}
+            className={`inline-flex min-h-sentuh items-center text-xl font-extrabold tracking-tight ${fokusHeader} ${dalam ? "" : "px-2"}`}
           >
             {app.nama}
-            <span aria-hidden="true" className="text-aksen">
+            <span aria-hidden="true" className={gelap ? "text-daun" : "text-aksen"}>
               .
             </span>
           </Link>
