@@ -8,7 +8,7 @@ export default {
       colors: {
         kertas: "#FFFFFF", // latar area aplikasi (putih)
         permukaan: "#F2F6F6", // latar tipis untuk mengelompokkan satu segmen (mis. pencarian)
-        luar: "#E9E2D6", // latar di luar area aplikasi pada layar lebar
+        luar: "#0A4549", // latar di luar area aplikasi pada layar lebar
         tinta: "#1F2933", // teks utama (kontras tinggi)
         redup: "#4A5560", // teks sekunder
         garis: "#CBD2D9", // pembatas dekoratif
