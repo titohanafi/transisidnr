@@ -2,90 +2,97 @@ import type { ReactNode } from "react";
 import type { Tingkat } from "../domain/konstanta";
 
 // Ilustrasi selebar panel untuk pilihan solusi. Dibuat bertahap: baru panduan yang ada di daftar ini yang punya
-// ilustrasi (kunci "idKartu:tingkat"); panduan lain tidak menampilkan apa pun. Dekoratif, hanya benda dan situasinya
-// (tanpa orang, ukuran, atau cara pasang), dan warnanya mengikuti token Tailwind.
+// ilustrasi (kunci "idKartu:tingkat"); panduan lain tidak menampilkan apa pun. Gaya: garis tipis (seperti gambar teknik),
+// isian tonal dari warna utama, satu aksen kecil. Dekoratif; hanya benda dan situasinya (tanpa orang, ukuran, atau cara pasang).
 
-const Lantai = ({ children }: { children: ReactNode }) => (
+const LANTAI_ATAS = 92;
+const garisLantai = (n: number) =>
+  Array.from({ length: n }, (_, i) => {
+    const bawah = -120 + (i * 600) / (n - 1);
+    const atas = 180 + (bawah - 180) * 0.55;
+    return `M${atas.toFixed(1)} ${LANTAI_ATAS}L${bawah.toFixed(1)} 150`;
+  }).join("");
+
+/** Dinding berubin tipis di atas, lantai berperspektif di bawah. */
+const Ruang = ({ children }: { children: ReactNode }) => (
   <>
-    <rect width="360" height="150" className="fill-permukaan" />
-    <path d="M0 40h360M0 72h360M60 8v64M120 8v64M180 8v64M240 8v64M300 8v64" strokeWidth="1.5" className="stroke-white" fill="none" />
-    <rect y="100" width="360" height="50" className="fill-utama" opacity="0.14" />
-    <rect y="98" width="360" height="5" className="fill-utama" opacity="0.28" />
+    <rect width="360" height="150" className="fill-white" />
+    <path d="M0 30h360M0 62h360M45 0v92M135 0v92M225 0v92M315 0v92" fill="none" strokeWidth="1" className="stroke-garis" />
+    <path d={`M0 ${LANTAI_ATAS}h360v58H0z`} className="fill-utama-muda" />
+    <path d={garisLantai(13)} fill="none" strokeWidth="1" className="stroke-white" opacity="0.9" />
+    <path d={`M0 ${LANTAI_ATAS + 20}h360M0 ${LANTAI_ATAS + 40}h360`} fill="none" strokeWidth="1" className="stroke-white" opacity="0.9" />
+    <path d={`M0 ${LANTAI_ATAS}h360`} fill="none" strokeWidth="2" className="stroke-utama" opacity="0.35" />
     {children}
   </>
 );
 
+const garis = { fill: "none", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" } as const;
+
 const GAMBAR: Record<string, () => ReactNode> = {
   // Jaga lantai tetap kering dan bersih dari benda yang menghalangi.
   "bath-floor-slip:tanpa_biaya": () => (
-    <Lantai>
-      <ellipse cx="120" cy="124" rx="52" ry="9" className="fill-daun" opacity="0.45" />
-      <path d="M96 118q8-3 16 0M126 128q8-3 16 0" fill="none" strokeWidth="2.500" strokeLinecap="round" className="stroke-white" />
-      <path d="M236 14L186 112" strokeWidth="6" strokeLinecap="round" className="stroke-utama" />
-      <rect x="162" y="106" width="58" height="16" rx="6" className="fill-utama" />
-      <path d="M168 122v8M180 122v8M192 122v8M204 122v8M214 122v8" strokeWidth="3" strokeLinecap="round" className="stroke-utama" />
-      <path d="M262 94h40l-5 32h-30z" className="fill-utama" />
-      <path d="M262 94q20-14 40 0" fill="none" strokeWidth="4" strokeLinecap="round" className="stroke-utama" />
-      <path d="M52 100l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" className="fill-daun" />
-      <path d="M322 54l2.500 6 6 2.500-6 2.500-2.500 6-2.500-6-6-2.500 6-2.500z" className="fill-daun" opacity="0.7" />
-    </Lantai>
+    <Ruang>
+      <path d="M62 128q-8-10 6-18 22-9 52-6 28 4 26 14-3 10-30 12-34 3-54-2z" className="fill-daun" opacity="0.28" />
+      <path d="M62 128q-8-10 6-18 22-9 52-6 28 4 26 14-3 10-30 12-34 3-54-2z" strokeDasharray="3 5" {...garis} className="stroke-daun" />
+      <path d="M232 14L192 108" {...garis} strokeWidth="3" className="stroke-utama" />
+      <path d="M170 112h46l6 14h-58z" className="fill-white" />
+      <path d="M170 112h46l6 14h-58z" {...garis} className="stroke-utama" />
+      <path d="M176 126v8M186 126v8M196 126v8M206 126v8M216 126v8" {...garis} strokeWidth="2" className="stroke-utama" />
+      <path d="M270 98h38l-4 36h-30z" className="fill-white" />
+      <path d="M270 98h38l-4 36h-30z" {...garis} className="stroke-utama" />
+      <path d="M270 98q19-12 38 0" {...garis} className="stroke-utama" />
+      <path d="M272 112h34" {...garis} strokeWidth="1.500" className="stroke-utama" opacity="0.5" />
+      <path d="M88 118q8 4 16 0M110 126q8 4 16 0" {...garis} strokeWidth="1.800" className="stroke-daun" />
+    </Ruang>
   ),
   // Pasang keset atau stiker anti-slip di area berpindah dan area mandi.
   "bath-floor-slip:alat_tanpa_bongkar": () => (
-    <Lantai>
-      <path d="M78 136l34-30h136l34 30z" strokeLinejoin="round" strokeWidth="6" className="fill-utama stroke-utama" />
-      <g className="fill-white" opacity="0.5">
+    <Ruang>
+      <path d="M84 138l38-34h116l38 34z" className="fill-utama" />
+      <path d="M84 138l38-34h116l38 34z" {...garis} className="stroke-utama" />
+      <path d="M84 138v5h192v-5" className="fill-utama" opacity="0.55" />
+      <g className="fill-white" opacity="0.8">
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-          <circle key={`a${i}`} cx={132 + i * 11.5} cy="115" r="2" />
+          <circle key={`a${i}`} cx={142 + i * 8.2} cy="110" r="1.500" />
         ))}
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-          <circle key={`b${i}`} cx={118 + i * 12.8} cy="124" r="2.200" />
+          <circle key={`b${i}`} cx={130 + i * 9.8} cy="120" r="1.700" />
         ))}
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
-          <circle key={`c${i}`} cx={104 + i * 13.5} cy="132" r="2.400" />
+          <circle key={`c${i}`} cx={118 + i * 11} cy="130" r="1.900" />
         ))}
       </g>
-      <rect x="40" y="108" width="34" height="9" rx="4.500" className="fill-daun" transform="rotate(-8 57 112)" />
-      <rect x="44" y="124" width="34" height="9" rx="4.500" className="fill-daun" opacity="0.7" transform="rotate(6 61 128)" />
-      <circle cx="318" cy="52" r="11" className="fill-daun" />
-      <path
-        d="M312 52l4.500 4.500L325 47"
-        fill="none"
-        strokeWidth="3.500"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="stroke-white"
-      />
-    </Lantai>
+      <path d="M36 112h32l6 7H42z" className="fill-white" />
+      <path d="M36 112h32l6 7H42z" {...garis} strokeWidth="2" className="stroke-daun" />
+      <path d="M30 126h32l6 7H36z" className="fill-white" />
+      <path d="M30 126h32l6 7H36z" {...garis} strokeWidth="2" className="stroke-daun" />
+    </Ruang>
   ),
   // Ganti lantai dengan permukaan anti-slip, perbaiki kemiringan ke saluran.
   "bath-floor-slip:renovasi": () => (
-    <Lantai>
-      <path
-        d="M0 112h360M0 126h360M0 140h360M60 104v46M120 104v46M240 104v46M300 104v46"
-        strokeWidth="1.800"
-        fill="none"
-        className="stroke-white"
-      />
-      <rect x="150" y="108" width="60" height="22" rx="6" className="fill-utama" />
-      <path d="M162 108v22M174 108v22M186 108v22M198 108v22" strokeWidth="3" className="stroke-white" opacity="0.6" />
-      <path
-        d="M40 92q30 14 70 22M320 92q-30 14 -70 22"
-        fill="none"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeDasharray="1 10"
-        className="stroke-daun"
-      />
-      <circle cx="70" cy="98" r="3.500" className="fill-daun" />
-      <circle cx="290" cy="98" r="3.500" className="fill-daun" />
-      <circle cx="108" cy="116" r="3.500" className="fill-daun" opacity="0.7" />
-      <circle cx="252" cy="116" r="3.500" className="fill-daun" opacity="0.7" />
-      <g transform="rotate(-35 300 40)">
-        <rect x="296" y="14" width="8" height="46" rx="4" className="fill-daun" />
-        <rect x="284" y="8" width="32" height="14" rx="4" className="fill-utama" />
+    <Ruang>
+      <path d="M150 112h60l8 20h-76z" className="fill-white" />
+      <path d="M150 112h60l8 20h-76z" {...garis} className="stroke-utama" />
+      <path d="M166 118l-4 10M178 118l-2 10M190 118v10M202 118l2 10M214 118l4 10" {...garis} strokeWidth="2" className="stroke-utama" />
+      <path d="M52 108q36 4 84 12M308 108q-36 4 -84 12" {...garis} strokeWidth="2" strokeDasharray="2 6" className="stroke-daun" />
+      <path d="M128 117l9 3-8 5M232 117l-9 3 8 5" {...garis} strokeWidth="2" className="stroke-daun" />
+      <g transform="rotate(-8 292 36)">
+        <rect x="244" y="26" width="96" height="20" rx="4" className="fill-white" />
+        <rect x="244" y="26" width="96" height="20" rx="4" {...garis} className="stroke-utama" />
+        <path d="M262 26v8M280 26v6M298 26v8M316 26v6" {...garis} strokeWidth="1.800" className="stroke-utama" />
+        <rect
+          x="282"
+          y="32"
+          width="20"
+          height="9"
+          rx="4.500"
+          {...garis}
+          strokeWidth="1.800"
+          className="fill-daun stroke-utama"
+          opacity="0.9"
+        />
       </g>
-    </Lantai>
+    </Ruang>
   ),
 };
 
