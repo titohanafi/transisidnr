@@ -24,7 +24,7 @@ import { useRencana } from "../state/useRencana";
 
 const { kartu: t, umum, rencana: tr } = konten.ui;
 
-// Setiap tingkat solusi punya ikon sendiri; latar kartunya satu warna netral tipis yang sama (tanpa bayangan). Nama tingkat tetap tertulis.
+// Setiap tingkat solusi punya ikon sendiri; kartunya putih dengan garis tipis (tanpa bayangan dan tanpa warna latar). Nama tingkat tetap tertulis.
 const IKON_TINGKAT: Record<Tingkat, LucideIcon> = {
   tanpa_biaya: Hand,
   alat_tanpa_bongkar: Wrench,
@@ -124,7 +124,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   const idPanel = `panel-${x.tingkat}`;
                   const IkonTingkat = IKON_TINGKAT[x.tingkat];
                   return (
-                    <div key={x.tingkat} className="rounded-kartu bg-permukaan">
+                    <div key={x.tingkat} className="rounded-kartu border border-garis bg-white">
                       <h3>
                         <button
                           type="button"
@@ -145,7 +145,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                       </h3>
                       <p className="-mt-2 px-4 pb-4 text-redup">{s.ringkasan}</p>
                       <div className={`flex flex-wrap gap-2 px-4 ${buka ? "pb-3" : "pb-4"}`}>
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-kecil font-medium">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
                           <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
                           {s.biaya.kisaran_rp
                             ? ringkasRp(s.biaya.kisaran_rp)
@@ -153,14 +153,14 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                               ? `~${ringkasRp(s.biaya.estimasi_rp)}`
                               : umum.biayaMenyusul}
                         </span>
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-kecil font-medium">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
                           <Clock className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
                           {s.usaha.waktu ?? umum.menyusul}
                         </span>
                         {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
                         {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                       </div>
-                      <div id={idPanel} hidden={!buka} className="mx-3 mb-3 rounded-tombol bg-white p-4">
+                      <div id={idPanel} hidden={!buka} className="border-t border-garis/70 p-4">
                         <div className="mb-4 flex flex-wrap gap-2 empty:hidden">
                           <LencanaSifat sifat={x.sifat} />
                           {x.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
