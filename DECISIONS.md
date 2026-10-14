@@ -674,3 +674,4 @@
 - Jarak judul/avatar ke kartu di pita gelap dinaikkan menjadi 32px (ruang di atas tetap 24px).
 - Pita gelap: ruang di atas judul/avatar disamakan dengan jaraknya ke kartu, sama-sama 32px.
 - Kartu nomor darurat: padding atas dan bawah kartu dikurangi (16px menjadi 4px); jarak ke baris pertama dan terakhir kini ditentukan tinggi baris (minimal 56px).
+- **Panduan umum (sebelum asesmen, daftar semua panduan) memakai pita kepala gelap** seperti Dukungan dan Profil. Kolom pencarian dipindah ke dalam pita; kartu kelompok pertama menimpa tepi bawahnya, jarak kolom cari ke kartu 32px sama dengan jarak ke tepi atas pita. Halaman Produk Disabilitas (filter alat) tidak berubah.
