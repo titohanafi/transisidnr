@@ -18,9 +18,7 @@ export function KartuHero({
 }) {
   return (
     <section className={`relative overflow-hidden rounded-kartu bg-utama p-5 text-white ${className}`} aria-labelledby={id}>
-      <span aria-hidden="true" className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-utama-gelap/40" />
-      <span aria-hidden="true" className="pointer-events-none absolute -right-2 -top-20 h-32 w-32 rounded-full bg-utama-gelap/30" />
-      <span aria-hidden="true" className="pointer-events-none absolute -bottom-16 -left-10 h-36 w-36 rounded-full bg-utama-gelap/30" />
+      <HiasanLingkaran />
 
       <div className="relative flex items-center gap-4">
         {ikon}
@@ -42,5 +40,16 @@ export function TautanHero({ to, children }: { to: string; children: ReactNode }
     >
       {children}
     </Link>
+  );
+}
+
+/** Tiga lingkaran hiasan lebih gelap dari latar teal, jadi tidak pernah menurunkan kontras teks di atasnya. Induk harus relative dan overflow-hidden. */
+export function HiasanLingkaran() {
+  return (
+    <>
+      <span aria-hidden="true" className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-utama-gelap/40" />
+      <span aria-hidden="true" className="pointer-events-none absolute -right-2 -top-20 h-32 w-32 rounded-full bg-utama-gelap/30" />
+      <span aria-hidden="true" className="pointer-events-none absolute -bottom-16 -left-10 h-36 w-36 rounded-full bg-utama-gelap/30" />
+    </>
   );
 }
