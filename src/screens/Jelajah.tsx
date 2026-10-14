@@ -125,16 +125,16 @@ function Daftar({ awal }: { awal: Filter }) {
           {kelompok.map((g) => (
             <section
               key={g.kunci}
-              className="mt-bagian overflow-hidden rounded-kartu border border-garis/70 bg-white shadow-kartu first:mt-0"
+              className="mt-bagian overflow-hidden rounded-kartu bg-permukaan first:mt-0"
               aria-labelledby={`grup-${g.kunci}`}
             >
               <h2 id={`grup-${g.kunci}`} className="flex items-center gap-3 p-4 text-subjudul">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-white shadow-kartu">
                   <Ikon kunci={g.kunci} className="h-6 w-6" />
                 </span>
                 {label(g.kunci)}
               </h2>
-              <ul className="divide-y divide-garis/60 border-t border-garis/60">
+              <ul className="divide-y divide-garis border-t border-garis">
                 {g.kartu.map((k) => (
                   <li key={k.id}>{k.isi_menyusul ? <KartuKerangka kartu={k} /> : <KartuBaris kartu={k} />}</li>
                 ))}
