@@ -1,4 +1,20 @@
-import { ChevronDown, MessageCircle, Phone, TriangleAlert } from "lucide-react";
+import {
+  Accessibility,
+  Activity,
+  ChevronDown,
+  DraftingCompass,
+  Hammer,
+  HandHelping,
+  Landmark,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Siren,
+  Stethoscope,
+  TriangleAlert,
+  UsersRound,
+  type LucideIcon,
+} from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
@@ -14,13 +30,26 @@ import { isi } from "../lib/teks";
 const { kontak: t, igd, aksi } = konten.ui;
 
 const tombolTelepon =
-  "tekan inline-flex min-h-sentuh items-center justify-center gap-2 rounded-tombol bg-utama px-4 text-isi font-semibold text-white hover:bg-utama-gelap";
+  "tekan inline-flex min-h-sentuh w-full items-center justify-center gap-2 rounded-tombol bg-utama px-4 text-isi font-semibold text-white hover:bg-utama-gelap";
 const tombolSekunder =
-  "tekan inline-flex min-h-sentuh items-center justify-center gap-2 rounded-tombol border border-utama/60 bg-white px-4 text-isi font-semibold text-utama hover:bg-utama-muda";
+  "tekan inline-flex min-h-sentuh w-full items-center justify-center gap-2 rounded-tombol border border-utama/60 bg-white px-4 text-isi font-semibold text-utama hover:bg-utama-muda";
+
+// Ikon per jenis kontak (dekoratif; artinya sudah ada di nama jenis di sebelahnya).
+const IKON_KATEGORI: Record<KategoriKontak, LucideIcon> = {
+  darurat: Siren,
+  layanan_pemerintah: Landmark,
+  dokter_rehabilitasi: Stethoscope,
+  prostetis_ortotis: Accessibility,
+  okupasi_terapis: HandHelping,
+  fisioterapis: Activity,
+  tukang: Hammer,
+  arsitek: DraftingCompass,
+  komunitas: UsersRound,
+};
 
 function Aksi({ entri }: { entri: EntriKontak }) {
   return (
-    <div className="mt-3 flex flex-wrap gap-2">
+    <div className="mt-3 grid gap-2">
       {entri.telepon && (
         <a href={urlTelepon(entri.telepon)} className={tombolTelepon}>
           <Phone className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
@@ -40,7 +69,7 @@ function Aksi({ entri }: { entri: EntriKontak }) {
           href={entri.sumber}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-sentuh items-center px-1 text-kecil text-utama underline"
+          className="inline-flex min-h-sentuh items-center justify-self-start px-1 text-kecil text-utama underline"
         >
           {t.sumber}
           <span className="sr-only">: {entri.nama}</span>
@@ -66,11 +95,12 @@ export function Kontak() {
   const ahli = kumpulkanAhli(konten.kartu);
 
   return (
-    <Halaman judul={t.judul} judulTersembunyi kepala={<p className="mt-2 text-redup">{t.pengantar}</p>}>
+    <Halaman judul={t.judul} judulTersembunyi latarPutih kepala={<p className="mt-2 text-redup">{t.pengantar}</p>}>
       <div className="flex flex-col gap-bagian">
         {darurat && darurat.entri.length > 0 && (
           <section aria-labelledby="nomor-darurat">
-            <h2 id="nomor-darurat" className="text-subjudul">
+            <h2 id="nomor-darurat" className="flex items-center gap-2 text-subjudul">
+              <Siren className="h-5 w-5 shrink-0 text-bahaya" strokeWidth={2} aria-hidden="true" focusable="false" />
               {darurat.kategori.nama}
             </h2>
             <ul className="mt-isi grid grid-cols-2 gap-3">
@@ -169,27 +199,33 @@ export function Kontak() {
           </div>
         </fieldset>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
           {tampil.map((g) => {
             const info = ahli.find((a) => a.jenis === g.kategori.id);
             const saran = kartu?.bantuan?.find((b) => b.jenis === g.kategori.id);
+            const Ikon = IKON_KATEGORI[g.kategori.id];
             return (
               <section
                 key={g.kategori.id}
-                className="overflow-hidden rounded-kartu border border-garis bg-white"
+                className="overflow-hidden rounded-kartu border border-garis bg-white shadow-kartu"
                 aria-labelledby={`kat-${g.kategori.id}`}
               >
-                <div className="p-4">
-                  <h2 id={`kat-${g.kategori.id}`} className="text-judulKartu">
-                    {g.kategori.nama}
-                  </h2>
-                  <p className="mt-1 text-kecil text-redup">{g.kategori.arti}</p>
-                  {saran && (
-                    <div className="mt-3">
-                      <Tanda>{t.saranUntukPanduan}</Tanda>
-                      <p className="mt-2">{saran.keterangan}</p>
-                    </div>
-                  )}
+                <div className="flex gap-3 p-4">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-tombol bg-utama-muda text-utama">
+                    <Ikon className="h-6 w-6" strokeWidth={2} aria-hidden="true" focusable="false" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h2 id={`kat-${g.kategori.id}`} className="text-judulKartu">
+                      {g.kategori.nama}
+                    </h2>
+                    <p className="mt-1 text-kecil text-redup">{g.kategori.arti}</p>
+                    {saran && (
+                      <div className="mt-3">
+                        <Tanda>{t.saranUntukPanduan}</Tanda>
+                        <p className="mt-2">{saran.keterangan}</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="divide-y divide-garis/70 border-t border-garis/70">
                   {g.entri.length === 0 ? (
@@ -198,9 +234,13 @@ export function Kontak() {
                     g.entri.map((e) => (
                       <div key={e.id} className="p-4">
                         <p className="font-semibold">{e.nama}</p>
-                        {(e.kota || e.alamat || e.catatan) && (
-                          <p className="text-kecil text-redup">{[e.kota, e.alamat, e.catatan].filter(Boolean).join(" · ")}</p>
+                        {(e.kota || e.alamat) && (
+                          <p className="mt-1 flex items-start gap-1.5 text-kecil text-redup">
+                            <MapPin className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+                            <span>{[e.kota, e.alamat].filter(Boolean).join(" · ")}</span>
+                          </p>
                         )}
+                        {e.catatan && <p className="mt-1 text-kecil text-redup">{e.catatan}</p>}
                         <Aksi entri={e} />
                       </div>
                     ))

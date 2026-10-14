@@ -47,12 +47,12 @@
     "tabBeranda": "Beranda",
     "tabPanduan": "Panduan",
     "tabSaya": "Saya",
-    "tabDarurat": "Kontak",
+    "tabDarurat": "Dukungan",
     "headerPakaiAlat": "Produk Disabilitas",
     "halamanSebelumnya": "Halaman sebelumnya"
   },
   "kontak": {
-    "judul": "Kontak",
+    "judul": "Dukungan",
     "pengantar": "Nomor yang bisa dihubungi saat darurat, dan ahli yang bisa membantu.",
     "sumber": "Sumber resmi",
     "keteranganSumber": "Keterangan dan sumber nomor",
@@ -342,7 +342,7 @@
         "balasCukup": "Kabar baik. Panduan ini ditandai beres di Panduan Saya.",
         "balasSulit": "Tidak apa-apa. Pilihan berikutnya sedikit lebih besar, dan tetap boleh Anda tunda.",
         "berikutnya": "Lihat pilihan berikutnya",
-        "terakhir": "Ini sudah pilihan terakhir di panduan ini. Pertimbangkan bertanya ke ahli lewat menu Kontak."
+        "terakhir": "Ini sudah pilihan terakhir di panduan ini. Pertimbangkan bertanya ke ahli lewat menu Dukungan."
       }
     },
     "beli": {

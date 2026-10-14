@@ -624,3 +624,9 @@
 - Tanpa foto: kotak polos dengan ikon kotak dan teks "Foto produk menyusul" (`aksi.beli.fotoMenyusul` di `content/ui.json`).
 - Tidak ada foto yang diisi: tautan gambar tidak boleh dikarang. Semua produk contoh masih `null`.
 - Foto dimuat dari alamat luar saat dilihat, jadi peramban pengguna menghubungi situs itu (alamat IP terlihat). Tanpa cookie atau data aplikasi, tetapi ini beda dari prinsip "tidak ada data keluar perangkat"; perlu keputusan tim bila foto mulai diisi (alternatif: simpan berkas kecil di `public/`).
+
+## Menu Kontak menjadi Dukungan, tampilan dirapikan
+- Nama menu dan header: "Kontak" menjadi "Dukungan" (`umum.tabDarurat`, `kontak.judul` di `content/ui.json`). Alamat tetap `/kontak` agar tautan lama tidak putus. Kalimat "lewat menu Dukungan" di panduan ikut diganti.
+- Latar halaman putih (`latarPutih`), sesuai latar bawaan.
+- Setiap jenis kontak punya ikon dalam kotak hijau muda (`IKON_KATEGORI` di `src/screens/Kontak.tsx`, dari lucide-react, dekoratif). Jenis kontak baru di `KategoriKontak` wajib diberi ikon, kalau tidak typecheck gagal.
+- Alamat/kota memakai ikon pin dan baris sendiri, catatan di bawahnya. Tombol telepon dan WhatsApp selebar kartu, bertumpuk, supaya mudah ditekan satu tangan.
