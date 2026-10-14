@@ -165,6 +165,8 @@ export function Kontak() {
           </p>
         )}
 
+        <h2 className="-mb-2 text-subjudul">{t.daftarJudul}</h2>
+
         <fieldset>
           <legend className="sr-only">{t.filterJudul}</legend>
           <div className="flex flex-wrap gap-2">

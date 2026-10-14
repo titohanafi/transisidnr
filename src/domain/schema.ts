@@ -208,6 +208,7 @@ export const uiSchema = z
     kontak: z.object({
       judul: teks,
       sumber: teks,
+      daftarJudul: teks,
       filterSemua: teks,
       filterJudul: teks,
       telepon: teks,
