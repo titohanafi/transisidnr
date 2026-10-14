@@ -124,7 +124,7 @@ const rapikanTeks = (t: string) => t.toLowerCase().normalize("NFD").replace(/[\u
 // Kata penghubung dan kata tanya yang lazim diketik ("cara mengatasi lantai licin") tetapi tidak ada di judul panduan.
 const KATA_ABAI = new Set([
   "cara", "mengatasi", "atasi", "mengatur", "memperbaiki", "bagaimana", "gimana", "apa", "kenapa", "yang", "di", "ke", "dari", "untuk",
-  "agar", "supaya", "saat", "ketika", "dan", "atau", "dengan", "pada", "kalau", "jika", "bila", "tentang", "soal", "panduan",
+  "agar", "supaya", "saat", "ketika", "dan", "atau", "dengan", "pada", "kalau", "jika", "bila", "tentang", "soal", "panduan", "solusi",
 ]);
 
 /**

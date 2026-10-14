@@ -141,6 +141,7 @@ describe("cocokCari", () => {
     expect(cocokCari(kartuLicin, "cara mengatasi lantai licin")).toBe(true);
     expect(cocokCari(kartuLicin, "bagaimana mengatasi pintu")).toBe(false);
     expect(cocokCari(kartuLicin, "cara")).toBe(true);
+    expect(cocokCari(kartuLicin, "solusi lantai licin")).toBe(true);
   });
   it("kata yang tidak ada tidak cocok", () => {
     expect(cocokCari(kartuLicin, "xyz")).toBe(false);

@@ -443,3 +443,5 @@
 ## Saran pencarian di Beranda
 - Di bawah kolom cari ada baris "Coba cari" berisi tiga saran yang bisa diketuk (Lantai licin, Pintu sempit, Pegangan kloset). Mengetuknya membuka daftar panduan yang sudah tersaring (sama seperti mengetik lalu Enter). Daftar saran ada di `content/ui.json` (`beranda.pilih.cari.saran`) dan diuji agar tiap saran selalu menemukan minimal satu panduan.
 - Saran ini bukan riwayat pencarian pengguna: tidak ada riwayat yang disimpan. Tiga saja agar muat satu baris dan Beranda tidak makin padat.
+
+- Judul kolom cari menjadi "Temukan panduan dan solusi agar rumah lebih ramah disabilitas": kata "solusi" memberi tahu bahwa mengetik masalah (mis. "lantai licin") juga tepat, dan sudah dikenal di aplikasi ("Pilihan solusi"). Kata "solusi" ikut diabaikan oleh pencarian ("solusi lantai licin" tetap menemukan panduan).
