@@ -12,9 +12,9 @@
         "tombol": "Mulai"
       },
       "lanjut": {
-        "judul": "Lanjutkan rencana Anda",
+        "judul": "Lanjutkan panduan Anda",
         "deskripsi": "Lihat satu hal untuk hari ini dan langkah berikutnya.",
-        "tombol": "Buka rencana"
+        "tombol": "Buka Panduan Saya"
       },
       "cakupan": "Saat ini baru tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda.",
       "semua": "Lihat panduan",
@@ -44,7 +44,7 @@
     "menuUtama": "Menu utama",
     "dataPrivasi": "Data dan privasi",
     "tabBeranda": "Beranda",
-    "tabRencana": "Rencana",
+    "tabPanduan": "Panduan",
     "tabSaya": "Saya",
     "tabDarurat": "Darurat",
     "halamanSebelumnya": "Halaman sebelumnya"
@@ -68,7 +68,7 @@
   "saya": {
     "judul": "Saya",
     "jawabanJudul": "Jawaban Anda",
-    "belumJawab": "Anda belum mengisi pertanyaan awal. Dengan beberapa pertanyaan ya atau tidak, rencana bisa disesuaikan dengan rumah Anda.",
+    "belumJawab": "Anda belum mengisi pertanyaan awal. Dengan beberapa pertanyaan ya atau tidak, panduan bisa disesuaikan dengan kondisi Anda.",
     "mulai": "Mulai pertanyaan",
     "ruangan": "Ruangan",
     "aktivitas": "Aktivitas",
@@ -184,7 +184,7 @@
     "ubahRuangan": "Ganti"
   },
   "rencana": {
-    "judul": "Rencana Saya",
+    "judul": "Panduan Saya",
     "prioritas": "Prioritas Anda: {daftar}",
     "ubahJawaban": "Ubah jawaban",
     "semuaPanduan": "Lihat semua panduan",
@@ -200,7 +200,7 @@
     "pendampingJudul": "Untuk Anda yang mendampingi",
     "bukaKartu": "Buka panduan",
     "cocokSewa": "Cocok untuk kontrakan dan kos",
-    "cetak": "Cetak rencana",
+    "cetak": "Cetak panduan saya",
     "sedangDisusun": "Sedang disusun",
     "belumAdaSiap": "Panduan untuk prioritas Anda belum siap. Isinya sedang disusun; daftarnya ada di bawah.",
     "ringan": {
@@ -223,7 +223,7 @@
       "renovasi": "Renovasi"
     },
     "tidakDitemukan": "Panduan tidak ditemukan",
-    "kembaliKeRencana": "Kembali ke rencana",
+    "kembaliKeRencana": "Kembali ke panduan saya",
     "situasi": "Situasi",
     "kenapa": "Kenapa penting",
     "solusi": "Pilihan solusi",
@@ -318,11 +318,11 @@
         "judul": "Bagaimana hasilnya?",
         "cukup": "Sudah cukup",
         "sulit": "Masih sulit",
-        "balasCukup": "Kabar baik. Panduan ini ditandai beres di Rencana.",
+        "balasCukup": "Kabar baik. Panduan ini ditandai beres di Panduan Saya.",
         "balasSulit": "Tidak apa-apa. Pilihan berikutnya sedikit lebih besar, dan tetap boleh Anda tunda.",
         "berikutnya": "Lihat pilihan berikutnya",
         "terakhir": "Ini sudah pilihan terakhir di panduan ini. Pertimbangkan bertanya ke ahli.",
-        "keRencana": "Kembali ke rencana"
+        "keRencana": "Kembali ke panduan saya"
       }
     },
     "beli": {
@@ -365,12 +365,12 @@
       "kosong": "Panduan ini belum punya saran ahli."
     },
     "cetak": {
-      "judulKertas": "Rencana adaptasi rumah",
+      "judulKertas": "Panduan adaptasi rumah",
       "tombol": "Cetak atau simpan PDF",
       "penjelasan": "Tombol ini membuka jendela cetak. Pilih \"Simpan sebagai PDF\" bila ingin berkas.",
       "foto": "Foto ruangan",
       "satuHal": "Satu hal untuk hari ini",
-      "kosong": "Belum ada panduan di rencana Anda.",
+      "kosong": "Belum ada panduan yang dipilih untuk Anda.",
       "langkahSelesai": "Selesai:",
       "langkahBelum": "Belum:"
     }
@@ -380,14 +380,14 @@
     "pengantar": "Buka panduan untuk melihat langkahnya. Bila sudah tahu ingin mencari alat atau mengenali peran ahli dan tukang, pilih saringan di bawah. Urutan panduan tidak dipengaruhi pembayaran.",
     "kosongFilter": "Belum ada panduan dengan isi lengkap untuk pilihan ini. Isi panduan masih disusun.",
     "caregiver": "Untuk caregiver",
-    "ajakanJudul": "Rencana",
+    "ajakanJudul": "Panduan saya",
     "ajakanBelum": "Ingin langkah yang disesuaikan dengan rumah Anda? Jawab beberapa pertanyaan ya atau tidak.",
-    "ajakanMulai": "Susun rencana saya",
-    "ajakanSudah": "Jawaban Anda sudah tersimpan. Buka rencana yang dibuat dari jawaban itu.",
-    "ajakanRencana": "Lihat Rencana Saya",
+    "ajakanMulai": "Cek kebutuhan di rumah",
+    "ajakanSudah": "Jawaban Anda sudah tersimpan. Buka panduan yang disusun dari jawaban itu.",
+    "ajakanRencana": "Lihat Panduan Saya",
     "aksiKartu": "Aksi untuk panduan ini",
     "semuaPanduan": "Kembali ke semua panduan",
-    "cari": { "label": "Cari panduan", "placeholder": "Mis. lantai licin", "tombol": "Cari", "hapus": "Hapus pencarian", "kosong": "Tidak ada panduan yang cocok. Coba kata lain, atau susun rencana supaya langkahnya disesuaikan dengan rumah Anda." },
+    "cari": { "label": "Cari panduan", "placeholder": "Mis. lantai licin", "tombol": "Cari", "hapus": "Hapus pencarian", "kosong": "Tidak ada panduan yang cocok. Coba kata lain, atau cek kebutuhan di rumah supaya langkahnya disesuaikan dengan kondisi Anda." },
     "lainnya": { "judul": "Lainnya", "alat": "Daftar alat", "ahli": "Peran ahli dan tukang" },
     "judulFilter": {
       "semua": "Semua panduan",

@@ -1,4 +1,4 @@
-import { House, ListChecks, ShieldAlert, UserRound, type LucideIcon } from "lucide-react";
+import { BookOpen, House, ShieldAlert, UserRound, type LucideIcon } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { konten } from "../domain/content";
 
@@ -6,7 +6,7 @@ const { umum } = konten.ui;
 
 const TAB: { ke: string; label: string; ujung?: boolean; alias?: string; Ikon: LucideIcon }[] = [
   { ke: "/", label: umum.tabBeranda, ujung: true, Ikon: House },
-  { ke: "/rencana", label: umum.tabRencana, alias: "/jelajah", Ikon: ListChecks },
+  { ke: "/rencana", label: umum.tabPanduan, alias: "/jelajah", Ikon: BookOpen },
   { ke: "/igd", label: umum.tabDarurat, Ikon: ShieldAlert },
   { ke: "/saya", label: umum.tabSaya, Ikon: UserRound },
 ];

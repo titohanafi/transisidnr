@@ -46,7 +46,9 @@ export function CheckIn() {
   return (
     <fieldset className="rounded-kartu bg-utama-muda p-4">
       <legend className="sr-only">{t.label}</legend>
-      <p className="text-sm font-semibold text-utama-gelap">{t.label}</p>
+      <p aria-hidden="true" className="text-sm font-semibold text-utama-gelap">
+        {t.label}
+      </p>
       <p className="mt-0.5 text-lg font-bold leading-snug">{t.pertanyaan}</p>
       <div className="mt-3 grid grid-cols-5 gap-1.5">
         {t.pilihan.map((p) => (

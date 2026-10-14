@@ -426,3 +426,9 @@
 - Judul kartu utama diganti "Buat rencana pribadi" (sebelumnya "Buat rencana untuk rumah Anda") agar langsung ke inti dan tidak mengulang "rumah Anda" yang ada di deskripsinya ("Dapatkan langkah yang sesuai dengan kondisi dan rumah Anda.").
 
 - Kartu utama: judul "Cek kebutuhan di rumah" dan deskripsi "Jawab beberapa pertanyaan, lalu dapatkan langkah yang sesuai dengan kondisi Anda." Kata "rencana" dihindari di judul kartu karena terdengar seperti rencana bepergian. Kata "rencana" masih dipakai di tab Rencana dan layar "Rencana Saya"; bila tidak pas juga, pertimbangkan "Langkah Saya".
+
+## Tab Rencana menjadi Panduan
+- Alasan: "rencana" terdengar seperti rencana bepergian, dan "langkah" sudah dipakai untuk isi di dalam panduan (bagian Langkah, "3 dari 5 langkah selesai"). Setelah Rencana dan Panduan digabung, tab itu berisi satu hal: panduan.
+- Tab navbar: "Panduan" (ikon buku terbuka). Judul layar: "Semua panduan" sebelum menjawab dan "Panduan Saya" sesudahnya. Tombol di Beranda: "Cek kebutuhan di rumah", lalu "Lanjutkan panduan Anda" / "Buka Panduan Saya".
+- Teks ikut diselaraskan: cetak ("Cetak panduan saya", kertas "Panduan adaptasi rumah"), kembali ("Kembali ke panduan saya"), ajakan di daftar, dan Saya. Nama internal (rute `/rencana`, fungsi `buatRencana`, kejadian `rencana_dibuat`) tidak diubah agar tautan lama tetap berlaku.
+- Telusur halaman: tidak ada sisa kata "rencana" yang terlihat pengguna di Beranda, Panduan, Saya, Cetak, detail panduan, dan peran ahli. Label "Untuk Anda yang merawat" di check-in tidak lagi terbaca dua kali oleh pembaca layar.
