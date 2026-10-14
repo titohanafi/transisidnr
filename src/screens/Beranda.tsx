@@ -62,6 +62,24 @@ export function Beranda() {
             <Search className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" focusable="false" />
           </button>
         </div>
+        <div className="mt-3">
+          <p id="saran-cari" className="text-sm text-redup">
+            {pilih.cari.saranJudul}
+          </p>
+          <ul aria-labelledby="saran-cari" className="mt-1 flex flex-wrap gap-2">
+            {pilih.cari.saran.map((k) => (
+              <li key={k}>
+                <button
+                  type="button"
+                  onClick={() => navigate("/jelajah", { state: { cari: k } })}
+                  className="inline-flex min-h-sentuh items-center rounded-full border-2 border-garisKontrol bg-white px-4 text-sm font-semibold text-tinta"
+                >
+                  {k}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       </form>
 
       <section className="mt-6 rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-utama">

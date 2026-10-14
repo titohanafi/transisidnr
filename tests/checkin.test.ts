@@ -14,3 +14,12 @@ describe("bantuan di check-in", () => {
     }
   });
 });
+
+import { cocokCari } from "../src/domain/jelajah";
+describe("saran pencarian di Beranda", () => {
+  it("setiap saran menemukan minimal satu panduan", () => {
+    for (const saran of konten.ui.beranda.pilih.cari.saran) {
+      expect(konten.kartu.some((k) => cocokCari(k, saran))).toBe(true);
+    }
+  });
+});

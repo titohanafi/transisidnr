@@ -18,7 +18,7 @@
       },
       "cakupan": "Saat ini baru tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda.",
       "semua": "Lihat panduan",
-      "cari": { "label": "Temukan panduan agar rumah lebih ramah disabilitas", "placeholder": "Mis. cara mengatasi lantai licin", "tombol": "Cari" }
+      "cari": { "label": "Temukan panduan agar rumah lebih ramah disabilitas", "placeholder": "Mis. cara mengatasi lantai licin", "tombol": "Cari", "saranJudul": "Coba cari", "saran": ["Lantai licin", "Pintu sempit", "Pegangan kloset"] }
     }
   },
   "umum": {
