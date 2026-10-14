@@ -226,7 +226,7 @@
       "ringkasan": "{n} dari {total} masalah teratasi",
       "kosong": "Belum ada masalah yang teratasi. Setelah mencoba satu panduan, catat hasilnya di sana.",
       "rincian": "Lihat rincian",
-      "sedang": "Sedang dicoba",
+      "sedang": "Sedang dikerjakan",
       "belumDicoba": "Belum dicoba",
       "lihat": "Sudah teratasi ({n})"
     },
