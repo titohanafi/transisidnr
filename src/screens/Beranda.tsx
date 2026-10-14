@@ -50,7 +50,7 @@ export function Beranda() {
             <Search className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" focusable="false" />
           </button>
         </div>
-        <p id="cakupan-judul" className="mt-3 text-sm font-semibold text-redup">
+        <p id="cakupan-judul" className="mt-3 text-sm text-redup">
           {pilih.cakupanJudul}
         </p>
         <ul aria-labelledby="cakupan-judul" className="mt-1 flex flex-wrap gap-2">
