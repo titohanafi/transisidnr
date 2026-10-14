@@ -208,7 +208,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                             )}
                             {x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang") && (
                               <Jembatan teks={t.jembatanRenovasi}>
-                                <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" />
+                                <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" className="w-full" />
                               </Jembatan>
                             )}
                           </div>
