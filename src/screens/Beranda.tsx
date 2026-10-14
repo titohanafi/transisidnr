@@ -114,7 +114,7 @@ export function Beranda() {
 
       <div className="relative flex items-center gap-3">
         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-daun">
-          <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-6 w-6 text-white" />
+          <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-5 w-5 text-white" />
         </span>
         <h3 id="jalur-utama" className="text-judulKartu font-bold">
           {kartu.judul}
