@@ -40,7 +40,6 @@ const teks: [string, string, string][] = [
   ["tinta di aksen-muda", hex("tinta"), hex("aksen", "muda")],
   ["tinta di permukaan", hex("tinta"), hex("permukaan")],
   ["redup di permukaan", hex("redup"), hex("permukaan")],
-  ["redup di utama-muda (saran Beranda)", hex("redup"), hex("utama", "muda")],
   ["info di info-muda", hex("info"), hex("info", "muda")],
   ["tinta di info-muda", hex("tinta"), hex("info", "muda")],
   ["info di putih (ikon)", hex("info"), putih],

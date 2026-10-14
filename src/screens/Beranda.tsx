@@ -103,7 +103,7 @@ export function Beranda() {
 
   // Segmen pencarian selebar layar. Bagi pengunjung baru, kartu utama menimpa tepi bawahnya sekitar 40px.
   const segmenCari = (
-    <div className={`-mx-4 bg-utama-muda px-4 ${adaJawaban ? "py-5" : "-mt-6 pb-[72px] pt-6"}`}>
+    <div className={`-mx-4 bg-permukaan px-4 ${adaJawaban ? "py-5" : "-mt-6 pb-[72px] pt-6"}`}>
       {!adaJawaban && cakupan("mb-isi")}
       {!adaJawaban && sapaan("mb-isi")}
       {cari}
@@ -123,7 +123,7 @@ export function Beranda() {
   );
 
   return (
-    <Halaman judul={app.nama}>
+    <Halaman judul={app.nama} latarPutih>
       <h2 className="sr-only">{pilih.judul}</h2>
 
       <div className="flex flex-col gap-bagian">

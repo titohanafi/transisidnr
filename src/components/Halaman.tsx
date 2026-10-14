@@ -15,6 +15,7 @@ export function Halaman({
   judulTersembunyi = false,
   atasJudul,
   kepalaPutih = false,
+  latarPutih = false,
 }: {
   judul: string;
   children: ReactNode;
@@ -27,6 +28,8 @@ export function Halaman({
   atasJudul?: ReactNode;
   /** Kepala berupa hero putih selebar layar (tanpa kotak), di atas latar halaman yang berwarna. */
   kepalaPutih?: boolean;
+  /** Latar halaman putih (bawaan: abu kehijauan muda). Dipakai Beranda, yang punya pita pencarian berwarna. */
+  latarPutih?: boolean;
 }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -45,7 +48,9 @@ export function Halaman({
   );
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col bg-permukaan md:border-x md:border-garis md:shadow-kartu print:bg-white print:shadow-none">
+    <div
+      className={`mx-auto flex min-h-screen max-w-md flex-col ${latarPutih ? "bg-kertas" : "bg-permukaan"} md:border-x md:border-garis md:shadow-kartu print:bg-white print:shadow-none`}
+    >
       <a
         href="#isi"
         onClick={(e) => {
