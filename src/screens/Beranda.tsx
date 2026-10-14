@@ -5,7 +5,7 @@ import { IkonBeranda } from "../components/IkonBeranda";
 import { konten } from "../domain/content";
 import { useStore } from "../state/store";
 
-const { app, beranda, umum } = konten.ui;
+const { app, beranda } = konten.ui;
 const { pilih } = beranda;
 
 // Satu tindakan utama: belum menjawab -> buat rencana; sudah -> lanjutkan rencana.
@@ -35,8 +35,6 @@ export function Beranda() {
           {kartu.tombol}
         </Link>
       </section>
-
-      {!adaJawaban && <p className="mt-3 text-sm text-redup">{umum.privasi}</p>}
 
       <Link to="/jelajah" className="mt-2 inline-flex min-h-sentuh items-center text-utama underline">
         {pilih.semua}
