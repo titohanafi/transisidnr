@@ -108,7 +108,9 @@ export function Beranda() {
       aria-labelledby="jalur-utama"
     >
       <div className="flex items-center gap-3">
-        <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-9 w-9 text-aksen-muda" />
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-daun">
+          <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-6 w-6 text-white" />
+        </span>
         <h3 id="jalur-utama" className="text-subjudul">
           {kartu.judul}
         </h3>
