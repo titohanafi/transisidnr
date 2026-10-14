@@ -83,42 +83,39 @@ function Daftar({ awal }: { awal: Filter }) {
     <Halaman
       judul={t.judulFilter[filter]}
       judulTersembunyi={filter === "semua"}
-      kepala={
-        <>
-          {filter !== "semua" && <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>}
-          {filter === "semua" && (
-            <div>
-              <label htmlFor="cari-panduan" className="sr-only">
-                {t.cari.label}
-              </label>
-              <div className="relative">
-                <Search
-                  className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-redup"
-                  strokeWidth={2}
-                  aria-hidden="true"
-                  focusable="false"
-                />
-                <input
-                  id="cari-panduan"
-                  type="search"
-                  value={cari}
-                  onChange={(e) => setCari(e.target.value)}
-                  autoComplete="off"
-                  enterKeyHint="search"
-                  placeholder={placeholder}
-                  onFocus={() => setFokus(true)}
-                  onBlur={() => setFokus(false)}
-                  autoFocus={dariBeranda === ""}
-                  className="h-12 w-full rounded-tombol border border-garisKontrol bg-white pl-11 pr-3 text-isi shadow-kartu placeholder:text-redup"
-                />
-              </div>
-            </div>
-          )}
-        </>
-      }
+      kepala={filter === "semua" ? undefined : <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>}
     >
+      {filter === "semua" && (
+        <div>
+          <label htmlFor="cari-panduan" className="sr-only">
+            {t.cari.label}
+          </label>
+          <div className="relative">
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-redup"
+              strokeWidth={2}
+              aria-hidden="true"
+              focusable="false"
+            />
+            <input
+              id="cari-panduan"
+              type="search"
+              value={cari}
+              onChange={(e) => setCari(e.target.value)}
+              autoComplete="off"
+              enterKeyHint="search"
+              placeholder={placeholder}
+              onFocus={() => setFokus(true)}
+              onBlur={() => setFokus(false)}
+              autoFocus={dariBeranda === ""}
+              className="h-12 w-full rounded-tombol border border-garisKontrol bg-white pl-11 pr-3 text-isi shadow-kartu placeholder:text-redup"
+            />
+          </div>
+        </div>
+      )}
+
       {filter === "semua" && cari.trim() !== "" && (
-        <aside className="flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda p-3 text-catatan">
+        <aside className="mt-isi flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda p-3 text-catatan">
           <Info className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
           <p className="text-kecil">{t.cari.cakupan}</p>
         </aside>
@@ -207,9 +204,8 @@ function Daftar({ awal }: { awal: Filter }) {
       )}
 
       {filter === "semua" ? (
-        <nav aria-label={t.lainnya.judul} className="mt-jeda">
-          <h2 className="text-subjudul">{t.lainnya.judul}</h2>
-          <ul className="mt-isi space-y-3">
+        <nav aria-label={t.lainnya.judul} className="mt-bagian">
+          <ul className="space-y-3">
             {[
               { ke: "/jelajah/alat", teks: t.lainnya.alat, Ikon: Wrench },
               { ke: "/jelajah/ahli", teks: t.lainnya.ahli, Ikon: UsersRound },
@@ -225,10 +221,6 @@ function Daftar({ awal }: { awal: Filter }) {
           {t.semuaPanduan}
         </TombolLink>
       )}
-
-      <TombolLink to="/" gayaTombol="sekunder" className="mt-4">
-        {umum.keBeranda}
-      </TombolLink>
     </Halaman>
   );
 }
