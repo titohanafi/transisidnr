@@ -95,7 +95,7 @@
     "belumDiisi": "Belum diisi",
     "artiIkon": "Arti ikon",
     "ubah": "Ubah",
-    "pertanyaan": "Bagaimana perasaan Anda hari ini?",
+    "pertanyaan": "Apa yang paling terasa hari ini?",
     "pilihan": [
       {
         "id": "capek_fisik",
@@ -108,7 +108,7 @@
       {
         "id": "capek_emosi",
         "bantuan": { "tombol": "Baca: mendampingi tanpa mengambil alih", "panduan": "care-assist-transfer" },
-        "singkat": "Penuh",
+        "singkat": "Berat",
         "emoji": "😔",
         "label": "Hati terasa penuh",
         "balasan": "Wajar bila perasaan terasa penuh. Anda tidak harus kuat setiap saat."
@@ -124,7 +124,7 @@
       {
         "id": "soal_biaya",
         "bantuan": { "tombol": "Lihat panduan, mulai dari yang tanpa biaya", "ke": "/jelajah" },
-        "singkat": "Biaya",
+        "singkat": "Cemas",
         "emoji": "😟",
         "label": "Khawatir soal biaya",
         "balasan": "Memikirkan biaya itu berat. Mulai dari langkah tanpa biaya juga sudah berarti."
