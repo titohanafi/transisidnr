@@ -1,4 +1,4 @@
-import { CalendarDays, ClipboardList, ShieldCheck, type LucideIcon } from "lucide-react";
+import { CalendarDays, ClipboardList, DoorOpen, Flag, ListChecks, ShieldCheck, type LucideIcon } from "lucide-react";
 import { BarisTautan } from "../components/BarisTautan";
 import { RiwayatCheckin } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
@@ -31,38 +31,54 @@ export function Saya() {
     </div>
   );
 
+  // Ikon kecil di kiri tiap baris ringkasan (dekoratif; artinya ada di label).
+  const ikonBaris = (Ikon: LucideIcon) => (
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-tombol bg-permukaan text-utama">
+      <Ikon className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+    </span>
+  );
+
   return (
-    <Halaman judul={t.judul} kepala={<p className="mt-2 text-redup">{t.pengantar}</p>}>
+    <Halaman judul={t.judul} judulTersembunyi latarPutih>
       <div className="flex flex-col gap-bagian">
         <section className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu" aria-labelledby="saya-jawaban">
           {judulKartu("saya-jawaban", ClipboardList, t.jawabanJudul)}
           {adaJawaban ? (
             <>
-              <dl className="mt-4 divide-y divide-garis/60">
-                <div className="pb-3">
-                  <dt className="text-kecil text-redup">{t.ruangan}</dt>
-                  <dd className="font-medium">{ruangan?.nama ?? t.belumDipilih}</dd>
+              <dl className="mt-4 divide-y divide-garis/60 border-t border-garis/60">
+                <div className="flex items-start gap-3 py-3.5">
+                  {ikonBaris(DoorOpen)}
+                  <div className="min-w-0 flex-1">
+                    <dt className="text-kecil text-redup">{t.ruangan}</dt>
+                    <dd className="font-medium">{ruangan?.nama ?? t.belumDipilih}</dd>
+                  </div>
                 </div>
-                <div className="py-3">
-                  <dt className="text-kecil text-redup">{t.aktivitas}</dt>
-                  <dd>
-                    <ul className="mt-1 space-y-1">
-                      {status.map(([id, st]) => (
-                        <li key={id} className="flex justify-between gap-3">
-                          <span className="font-medium">{namaAktivitas(id)}</span>
-                          <span className="text-right text-redup">
-                            {asesmen.aktivitas.status[st as keyof typeof asesmen.aktivitas.status]}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </dd>
+                <div className="flex items-start gap-3 py-3.5">
+                  {ikonBaris(ListChecks)}
+                  <div className="min-w-0 flex-1">
+                    <dt className="text-kecil text-redup">{t.aktivitas}</dt>
+                    <dd>
+                      <ul className="mt-1 space-y-1.5">
+                        {status.map(([id, st]) => (
+                          <li key={id} className="flex items-baseline justify-between gap-3">
+                            <span className="font-medium">{namaAktivitas(id)}</span>
+                            <span className="rounded-full bg-permukaan px-2.5 py-0.5 text-right text-kecil text-redup">
+                              {asesmen.aktivitas.status[st as keyof typeof asesmen.aktivitas.status]}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
                 </div>
-                <div className="pt-3">
-                  <dt className="text-kecil text-redup">{t.prioritas}</dt>
-                  <dd className="font-medium">
-                    {state.asesmen.prioritas.length > 0 ? state.asesmen.prioritas.map(namaAktivitas).join(", ") : t.belumDipilih}
-                  </dd>
+                <div className="flex items-start gap-3 pt-3.5">
+                  {ikonBaris(Flag)}
+                  <div className="min-w-0 flex-1">
+                    <dt className="text-kecil text-redup">{t.prioritas}</dt>
+                    <dd className="font-medium">
+                      {state.asesmen.prioritas.length > 0 ? state.asesmen.prioritas.map(namaAktivitas).join(", ") : t.belumDipilih}
+                    </dd>
+                  </div>
                 </div>
               </dl>
               <TombolLink to="/mulai/1" gayaTombol="sekunder" className="mt-5 w-full">

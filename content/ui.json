@@ -46,7 +46,7 @@
     "dataPrivasi": "Data dan privasi",
     "tabBeranda": "Beranda",
     "tabPanduan": "Panduan",
-    "tabSaya": "Saya",
+    "tabSaya": "Profil",
     "tabDarurat": "Dukungan",
     "headerPakaiAlat": "Produk Disabilitas",
     "halamanSebelumnya": "Halaman sebelumnya"
@@ -80,8 +80,7 @@
     "menyusul": "Daftar tanda bahaya sedang disiapkan bersama tenaga medis. Sampai daftar ini tersedia, bila Anda ragu atau khawatir, hubungi dokter atau IGD terdekat."
   },
   "saya": {
-    "judul": "Saya",
-    "pengantar": "Ringkasan jawaban dan check-in Anda. Semuanya tersimpan hanya di perangkat ini.",
+    "judul": "Profil",
     "jawabanJudul": "Jawaban Anda",
     "belumJawab": "Anda belum mengisi pertanyaan awal. Dengan beberapa pertanyaan ya atau tidak, panduan bisa disesuaikan dengan kondisi Anda.",
     "mulai": "Mulai pertanyaan",

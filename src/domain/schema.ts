@@ -220,7 +220,6 @@ export const uiSchema = z
     igd: z.object({ judul: teks, isi: teks, daftarJudul: teks, tandaBahaya: z.array(teks), menyusul: teks }),
     saya: z.object({
       judul: teks,
-      pengantar: teks,
       jawabanJudul: teks,
       belumJawab: teks,
       mulai: teks,
