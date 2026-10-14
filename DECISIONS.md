@@ -661,3 +661,4 @@
 - "Lihat rincian" di kartu kemajuan Panduan Saya terbuka secara bawaan (permintaan pemilik); pengguna tetap bisa menutupnya.
 - Profil: judul kartu "Kebutuhan Anda" diperkecil sebesar label baris (teks kecil, tebal), ikon di sampingnya dan garis pemisah di bawahnya dihapus. Kartu "Check-in 7 hari terakhir" belum diubah.
 - Revisi: "Lihat rincian" di Panduan Saya kembali tertutup secara bawaan (permintaan pemilik).
+- **Dukungan: pita hijau muda di belakang bagian atas** (konsisten dengan hero halaman lain). Pita tanpa isi; panel "Nomor Kontak Darurat" menimpa sebagian tepi bawahnya, sehingga pita terlihat "setengah" di belakang panel.

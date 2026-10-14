@@ -85,10 +85,10 @@ export function Kontak() {
   const ahli = kumpulkanAhli(konten.kartu);
 
   return (
-    <Halaman judul={t.judul} judulTersembunyi latarPutih>
+    <Halaman judul={t.judul} judulTersembunyi latarPutih kepalaPita="hijau" kepalaTumpang kepala={<div aria-hidden="true" />}>
       <div className="flex flex-col gap-bagian">
         {darurat && darurat.entri.length > 0 && (
-          <section aria-labelledby="nomor-darurat" className="rounded-kartu border border-bahaya/25 bg-bahaya-muda p-4">
+          <section aria-labelledby="nomor-darurat" className="rounded-kartu border border-bahaya/25 bg-bahaya-muda p-4 shadow-kartu">
             <h2 id="nomor-darurat" className="flex items-center gap-2 text-subjudul text-bahaya">
               <Siren className="h-5 w-5 shrink-0 text-bahaya" strokeWidth={2} aria-hidden="true" focusable="false" />
               {darurat.kategori.nama}
