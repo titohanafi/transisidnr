@@ -93,7 +93,7 @@ export function Kontak() {
       kepalaTumpang
       kepala={
         darurat && darurat.entri.length > 0 ? (
-          <h2 id="nomor-darurat" className="mt-3 flex items-center gap-2 text-subjudul text-tinta">
+          <h2 id="nomor-darurat" className="mb-6 mt-3 flex items-center gap-2 text-subjudul text-tinta">
             <Siren className="h-5 w-5 shrink-0 text-bahaya" strokeWidth={2} aria-hidden="true" focusable="false" />
             {darurat.kategori.nama}
           </h2>
@@ -104,7 +104,7 @@ export function Kontak() {
     >
       <div className="flex flex-col gap-bagian">
         {darurat && darurat.entri.length > 0 && (
-          <section aria-labelledby="nomor-darurat" className="rounded-kartu border border-bahaya/25 bg-white p-4 shadow-kartu">
+          <section aria-labelledby="nomor-darurat" className="-mt-6 rounded-kartu border border-bahaya/25 bg-white p-4 shadow-kartu">
             <ul className="divide-y divide-bahaya/20">
               {darurat.entri.map((e) =>
                 e.telepon ? (
