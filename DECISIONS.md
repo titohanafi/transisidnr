@@ -643,3 +643,4 @@
 - Kartu kemajuan dan perkiraan biaya mendapat ikon dalam kotak hijau muda. Judul "Mulai dari sini" dan "Rekomendasi lainnya" menampilkan jumlah panduan dalam pil kecil.
 - Kartu panduan (`KartuRingkas`): ikon dalam kotak hijau muda, tingkat solusi jadi baris bernomor 1-2-3 (urutan dari yang paling ringan), dan garis pemisah di atas tombol.
 - **Revisi Panduan Saya:** latar halaman putih (`latarPutih`); pita kepala hijau muda dan kartu hero teal tetap.
+- **Kepala Panduan Saya berlabel:** ruangan dan prioritas kini dua baris di kotak putih, masing-masing dengan ikon, label kecil ("Ruangan", "Prioritas"), nilai tebal, dan tautan ubah ("Ganti", "Ubah jawaban") di kanan. Sebelumnya teksnya lepas tanpa label. Label memakai teks yang sudah ada di `content/ui.json` (`saya.ruangan`, `saya.prioritas`).

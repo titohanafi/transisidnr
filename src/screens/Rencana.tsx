@@ -1,14 +1,13 @@
 import { useEffect } from "react";
-import { BookOpen, CircleCheck, Flag, Printer, Sun, Wallet } from "lucide-react";
+import { BookOpen, CircleCheck, DoorOpen, Flag, Printer, Sun, Wallet, type LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { BarisTautan } from "../components/BarisTautan";
-import { BarisRuangan } from "../components/BarisRuangan";
 import { BilahKemajuan } from "../components/BilahKemajuan";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
 import { KartuHero, TautanHero } from "../components/KartuHero";
 import { KartuRingkas } from "../components/KartuRingkas";
-import { LencanaStatus, Tanda } from "../components/Lencana";
+import { LencanaStatus } from "../components/Lencana";
 import { Lipat } from "../components/Lipat";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { TombolLink } from "../components/Tombol";
@@ -20,6 +19,7 @@ import { kunciHari } from "../lib/tanggal";
 import { Jelajah } from "./Jelajah";
 import { isi } from "../lib/teks";
 import { useRencana } from "../state/useRencana";
+import { useRuangan } from "../state/useRuangan";
 import { useStore } from "../state/store";
 
 const { rencana: t } = konten.ui;
@@ -32,6 +32,7 @@ function Hitungan({ n }: { n: number }) {
 export function Rencana() {
   const { state } = useStore();
   const { rencana, masukan } = useRencana();
+  const { ruangan } = useRuangan();
   const jumlahKartu = rencana.daftar.length;
   useEffect(() => {
     track("rencana_dibuat", { jumlah_kartu: jumlahKartu });
@@ -105,20 +106,40 @@ export function Rencana() {
     </div>
   );
 
-  // Pita kepala: ruangan yang dikerjakan dan prioritas pengguna, dengan jalan pintas mengubah jawaban.
+  // Pita kepala: dua baris berlabel (ruangan dan prioritas), tiap baris dengan jalan pintas untuk mengubahnya.
+  const tautanUbah = "inline-flex min-h-sentuh shrink-0 items-center font-semibold text-utama underline";
+  const kotakIkon = (Ikon: LucideIcon) => (
+    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda text-utama">
+      <Ikon className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+    </span>
+  );
   const kepala = (
-    <>
-      <BarisRuangan />
-      <div className="mt-2 flex flex-wrap items-center gap-2">
-        <Flag className="h-4 w-4 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-        {masukan.prioritas.map((a) => (
-          <Tanda key={a}>{labelAkt(a)}</Tanda>
-        ))}
-        <Link to="/asesmen/aktivitas" className="inline-flex min-h-sentuh items-center font-semibold text-utama underline">
+    <div className="mt-3 divide-y divide-utama-redup/60 rounded-kartu border border-utama-redup bg-white">
+      {ruangan && (
+        <div className="flex items-center gap-3 p-3">
+          {kotakIkon(DoorOpen)}
+          <div className="min-w-0 flex-1">
+            <p className="text-kecil text-redup">{konten.ui.saya.ruangan}</p>
+            <p className="font-semibold">{ruangan.nama}</p>
+          </div>
+          {konten.config.ruangan.length > 1 && (
+            <Link to="/ruangan" className={tautanUbah}>
+              {konten.ui.asesmen.ubahRuangan}
+            </Link>
+          )}
+        </div>
+      )}
+      <div className="flex items-center gap-3 p-3">
+        {kotakIkon(Flag)}
+        <div className="min-w-0 flex-1">
+          <p className="text-kecil text-redup">{konten.ui.saya.prioritas}</p>
+          <p className="font-semibold">{masukan.prioritas.map(labelAkt).join(", ")}</p>
+        </div>
+        <Link to="/asesmen/aktivitas" className={tautanUbah}>
           {t.ubahJawaban}
         </Link>
       </div>
-    </>
+    </div>
   );
 
   return (
