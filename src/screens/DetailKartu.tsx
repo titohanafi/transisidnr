@@ -6,7 +6,7 @@ import { Ikon } from "../components/Ikon";
 import { Jembatan } from "../components/Jembatan";
 import { LangkahChecklist } from "../components/LangkahChecklist";
 import { LipatBaris } from "../components/Lipat";
-import { LencanaSifat, LencanaStatus, Tanda } from "../components/Lencana";
+import { LencanaStatus, Tanda } from "../components/Lencana";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { TombolLink } from "../components/Tombol";
 import { TAMPILKAN_ANGKA_DRAF, konten } from "../domain/content";
@@ -168,8 +168,6 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                             <Clock className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
                             {s.usaha.waktu ?? umum.menyusul}
                           </span>
-                          <LencanaSifat sifat={x.sifat} />
-                          {x.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
                           {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
                           {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                         </div>

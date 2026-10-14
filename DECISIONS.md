@@ -548,3 +548,5 @@
 - Pembagian peran untuk 106 langkah DITENTUKAN ASISTEN dengan aturan sederhana dari kata kerja pertama dan sedikit penyesuaian manual: memutuskan, mencoba, dan memakai = penyandang disabilitas; menyiapkan, memasang, memindahkan, dan membeli = caregiver; melatih, menyepakati, dan menguji = bersama; pekerjaan bangunan di Renovasi = tukang; kartu pendamping semuanya caregiver. Ini penilaian, bukan fakta dari ahli. Semua kartu masih draf dan tim konten perlu meninjau penandanya.
 
 - Baris "Kesulitan" (mis. "Mudah, bisa sendiri") dihapus dari panel solusi karena penanda peran di setiap langkah sudah menunjukkan siapa yang terlibat. Datanya (`usaha.kesulitan`) tetap ada di konten.
+
+- Lencana "Permanen" dan "Tunggu dulu, kebutuhan Anda mungkin berubah" dihapus dari panel solusi di Detail Panduan (permintaan pemilik): nama tingkat "Renovasi" dan urutan dari yang paling ringan sudah menyiratkannya. Lencana yang sama masih tampil di kartu rencana pada Panduan Saya.
