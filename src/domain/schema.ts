@@ -147,7 +147,7 @@ export const uiSchema = z
       spandukDraf: teks,
       pilih: z.object({
         judul: teks,
-        susun: z.object({ judul: teks, deskripsi: teks, tombol: teks }),
+        susun: z.object({ judul: teks, deskripsi: teks, tombol: teks, cakupan: teks }),
         lanjut: z.object({ judul: teks, deskripsi: teks, tombol: teks }),
         semua: teks,
         cari: z.object({ label: teks, placeholder: teks, tombol: teks }),

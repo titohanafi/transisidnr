@@ -387,3 +387,7 @@
 - Keputusan: "rumah" dipakai sebagai kata umum di seluruh antarmuka (pendek, hangat, dan lazim dipakai untuk kos/apartemen: "di rumah"). "Tempat tinggal" hanya dipertahankan pada pertanyaan jenis hunian karena di situ perbedaan kos/kontrakan/apartemen memang ditanyakan. Label kolom cari diubah ke "Temukan panduan agar rumah lebih ramah disabilitas".
 - Risiko: penghuni kos mungkin terasa kurang disapa oleh kata "rumah". Periksa pada uji pengguna; alternatif yang lebih inklusif adalah "tempat tinggal" di semua tempat, dengan harga kata yang lebih formal.
 - Teks kartu "Buat rencana" disesuaikan dengan perannya (panduan yang dipersonalisasi sesuai kondisi), sedangkan kolom cari untuk semua orang: "Dapatkan langkah yang sesuai dengan kondisi dan rumah Anda, mulai dari kamar mandi. Untuk penyandang disabilitas pengguna kursi roda dan caregiver."
+
+## Cakupan layanan sebagai label kecil
+- Layanan saat ini hanya kamar mandi dan pengguna kursi roda, dan nanti akan bertambah. Informasi ini dipisah dari narasi umum: kartu "Buat rencana" kini berisi narasi umum ("Dapatkan langkah yang sesuai dengan kondisi dan rumah Anda.") dan satu label kecil berbingkai di pojok kanan atas, "Saat ini: kamar mandi dan kursi roda". Tampil hanya sebelum pengguna menjawab.
+- Teks label ada di `content/ui.json` (`beranda.pilih.susun.cakupan`) dan cukup diubah saat layanan bertambah. Pertimbangan lanjutan: menurunkan label dari `config.json` (ruangan dengan `tersedia: true`) supaya otomatis, tetapi alat bantu belum ada di config.

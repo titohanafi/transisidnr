@@ -8,8 +8,9 @@
       "judul": "Apa yang ingin Anda lakukan?",
       "susun": {
         "judul": "Buat rencana untuk rumah Anda",
-        "deskripsi": "Dapatkan langkah yang sesuai dengan kondisi dan rumah Anda, mulai dari kamar mandi. Untuk penyandang disabilitas pengguna kursi roda dan caregiver.",
-        "tombol": "Mulai"
+        "deskripsi": "Dapatkan langkah yang sesuai dengan kondisi dan rumah Anda.",
+        "tombol": "Mulai",
+        "cakupan": "Saat ini: kamar mandi dan kursi roda"
       },
       "lanjut": {
         "judul": "Lanjutkan rencana Anda",
