@@ -38,12 +38,11 @@ export function Beranda() {
   const adaJawaban = Object.keys(state.asesmen.status).length > 0;
   const kartu = adaJawaban ? pilih.lanjut : pilih.susun;
 
-  const sapaan = <p className="-mb-isi text-isi font-semibold text-utama">{beranda.sapaan[bagianHari()]}</p>;
+  const sapaan = (kelas: string) => <p className={`text-isi font-semibold text-utama ${kelas}`}>{beranda.sapaan[bagianHari()]}</p>;
 
   const cari = (
     <form
       role="search"
-      className="rounded-kartu bg-permukaan p-4"
       onSubmit={(e) => {
         e.preventDefault();
         const q = new FormData(e.currentTarget).get("q");
@@ -94,8 +93,19 @@ export function Beranda() {
     </form>
   );
 
+  // Segmen pencarian selebar layar. Bagi pengunjung baru, kartu utama sedikit menimpa tepi bawahnya.
+  const segmenCari = (
+    <div className={`-mx-4 bg-permukaan px-4 ${adaJawaban ? "py-5" : "pb-10 pt-5"}`}>
+      {!adaJawaban && sapaan("mb-isi")}
+      {cari}
+    </div>
+  );
+
   const utama = (
-    <section className="rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-utama">
+    <section
+      className={`rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "relative -mt-11 shadow-sm"}`}
+      aria-labelledby="jalur-utama"
+    >
       <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-utama">
         <IkonBeranda kunci="rencana" />
       </span>
@@ -118,10 +128,19 @@ export function Beranda() {
 
       {!adaJawaban && <Cakupan banner />}
 
-      <div className={`flex flex-col gap-bagian ${adaJawaban ? "" : "mt-bagian"}`}>
-        {sapaan}
-        {adaJawaban ? utama : cari}
-        {adaJawaban ? cari : utama}
+      <div className="flex flex-col gap-bagian">
+        {adaJawaban ? (
+          <>
+            {sapaan("-mb-isi")}
+            {utama}
+            {segmenCari}
+          </>
+        ) : (
+          <>
+            {segmenCari}
+            {utama}
+          </>
+        )}
         <CheckIn />
         {adaJawaban && <Cakupan banner={false} />}
       </div>
