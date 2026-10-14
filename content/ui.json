@@ -124,7 +124,7 @@
       {
         "id": "soal_biaya",
         "bantuan": { "tombol": "Lihat panduan, mulai dari yang tanpa biaya", "ke": "/jelajah" },
-        "singkat": "Cemas",
+        "singkat": "Biaya",
         "emoji": "😟",
         "label": "Khawatir soal biaya",
         "balasan": "Memikirkan biaya itu berat. Mulai dari langkah tanpa biaya juga sudah berarti."
