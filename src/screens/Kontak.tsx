@@ -104,7 +104,10 @@ export function Kontak() {
     >
       <div className="flex flex-col gap-bagian">
         {darurat && darurat.entri.length > 0 && (
-          <section aria-labelledby="nomor-darurat" className="-mt-4 rounded-kartu border border-utama-redup bg-white p-4 shadow-kartu">
+          <section
+            aria-labelledby="nomor-darurat"
+            className="-mt-4 rounded-kartu border border-utama-redup bg-white px-4 py-1 shadow-kartu"
+          >
             <ul className="divide-y divide-utama-redup/60">
               {darurat.entri.map((e) =>
                 e.telepon ? (
