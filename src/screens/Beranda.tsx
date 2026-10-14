@@ -58,7 +58,7 @@ export function Beranda() {
             <IkonBeranda kunci="rencana" />
           </span>
           {!adaJawaban && (
-            <span className="rounded-full border border-white px-3 py-1 text-sm font-semibold">{pilih.susun.cakupan}</span>
+            <span className="rounded-2xl border border-white px-3 py-1 text-sm font-semibold leading-snug">{pilih.susun.cakupan}</span>
           )}
         </div>
         <h3 id="jalur-utama" className="mt-3 text-xl font-bold leading-snug">
