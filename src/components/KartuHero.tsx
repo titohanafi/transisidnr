@@ -55,16 +55,16 @@ export function HiasanLingkaran() {
 }
 
 /**
- * Lingkaran hiasan untuk pita kepala gelap: ukuran sama dengan kartu hero, tetapi rata bawah supaya tidak terpotong
- * garis lurus tepi atas pita (bawah bilah atas). Bagian bawahnya tertutup kartu yang menimpa tepi bawah pita.
- * Induk harus relative dan overflow-hidden.
+ * Lingkaran hiasan untuk pita kepala gelap: rata bawah supaya tidak terpotong garis lurus tepi atas pita (bawah bilah atas).
+ * Dua lingkaran di kanan saling menimpa di bagian yang tidak tertutup kartu (kartu menutup sekitar 70px terbawah pita),
+ * dan tingginya dijaga di bawah tinggi pita terpendek (sekitar 140px). Induk harus relative dan overflow-hidden.
  */
 export function HiasanPita() {
   return (
     <>
-      <span aria-hidden="true" className="pointer-events-none absolute -bottom-12 -right-12 h-40 w-40 rounded-full bg-utama-gelap/40" />
-      <span aria-hidden="true" className="pointer-events-none absolute -bottom-20 -right-2 h-32 w-32 rounded-full bg-utama-gelap/30" />
-      <span aria-hidden="true" className="pointer-events-none absolute -bottom-16 -left-10 h-36 w-36 rounded-full bg-utama-gelap/30" />
+      <span aria-hidden="true" className="pointer-events-none absolute -right-12 bottom-0 h-32 w-32 rounded-full bg-utama-gelap/40" />
+      <span aria-hidden="true" className="pointer-events-none absolute bottom-6 right-1 h-24 w-24 rounded-full bg-utama-gelap/30" />
+      <span aria-hidden="true" className="pointer-events-none absolute -left-10 bottom-0 h-28 w-28 rounded-full bg-utama-gelap/30" />
     </>
   );
 }
