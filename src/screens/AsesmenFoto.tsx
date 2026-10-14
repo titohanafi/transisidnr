@@ -34,21 +34,19 @@ export function AsesmenFoto() {
   };
 
   return (
-    <Halaman judul={t.judul}>
-      <p className="mt-2 text-redup">{t.penjelasan}</p>
-
+    <Halaman judul={t.judul} kepala={<p className="mt-2 text-redup">{t.penjelasan}</p>}>
       {!foto && (
         <button
           type="button"
           onClick={() => input.current?.click()}
-          className="mt-4 flex min-h-[10rem] w-full flex-col items-center justify-center gap-2 rounded-kartu border border-dashed border-utama bg-utama-muda p-4 text-utama-gelap"
+          className="flex min-h-[10rem] w-full flex-col items-center justify-center gap-2 rounded-kartu border border-dashed border-utama/50 bg-utama-muda p-5 text-utama-gelap"
         >
           <Camera className="h-12 w-12 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
           <span className="text-lg font-semibold">{t.pilih}</span>
         </button>
       )}
 
-      {foto && <img src={foto} alt={t.alt} className="mt-4 max-h-64 w-full rounded-kartu border border-garis object-contain" />}
+      {foto && <img src={foto} alt={t.alt} className="max-h-64 w-full rounded-kartu border border-garis/70 object-contain shadow-kartu" />}
 
       <input
         ref={input}

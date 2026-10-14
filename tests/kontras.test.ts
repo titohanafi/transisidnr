@@ -46,6 +46,12 @@ const teks: [string, string, string][] = [
   ["bahaya di kertas", hex("bahaya"), hex("kertas")],
   ["bahaya di putih", hex("bahaya"), putih],
   ["putih di bahaya (tombol)", putih, hex("bahaya")],
+  ["bahaya di bahaya-muda (kartu darurat)", hex("bahaya"), hex("bahaya", "muda")],
+  ["tinta di bahaya-muda", hex("tinta"), hex("bahaya", "muda")],
+  ["catatan di catatan-muda (catatan kuning)", hex("catatan"), hex("catatan", "muda")],
+  ["putih di utama (judul kartu hero)", putih, hex("utama")],
+  ["utama-redup di utama (deskripsi kartu hero)", hex("utama", "redup"), hex("utama")],
+  ["utama-redup di utama-gelap (lingkaran hiasan)", hex("utama", "redup"), hex("utama", "gelap")],
 ];
 
 describe("kontras warna (WCAG 2.2 AA)", () => {
@@ -55,6 +61,10 @@ describe("kontras warna (WCAG 2.2 AA)", () => {
 
   it("batas kontrol formulir (textarea) ≥ 3:1 terhadap latar", () => {
     expect(rasio(hex("garisKontrol"), putih)).toBeGreaterThanOrEqual(3);
+  });
+
+  it("ikon daun di atas kartu hero (grafis) ≥ 3:1", () => {
+    expect(rasio(hex("daun"), hex("utama"))).toBeGreaterThanOrEqual(3);
   });
 
   it("cincin fokus (utama) ≥ 3:1 terhadap kertas dan putih", () => {

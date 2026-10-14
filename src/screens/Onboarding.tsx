@@ -32,20 +32,25 @@ export function Onboarding() {
   const kembali = () => navigate(n === 1 ? "/" : `/mulai/${n - 1}`);
 
   return (
-    <Halaman judul={q.pertanyaan} kunciFokus={n}>
-      <p className="mt-2 text-sm text-redup" aria-live="polite">
-        {indikator}
-      </p>
-      <BilahKemajuan n={n} total={soal.length} label={indikator} />
-
-      {n === 1 && (
-        <aside className="mt-4 flex items-start gap-2 rounded-kartu bg-info-muda p-3">
-          <Info className="mt-0.5 h-5 w-5 shrink-0 text-info" strokeWidth={2} aria-hidden="true" focusable="false" />
-          <p className="text-kecil text-tinta">{teks.cakupan}</p>
-        </aside>
-      )}
-
-      <fieldset className="mt-5">
+    <Halaman
+      judul={q.pertanyaan}
+      kunciFokus={n}
+      kepala={
+        <>
+          <p className="mt-2 text-kecil text-redup" aria-live="polite">
+            {indikator}
+          </p>
+          <BilahKemajuan n={n} total={soal.length} label={indikator} />
+          {n === 1 && (
+            <aside className="mt-4 flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda p-3 text-catatan">
+              <Info className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+              <p className="text-kecil">{teks.cakupan}</p>
+            </aside>
+          )}
+        </>
+      }
+    >
+      <fieldset>
         <legend className="sr-only">{q.pertanyaan}</legend>
         {q.bantuan && <p className="mb-3 text-redup">{q.bantuan}</p>}
         <div className="space-y-3">

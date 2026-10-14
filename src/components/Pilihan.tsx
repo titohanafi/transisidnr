@@ -24,7 +24,7 @@ export function Pilihan({
 }) {
   return (
     <label
-      className={`flex min-h-sentuh items-center gap-3 rounded-kartu border p-3 ${
+      className={`flex min-h-sentuh items-center gap-3 rounded-kartu border p-4 ${
         aktif ? "border-utama bg-utama-muda font-semibold" : "border-garis bg-white shadow-kartu"
       } ${nonaktif ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
     >

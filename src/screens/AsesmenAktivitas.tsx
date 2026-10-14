@@ -28,20 +28,27 @@ export function AsesmenAktivitas() {
   if (!ruangan) return <Navigate to="/ruangan" replace />;
 
   return (
-    <Halaman judul={ta.judul}>
-      <BarisRuangan />
-      <p className="mt-2 text-redup">{ta.bantuan}</p>
-
-      <div className="mt-4 space-y-3">
+    <Halaman
+      judul={ta.judul}
+      kepala={
+        <>
+          <BarisRuangan />
+          <p className="mt-2 text-redup">{ta.bantuan}</p>
+        </>
+      }
+    >
+      <div className="space-y-3">
         {aktivitas.map((a) => (
           <div
             key={a.id}
             role="radiogroup"
             aria-labelledby={`akt-judul-${a.id}`}
-            className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-3"
+            className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu"
           >
-            <p id={`akt-judul-${a.id}`} className="flex items-center gap-3 text-lg font-semibold">
-              <Ikon kunci={a.id} className="h-9 w-9" />
+            <p id={`akt-judul-${a.id}`} className="flex items-center gap-3 text-judulKartu">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
+                <Ikon kunci={a.id} className="h-6 w-6" />
+              </span>
               {a.label}
             </p>
             <div className="mt-2 flex flex-wrap gap-2">

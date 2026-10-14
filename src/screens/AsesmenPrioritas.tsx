@@ -22,10 +22,9 @@ export function AsesmenPrioritas() {
   const label = (id: string) => konten.asesmen.aktivitas.find((a) => a.id === id)?.label ?? id;
 
   return (
-    <Halaman judul={t.prioritas.judul}>
-      <fieldset className="mt-2">
+    <Halaman judul={t.prioritas.judul} kepala={<p className="mt-2 text-redup">{t.prioritas.bantuan}</p>}>
+      <fieldset>
         <legend className="sr-only">{t.prioritas.judul}</legend>
-        <p className="mb-3 text-redup">{t.prioritas.bantuan}</p>
         <div className="space-y-3">
           {kandidat.map((id) => (
             <Pilihan

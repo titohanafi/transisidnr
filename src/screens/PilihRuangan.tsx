@@ -16,8 +16,8 @@ export function PilihRuangan() {
   const { ruangan } = useRuangan();
 
   return (
-    <Halaman judul={t.judul}>
-      <fieldset className="mt-4">
+    <Halaman judul={t.judul} kepala={<></>}>
+      <fieldset>
         <legend className="sr-only">{t.judul}</legend>
         <div className="space-y-3">
           {konten.config.ruangan.map((r) => (

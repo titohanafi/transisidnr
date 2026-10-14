@@ -36,18 +36,24 @@ export function AsesmenPertanyaan() {
   };
 
   return (
-    <Halaman judul={q.pertanyaan} kunciFokus={n}>
-      <p className="mt-2 flex items-center gap-2 text-sm text-redup" aria-live="polite">
-        <Ikon kunci={q.aktivitas} className="h-6 w-6" />
-        {kelompok} · {indikator}
-      </p>
-      <BilahKemajuan n={n} total={daftar.length} label={indikator} />
-
-      <p className="mt-4 rounded-kartu bg-utama-muda p-4">
+    <Halaman
+      judul={q.pertanyaan}
+      kunciFokus={n}
+      kepala={
+        <>
+          <p className="mt-2 flex items-center gap-2 text-kecil text-redup" aria-live="polite">
+            <Ikon kunci={q.aktivitas} className="h-6 w-6" />
+            {kelompok} · {indikator}
+          </p>
+          <BilahKemajuan n={n} total={daftar.length} label={indikator} />
+        </>
+      }
+    >
+      <p className="rounded-kartu bg-utama-muda p-5">
         <span className="font-semibold">{t.penjelasanJudul}</span> {q.penjelasan}
       </p>
 
-      <fieldset className="mt-5">
+      <fieldset className="mt-bagian">
         <legend className="sr-only">{q.pertanyaan}</legend>
         <div className="grid grid-cols-2 gap-3">
           <Pilihan tipe="radio" nama={q.id} label={t.ya} aktif={nilai === true} onUbah={() => setJawaban(q.id, true)} />

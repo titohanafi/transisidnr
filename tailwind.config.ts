@@ -19,7 +19,7 @@ export default {
         draf: { DEFAULT: "#7A4B00", muda: "#FFF1CC" },
         catatan: { DEFAULT: "#5C3D00", muda: "#FFF3C4", garis: "#E8CF7A" }, // kuning lembut untuk catatan yang bisa ditutup
         daun: "#8FD27A", // hijau daun muda, warna ikon kartu utama di atas teal (kontras ≈ 4,2:1)
-        bahaya: "#A32020",
+        bahaya: { DEFAULT: "#A32020", muda: "#FDEDED" },
       },
       fontFamily: {
         sans: ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
