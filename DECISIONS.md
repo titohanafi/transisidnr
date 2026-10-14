@@ -574,3 +574,5 @@
 - Kontak: nomor darurat kini di paling atas sebagai kisi tombol telepon dua kolom (nomor besar + nama), karena sebelumnya daftar tanda bahaya yang panjang mendorong nomor ke bawah. Tanda bahaya dan keterangan/sumber nomor dilipat. Dalam keadaan darurat orang perlu menelepon dulu, membaca kemudian.
 
 - Saat semua langkah tercentang, pesan "Semua langkah selesai..." diberi emoji 🎉 di depannya (hiasan; disembunyikan dari pembaca layar karena kalimatnya sudah jelas).
+
+- Hero Detail Panduan: "Perhatian" kini berwarna kuning lembut (token `catatan`), "Situasi" berganti hijau muda, dan label "Situasi" serta nama kelompok tidak lagi huruf kapital semua.

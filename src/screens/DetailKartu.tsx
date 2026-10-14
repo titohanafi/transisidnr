@@ -75,7 +75,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
       <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-kartu bg-white shadow-kartu">
         <Ikon kunci={kunciGrup} className="h-7 w-7" />
       </span>
-      {namaGrup && <span className="text-kecil font-semibold uppercase tracking-wide text-utama-gelap">{namaGrup}</span>}
+      {namaGrup && <span className="text-kecil font-semibold text-utama-gelap">{namaGrup}</span>}
     </div>
   );
 
@@ -98,17 +98,20 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
       <div className="mt-2 empty:hidden">
         <LencanaStatus status={kartu.status_validasi} />
       </div>
-      <section className="mt-4 rounded-kartu border border-catatan-garis bg-catatan-muda p-4 text-catatan" aria-labelledby="situasi">
-        <h2 id="situasi" className="text-kecil font-semibold uppercase tracking-wide">
+      <section className="mt-4 rounded-kartu bg-utama-muda p-4" aria-labelledby="situasi">
+        <h2 id="situasi" className="text-kecil font-semibold text-utama-gelap">
           {t.situasi}
         </h2>
         <p className="mt-1 text-isi">{uraian}</p>
       </section>
       {kartu.peringatan && (
-        <section className="mt-3 flex items-start gap-3 rounded-tombol bg-white p-4" aria-labelledby="peringatan">
-          <TriangleAlert className="mt-0.5 h-5 w-5 shrink-0 text-aksen" strokeWidth={2} aria-hidden="true" focusable="false" />
+        <section
+          className="mt-3 flex items-start gap-3 rounded-kartu border border-catatan-garis bg-catatan-muda p-4 text-catatan"
+          aria-labelledby="peringatan"
+        >
+          <TriangleAlert className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
           <div>
-            <h2 id="peringatan" className="text-kecil font-semibold text-aksen">
+            <h2 id="peringatan" className="text-kecil font-semibold">
               {t.peringatan}
             </h2>
             <p className="mt-0.5 text-kecil">{kartu.peringatan}</p>
