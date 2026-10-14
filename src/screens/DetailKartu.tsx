@@ -1,4 +1,4 @@
-import { HeartHandshake, TriangleAlert, User } from "lucide-react";
+import { ChevronDown, HeartHandshake, TriangleAlert, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
@@ -79,6 +79,20 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
           {t.situasi}
         </h2>
         <p className="mt-1 text-lg">{kartu.situasi}</p>
+        {kartu.kenapa_penting && !kartu.isi_menyusul && kartu.solusi && (
+          <details className="group mt-3 border-t border-catatan-garis">
+            <summary className="flex min-h-sentuh cursor-pointer list-none items-center justify-between gap-2 font-semibold [&::-webkit-details-marker]:hidden">
+              {t.kenapa}
+              <ChevronDown
+                className="h-5 w-5 shrink-0 motion-safe:transition-transform group-open:rotate-180"
+                strokeWidth={2}
+                aria-hidden="true"
+                focusable="false"
+              />
+            </summary>
+            <p className="pb-1">{kartu.kenapa_penting}</p>
+          </details>
+        )}
       </section>
     </>
   );
@@ -90,12 +104,6 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
           <p className="rounded-kartu border border-draf bg-draf-muda p-4 font-medium text-draf">{umum.isiMenyusul}</p>
         ) : (
           <>
-            {kartu.kenapa_penting && (
-              <Lipat className="" judul={t.kenapa}>
-                <p>{kartu.kenapa_penting}</p>
-              </Lipat>
-            )}
-
             <section aria-labelledby="solusi">
               <h2 id="solusi" className="text-subjudul">
                 {t.solusi}
