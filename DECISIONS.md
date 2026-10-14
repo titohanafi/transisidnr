@@ -458,3 +458,5 @@
 - **Umpan balik sentuhan:** kelas `.tekan` (mengecil sedikit saat ditekan, mati bila pengguna meminta gerak dikurangi) pada tombol, kartu baris, tab navbar, saran pencarian, dan ubin check-in.
 - **Ukuran teks:** label ubin check-in dan tab navbar 13px (sebelumnya 12px). Diperiksa di lebar 360px: semua label muat (Bingung 52px, Istirahat 53px dalam ubin 55px). Karena ruangnya tipis, jangan menambah kata atau memperbesar font label tanpa memeriksa ulang.
 - Perubahan token Tailwind memerlukan server dev dimulai ulang.
+
+- Segmen pencarian di Beranda diberi latar tipis (token baru `permukaan` #F2F6F6, abu kehijauan sangat muda) dalam kartu membulat, supaya judul, kolom, dan saran terbaca sebagai satu kelompok. Kontras tinta dan redup di atasnya diuji. Padding saran dirapatkan agar tiga saran tetap satu baris. Token baru memerlukan server dev dimulai ulang.

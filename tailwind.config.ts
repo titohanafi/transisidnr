@@ -7,6 +7,7 @@ export default {
     extend: {
       colors: {
         kertas: "#FFFFFF", // latar area aplikasi (putih)
+        permukaan: "#F2F6F6", // latar tipis untuk mengelompokkan satu segmen (mis. pencarian)
         luar: "#DCE3E5", // latar di luar area aplikasi pada layar lebar
         tinta: "#1F2933", // teks utama (kontras tinggi)
         redup: "#4A5560", // teks sekunder

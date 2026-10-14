@@ -36,6 +36,8 @@ const teks: [string, string, string][] = [
   ["aksen di aksen-muda", hex("aksen"), hex("aksen", "muda")],
   ["aksen di putih (lencana)", hex("aksen"), putih],
   ["tinta di aksen-muda", hex("tinta"), hex("aksen", "muda")],
+  ["tinta di permukaan", hex("tinta"), hex("permukaan")],
+  ["redup di permukaan", hex("redup"), hex("permukaan")],
   ["info di info-muda", hex("info"), hex("info", "muda")],
   ["tinta di info-muda", hex("tinta"), hex("info", "muda")],
   ["info di putih (ikon)", hex("info"), putih],

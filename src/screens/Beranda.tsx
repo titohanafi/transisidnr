@@ -43,6 +43,7 @@ export function Beranda() {
   const cari = (
     <form
       role="search"
+      className="rounded-kartu bg-permukaan p-4"
       onSubmit={(e) => {
         e.preventDefault();
         const q = new FormData(e.currentTarget).get("q");
@@ -82,7 +83,7 @@ export function Beranda() {
               <button
                 type="button"
                 onClick={() => navigate("/jelajah", { state: { cari: k } })}
-                className="tekan inline-flex min-h-sentuh items-center rounded-full border-2 border-garisKontrol bg-white px-4 text-kecil font-semibold text-tinta"
+                className="tekan inline-flex min-h-sentuh items-center rounded-full border-2 border-garisKontrol bg-white px-3 text-kecil font-semibold text-tinta"
               >
                 {k}
               </button>
