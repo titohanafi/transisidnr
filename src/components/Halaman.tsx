@@ -7,7 +7,7 @@ import { konten } from "../domain/content";
 
 const { app, umum } = konten.ui;
 
-// Warna pita kepala. "gelap" sama dengan kartu hero teal, lengkap dengan lingkaran hiasan kecil.
+// Warna pita kepala. "gelap" sama dengan kartu hero teal, lengkap dengan lingkaran hiasan rata bawah.
 const warnaPita = {
   biasa: "bg-permukaan",
   hijau: "bg-utama-muda",
