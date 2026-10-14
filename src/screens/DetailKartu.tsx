@@ -144,7 +144,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           />
                         </button>
                       </h3>
-                      <div className={`flex flex-wrap gap-2 px-4 -mt-2 empty:hidden ${buka ? "pb-3" : "pb-4"}`}>
+                      <p className="-mt-2 px-4 pb-4 text-redup">{s.ringkasan}</p>
+                      <div className={`flex flex-wrap gap-2 px-4 empty:hidden ${buka ? "pb-3" : "pb-4"}`}>
                         {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
                         {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                       </div>
@@ -153,8 +154,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           <LencanaSifat sifat={x.sifat} />
                           {x.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
                         </div>
-                        <p className="text-redup">{s.ringkasan}</p>
-                        <div className="mt-3 flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2">
                           <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
                             <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
                             {s.biaya.kisaran_rp ?? umum.biayaMenyusul}
