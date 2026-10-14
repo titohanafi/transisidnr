@@ -447,3 +447,14 @@
 - Judul kolom cari menjadi "Temukan panduan dan solusi agar rumah lebih ramah disabilitas": kata "solusi" memberi tahu bahwa mengetik masalah (mis. "lantai licin") juga tepat, dan sudah dikenal di aplikasi ("Pilihan solusi"). Kata "solusi" ikut diabaikan oleh pencarian ("solusi lantai licin" tetap menemukan panduan).
 
 - Deskripsi kartu utama: "Jawab beberapa pertanyaan, lalu dapatkan solusi yang sesuai dengan kondisi Anda." (bukan "langkah", agar selaras dengan judul pencarian dan tidak bentrok dengan "langkah" di dalam panduan). Ajakan di halaman daftar ikut disamakan.
+
+## Putaran penyempurnaan Beranda
+- **Urutan mengikuti keadaan:** pengunjung baru melihat banner cakupan, sapaan, pencarian, kartu "Cek kebutuhan", lalu check-in. Setelah menjawab: sapaan, kartu "Lanjutkan panduan Anda", pencarian, check-in, lalu info cakupan sebagai catatan kecil di dasar (banner di atas hanya untuk kunjungan awal).
+- **Sapaan** sesuai jam perangkat (pagi 04-10, siang 11-14, sore 15-17, malam lainnya), fungsi `bagianHari` diuji. Tidak ada data pribadi.
+- **Check-in sebelum diisi** lebih tenang (kartu putih bergaris tipis; yang terpilih berlatar hijau muda dengan cincin). Setelah diisi tetap kartu hijau muda yang dirancang ulang sebelumnya.
+- **Kolom cari** satu kolom setinggi 48px dengan ikon kaca pembesar di dalam; tombol terpisah dihapus (Enter mengirim, ada tombol kirim tersembunyi untuk pembaca layar).
+- **Token desain** di `tailwind.config.ts`: skala tipografi (`text-judul`, `text-subjudul`, `text-isi`, `text-kecil`, `text-mikro`) dan ritme jarak (`bagian` = 24px antar bagian, `isi` = 12px di dalam bagian). Beranda memakainya; layar lain belum dimigrasi.
+- **Merek:** wordmark "Transisi." (tebal, rapat, titik berwarna aksen) di header layar non-menu.
+- **Umpan balik sentuhan:** kelas `.tekan` (mengecil sedikit saat ditekan, mati bila pengguna meminta gerak dikurangi) pada tombol, kartu baris, tab navbar, saran pencarian, dan ubin check-in.
+- **Ukuran teks:** label ubin check-in dan tab navbar 13px (sebelumnya 12px). Diperiksa di lebar 360px: semua label muat (Bingung 52px, Istirahat 53px dalam ubin 55px). Karena ruangnya tipis, jangan menambah kata atau memperbesar font label tanpa memeriksa ulang.
+- Perubahan token Tailwind memerlukan server dev dimulai ulang.

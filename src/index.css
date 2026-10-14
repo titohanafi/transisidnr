@@ -8,6 +8,11 @@
   :focus-visible { outline: 3px solid theme("colors.utama.DEFAULT"); outline-offset: 2px; }
 }
 
+@layer components {
+  /* Umpan balik sentuhan: sedikit mengecil saat ditekan; dimatikan bila pengguna meminta gerak dikurangi. */
+  .tekan { @apply transition-transform duration-100 active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100; }
+}
+
 @media print {
   body { background: #fff; color: #000; font-size: 12pt; }
   a { color: inherit; text-decoration: none; }

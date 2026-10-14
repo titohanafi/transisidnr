@@ -4,7 +4,7 @@ import { Link, type LinkProps } from "react-router-dom";
 type Gaya = "utama" | "sekunder" | "bahaya";
 
 const dasar =
-  "inline-flex min-h-sentuh min-w-sentuh items-center justify-center rounded-tombol px-5 py-2 text-base font-semibold text-center disabled:cursor-not-allowed disabled:opacity-50";
+  "tekan inline-flex min-h-sentuh min-w-sentuh items-center justify-center rounded-tombol px-5 py-2 text-base font-semibold text-center disabled:cursor-not-allowed disabled:opacity-50";
 const gaya: Record<Gaya, string> = {
   utama: "bg-utama text-white hover:bg-utama-gelap disabled:hover:bg-utama",
   sekunder: "border-2 border-utama bg-white text-utama hover:bg-utama-muda",

@@ -22,7 +22,15 @@ export default {
         sans: ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
       },
       borderRadius: { kartu: "16px", tombol: "12px" },
-      spacing: { sentuh: "44px" },
+      // Skala tipografi dan ritme jarak (desainer cukup mengubah di sini).
+      fontSize: {
+        judul: ["1.5rem", { lineHeight: "1.3", fontWeight: "700" }],
+        subjudul: ["1.25rem", { lineHeight: "1.35", fontWeight: "700" }],
+        isi: ["1rem", { lineHeight: "1.5" }],
+        kecil: ["0.875rem", { lineHeight: "1.45" }],
+        mikro: ["0.8125rem", { lineHeight: "1.3" }],
+      },
+      spacing: { sentuh: "44px", bagian: "24px", isi: "12px" },
       minHeight: { sentuh: "44px" },
       minWidth: { sentuh: "44px" },
       keyframes: { muncul: { from: { opacity: "0", transform: "translateY(6px)" }, to: { opacity: "1", transform: "none" } } },

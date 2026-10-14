@@ -42,7 +42,7 @@ export function BilahTab() {
               end={t.ujung}
               className={({ isActive: aktif }) => {
                 const isActive = aktif || (t.alias ? pathname === t.alias || pathname.startsWith(t.alias + "/") : false);
-                return `flex min-h-[56px] flex-col items-center justify-center gap-0.5 px-1 text-xs font-semibold ${
+                return `tekan flex min-h-[56px] flex-col items-center justify-center gap-0.5 px-1 text-mikro font-semibold ${
                   isActive ? "bg-utama-muda text-utama-gelap" : "text-redup"
                 }`;
               }}

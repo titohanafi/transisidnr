@@ -44,8 +44,9 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
         {menu ? (
           <span className="inline-flex min-h-sentuh items-center px-2 text-lg font-bold text-utama">{menu}</span>
         ) : (
-          <Link to="/" className={`inline-flex min-h-sentuh items-center text-lg font-bold text-utama ${dalam ? "" : "px-2"}`}>
+          <Link to="/" className={`inline-flex min-h-sentuh items-center text-xl font-extrabold tracking-tight text-utama ${dalam ? "" : "px-2"}`}>
             {app.nama}
+            <span aria-hidden="true" className="text-aksen">.</span>
           </Link>
         )}
       </header>

@@ -24,7 +24,7 @@ export function CheckIn() {
             {pilihan.emoji}
           </span>
           <div className="min-w-0 flex-1 pt-0.5">
-            <p className="text-sm text-utama-gelap">
+            <p className="text-kecil text-utama-gelap">
               {t.hariIni} · {t.label}
             </p>
             <p className="mt-0.5 text-lg font-bold leading-snug">{pilihan.label}</p>
@@ -32,7 +32,7 @@ export function CheckIn() {
           <button
             type="button"
             onClick={() => setMengubah(true)}
-            className="-mr-2 -mt-1 inline-flex min-h-sentuh shrink-0 items-center gap-1 rounded-tombol px-2 text-sm font-semibold text-utama-gelap"
+            className="tekan -mr-2 -mt-1 inline-flex min-h-sentuh shrink-0 items-center gap-1 rounded-tombol px-2 text-kecil font-semibold text-utama-gelap"
           >
             <Pencil className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" focusable="false" />
             {t.ubah}
@@ -40,7 +40,7 @@ export function CheckIn() {
         </div>
         <Link
           to={pilihan.bantuan.panduan ? `/kartu/${pilihan.bantuan.panduan}` : (pilihan.bantuan.ke ?? "/")}
-          className="mt-3 flex min-h-sentuh items-center justify-between gap-2 rounded-tombol border border-utama/25 bg-white px-4 py-2 font-semibold text-utama-gelap"
+          className="tekan mt-3 flex min-h-sentuh items-center justify-between gap-2 rounded-tombol border border-utama/25 bg-white px-4 py-2 font-semibold text-utama-gelap"
         >
           <span>{pilihan.bantuan.tombol}</span>
           <ChevronRight className="h-5 w-5 shrink-0" strokeWidth={2.5} aria-hidden="true" focusable="false" />
@@ -50,13 +50,13 @@ export function CheckIn() {
   }
 
   return (
-    <fieldset className="rounded-kartu bg-utama-muda p-4">
+    <fieldset className="rounded-kartu border border-garis bg-white px-3 py-4">
       <legend className="sr-only">{t.label}</legend>
-      <p aria-hidden="true" className="text-sm font-semibold text-utama-gelap">
+      <p aria-hidden="true" className="px-1 text-kecil font-semibold text-utama-gelap">
         {t.label}
       </p>
-      <p className="mt-0.5 text-lg font-bold leading-snug">{t.pertanyaan}</p>
-      <div className="mt-3 grid grid-cols-5 gap-1.5">
+      <p className="mt-0.5 px-1 text-subjudul">{t.pertanyaan}</p>
+      <div className="mt-3 grid grid-cols-5 gap-1">
         {t.pilihan.map((p) => (
           <button
             key={p.id}
@@ -67,14 +67,14 @@ export function CheckIn() {
               setCheckin(p.id);
               setMengubah(false);
             }}
-            className={`flex min-h-[72px] flex-col items-center justify-center gap-1 rounded-tombol border-2 bg-white px-0.5 py-2 ${
-              jawabanHariIni === p.id ? "border-utama" : "border-transparent"
+            className={`tekan flex min-h-[76px] flex-col items-center justify-center gap-1 rounded-tombol border px-0 py-2 ${
+              jawabanHariIni === p.id ? "border-utama bg-utama-muda ring-1 ring-utama" : "border-garis bg-white"
             }`}
           >
             <span aria-hidden="true" className="text-2xl leading-none">
               {p.emoji}
             </span>
-            <span aria-hidden="true" className="text-xs font-semibold">
+            <span aria-hidden="true" className="text-mikro font-semibold">
               {p.singkat}
             </span>
           </button>

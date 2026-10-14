@@ -32,3 +32,14 @@ export function namaHariSingkat(kunci: string): string {
 export function tanggalDalamBulan(kunci: string): string {
   return String(Number(kunci.slice(8, 10)));
 }
+
+export type BagianHari = "pagi" | "siang" | "sore" | "malam";
+
+/** Pagi 04-10, siang 11-14, sore 15-17, selain itu malam (jam lokal perangkat). */
+export function bagianHari(d: Date = new Date()): BagianHari {
+  const j = d.getHours();
+  if (j >= 4 && j <= 10) return "pagi";
+  if (j >= 11 && j <= 14) return "siang";
+  if (j >= 15 && j <= 17) return "sore";
+  return "malam";
+}

@@ -145,6 +145,7 @@ export const uiSchema = z
     app: z.object({ nama: teks }),
     beranda: z.object({
       spandukDraf: teks,
+      sapaan: z.object({ pagi: teks, siang: teks, sore: teks, malam: teks }),
       pilih: z.object({
         judul: teks,
         susun: z.object({ judul: teks, deskripsi: teks, tombol: teks }),

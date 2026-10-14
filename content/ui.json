@@ -4,6 +4,7 @@
   },
   "beranda": {
     "spandukDraf": "Konten masih draf dan belum ditinjau ahli.",
+    "sapaan": { "pagi": "Selamat pagi", "siang": "Selamat siang", "sore": "Selamat sore", "malam": "Selamat malam" },
     "pilih": {
       "judul": "Apa yang ingin Anda lakukan?",
       "susun": {
