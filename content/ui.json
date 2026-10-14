@@ -205,15 +205,12 @@
     "satuHal": "Satu hal untuk hari ini",
     "dariKartu": "Dari panduan: {judul}",
     "lihatKartu": "Lihat panduan",
-    "mulaiDariSini": "Mulai dari sini",
-    "semuaRekomendasi": "Rekomendasi lainnya",
     "kosongJudul": "Dari jawaban Anda, belum ada hambatan besar",
     "kosongIsi": "Jawaban bisa diubah kapan saja. Panduan untuk caregiver tetap ada di bawah.",
     "bukaKartu": "Buka panduan",
     "cocokSewa": "Cocok untuk kontrakan dan kos",
     "cetak": "Cetak panduan saya",
-    "sedangDisusun": "Sedang disusun",
-    "belumAdaSiap": "Panduan untuk prioritas Anda belum siap. Isinya sedang disusun; daftarnya ada di bawah.",
+    "belumAdaSiap": "Panduan untuk prioritas Anda belum siap. Isinya sedang disusun.",
     "kemajuan": "Anda sudah menyelesaikan {n} langkah. Terus berjalan, pelan-pelan juga maju.",
     "beres": {
       "judul": "Yang sudah teratasi",
@@ -221,8 +218,7 @@
       "kosong": "Belum ada masalah yang teratasi. Setelah mencoba satu panduan, catat hasilnya di sana.",
       "rincian": "Lihat rincian",
       "sedang": "Sedang dikerjakan",
-      "belumDicoba": "Belum dicoba",
-      "lihat": "Sudah teratasi ({n})"
+      "belumDicoba": "Belum dicoba"
     },
     "perluLagi": "Perlu langkah berikutnya"
   },

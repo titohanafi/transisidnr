@@ -17,8 +17,6 @@ import { BarisTautan } from "../components/BarisTautan";
 import { BilahKemajuan } from "../components/BilahKemajuan";
 import { Halaman } from "../components/Halaman";
 import { KartuHero, TautanHero } from "../components/KartuHero";
-import { KartuRingkas } from "../components/KartuRingkas";
-import { Lipat } from "../components/Lipat";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { konten } from "../domain/content";
 import { terapkanHasil } from "../domain/hasil";
@@ -30,11 +28,6 @@ import { useRuangan } from "../state/useRuangan";
 import { useStore } from "../state/store";
 
 const { rencana: t } = konten.ui;
-
-// Jumlah panduan di samping judul bagian, dalam pil kecil.
-function Hitungan({ n }: { n: number }) {
-  return <span className="rounded-full bg-utama-muda px-2.5 py-0.5 text-kecil font-semibold tabular-nums text-utama-gelap">{n}</span>;
-}
 
 export function Rencana() {
   const { state } = useStore();
@@ -51,62 +44,8 @@ export function Rencana() {
   const h = terapkanHasil(rencana, state.hasil, konten.kartu);
 
   const dataKartu = (id: string) => konten.kartu.find((k) => k.id === id);
-  const lainnya = h.lainnya.filter((k) => !k.isiMenyusul);
-  const disusun = h.lainnya.filter((k) => k.isiMenyusul);
   const satuHal = h.satuHal;
   const labelAkt = (id: string) => konten.asesmen.aktivitas.find((a) => a.id === id)?.label.split(" (")[0] ?? id;
-
-  const daftarKartu = (daftar: typeof h.mulai) => (
-    <div className="mt-isi space-y-4">
-      {daftar.map((k) => (
-        <KartuRingkas key={k.id} kartu={k} />
-      ))}
-    </div>
-  );
-
-  const daftarLengkap = (
-    <div className="flex flex-col gap-bagian">
-      {h.mulai.length > 0 && (
-        <section aria-labelledby="mulai">
-          <h2 id="mulai" className="flex items-center gap-2 text-subjudul">
-            {t.mulaiDariSini}
-            <Hitungan n={h.mulai.length} />
-          </h2>
-          {daftarKartu(h.mulai)}
-        </section>
-      )}
-
-      {lainnya.length > 0 && (
-        <section aria-labelledby="lainnya">
-          <h2 id="lainnya" className="flex items-center gap-2 text-subjudul">
-            {t.semuaRekomendasi}
-            <Hitungan n={lainnya.length} />
-          </h2>
-          {daftarKartu(lainnya)}
-        </section>
-      )}
-
-      {h.beres.length > 0 && (
-        <Lipat className="" judul={isi(t.beres.lihat, { n: h.beres.length })}>
-          <div className="space-y-3">
-            {h.beres.map((k) => (
-              <KartuRingkas key={k.id} kartu={k} />
-            ))}
-          </div>
-        </Lipat>
-      )}
-
-      {disusun.length > 0 && (
-        <Lipat className="" judul={`${t.sedangDisusun} (${disusun.length})`} buka={h.mulai.length === 0 && lainnya.length === 0}>
-          <div className="space-y-3">
-            {disusun.map((k) => (
-              <KartuRingkas key={k.id} kartu={k} />
-            ))}
-          </div>
-        </Lipat>
-      )}
-    </div>
-  );
 
   // Pita kepala: dua baris berlabel (ruangan dan prioritas), tiap baris dengan jalan pintas untuk mengubahnya.
   const tautanUbah = "inline-flex min-h-sentuh shrink-0 items-center font-semibold text-utama underline";
@@ -248,8 +187,6 @@ export function Rencana() {
                 {t.belumAdaSiap}
               </p>
             )}
-
-            {daftarLengkap}
           </>
         )}
 
