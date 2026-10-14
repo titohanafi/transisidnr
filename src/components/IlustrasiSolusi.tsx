@@ -32,17 +32,32 @@ const GAMBAR: Record<string, () => ReactNode> = {
   // Jaga lantai tetap kering dan bersih dari benda yang menghalangi.
   "bath-floor-slip:tanpa_biaya": () => (
     <Ruang>
-      <path d="M62 128q-8-10 6-18 22-9 52-6 28 4 26 14-3 10-30 12-34 3-54-2z" className="fill-daun" opacity="0.28" />
-      <path d="M62 128q-8-10 6-18 22-9 52-6 28 4 26 14-3 10-30 12-34 3-54-2z" strokeDasharray="3 5" {...garis} className="stroke-daun" />
-      <path d="M232 14L192 108" {...garis} strokeWidth="3" className="stroke-utama" />
-      <path d="M170 112h46l6 14h-58z" className="fill-white" />
-      <path d="M170 112h46l6 14h-58z" {...garis} className="stroke-utama" />
-      <path d="M176 126v8M186 126v8M196 126v8M206 126v8M216 126v8" {...garis} strokeWidth="2" className="stroke-utama" />
-      <path d="M270 98h38l-4 36h-30z" className="fill-white" />
-      <path d="M270 98h38l-4 36h-30z" {...garis} className="stroke-utama" />
-      <path d="M270 98q19-12 38 0" {...garis} className="stroke-utama" />
-      <path d="M272 112h34" {...garis} strokeWidth="1.500" className="stroke-utama" opacity="0.5" />
-      <path d="M88 118q8 4 16 0M110 126q8 4 16 0" {...garis} strokeWidth="1.800" className="stroke-daun" />
+      {/* Pancuran di dinding, dalam keadaan mati. */}
+      <path d="M58 6v30q0 8 8 8h28" {...garis} strokeWidth="3" className="stroke-utama" />
+      <rect x="92" y="38" width="40" height="11" rx="5.500" className="fill-white" />
+      <rect x="92" y="38" width="40" height="11" rx="5.500" {...garis} className="stroke-utama" />
+      <circle cx="58" cy="62" r="7" className="fill-white" />
+      <circle cx="58" cy="62" r="7" {...garis} strokeWidth="2" className="stroke-utama" />
+      <path d="M58 58v8" {...garis} strokeWidth="2" className="stroke-daun" />
+      {/* Saluran lantai. */}
+      <ellipse cx="112" cy="124" rx="22" ry="6" className="fill-white" />
+      <ellipse cx="112" cy="124" rx="22" ry="6" {...garis} strokeWidth="2" className="stroke-utama" />
+      <path
+        d="M98 124h28M104 121.500v5M112 121.500v5M120 121.500v5"
+        {...garis}
+        strokeWidth="1.500"
+        className="stroke-utama"
+        opacity="0.6"
+      />
+      {/* Kloset. */}
+      <rect x="262" y="40" width="34" height="30" rx="5" className="fill-white" />
+      <rect x="262" y="40" width="34" height="30" rx="5" {...garis} className="stroke-utama" />
+      <ellipse cx="285" cy="122" rx="30" ry="4" className="fill-utama" opacity="0.14" />
+      <path d="M252 78h66v6q0 14-18 18v14h-30v-14q-18-4-18-18z" className="fill-white" />
+      <path d="M252 78h66v6q0 14-18 18v14h-30v-14q-18-4-18-18z" {...garis} className="stroke-utama" />
+      <path d="M252 78h66" {...garis} strokeWidth="3" className="stroke-utama" />
+      {/* Kilau tanda lantai bersih dan kering. */}
+      <path d="M170 112l14-10M186 120l18-14M214 126l16-12" {...garis} strokeWidth="3" className="stroke-white" />
     </Ruang>
   ),
   // Pasang keset atau stiker anti-slip di area berpindah dan area mandi.
