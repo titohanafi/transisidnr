@@ -1,28 +1,6 @@
 {
   "pertanyaan": [
     {
-      "id": "pengisi",
-      "pertanyaan": "Siapa yang mengisi?",
-      "banyakPilihan": false,
-      "pilihan": [
-        {
-          "id": "penyandang",
-          "label": "Penyandang disabilitas",
-          "respons": "Terima kasih. Anda yang paling tahu apa yang dibutuhkan."
-        },
-        {
-          "id": "caregiver",
-          "label": "Caregiver",
-          "respons": "Terima kasih sudah mendampingi. Anda juga boleh istirahat sebentar."
-        },
-        {
-          "id": "berdua",
-          "label": "Berdua",
-          "respons": "Bagus. Mengisi berdua sering membuat keputusan terasa lebih ringan."
-        }
-      ]
-    },
-    {
       "id": "kejadian",
       "pertanyaan": "Kapan kejadiannya?",
       "banyakPilihan": false,

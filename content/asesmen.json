@@ -25,7 +25,7 @@
       "id": "q-mandi-jangkau",
       "aktivitas": "mandi",
       "pertanyaan": "Apakah sulit menjangkau sabun, shower, atau keran dari posisi duduk?",
-      "penjelasan": "Letak sabun, shower, atau keran yang tinggi atau jauh membuat Anda harus meregang atau berdiri.",
+      "penjelasan": "Letak sabun, shower, atau keran yang tinggi atau jauh membuat pengguna kursi roda harus meregang atau berdiri.",
       "memicu_kartu": ["bath-reach-controls"]
     },
     {
@@ -74,7 +74,7 @@
       "id": "q-umum-panggil",
       "aktivitas": "umum",
       "pertanyaan": "Apakah tidak ada tombol atau cara memanggil bantuan dari kamar mandi?",
-      "penjelasan": "Bila terjatuh atau butuh bantuan, Anda perlu cara memberi tahu orang lain tanpa harus berteriak.",
+      "penjelasan": "Bila terjatuh atau butuh bantuan, perlu ada cara memberi tahu orang lain tanpa harus berteriak.",
       "memicu_kartu": ["bath-emergency-call"]
     }
   ]

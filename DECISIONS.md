@@ -344,3 +344,9 @@
 - Pil Semua / Cari alat / Kenali peran ahli dihapus karena mencampur jenis berbeda (topik, produk, orang). Diganti bagian "Lainnya" di dasar daftar dengan dua tombol: "Daftar alat" dan "Peran ahli dan tukang" (`/jelajah/alat`, `/jelajah/ahli`).
 - Beranda: satu tindakan utama yang mengikuti keadaan: belum menjawab "Buat rencana untuk rumah Anda"; sudah menjawab "Lanjutkan rencana Anda" (ke Rencana). Satu tautan kecil "Lihat semua panduan" untuk yang ingin melihat-lihat dulu. Baris "Cari alat" dan "Lihat semua panduan" yang besar dihapus. Check-in tetap di bawahnya.
 - Belum dikerjakan (usul council): ganti kata "panduan" dengan "topik"/"langkah" (perlu diuji kata mana yang dipahami), layar sambutan singkat untuk kunjungan pertama, mengurangi 6+4 pertanyaan awal, pengukuran drop-off tanpa server (acara lokal), dan titik masuk terpisah untuk penyandang disabilitas vs caregiver.
+
+## Sapaan "Anda" dan siapa yang mengisi
+- Aturan: "Anda" berarti orang yang sedang memegang ponsel. Hal tentang kemampuan fisik menyebut "pengguna kursi roda", dan hal tentang rumah memakai "rumah ini".
+- Pertanyaan onboarding "Siapa yang mengisi?" dihapus karena jawabannya tidak dipakai di mana pun; onboarding kini lima pertanyaan. Data lama yang masih menyimpan jawabannya tetap terbaca dan diabaikan.
+- Teks yang disesuaikan: penjelas pertanyaan menjangkau dan memanggil bantuan, bantuan pilihan aktivitas ("keseharian di rumah"), bantuan prioritas ("caregiver membantu"), dan catatan renovasi di kontrakan atau kos ("karena rumah ini kontrakan atau kos").
+- Ide bila uji pengguna menunjukkan caregiver merasa tidak disapa: pilihan "mengisi untuk siapa" di tab Saya, bukan gerbang di Beranda.

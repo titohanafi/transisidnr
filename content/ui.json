@@ -147,7 +147,7 @@
     "judul": "Mengenali kebutuhan di rumah",
     "aktivitas": {
       "judul": "Aktivitas apa yang relevan?",
-      "bantuan": "Pilih yang sesuai dengan keseharian Anda. Tidak ada jawaban benar atau salah, dan boleh dilewati.",
+      "bantuan": "Pilih yang sesuai dengan keseharian di rumah. Tidak ada jawaban benar atau salah, dan boleh dilewati.",
       "tidakRelevan": "Tidak relevan",
       "status": {
         "bisa_sendiri": "Bisa sendiri",
@@ -158,7 +158,7 @@
     },
     "prioritas": {
       "judul": "Mana yang paling penting?",
-      "bantuan": "Anda yang paling tahu mana yang terpenting. Pilih satu atau dua untuk dibereskan lebih dulu. Keputusan ada pada penyandang disabilitas.",
+      "bantuan": "Pilih satu atau dua yang paling penting untuk dibereskan lebih dulu. Keputusan ada pada penyandang disabilitas, caregiver membantu.",
       "maksimal": "Anda sudah memilih dua. Lepas satu bila ingin mengganti."
     },
     "pertanyaan": {
@@ -237,7 +237,7 @@
     "cek": "Cek kecocokan dulu",
     "harga": "Harga",
     "afiliasi": "Tautan afiliasi",
-    "tingkatDisembunyikan": "Pilihan renovasi permanen tidak ditampilkan karena Anda tinggal di kontrakan atau kos. Perlu izin pemilik.",
+    "tingkatDisembunyikan": "Pilihan renovasi permanen tidak ditampilkan karena rumah ini kontrakan atau kos. Perlu izin pemilik.",
     "bantuan": "Siapa yang bisa membantu",
     "peranPenyandang": "Peran penyandang disabilitas",
     "peranCaregiver": "Peran caregiver",
