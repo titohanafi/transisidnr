@@ -257,6 +257,59 @@ const GAMBAR: Record<string, () => ReactNode> = {
       <Pengguna x={228} y={138} tangan={[277, 78]} />
     </Kanvas>
   ),
+  // Cara aman sementara: belum masuk ke area mandi yang berbibir (tanda "jangan"), mandi lap sambil duduk di area datar.
+  "bath-shower-entry:tanpa_biaya": () => (
+    <Kanvas>
+      <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <rect x="272" y="116" width="88" height="22" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M272 116V10" {...garisTinta} strokeWidth="1.500" strokeDasharray="4 5" className="stroke-tinta" opacity="0.5" />
+      <Larang x={314} y={90} />
+      <Pengguna x={100} y={138} tangan={[152, 58]} />
+      <rect x="148" y="74" width="68" height="6" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M170 80V138M204 80V138" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <path d="M164 62H200Q198 74 182 74Q166 74 164 62Z" className="fill-white stroke-tinta" strokeWidth="3" strokeLinejoin="round" />
+      <circle cx="176" cy="54" r="3" fill="none" strokeWidth="2" className="stroke-tinta" />
+      <circle cx="187" cy="48" r="4" fill="none" strokeWidth="2" className="stroke-tinta" />
+      <circle cx="196" cy="55" r="2.500" fill="none" strokeWidth="2" className="stroke-tinta" />
+    </Kanvas>
+  ),
+  // Alat tanpa bongkar: ramp kecil yang bisa dilepas di atas bibir, bangku mandi di dalam area mandi, titik anti-slip di lantainya.
+  "bath-shower-entry:alat_tanpa_bongkar": () => (
+    <Kanvas>
+      <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <Pengguna x={96} y={138} tangan={[16, -56]} />
+      <path d="M156 138L232 118V138Z" className="fill-white stroke-tinta" strokeWidth="3" strokeLinejoin="round" />
+      <path
+        d="M176 132L180 138M194 127L198 138M212 122L216 138"
+        {...garisTinta}
+        strokeWidth="1.500"
+        className="stroke-tinta"
+        opacity="0.5"
+      />
+      <rect x="232" y="118" width="128" height="20" className="fill-white stroke-tinta" strokeWidth="3" />
+      <Bintik x={246} y={126} kolom={10} baris={1} jarak={11} />
+      <rect x="262" y="84" width="52" height="7" rx="3.500" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M268 91V118M308 91V118M316 84V44" {...garisTinta} strokeWidth="4" className="stroke-tinta" />
+      <path d="M306 44H326" {...garisTinta} strokeWidth="4" className="stroke-tinta" />
+    </Kanvas>
+  ),
+  // Renovasi: area mandi tanpa bibir (roll-in), lantai miring ke saluran, tempat duduk lipat dan pegangan di dinding.
+  "bath-shower-entry:renovasi": () => (
+    <Kanvas>
+      <path d="M0 146V118L254 123H276H360V146Z" className="fill-white stroke-tinta" strokeWidth="3" strokeLinejoin="round" />
+      <rect x="254" y="121" width="22" height="7" rx="2" className="fill-white stroke-tinta" strokeWidth="3" />
+      <rect x="290" y="0" width="50" height="146" className="fill-tinta" />
+      <path d="M290 10H266" {...garisTinta} strokeWidth="4" className="stroke-tinta" />
+      <ellipse cx="260" cy="16" rx="6" ry="9" transform="rotate(-20 260 16)" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M246 34V70M254 36V72M262 34V70" {...garisTinta} strokeWidth="2" strokeDasharray="3 5" className="stroke-tinta" />
+      <path d="M290 24H280V66H290" {...garisTinta} strokeWidth="5" className="stroke-tinta" />
+      <rect x="252" y="82" width="38" height="6" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M290 114L262 88" {...garisTinta} strokeWidth="4" className="stroke-tinta" />
+      <Pengguna x={116} y={119} skala={0.8} />
+      <path d="M176 110H226" {...garisTinta} strokeWidth="3" strokeDasharray="3 7" className="stroke-tinta" />
+      <Panah x={234} y={110} arah={0} />
+    </Kanvas>
+  ),
   // Pastikan pintu bisa dibuka leluasa: pintu terbuka penuh dan diganjal, jalur di depan pintu kosong.
   "bath-door:tanpa_biaya": () => (
     <Kanvas>
