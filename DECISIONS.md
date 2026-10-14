@@ -365,3 +365,5 @@
 - Kata kunci dikirim lewat state riwayat peramban, bukan alamat, supaya tidak ada teks pengguna di URL.
 - Pencarian berjalan di perangkat (fungsi murni `cocokCari`, diuji): semua kata harus ada di judul atau situasi panduan, tanpa membedakan huruf besar/kecil. Belum mencari di isi langkah, alat, atau sinonim (mis. "grab bar" untuk pegangan); tambahkan bila uji pengguna menunjukkan orang memakai istilah lain.
 - Hasil kosong menampilkan pesan yang mengarahkan ke "Susun rencana saya".
+
+- Kolom cari dipindah ke atas kartu "Buat rencana" atas permintaan pemilik (menggantikan keputusan "di bawah kartu"). Tautan "Lihat semua panduan" tetap di bawah kartu. Catatan: dua pintu masuk kini bersaing di bagian atas Beranda; pantau pada uji pengguna apakah pengguna baru tetap menemukan "Buat rencana".
