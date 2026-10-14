@@ -8,6 +8,7 @@ import {
   Kanvas,
   Larang,
   Panah,
+  Pendamping,
   Pengguna,
   UkurMendatar,
   UkurTegak,
@@ -591,6 +592,28 @@ const GAMBAR: Record<string, () => ReactNode> = {
       />
       <path d="M252 70V74M256 70V74" {...garisTinta} strokeWidth="2" strokeDasharray="2 3" className="stroke-tinta" />
       <Pengguna x={198} y={131} tangan={[252, 74]} />
+    </Kanvas>
+  ),
+  // Pendamping bertanya dulu dan berdiri tegak dengan tangan terbuka; pengguna kursi roda yang memegang kendali.
+  "care-assist-transfer:tanpa_biaya": () => (
+    <Kanvas>
+      <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <Pengguna x={104} y={138} tangan={[16, -56]} />
+      <Pendamping x={236} y={138} />
+      <rect x="164" y="8" width="38" height="28" rx="9" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M202 18L216 22L202 28z" className="fill-white stroke-tinta" strokeWidth="3" strokeLinejoin="round" />
+      <path d="M200 20V27" className="stroke-white" strokeWidth="4" />
+      <text
+        x="183"
+        y="29"
+        fontSize="20"
+        fontWeight="700"
+        textAnchor="middle"
+        fontFamily="system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+        className="fill-tinta"
+      >
+        {"?"}
+      </text>
     </Kanvas>
   ),
   // Pastikan pintu bisa dibuka leluasa: pintu terbuka penuh dan diganjal, jalur di depan pintu kosong.

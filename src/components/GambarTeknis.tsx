@@ -58,6 +58,22 @@ export function Pengguna({ x, y, tangan = [34, -80], skala = 1 }: { x: number; y
   );
 }
 
+/** Pendamping (caregiver) berdiri tegak tampak samping, menghadap kiri; tangan terbuka di depan, tidak menyentuh siapa pun. Titik (x, y) = tanah. */
+export function Pendamping({ x, y, skala = 0.8 }: { x: number; y: number; skala?: number }) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${skala})`}>
+      <Anggota d="M2 -90L4 -6" tebal={9} />
+      <Anggota d="M-2 -90L-6 -6" tebal={9} />
+      <Anggota d="M-6 -3H-18" tebal={6} />
+      <Anggota d="M4 -3H-8" tebal={6} />
+      <Anggota d="M0 -136L1 -88" tebal={17} />
+      <circle cx="-1" cy="-152" r="11" className="fill-white stroke-tinta" strokeWidth="3" />
+      <Anggota d="M4 -130L10 -104L8 -86" tebal={6} />
+      <Anggota d="M-4 -130L-16 -110L-34 -104" tebal={6} />
+    </g>
+  );
+}
+
 /** Kursi roda tampak atas, menghadap ke atas layar. Titik (x, y) = pusat dudukan. */
 export function KursiRodaAtas({ x, y }: { x: number; y: number }) {
   return (
