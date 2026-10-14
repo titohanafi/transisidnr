@@ -53,14 +53,14 @@ export function Beranda() {
       </form>
 
       <section className="mt-6 rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-utama">
-        <div className="flex items-center justify-between gap-3">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-utama">
-            <IkonBeranda kunci="rencana" />
-          </span>
-          {!adaJawaban && (
-            <span className="rounded-2xl border border-white px-3 py-1 text-sm font-semibold leading-snug">{pilih.susun.cakupan}</span>
-          )}
-        </div>
+        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-utama">
+          <IkonBeranda kunci="rencana" />
+        </span>
+        {!adaJawaban && (
+          <p className="mt-3">
+            <span className="inline-block rounded-full border border-white px-3 py-1 text-sm font-semibold">{pilih.susun.cakupan}</span>
+          </p>
+        )}
         <h3 id="jalur-utama" className="mt-3 text-xl font-bold leading-snug">
           {kartu.judul}
         </h3>
