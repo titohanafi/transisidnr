@@ -491,3 +491,9 @@
 
 ## Lencana "Sementara, bisa dibatalkan" dihapus
 - Lencana ini dihapus di Detail Panduan dan di kartu Panduan Saya (permintaan pemilik). Hanya solusi permanen yang diberi lencana "Permanen", sehingga prinsip 5 ("solusi permanen ditandai") tetap terpenuhi: yang tidak bertanda adalah solusi yang bisa dibatalkan. Teks `umum.sementara` di `content/ui.json` kini tidak terpakai.
+
+## Waktu pengerjaan diisi sementara (placeholder, belum ditinjau)
+- Atas permintaan pemilik, kolom `usaha.waktu` yang masih kosong diisi: Tanpa biaya "15 menit", Alat tanpa bongkar "1-2 jam", Renovasi "1-3 hari". Nilai ini disalin dari satu-satunya panduan yang sudah punya data waktu (`bath-transfer-toilet`) dan diterapkan ke tingkat yang sama di panduan lain. Itu BUKAN estimasi per panduan; hanya pengisi sementara.
+- Renovasi di `bath-space-turning`, `bath-shower-entry`, dan `bath-emergency-call` sengaja tetap kosong karena pekerjaannya (membongkar dinding, merencanakan, atau instalasi listrik) hampir pasti lebih lama dari "1-3 hari".
+- Kisaran biaya (`biaya.kisaran_rp`) TIDAK diisi: mesin rekomendasi membacanya untuk menghitung total dan menandai "di atas anggaran", jadi angka karangan akan diam-diam mengubah rekomendasi. Menunggu angka dari tim konten.
+- Semua kartu tetap berstatus `draf`; angka ini perlu ditinjau sebelum dianggap benar.

@@ -17,7 +17,7 @@
         "kisaran_rp": "Rp 0"
       },
       "usaha": {
-        "waktu": null,
+        "waktu": "15 menit",
         "kesulitan": "Mudah, bisa sendiri"
       },
       "barang": []
@@ -34,7 +34,7 @@
         "kisaran_rp": null
       },
       "usaha": {
-        "waktu": null,
+        "waktu": "1-2 jam",
         "kesulitan": "Mudah, bisa sendiri atau dibantu caregiver"
       },
       "barang": [
@@ -68,7 +68,7 @@
         "kisaran_rp": null
       },
       "usaha": {
-        "waktu": null,
+        "waktu": "1-3 hari",
         "kesulitan": "Perlu tukang"
       },
       "barang": []

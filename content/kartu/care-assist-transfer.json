@@ -15,7 +15,7 @@
         "Setelah selesai, tanyakan apa yang terasa nyaman dan apa yang tidak."
       ],
       "biaya": { "kisaran_rp": "Rp 0" },
-      "usaha": { "waktu": null, "kesulitan": "Perlu latihan bersama terapis" },
+      "usaha": { "waktu": "15 menit", "kesulitan": "Perlu latihan bersama terapis" },
       "barang": []
     }
   },

@@ -16,7 +16,7 @@
         "kisaran_rp": "Rp 0"
       },
       "usaha": {
-        "waktu": null,
+        "waktu": "15 menit",
         "kesulitan": "Perlu latihan bersama terapis"
       },
       "barang": []
@@ -34,7 +34,7 @@
         "kisaran_rp": null
       },
       "usaha": {
-        "waktu": null,
+        "waktu": "1-2 jam",
         "kesulitan": "Sedang, perlu dicoba bersama pendamping"
       },
       "barang": [
