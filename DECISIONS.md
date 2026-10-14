@@ -678,3 +678,4 @@
 - Panduan umum: jarak kolom cari ke kartu pertama diperkecil menjadi 16px (sebelumnya 32px).
 - Panduan umum: ruang di atas dan di bawah kolom cari di dalam pita disamakan, 12px (sebelumnya 32px atas dan 16px bawah).
 - **Perbaikan jarak panduan umum:** kartu kelompok pertama ternyata membawa margin atas 24px (aturan `first:mt-0` tidak berlaku karena ada elemen kosong `aria-live` di depannya), sehingga jarak kolom cari ke kartu sebenarnya 36px, bukan 12px. Diganti `first-of-type:mt-0`; catatan kuning cakupan diberi jarak bawah supaya tidak menempel ke kartu. Kini ruang atas dan bawah kolom cari sama-sama 12px.
+- Panduan umum: ruang atas dan bawah kolom cari dinaikkan menjadi 20px (sama).
