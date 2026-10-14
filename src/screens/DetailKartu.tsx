@@ -1,4 +1,4 @@
-import { ChevronDown, HeartHandshake, TriangleAlert, User } from "lucide-react";
+import { HeartHandshake, TriangleAlert, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
@@ -69,35 +69,30 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
     </span>
   );
 
-  const adaKenapa = Boolean(kartu.kenapa_penting) && !kartu.isi_menyusul && Boolean(kartu.solusi);
+  // Situasi digabung dengan "kenapa penting" bila isinya berbeda, supaya tidak ada dua bagian yang saling mengulang.
+  const norm = (x: string) =>
+    x
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  const kenapa = kartu.kenapa_penting;
+  const sudahAda = !kenapa || norm(kartu.situasi).includes(norm(kenapa)) || norm(kenapa).includes(norm(kartu.situasi));
+  const uraian = sudahAda
+    ? kenapa && norm(kenapa).length > norm(kartu.situasi).length
+      ? kenapa
+      : kartu.situasi
+    : `${kartu.situasi} ${kenapa}`;
 
   const kepala = (
     <>
       <div className="mt-2 empty:hidden">
         <LencanaStatus status={kartu.status_validasi} />
       </div>
-      <section
-        className={`mt-4 rounded-kartu border border-catatan-garis bg-catatan-muda px-4 pt-4 text-catatan ${adaKenapa ? "pb-1" : "pb-4"}`}
-        aria-labelledby="situasi"
-      >
+      <section className="mt-4 rounded-kartu border border-catatan-garis bg-catatan-muda p-4 text-catatan" aria-labelledby="situasi">
         <h2 id="situasi" className="text-kecil font-semibold uppercase tracking-wide">
           {t.situasi}
         </h2>
-        <p className="mt-1 text-lg">{kartu.situasi_lengkap ?? kartu.situasi}</p>
-        {adaKenapa && (
-          <details className="group mt-3 border-t border-catatan-garis">
-            <summary className="flex min-h-sentuh cursor-pointer list-none items-center justify-between gap-2 font-semibold [&::-webkit-details-marker]:hidden">
-              {t.kenapa}
-              <ChevronDown
-                className="h-5 w-5 shrink-0 motion-safe:transition-transform group-open:rotate-180"
-                strokeWidth={2}
-                aria-hidden="true"
-                focusable="false"
-              />
-            </summary>
-            <p className="pb-1">{kartu.kenapa_penting}</p>
-          </details>
-        )}
+        <p className="mt-1 text-lg">{uraian}</p>
       </section>
     </>
   );
