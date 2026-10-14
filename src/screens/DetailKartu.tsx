@@ -92,7 +92,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
         <h2 id="situasi" className="text-kecil font-semibold uppercase tracking-wide">
           {t.situasi}
         </h2>
-        <p className="mt-1 text-lg">{uraian}</p>
+        <p className="mt-1 text-isi">{uraian}</p>
       </section>
     </>
   );
