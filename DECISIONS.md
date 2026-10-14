@@ -663,3 +663,4 @@
 - Revisi: "Lihat rincian" di Panduan Saya kembali tertutup secara bawaan (permintaan pemilik).
 - **Dukungan: pita hijau muda di belakang bagian atas** (konsisten dengan hero halaman lain). Pita tanpa isi; panel "Nomor Kontak Darurat" menimpa sebagian tepi bawahnya, sehingga pita terlihat "setengah" di belakang panel.
 - Nomor darurat di Dukungan kini berbentuk daftar baris (ikon telepon, nama, nomor tebal di kanan) dalam satu kotak putih, bukan ubin dua kolom.
+- Panel "Nomor Kontak Darurat" di Dukungan berlatar putih (garis merah tipis tetap); baris nomor langsung di dalam panel tanpa kotak tambahan.

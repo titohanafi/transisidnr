@@ -88,16 +88,16 @@ export function Kontak() {
     <Halaman judul={t.judul} judulTersembunyi latarPutih kepalaPita="hijau" kepalaTumpang kepala={<div aria-hidden="true" />}>
       <div className="flex flex-col gap-bagian">
         {darurat && darurat.entri.length > 0 && (
-          <section aria-labelledby="nomor-darurat" className="rounded-kartu border border-bahaya/25 bg-bahaya-muda p-4 shadow-kartu">
+          <section aria-labelledby="nomor-darurat" className="rounded-kartu border border-bahaya/25 bg-white p-4 shadow-kartu">
             <h2 id="nomor-darurat" className="flex items-center gap-2 text-subjudul text-bahaya">
               <Siren className="h-5 w-5 shrink-0 text-bahaya" strokeWidth={2} aria-hidden="true" focusable="false" />
               {darurat.kategori.nama}
             </h2>
-            <ul className="mt-isi divide-y divide-bahaya/20 overflow-hidden rounded-kartu border border-bahaya/25 bg-white">
+            <ul className="mt-2 divide-y divide-bahaya/20">
               {darurat.entri.map((e) =>
                 e.telepon ? (
                   <li key={e.id}>
-                    <a href={urlTelepon(e.telepon)} className="tekan flex min-h-[56px] items-center gap-3 px-4 py-3">
+                    <a href={urlTelepon(e.telepon)} className="tekan flex min-h-[56px] items-center gap-3 py-3">
                       <Phone className="h-5 w-5 shrink-0 text-bahaya" strokeWidth={2} aria-hidden="true" focusable="false" />
                       <span className="min-w-0 flex-1 font-medium leading-snug">{e.nama.replace(/\s*\(\d+\)$/, "")}</span>
                       <span className="shrink-0 text-judulKartu font-bold tabular-nums text-bahaya">{e.telepon}</span>
