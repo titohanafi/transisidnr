@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { Ilustrasi } from "../components/Ilustrasi";
+import { IlustrasiSolusi } from "../components/IlustrasiSolusi";
 import { HasilLangkah, LangkahChecklist } from "../components/LangkahChecklist";
 import { LipatBaris } from "../components/Lipat";
 import { LencanaStatus, Tanda } from "../components/Lencana";
@@ -169,74 +170,77 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   id="panel-solusi"
                   role="tabpanel"
                   aria-labelledby={`tab-${aktif.tingkat}`}
-                  className="mt-3 rounded-kartu border border-garis bg-white p-4"
+                  className="mt-3 overflow-hidden rounded-kartu border border-garis bg-white"
                 >
-                  {(() => {
-                    const s = kartu.solusi![aktif.tingkat]!;
-                    const x = aktif;
-                    return (
-                      <>
-                        <p className="text-judulKartu text-tinta">{s.ringkasan}</p>
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
-                            <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
-                            {biayaPil(s.biaya)}
-                          </span>
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
-                            <Clock className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
-                            {s.usaha.waktu ?? umum.menyusul}
-                          </span>
-                          {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
-                          {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
-                        </div>
-                        {/* Ajakan bertindak ada di atas langkah; pertanyaan hasil di paling bawah. */}
-                        {(aksiTersedia(kartu, x.tingkat).includes("beli") ||
-                          (x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang"))) && (
-                          <div className="mt-5 flex flex-col gap-5">
-                            {aksiTersedia(kartu, x.tingkat).includes("beli") && (
-                              <TombolAksi
-                                jenis="beli"
-                                kartuId={kartu.id}
-                                tingkat={x.tingkat}
-                                gayaTombol={x.tingkat === "renovasi" ? "sekunder" : "utama"}
-                                className="w-full"
-                              />
-                            )}
-                            {x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang") && (
-                              <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" className="w-full" />
-                            )}
+                  <IlustrasiSolusi kartuId={kartu.id} tingkat={aktif.tingkat} />
+                  <div className="p-4">
+                    {(() => {
+                      const s = kartu.solusi![aktif.tingkat]!;
+                      const x = aktif;
+                      return (
+                        <>
+                          <p className="text-judulKartu text-tinta">{s.ringkasan}</p>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
+                              <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
+                              {biayaPil(s.biaya)}
+                            </span>
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
+                              <Clock className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
+                              {s.usaha.waktu ?? umum.menyusul}
+                            </span>
+                            {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
+                            {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                           </div>
-                        )}
+                          {/* Ajakan bertindak ada di atas langkah; pertanyaan hasil di paling bawah. */}
+                          {(aksiTersedia(kartu, x.tingkat).includes("beli") ||
+                            (x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang"))) && (
+                            <div className="mt-5 flex flex-col gap-5">
+                              {aksiTersedia(kartu, x.tingkat).includes("beli") && (
+                                <TombolAksi
+                                  jenis="beli"
+                                  kartuId={kartu.id}
+                                  tingkat={x.tingkat}
+                                  gayaTombol={x.tingkat === "renovasi" ? "sekunder" : "utama"}
+                                  className="w-full"
+                                />
+                              )}
+                              {x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang") && (
+                                <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" className="w-full" />
+                              )}
+                            </div>
+                          )}
 
-                        <hr className="-mx-4 mt-5 border-t border-garis/70" />
-                        <h4 className="mt-5 font-semibold">{t.langkah}</h4>
-                        <div className="mt-2">
-                          <LangkahChecklist kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} peran={s.peran_langkah} />
-                        </div>
-
-                        {s.ukuran && s.ukuran.length > 0 && (
-                          <div className="mt-4">
-                            <h4 className="font-semibold">{t.ukuran}</h4>
-                            {tampilkanUkuran ? (
-                              <ul className="mt-1 list-disc pl-6">
-                                {s.ukuran.map((u) => (
-                                  <li key={u.label}>
-                                    {u.label}: {u.nilai} {u.satuan}
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <p className="mt-1 text-redup">{t.ukuranMenyusul}</p>
-                            )}
+                          <hr className="-mx-4 mt-5 border-t border-garis/70" />
+                          <h4 className="mt-5 font-semibold">{t.langkah}</h4>
+                          <div className="mt-2">
+                            <LangkahChecklist kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} peran={s.peran_langkah} />
                           </div>
-                        )}
 
-                        <div className="mt-6 empty:hidden">
-                          <HasilLangkah kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} keTingkat={setAktifTingkat} />
-                        </div>
-                      </>
-                    );
-                  })()}
+                          {s.ukuran && s.ukuran.length > 0 && (
+                            <div className="mt-4">
+                              <h4 className="font-semibold">{t.ukuran}</h4>
+                              {tampilkanUkuran ? (
+                                <ul className="mt-1 list-disc pl-6">
+                                  {s.ukuran.map((u) => (
+                                    <li key={u.label}>
+                                      {u.label}: {u.nilai} {u.satuan}
+                                    </li>
+                                  ))}
+                                </ul>
+                              ) : (
+                                <p className="mt-1 text-redup">{t.ukuranMenyusul}</p>
+                              )}
+                            </div>
+                          )}
+
+                          <div className="mt-6 empty:hidden">
+                            <HasilLangkah kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} keTingkat={setAktifTingkat} />
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
                 </div>
               )}
               {adaDisembunyikan && <p className="mt-3 text-redup">{t.tingkatDisembunyikan}</p>}

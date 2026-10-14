@@ -582,3 +582,7 @@
 ## Ilustrasi sederhana di hero Detail Panduan
 - Hero kini punya ilustrasi kecil di sisi kanan judul, satu per kelompok (mandi, toilet, wudhu, grooming, umum, caregiver), menggantikan petak ikon. Berupa SVG inline (tanpa berkas unduhan, kurang dari 5 KB untuk semuanya), warna mengikuti token `utama` dan `daun`, dekoratif (`aria-hidden`). Ilustrasi sengaja hanya menggambarkan benda (pancuran, kloset, keran, cermin, pintu, hati), tanpa orang, ukuran, atau cara pasang, supaya tidak menyiratkan klaim teknis atau menempatkan penyandang disabilitas sebagai objek gambar.
 - Ilustrasi digambar asisten dan sengaja sederhana; desainer bisa mengganti isi `src/components/Ilustrasi.tsx` dengan karya sendiri tanpa mengubah tata letak.
+
+## Ilustrasi selebar panel untuk pilihan solusi (bertahap)
+- Dibuat bertahap, mulai dari panduan "Lantai licin saat basah" (`bath-floor-slip`) saja. Tiap pilihan solusinya punya ilustrasi selebar panel di atas deskripsi: tanpa biaya (pel, genangan, ember), pakai alat (keset anti-slip dan stiker), renovasi (lantai berubin dengan saluran dan palu). Panduan lain belum punya, sehingga panelnya tidak berubah. Daftar ada di `src/components/IlustrasiSolusi.tsx` dengan kunci `idKartu:tingkat`; menambah panduan baru tinggal menambah satu entri.
+- SVG inline dan dekoratif; hanya benda dan situasinya, tanpa orang, ukuran, atau cara pasang.
