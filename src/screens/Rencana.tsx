@@ -172,8 +172,8 @@ export function Rencana() {
               className="mt-3"
             />
             {h.beres.length === 0 && <p className="mt-3 text-kecil text-redup">{t.beres.kosong}</p>}
-            <details className="group mt-2 border-t border-garis/60">
-              <summary className="flex min-h-sentuh cursor-pointer list-none items-center justify-between gap-2 font-semibold text-utama [&::-webkit-details-marker]:hidden">
+            <details className="group -mx-4 -mb-4 mt-4 border-t border-garis/60">
+              <summary className="flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-2 px-4 font-semibold text-utama [&::-webkit-details-marker]:hidden">
                 <span>{t.beres.rincian}</span>
                 <ChevronDown
                   className="h-5 w-5 shrink-0 motion-safe:transition-transform group-open:rotate-180"
@@ -182,7 +182,7 @@ export function Rencana() {
                   focusable="false"
                 />
               </summary>
-              <ul className="divide-y divide-garis/60">
+              <ul className="divide-y divide-garis/60 border-t border-garis/60 px-4">
                 {rencana.daftar
                   .filter((k) => !k.isiMenyusul)
                   .map((k) => {
