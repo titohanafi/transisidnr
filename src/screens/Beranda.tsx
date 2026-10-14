@@ -1,4 +1,5 @@
-import { Search } from "lucide-react";
+import { Info, Search, X } from "lucide-react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
@@ -15,6 +16,7 @@ export function Beranda() {
   const { state } = useStore();
   const navigate = useNavigate();
   const adaJawaban = Object.keys(state.asesmen.status).length > 0;
+  const [cakupanTutup, setCakupanTutup] = useState(false);
   const kartu = adaJawaban ? pilih.lanjut : pilih.susun;
 
   const sapaan = (kelas: string) => <p className={`text-isi font-semibold text-utama ${kelas}`}>{beranda.sapaan[bagianHari()]}</p>;
@@ -101,6 +103,22 @@ export function Beranda() {
     </section>
   );
 
+  // Catatan cakupan: kuning lembut, selebar isi (bukan tepi ke tepi), bisa ditutup. Muncul lagi saat halaman dimuat ulang.
+  const cakupan = !cakupanTutup && (
+    <aside className="flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda py-1 pl-3 pr-1 text-catatan">
+      <Info className="mt-3 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+      <p className="flex-1 py-2.5 text-kecil">{pilih.cakupan}</p>
+      <button
+        type="button"
+        onClick={() => setCakupanTutup(true)}
+        aria-label={pilih.tutupCakupan}
+        className="tekan inline-flex h-sentuh w-sentuh shrink-0 items-center justify-center rounded-tombol hover:bg-catatan-garis/40"
+      >
+        <X className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+      </button>
+    </aside>
+  );
+
   return (
     <Halaman judul={app.nama}>
       <h2 className="sr-only">{pilih.judul}</h2>
@@ -118,6 +136,7 @@ export function Beranda() {
             {utama}
           </>
         )}
+        {cakupan}
         <CheckIn />
       </div>
     </Halaman>

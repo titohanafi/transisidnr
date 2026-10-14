@@ -474,3 +474,8 @@
 - Sekali ini server dev yang sedang berjalan tetap perlu dimulai ulang agar memakai pengaturan baru; sesudahnya tidak lagi.
 
 - Latar di luar area aplikasi (token `luar`) diganti abu netral tipis #ECECEA (menggantikan hijau tua pekat), sesuai permintaan pemilik.
+
+## Catatan cakupan kembali ke Beranda (kuning, bisa ditutup)
+- Catatan "Saat ini baru tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda" tampil lagi di Beranda, di bawah kartu utama, sebagai kartu kuning lembut selebar isi (bukan tepi ke tepi) dengan tombol tutup. Tetap ada juga di hasil pencarian dan pertanyaan pertama asesmen.
+- Keputusan paling sederhana: status "ditutup" hanya disimpan di memori halaman, jadi catatan muncul lagi saat halaman dimuat ulang. Tidak ada data baru di localStorage. Bila ingin tetap tertutup, perlu satu bidang baru di `transisi:v1`.
+- Token warna baru `catatan` (teks #5C3D00, latar #FFF3C4, garis #E8CF7A). Kontras teks di atas latar sekitar 8,9:1.
