@@ -95,7 +95,7 @@ export function Kontak() {
   const ahli = kumpulkanAhli(konten.kartu);
 
   return (
-    <Halaman judul={t.judul} judulTersembunyi latarPutih kepala={<p className="mt-2 text-redup">{t.pengantar}</p>}>
+    <Halaman judul={t.judul} judulTersembunyi latarPutih>
       <div className="flex flex-col gap-bagian">
         {darurat && darurat.entri.length > 0 && (
           <section aria-labelledby="nomor-darurat" className="rounded-kartu border border-utama-redup bg-utama-muda p-4">
