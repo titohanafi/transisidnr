@@ -1,4 +1,4 @@
-import { ChevronRight, Info, Search } from "lucide-react";
+import { Info, Search } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
@@ -34,11 +34,12 @@ export function Beranda() {
             <Info className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-sm leading-relaxed text-tinta">{pilih.cakupan}</p>
-            <Link to="/jelajah" className="mt-1 inline-flex min-h-sentuh items-center gap-1 text-sm font-semibold text-aksen">
-              <span className="underline">{pilih.semua}</span>
-              <ChevronRight className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" focusable="false" />
-            </Link>
+            <p className="text-sm leading-relaxed text-tinta">
+              {pilih.cakupan}{" "}
+              <Link to="/jelajah" className="whitespace-nowrap py-2 font-semibold text-aksen underline">
+                {pilih.semua}
+              </Link>
+            </p>
           </div>
         </aside>
         <label htmlFor="cari-beranda" className="text-2xl font-bold leading-snug text-tinta">
