@@ -34,6 +34,7 @@ export default {
       fontSize: {
         judul: ["1.625rem", { lineHeight: "1.25", fontWeight: "700", letterSpacing: "-0.015em" }], // judul halaman (h1)
         subjudul: ["1.25rem", { lineHeight: "1.35", fontWeight: "700", letterSpacing: "-0.01em" }], // judul bagian (h2)
+        judulUtama: ["1.1875rem", { lineHeight: "1.3", fontWeight: "700", letterSpacing: "-0.01em" }], // judul kartu utama Beranda
         judulKartu: ["1.0625rem", { lineHeight: "1.4", fontWeight: "600" }], // judul kartu / sub-bagian (h3)
         isi: ["1rem", { lineHeight: "1.5" }],
         kecil: ["0.875rem", { lineHeight: "1.45" }],

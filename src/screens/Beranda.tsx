@@ -112,16 +112,16 @@ export function Beranda() {
       <span aria-hidden="true" className="pointer-events-none absolute -right-2 -top-20 h-32 w-32 rounded-full bg-utama-gelap/30" />
       <span aria-hidden="true" className="pointer-events-none absolute -bottom-16 -left-10 h-36 w-36 rounded-full bg-utama-gelap/30" />
 
-      <div className="relative flex items-center gap-3">
+      <div className="relative flex items-center gap-4">
         <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-9 w-9 text-daun" />
-        <h3 id="jalur-utama" className="text-judulKartu font-bold">
+        <h3 id="jalur-utama" className="text-judulUtama">
           {kartu.judul}
         </h3>
       </div>
-      <p className="relative mt-1.5 text-isi text-utama-redup">{kartu.deskripsi}</p>
+      <p className="relative mt-2.5 text-isi text-utama-redup">{kartu.deskripsi}</p>
       <Link
         to={adaJawaban ? "/rencana" : "/mulai/1"}
-        className="tekan relative mt-5 inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-isi font-semibold text-utama-gelap hover:bg-utama-muda"
+        className="tekan relative mt-6 inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-isi font-semibold text-utama-gelap hover:bg-utama-muda"
       >
         {kartu.tombol}
       </Link>
