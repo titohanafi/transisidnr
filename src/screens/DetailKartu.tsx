@@ -195,7 +195,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           </div>
                         )}
 
-                        <h4 className="mt-5 border-t border-garis/70 pt-5 font-semibold">{t.langkah}</h4>
+                        <hr className="-mx-4 mt-5 border-t border-garis/70" />
+                        <h4 className="mt-5 font-semibold">{t.langkah}</h4>
                         <div className="mt-2">
                           <LangkahChecklist kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} peran={s.peran_langkah} />
                         </div>
