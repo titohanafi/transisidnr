@@ -39,6 +39,16 @@ export function DetailKartu() {
   return <Isi kartu={kartu} tingkatAwal={TINGKAT.find((x) => x === tingkatParam)} />;
 }
 
+/** Kalimat pengantar singkat di atas tombol, supaya orang tahu kenapa tombol itu ada. */
+function Jembatan({ teks, children }: { teks: string; children: ReactNode }) {
+  return (
+    <div>
+      <p className="mb-2 text-redup">{teks}</p>
+      {children}
+    </div>
+  );
+}
+
 function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   const { konteks } = useRencana();
   useEffect(() => {
@@ -225,13 +235,20 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                             </ul>
                           </div>
                         )}
-                        <div className="mt-6 flex flex-col gap-2">
-                          {/* Tukang tidak diulang di sini: tombolnya ada di "Kenali peran ahli", pada baris Tukang. */}
-                          {aksiTersedia(kartu, x.tingkat)
-                            .filter((j) => j !== "tukang" && j !== "sendiri")
-                            .map((j) => (
-                              <TombolAksi key={j} jenis={j} kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="sekunder" />
-                            ))}
+                        <div className="mt-6 flex flex-col gap-5">
+                          {aksiTersedia(kartu, x.tingkat).includes("beli") && (
+                            <TombolAksi jenis="beli" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="sekunder" />
+                          )}
+                          {aksiTersedia(kartu, x.tingkat).includes("tukang") && (
+                            <Jembatan teks={t.jembatanTukang}>
+                              <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="sekunder" />
+                            </Jembatan>
+                          )}
+                          {x.tingkat === "renovasi" && kartu.bantuan && kartu.bantuan.length > 0 && (
+                            <Jembatan teks={t.jembatanAhli}>
+                              <TombolAksi jenis="ahli" kartuId={kartu.id} gayaTombol="sekunder" />
+                            </Jembatan>
+                          )}
                         </div>
                       </>
                     );
@@ -240,12 +257,6 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
               )}
               {adaDisembunyikan && <p className="mt-3 text-redup">{t.tingkatDisembunyikan}</p>}
             </section>
-
-            {kartu.bantuan && kartu.bantuan.length > 0 && (
-              <div>
-                <TombolAksi jenis="ahli" kartuId={kartu.id} gayaTombol="sekunder" className="w-full" />
-              </div>
-            )}
 
             {kartu.peran && (
               <section aria-labelledby="peran">

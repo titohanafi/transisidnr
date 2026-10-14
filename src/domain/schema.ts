@@ -248,6 +248,8 @@ export const uiSchema = z
     kartu: z.object({
       tingkat: z.object({ tanpa_biaya: teks, alat_tanpa_bongkar: teks, renovasi: teks }),
       tidakDitemukan: teks,
+      jembatanTukang: teks,
+      jembatanAhli: teks,
       kembaliKeRencana: teks,
       kembaliKeJelajah: teks,
       situasi: teks,
