@@ -46,10 +46,10 @@ export function BilahTab() {
                 }`
               }
             >
-              {({ isActive }) => (
+              {() => (
                 <>
                   <t.Ikon className="h-6 w-6" strokeWidth={2} aria-hidden="true" focusable="false" />
-                  <span className={isActive ? "underline decoration-2 underline-offset-4" : ""}>{t.label}</span>
+                  <span>{t.label}</span>
                 </>
               )}
             </NavLink>
