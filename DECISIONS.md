@@ -666,3 +666,4 @@
 - Panel "Nomor Kontak Darurat" di Dukungan berlatar putih (garis merah tipis tetap); baris nomor langsung di dalam panel tanpa kotak tambahan.
 - Judul "Nomor Kontak Darurat" di Dukungan dipindah ke luar kartu: kini berada di pita hijau muda di atas kartu putih berisi daftar nomor.
 - Dukungan: kartu nomor darurat menimpa pita hijau lebih dalam (sekitar 56px, sebelumnya 32px); pita diberi ruang tambahan di bawah judul supaya judul tidak tertutup.
+- Revisi warna Dukungan (permintaan pemilik): elemen nomor kontak darurat (ikon sirene, garis kartu, pemisah, ikon telepon, nomor) berwarna kuning tua (token `catatan`), bukan merah. Kotak "Kapan harus ke dokter atau IGD" tetap kuning lembut, jadi kini tidak ada merah di halaman Dukungan.
