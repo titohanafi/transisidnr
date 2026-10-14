@@ -525,14 +525,45 @@
     ]
   },
   "ilustrasi": {
-    "catatanAngka": "Angka di gambar adalah acuan umum (standar ADA 2010), bukan penilaian ahli. Ukuran di rumah Anda bisa berbeda.",
-    "catatanAngkaKartu": "Angka di gambar mengikuti isi panduan ini dan belum ditinjau ahli. Ukuran di rumah Anda bisa berbeda.",
     "angka": {
       "bukaanPintu": "≥ 81 cm",
       "tinggiGagang": "86–122 cm",
       "ruangPutar": "Ø 152 cm",
       "ruangSamping": "≈ 90 cm",
       "tinggiKloset": "45–50 cm"
+    },
+    "gambar": {
+      "bath-door:tanpa_biaya": "Tampak dari atas: pintu dibuka penuh dan diganjal, dan jalur di depannya kosong supaya kursi roda bisa lewat. Bukaan pintu bebas sekitar 81 cm adalah acuan umum (ADA 2010).",
+      "bath-door:alat_tanpa_bongkar": "Tampak dari samping: tali dipasang di gagang pintu supaya bisa ditarik dari posisi duduk, dan ganjal di lantai menahan pintu. Tinggi gagang 86–122 cm adalah acuan umum (ADA 2010).",
+      "bath-door:renovasi": "Tampak dari atas: pintu diganti pintu geser, jadi tidak ada daun pintu yang memakan ruang. Bukaan bebas sekitar 81 cm adalah acuan umum (ADA 2010).",
+      "bath-emergency-call:tanpa_biaya": "Pengguna kursi roda memanggil dengan suara dan melambai, sementara pintu dibiarkan terbuka sedikit supaya orang di luar mendengar.",
+      "bath-emergency-call:alat_tanpa_bongkar": "Tombol panggil nirkabel di satu ruangan mengirim sinyal menembus dinding ke penerima di ruangan lain.",
+      "bath-emergency-call:renovasi": "Tombol panggil dan tali panggil terpasang di dinding dekat kloset, satu setinggi posisi duduk dan satu dekat lantai, terhubung ke bel di ruangan lain.",
+      "bath-floor-slip:tanpa_biaya": "Lantai dibiarkan kering dan lapang. Ember dan botol dipindah ke rak dinding supaya jalur kursi roda bebas.",
+      "bath-floor-slip:alat_tanpa_bongkar": "Tampak dari atas: keset anti-slip dipasang di samping kloset dan di area mandi, tempat pengguna berpindah dan mandi.",
+      "bath-floor-slip:renovasi": "Potongan lantai dari samping: permukaan anti-slip miring pelan ke saluran air tanpa beda tinggi, jadi roda tidak tersangkut dan air tidak menggenang.",
+      "bath-grab-bar:tanpa_biaya": "Tampak dari atas: wastafel dan gantungan handuk diberi tanda larangan karena bukan tumpuan. Kursi roda diparkir sejajar kloset dengan rem terkunci.",
+      "bath-grab-bar:alat_tanpa_bongkar": "Rangka pegangan berdiri di lantai mengapit kloset, dan di sebelahnya ada pegangan klem atau tempel di dinding keramik. Keduanya bisa dilepas.",
+      "bath-grab-bar:renovasi": "Dua pegangan permanen di dinding, di kiri dan kanan kloset. Lingkaran memperbesar pengikatnya yang tertanam di dinding.",
+      "bath-reach-controls:tanpa_biaya": "Sabun, sampo, dan handuk dikumpulkan di meja kecil yang terjangkau dari kursi roda. Botol dari rak tinggi diturunkan.",
+      "bath-reach-controls:alat_tanpa_bongkar": "Shower tangan berselang bisa diarahkan dari posisi duduk, dan keranjang gantung menyimpan sabun pompa pada tinggi yang terjangkau.",
+      "bath-reach-controls:renovasi": "Shower dan tuas keran diturunkan permanen ke tinggi yang terjangkau (posisi lama putus-putus), dan ada ceruk dinding untuk sabun.",
+      "bath-shower-entry:tanpa_biaya": "Area mandi berbibir diberi tanda larangan karena belum aman dimasuki. Sementara itu pengguna mandi lap sambil duduk di area datar.",
+      "bath-shower-entry:alat_tanpa_bongkar": "Ramp kecil yang bisa dilepas menutupi bibir area mandi. Di dalamnya ada bangku mandi dan lantai bertitik anti-slip.",
+      "bath-shower-entry:renovasi": "Area mandi tanpa bibir (bisa dimasuki langsung dengan kursi roda), lantai miring ke saluran, serta kursi lipat dan pegangan di dinding.",
+      "bath-sink-mirror:tanpa_biaya": "Pengguna memegang cermin kecil, dan sikat gigi serta sabun diletakkan di tepi wastafel yang terjangkau. Lutut masuk di bawah wastafel.",
+      "bath-sink-mirror:alat_tanpa_bongkar": "Cermin miring dipasang lebih rendah di dinding, dan troli kecil di samping pengguna menyimpan perlengkapan. Ruang di bawah wastafel dibiarkan kosong.",
+      "bath-sink-mirror:renovasi": "Wastafel gantung dengan ruang kosong di bawahnya, pipa dibungkus penutup, dan cermin diturunkan sampai terlihat dari posisi duduk.",
+      "bath-space-turning:tanpa_biaya": "Tampak dari atas: ember dan keranjang dipindah ke sudut ruangan, sehingga sisi kloset lapang dan kursi roda bisa mendekat.",
+      "bath-space-turning:alat_tanpa_bongkar": "Tampak dari atas: rak dinding dan keranjang gantung mengosongkan lantai, dan papan pindah menjembatani kursi roda ke kloset.",
+      "bath-space-turning:renovasi": "Tampak dari atas: kloset digeser dan pintu diganti pintu geser, sehingga ada ruang di samping kloset dan ruang putar kursi roda. Lingkaran putar 152 cm adalah acuan umum (ADA 2010).",
+      "bath-transfer-toilet:tanpa_biaya": "Tampak dari atas: ember dipindah dan keset anti-slip dipasang di ruang kosong di samping kloset. Ukuran sekitar 90 cm mengikuti isi panduan ini dan belum ditinjau ahli.",
+      "bath-transfer-toilet:alat_tanpa_bongkar": "Dudukan kloset tambahan meninggikan kloset, pegangan klem dipasang di sisinya, dan ada bangku mandi lipat serta keset anti-slip.",
+      "bath-transfer-toilet:renovasi": "Kloset dinaikkan sehingga dudukannya sejajar dengan dudukan kursi roda, dengan pegangan permanen di dinding dan lantai anti-slip. Tinggi 45–50 cm mengikuti isi panduan ini dan belum ditinjau ahli.",
+      "bath-wudhu-seated:tanpa_biaya": "Air dibawa ke posisi duduk: gayung dan ember kecil di meja rendah di samping kursi roda yang remnya terkunci, dan handuk di rak bawahnya dalam jangkauan.",
+      "bath-wudhu-seated:alat_tanpa_bongkar": "Bangku wudhu yang stabil dengan kaki karet di atas keset anti-slip, meja kecil untuk wadah air, dan selang berkeran di dinding.",
+      "bath-wudhu-seated:renovasi": "Keran wudhu rendah dengan baskom kecil di dinding, terjangkau dari kursi roda. Lantainya miring ke saluran dan anti-slip.",
+      "care-assist-transfer:tanpa_biaya": "Caregiver berdiri tegak dengan tangan terbuka dan bertanya dulu apakah ingin dibantu, tanpa menyentuh atau menarik. Pengguna kursi roda yang memutuskan."
     }
   }
 }

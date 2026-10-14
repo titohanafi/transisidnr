@@ -19,7 +19,7 @@ import {
 // Ilustrasi selebar panel untuk pilihan solusi. Dibuat bertahap, satu panduan demi satu panduan: panduan yang belum ada di
 // daftar ini tidak menampilkan apa pun (kunci "idKartu:tingkat"). Gaya: petunjuk perabot hitam-putih (garis tinta tegas,
 // isian putih, panah dan garis ukur), bahan gambarnya di GambarTeknis.tsx. Dekoratif; pengguna kursi roda digambar aktif.
-// Angka hanya dari content/ui.json. Gambar berangka masuk daftar BERANGKA: "ada" = acuan umum ADA 2010, "kartu" = angka dari isi kartu.
+// Angka dan penjelasan gambar (di bawah tiap gambar, juga untuk pembaca layar) hanya dari content/ui.json (ilustrasi.angka, ilustrasi.gambar).
 
 const Bintik = ({ x, y, kolom, baris, jarak = 10 }: { x: number; y: number; kolom: number; baris: number; jarak?: number }) => (
   <g className="fill-tinta">
@@ -28,6 +28,8 @@ const Bintik = ({ x, y, kolom, baris, jarak = 10 }: { x: number; y: number; kolo
     ))}
   </g>
 );
+
+export const KUNCI_GAMBAR = (): string[] => Object.keys(GAMBAR);
 
 const GAMBAR: Record<string, () => ReactNode> = {
   // Jaga lantai tetap kering dan bebas benda: ember dan botol dipindah ke rak, jalur kursi roda lapang.
@@ -724,15 +726,6 @@ const GAMBAR: Record<string, () => ReactNode> = {
   ),
 };
 
-const BERANGKA: Record<string, "ada" | "kartu"> = {
-  "bath-door:tanpa_biaya": "ada",
-  "bath-door:alat_tanpa_bongkar": "ada",
-  "bath-door:renovasi": "ada",
-  "bath-space-turning:renovasi": "ada",
-  "bath-transfer-toilet:tanpa_biaya": "kartu",
-  "bath-transfer-toilet:renovasi": "kartu",
-};
-
 /** Ilustrasi selebar panel untuk satu pilihan solusi; null bila panduan itu belum punya ilustrasi. */
 export function IlustrasiSolusi({ kartuId, tingkat }: { kartuId: string; tingkat: Tingkat }) {
   const kunci = `${kartuId}:${tingkat}`;
@@ -743,11 +736,7 @@ export function IlustrasiSolusi({ kartuId, tingkat }: { kartuId: string; tingkat
       <svg viewBox="0 0 360 150" className="block h-auto w-full" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
         <Gambar />
       </svg>
-      {BERANGKA[kunci] && (
-        <p className="px-4 pt-2 text-mikro text-redup">
-          {BERANGKA[kunci] === "ada" ? konten.ui.ilustrasi.catatanAngka : konten.ui.ilustrasi.catatanAngkaKartu}
-        </p>
-      )}
+      <p className="px-4 pt-2 text-kecil text-redup">{konten.ui.ilustrasi.gambar[kunci]}</p>
     </>
   );
 }

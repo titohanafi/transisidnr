@@ -408,7 +408,7 @@ export const uiSchema = z
     }),
     istilah: z.array(z.object({ kata: teks, arti: teks })),
     pilihRuangan: z.object({ judul: teks, segera: teks, lanjut: teks }),
-    ilustrasi: z.object({ catatanAngka: teks, catatanAngkaKartu: teks, angka: rekamTeks }),
+    ilustrasi: z.object({ angka: rekamTeks, gambar: rekamTeks }),
     pindai: z.object({
       judul: teks,
       penjelasan: teks,
