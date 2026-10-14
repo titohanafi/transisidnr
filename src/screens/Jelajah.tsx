@@ -69,7 +69,7 @@ function Daftar({ awal }: { awal: Filter }) {
 
   // Kolom cari ada di dalam pita kepala gelap (hanya di daftar semua panduan).
   const kolomCari = (
-    <div>
+    <div className="-mt-5">
       <label htmlFor="cari-panduan" className="sr-only">
         {t.cari.label}
       </label>
@@ -105,7 +105,7 @@ function Daftar({ awal }: { awal: Filter }) {
       kepalaPita={filter === "semua" ? "gelap" : false}
       kepalaTumpang={filter === "semua"}
     >
-      <div className={filter === "semua" ? "-mt-8" : undefined}>
+      <div className={filter === "semua" ? "-mt-9" : undefined}>
         {filter === "semua" && cari.trim() !== "" && (
           <aside className="mt-isi flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda p-3 text-catatan">
             <Info className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />

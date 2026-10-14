@@ -676,3 +676,4 @@
 - Kartu nomor darurat: padding atas dan bawah kartu dikurangi (16px menjadi 4px); jarak ke baris pertama dan terakhir kini ditentukan tinggi baris (minimal 56px).
 - **Panduan umum (sebelum asesmen, daftar semua panduan) memakai pita kepala gelap** seperti Dukungan dan Profil. Kolom pencarian dipindah ke dalam pita; kartu kelompok pertama menimpa tepi bawahnya, jarak kolom cari ke kartu 32px sama dengan jarak ke tepi atas pita. Halaman Produk Disabilitas (filter alat) tidak berubah.
 - Panduan umum: jarak kolom cari ke kartu pertama diperkecil menjadi 16px (sebelumnya 32px).
+- Panduan umum: ruang di atas dan di bawah kolom cari di dalam pita disamakan, 12px (sebelumnya 32px atas dan 16px bawah).
