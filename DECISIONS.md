@@ -371,3 +371,5 @@
 - Teks kartu "Buat rencana" kini: "Menyiapkan rumah agar lebih mudah dipakai, mulai dari kamar mandi. Untuk penyandang disabilitas pengguna kursi roda dan caregiver." (usul pemilik). Paragraf pengantar terpisah di atas dihapus karena duplikat. Kalimat "Jawab ya atau tidak, tanpa mengukur" tidak lagi tampil di Beranda; pertanyaannya sendiri sudah berbentuk ya/tidak.
 
 - Tulisan kecil "Jawab ya atau tidak, tanpa mengukur." ditambahkan di bawah tombol Mulai (hanya sebelum menjawab).
+
+- Catatan kecil di bawah Mulai dihapus (dianggap tidak penting). Label kolom cari di Beranda diganti "Cari masalah di rumah Anda" dengan contoh "Mis. lantai licin atau pintu sempit" supaya jelas apa yang bisa dicari tanpa istilah "panduan".

@@ -9,8 +9,7 @@
       "susun": {
         "judul": "Buat rencana untuk rumah Anda",
         "deskripsi": "Menyiapkan rumah agar lebih mudah dipakai, mulai dari kamar mandi. Untuk penyandang disabilitas pengguna kursi roda dan caregiver.",
-        "tombol": "Mulai",
-        "catatan": "Jawab ya atau tidak, tanpa mengukur."
+        "tombol": "Mulai"
       },
       "lanjut": {
         "judul": "Lanjutkan rencana Anda",
@@ -18,7 +17,7 @@
         "tombol": "Buka rencana"
       },
       "semua": "Lihat semua panduan",
-      "cari": { "label": "Sudah tahu masalahnya?", "placeholder": "Cari panduan, mis. lantai licin", "tombol": "Cari" }
+      "cari": { "label": "Cari masalah di rumah Anda", "placeholder": "Mis. lantai licin atau pintu sempit", "tombol": "Cari" }
     }
   },
   "umum": {
