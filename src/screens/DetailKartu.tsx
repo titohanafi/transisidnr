@@ -2,7 +2,7 @@ import { Clock, TriangleAlert, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
-import { Ikon } from "../components/Ikon";
+import { Ilustrasi } from "../components/Ilustrasi";
 import { HasilLangkah, LangkahChecklist } from "../components/LangkahChecklist";
 import { LipatBaris } from "../components/Lipat";
 import { LencanaStatus, Tanda } from "../components/Lencana";
@@ -70,14 +70,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
     kunciGrup === "caregiver"
       ? konten.ui.jelajah.caregiver
       : (konten.asesmen.aktivitas.find((a) => a.id === kunciGrup)?.label.split(" (")[0] ?? "");
-  const atasJudul = (
-    <div className="mb-3 flex items-center gap-3">
-      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-kartu bg-white shadow-kartu">
-        <Ikon kunci={kunciGrup} className="h-7 w-7" />
-      </span>
-      {namaGrup && <span className="text-kecil font-semibold text-utama-gelap">{namaGrup}</span>}
-    </div>
-  );
+  const atasJudul = namaGrup ? <p className="mb-1 text-kecil font-semibold text-utama-gelap">{namaGrup}</p> : null;
 
   // Situasi digabung dengan "kenapa penting" bila isinya berbeda, supaya tidak ada dua bagian yang saling mengulang.
   const norm = (x: string) =>
@@ -108,7 +101,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   );
 
   return (
-    <Halaman judul={kartu.judul} kepala={kepala} atasJudul={atasJudul} kepalaPita latarPutih>
+    <Halaman judul={kartu.judul} kepala={kepala} atasJudul={atasJudul} hiasan={<Ilustrasi kunci={kunciGrup} />} kepalaPita latarPutih>
       <div className="flex flex-col gap-bagian">
         {kartu.peringatan && (
           <section

@@ -15,6 +15,7 @@ export function Halaman({
   judulTersembunyi = false,
   atasJudul,
   kepalaPita = false,
+  hiasan,
   latarPutih = false,
 }: {
   judul: string;
@@ -28,6 +29,8 @@ export function Halaman({
   atasJudul?: ReactNode;
   /** Kepala berupa hero abu kehijauan muda selebar layar (tanpa kotak), sama dengan latar halaman Panduan. */
   kepalaPita?: boolean;
+  /** Hiasan di sisi kanan judul pada kepala pita (mis. ilustrasi). Dekoratif. */
+  hiasan?: ReactNode;
   /** Latar halaman putih (bawaan: abu kehijauan muda). Dipakai Beranda, yang punya pita pencarian berwarna. */
   latarPutih?: boolean;
 }) {
@@ -91,8 +94,20 @@ export function Halaman({
         {kepala ? (
           <>
             <div className={kepalaPita ? "bg-permukaan px-4 pb-6 pt-6" : "px-4 pb-5 pt-6"}>
-              {atasJudul}
-              {h1Elemen}
+              {hiasan ? (
+                <div className="flex items-center gap-2">
+                  <div className="min-w-0 flex-1">
+                    {atasJudul}
+                    {h1Elemen}
+                  </div>
+                  {hiasan}
+                </div>
+              ) : (
+                <>
+                  {atasJudul}
+                  {h1Elemen}
+                </>
+              )}
               {kepala}
             </div>
             <div className="flex flex-1 flex-col px-4 pt-6">{children}</div>

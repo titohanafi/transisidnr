@@ -578,3 +578,7 @@
 - Hero Detail Panduan: "Perhatian" kini berwarna kuning lembut (token `catatan`), "Situasi" berganti hijau muda, dan label "Situasi" serta nama kelompok tidak lagi huruf kapital semua.
 
 - "Perhatian" dipindah dari hero ke tepat di atas bagian "Pilihan solusi" (permintaan pemilik), tetap kuning. Tampil di semua panduan yang punya peringatan, termasuk yang isinya menyusul.
+
+## Ilustrasi sederhana di hero Detail Panduan
+- Hero kini punya ilustrasi kecil di sisi kanan judul, satu per kelompok (mandi, toilet, wudhu, grooming, umum, caregiver), menggantikan petak ikon. Berupa SVG inline (tanpa berkas unduhan, kurang dari 5 KB untuk semuanya), warna mengikuti token `utama` dan `daun`, dekoratif (`aria-hidden`). Ilustrasi sengaja hanya menggambarkan benda (pancuran, kloset, keran, cermin, pintu, hati), tanpa orang, ukuran, atau cara pasang, supaya tidak menyiratkan klaim teknis atau menempatkan penyandang disabilitas sebagai objek gambar.
+- Ilustrasi digambar asisten dan sengaja sederhana; desainer bisa mengganti isi `src/components/Ilustrasi.tsx` dengan karya sendiri tanpa mengubah tata letak.
