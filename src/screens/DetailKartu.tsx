@@ -65,7 +65,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   const istilah = istilahDalam(JSON.stringify(kartu), konten.ui.istilah);
 
   const atasJudul = (
-    <span className="mb-3 flex h-14 w-14 items-center justify-center rounded-kartu bg-utama-muda">
+    <span className="mb-3 flex h-14 w-14 items-center justify-center rounded-kartu bg-white">
       <Ikon kunci={kunciKelompok(kartu)} className="h-9 w-9" />
     </span>
   );
