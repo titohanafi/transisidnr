@@ -350,3 +350,8 @@
 - Pertanyaan onboarding "Siapa yang mengisi?" dihapus karena jawabannya tidak dipakai di mana pun; onboarding kini lima pertanyaan. Data lama yang masih menyimpan jawabannya tetap terbaca dan diabaikan.
 - Teks yang disesuaikan: penjelas pertanyaan menjangkau dan memanggil bantuan, bantuan pilihan aktivitas ("keseharian di rumah"), bantuan prioritas ("caregiver membantu"), dan catatan renovasi di kontrakan atau kos ("karena rumah ini kontrakan atau kos").
 - Ide bila uji pengguna menunjukkan caregiver merasa tidak disapa: pilihan "mengisi untuk siapa" di tab Saya, bukan gerbang di Beranda.
+
+## Orientasi kunjungan pertama di Beranda
+- Tanpa layar sambutan terpisah (menambah satu langkah sebelum manfaat). Sebelum pengguna menjawab pertanyaan awal, Beranda menampilkan paragraf pengantar (apa ini, untuk siapa) menggantikan kalimat konteks lama, dan kalimat privasi kecil di bawah kartu utama. Setelah menjawab keduanya hilang otomatis dari keadaan data; tidak ada tombol tutup atau penanda baru di penyimpanan.
+- Frasa yang dipilih pemilik: "setelah perubahan kondisi gerak" (lebih lembut daripada "setelah amputasi kaki").
+- Lama pengisian sengaja tidak disebut karena belum pernah diukur.
