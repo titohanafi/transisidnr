@@ -76,11 +76,12 @@ export function AksiBeli() {
           </ul>
 
           {aksiTersedia(ctx.kartu, ctx.tingkat).includes("tukang") && (
-            <section className="rounded-kartu bg-permukaan p-5" aria-label={tk.jembatanPasang}>
-              <div className="flex gap-3">
-                <Hammer className="mt-0.5 h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-                <p>{tk.jembatanPasang}</p>
+            <section className="rounded-kartu bg-permukaan p-5" aria-label={tk.jembatanPasangLabel}>
+              <div className="flex items-center gap-2 font-semibold text-utama">
+                <Hammer className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+                <h2>{tk.jembatanPasangLabel}</h2>
               </div>
+              <p className="mt-2">{tk.jembatanPasang}</p>
               <TombolAksi jenis="tukang" kartuId={ctx.kartu.id} tingkat={ctx.tingkat} gayaTombol="sekunder" className="mt-4 w-full" />
             </section>
           )}

@@ -300,6 +300,7 @@ export const uiSchema = z
       tingkat: z.object({ tanpa_biaya: teks, alat_tanpa_bongkar: teks, renovasi: teks }),
       tidakDitemukan: teks,
       jembatanPasang: teks,
+      jembatanPasangLabel: teks,
       kembaliKeRencana: teks,
       kembaliKeJelajah: teks,
       situasi: teks,
