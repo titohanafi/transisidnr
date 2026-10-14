@@ -183,7 +183,8 @@ export function Rencana() {
                   focusable="false"
                 />
               </summary>
-              <ul className="divide-y divide-garis/60 border-t border-garis/60 px-4">
+              {/* Dua kolom bersama untuk semua baris: kolom pil selebar pil terpanjang, jadi kolom judul sama lebar di tiap baris. */}
+              <ul className="grid grid-cols-[minmax(0,1fr)_auto] divide-y divide-garis/60 border-t border-garis/60 px-4">
                 {rencana.daftar
                   .filter((k) => !k.isiMenyusul)
                   .map((k) => {
@@ -209,11 +210,14 @@ export function Rencana() {
                       belum: { Ikon: Circle, kelas: "border-garisKontrol bg-permukaan text-redup", label: t.beres.belumDicoba },
                     }[status];
                     return (
-                      <li key={k.id}>
-                        <Link to={`/kartu/${k.id}`} className="tekan flex min-h-[56px] items-center gap-3 py-3">
-                          <span className="min-w-0 flex-1 leading-snug">{dataKartu(k.id)?.judul}</span>
+                      <li key={k.id} className="col-span-2 grid grid-cols-subgrid">
+                        <Link
+                          to={`/kartu/${k.id}`}
+                          className="tekan col-span-2 grid min-h-[56px] grid-cols-subgrid items-center gap-x-3 py-3"
+                        >
+                          <span className="min-w-0 leading-snug">{dataKartu(k.id)?.judul}</span>
                           <span
-                            className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-0.5 text-kecil font-medium ${kelas}`}
+                            className={`inline-flex items-center gap-1 justify-self-end rounded-full border px-2.5 py-0.5 text-kecil font-medium ${kelas}`}
                           >
                             <Ikon className="h-3.5 w-3.5 shrink-0" strokeWidth={2.25} aria-hidden="true" focusable="false" />
                             {label}

@@ -649,3 +649,4 @@
 - **Status di rincian kemajuan jadi empat:** Teratasi (ditandai "Sudah cukup"), Masih sulit (ditandai "Masih sulit"), **Sedang dikerjakan** (belum ada hasil, tetapi sudah ada langkah checklist yang dicentang di tingkat mana pun), dan Belum dicoba. Urutan prioritas: hasil yang dicatat menang atas centang. Hanya "Teratasi" yang menambah hitungan "n dari total".
 - **Status rincian berbentuk pil** di bawah judul panduan, dengan ikon kecil dan teks: Teratasi (teal muda), Masih sulit (terakota muda), Sedang dikerjakan (biru muda, token `info`), Belum dicoba (abu). Panah di kanan menandakan baris bisa diketuk.
 - Pil status di rincian dipindah ke sisi kanan baris (sejajar dengan judul panduan); panah dihapus untuk menghemat lebar.
+- Rincian kemajuan memakai grid dua kolom bersama (`grid-cols-subgrid`): kolom pil selebar pil terpanjang, kolom judul panduan sama lebar di setiap baris, pil rata kanan.
