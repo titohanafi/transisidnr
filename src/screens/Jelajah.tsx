@@ -72,7 +72,6 @@ function Daftar({ awal }: { awal: Filter }) {
     <Halaman
       judul={t.judulFilter[filter]}
       judulTersembunyi={filter === "semua"}
-      latarMuda={filter === "semua"}
       kepala={filter === "semua" ? undefined : <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>}
     >
       {filter === "semua" && (

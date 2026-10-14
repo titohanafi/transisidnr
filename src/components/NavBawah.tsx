@@ -15,7 +15,7 @@ export function NavBawah({
 }) {
   const { umum } = konten.ui;
   return (
-    <div className="sticky bottom-0 mt-auto flex gap-3 bg-kertas pb-4 pt-6">
+    <div className="sticky bottom-0 mt-auto flex gap-3 bg-permukaan pb-4 pt-6">
       <Tombol gayaTombol="sekunder" onClick={onKembali} className="flex-1">
         {umum.kembali}
       </Tombol>

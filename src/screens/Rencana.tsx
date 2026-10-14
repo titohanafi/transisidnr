@@ -163,7 +163,7 @@ export function Rencana() {
             )}
 
             {(rencana.total.diketahui || rencana.kebutuhanJangkaPanjangBelumJelas) && (
-              <div className="rounded-kartu bg-permukaan p-4">
+              <div className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
                 {rencana.total.diketahui && (
                   <p className="font-medium">
                     {isi(t.total, { rentang: formatRentang({ min: rencana.total.minRp, max: rencana.total.maksRp }) })}

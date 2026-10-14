@@ -13,7 +13,6 @@ export function Halaman({
   kunciFokus,
   kepala,
   judulTersembunyi = false,
-  latarMuda = false,
 }: {
   judul: string;
   children: ReactNode;
@@ -22,8 +21,6 @@ export function Halaman({
   kepala?: ReactNode;
   /** Judul tetap ada untuk pembaca layar tetapi tidak ditampilkan (bila sudah jelas dari menu). */
   judulTersembunyi?: boolean;
-  /** Latar halaman abu kehijauan muda (bukan putih), supaya kartu putih di atasnya menonjol. */
-  latarMuda?: boolean;
 }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -42,9 +39,7 @@ export function Halaman({
   );
 
   return (
-    <div
-      className={`mx-auto flex min-h-screen max-w-md flex-col ${latarMuda ? "bg-permukaan" : "bg-kertas"} md:border-x md:border-garis md:shadow-kartu print:shadow-none`}
-    >
+    <div className="mx-auto flex min-h-screen max-w-md flex-col bg-permukaan md:border-x md:border-garis md:shadow-kartu print:bg-white print:shadow-none">
       <a
         href="#isi"
         onClick={(e) => {
@@ -84,7 +79,7 @@ export function Halaman({
         {/* Di Beranda judulnya sama dengan nama aplikasi di header: tetap ada untuk pembaca layar, tidak ditampilkan dua kali. */}
         {kepala ? (
           <>
-            <div className="bg-permukaan px-4 pb-5 pt-6 print:bg-white">
+            <div className="px-4 pb-5 pt-6">
               {h1Elemen}
               {kepala}
             </div>
