@@ -131,19 +131,21 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           aria-expanded={buka}
                           aria-controls={idPanel}
                           onClick={() => ubah(x.tingkat)}
-                          className="flex min-h-sentuh w-full items-center gap-3 rounded-kartu px-4 pb-4 pt-4 text-left text-judulKartu"
+                          className="flex min-h-sentuh w-full items-start justify-between gap-3 rounded-kartu px-4 pb-4 pt-4 text-left text-judulKartu"
                         >
-                          <IkonTingkat className="h-6 w-6 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-                          <span className="flex-1">{t.tingkat[x.tingkat]}</span>
+                          <span className="flex flex-col gap-3">
+                            <IkonTingkat className="h-7 w-7 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+                            <span>{t.tingkat[x.tingkat]}</span>
+                          </span>
                           <ChevronDown
-                            className={`h-5 w-5 shrink-0 text-utama-gelap motion-safe:transition-transform ${buka ? "rotate-180" : ""}`}
+                            className={`mt-0.5 h-5 w-5 shrink-0 text-utama-gelap motion-safe:transition-transform ${buka ? "rotate-180" : ""}`}
                             strokeWidth={2}
                             aria-hidden="true"
                             focusable="false"
                           />
                         </button>
                       </h3>
-                      <p className="-mt-2 px-4 pb-4 text-redup">{s.ringkasan}</p>
+                      <p className="-mt-1 px-4 pb-4 text-redup">{s.ringkasan}</p>
                       <div className={`flex flex-wrap gap-2 px-4 ${buka ? "pb-3" : "pb-4"}`}>
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
                           <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
