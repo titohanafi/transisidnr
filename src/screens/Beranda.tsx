@@ -18,8 +18,6 @@ export function Beranda() {
 
   return (
     <Halaman judul={app.nama}>
-      {!adaJawaban && <p className="mt-2 text-lg">{beranda.pengantar}</p>}
-
       <h2 className="sr-only">{pilih.judul}</h2>
 
       <form
