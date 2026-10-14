@@ -667,3 +667,4 @@
 - Judul "Nomor Kontak Darurat" di Dukungan dipindah ke luar kartu: kini berada di pita hijau muda di atas kartu putih berisi daftar nomor.
 - Dukungan: kartu nomor darurat menimpa pita hijau lebih dalam (sekitar 56px, sebelumnya 32px); pita diberi ruang tambahan di bawah judul supaya judul tidak tertutup.
 - Revisi warna Dukungan (permintaan pemilik): elemen nomor kontak darurat (ikon sirene, garis kartu, pemisah, ikon telepon, nomor) berwarna kuning tua (token `catatan`), bukan merah. Kotak "Kapan harus ke dokter atau IGD" tetap kuning lembut, jadi kini tidak ada merah di halaman Dukungan.
+- **Pita kepala gelap untuk Dukungan dan Profil** (permintaan pemilik): `Halaman` kini menerima `kepalaPita="gelap"` (latar teal `utama`, teks putih, dengan lingkaran hiasan seperti kartu hero). Judul "Nomor Kontak Darurat" putih dengan ikon sirene kuning muda (token `catatan-muda`) di atasnya. Halaman lain tetap memakai pita hijau muda.

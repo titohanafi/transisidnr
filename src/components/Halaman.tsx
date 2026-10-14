@@ -2,9 +2,17 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BilahTab, namaMenu } from "./BilahTab";
+import { HiasanLingkaran } from "./KartuHero";
 import { konten } from "../domain/content";
 
 const { app, umum } = konten.ui;
+
+// Warna pita kepala. "gelap" sama dengan kartu hero teal, lengkap dengan lingkaran hiasan.
+const warnaPita = {
+  biasa: "bg-permukaan",
+  hijau: "bg-utama-muda",
+  gelap: "relative overflow-hidden bg-utama text-white",
+} as const;
 
 // Kerangka semua layar: header, tautan lewati, dan fokus ke judul saat layar berganti.
 export function Halaman({
@@ -29,7 +37,7 @@ export function Halaman({
   /** Elemen di atas judul di dalam kepala (mis. ikon). */
   atasJudul?: ReactNode;
   /** Kepala berupa hero abu kehijauan muda selebar layar (tanpa kotak), sama dengan latar halaman Panduan. */
-  kepalaPita?: boolean | "hijau";
+  kepalaPita?: boolean | "hijau" | "gelap";
   /** Isi halaman naik menimpa bagian bawah pita kepala (kartu pertama sedikit menumpuk di atas hero). */
   kepalaTumpang?: boolean;
   /** Hiasan di sisi kanan judul pada kepala pita (mis. ilustrasi). Dekoratif. */
@@ -102,25 +110,28 @@ export function Halaman({
             <div
               className={
                 kepalaPita
-                  ? `${kepalaPita === "hijau" ? "bg-utama-muda" : "bg-permukaan"} px-4 ${kepalaTumpang ? "pb-12" : "pb-6"} pt-6`
+                  ? `${warnaPita[kepalaPita === true ? "biasa" : kepalaPita]} px-4 ${kepalaTumpang ? "pb-12" : "pb-6"} pt-6`
                   : "px-4 pb-5 pt-6"
               }
             >
-              {hiasan ? (
-                <div className="flex items-center gap-2">
-                  <div className="min-w-0 flex-1">
+              {kepalaPita === "gelap" && <HiasanLingkaran />}
+              <div className="relative">
+                {hiasan ? (
+                  <div className="flex items-center gap-2">
+                    <div className="min-w-0 flex-1">
+                      {atasJudul}
+                      {h1Elemen}
+                    </div>
+                    {hiasan}
+                  </div>
+                ) : (
+                  <>
                     {atasJudul}
                     {h1Elemen}
-                  </div>
-                  {hiasan}
-                </div>
-              ) : (
-                <>
-                  {atasJudul}
-                  {h1Elemen}
-                </>
-              )}
-              {kepala}
+                  </>
+                )}
+                {kepala}
+              </div>
             </div>
             <div className={`flex flex-1 flex-col px-4 ${kepalaTumpang ? "relative -mt-8" : "pt-6"}`}>{children}</div>
           </>

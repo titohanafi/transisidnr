@@ -43,7 +43,7 @@ export function Saya() {
       judul={t.judul}
       judulTersembunyi
       latarPutih
-      kepalaPita="hijau"
+      kepalaPita="gelap"
       kepalaTumpang
       kepala={
         <div className="flex justify-center">

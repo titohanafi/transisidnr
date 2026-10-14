@@ -89,12 +89,12 @@ export function Kontak() {
       judul={t.judul}
       judulTersembunyi
       latarPutih
-      kepalaPita="hijau"
+      kepalaPita="gelap"
       kepalaTumpang
       kepala={
         darurat && darurat.entri.length > 0 ? (
-          <h2 id="nomor-darurat" className="mb-6 mt-3 flex items-center gap-2 text-subjudul text-tinta">
-            <Siren className="h-5 w-5 shrink-0 text-catatan" strokeWidth={2} aria-hidden="true" focusable="false" />
+          <h2 id="nomor-darurat" className="mb-6 mt-3 flex items-center gap-2 text-subjudul text-white">
+            <Siren className="h-5 w-5 shrink-0 text-catatan-muda" strokeWidth={2} aria-hidden="true" focusable="false" />
             {darurat.kategori.nama}
           </h2>
         ) : (
