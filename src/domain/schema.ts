@@ -30,6 +30,8 @@ export const barangSchema = z.object({
   link: urlHttp.nullable(),
   kisaran_harga: z.string().nullable(),
   afiliasi: z.boolean(),
+  // Foto produk (opsional). Alamat http(s) dan teks pengganti wajib berpasangan; null bila belum ada.
+  gambar: z.object({ url: urlHttp, alt: teks }).nullable().default(null),
 });
 
 export const ukuranSchema = z.object({
@@ -349,6 +351,7 @@ export const uiSchema = z
         label: teks,
         lihatProduk: teks,
         linkMenyusul: teks,
+        fotoMenyusul: teks,
         afiliasi: teks,
         afiliasiPenjelasan: teks,
         kosong: teks,

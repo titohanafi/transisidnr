@@ -617,3 +617,10 @@
 - Atas permintaan pemilik, barang "Keset atau stiker anti-slip" di tingkat Pakai alat pada `bath-floor-slip` diisi data CONTOH supaya desain halaman bisa dinilai: spesifikasi umum (ditandai "(Data contoh)" di teksnya), harga "Rp 30.000 - Rp 150.000" (ditampilkan "Rp 30 rb - 150 rb"), dan tautan `https://example.com/contoh-keset-anti-slip` (alamat contoh yang memang tidak mengarah ke toko). Afiliasi tetap `false`. Semuanya WAJIB diganti dengan data asli dari survei sebelum dipakai pengguna sungguhan. Harga alat tidak memengaruhi mesin rekomendasi (hanya tampilan).
 - Harga alat di halaman "Pakai Alat" kini memakai format singkat rb/jt seperti pil biaya.
 - Di halaman "Pakai Alat", spesifikasi alat kini berlabel di atas dan nilai di bawahnya (rata kiri) karena teks spesifikasi bisa panjang; harga tetap satu baris dengan nilai di kanan.
+
+## Foto produk di bawah judul
+- Kolom opsional `gambar` pada `barang[]`: `{ "url": "https://...", "alt": "..." }` atau `null` (bawaan bila kolom tidak ditulis). Teks `alt` wajib mengisi bila ada `url`.
+- Tampil di bawah judul produk di "Daftar alat" dan di layar Beli, lewat `src/components/GambarProduk.tsx`. Bingkai tinggi tetap (h-40), `object-contain`, `loading="lazy"`, `referrerPolicy="no-referrer"`.
+- Tanpa foto: kotak polos dengan ikon kotak dan teks "Foto produk menyusul" (`aksi.beli.fotoMenyusul` di `content/ui.json`).
+- Tidak ada foto yang diisi: tautan gambar tidak boleh dikarang. Semua produk contoh masih `null`.
+- Foto dimuat dari alamat luar saat dilihat, jadi peramban pengguna menghubungi situs itu (alamat IP terlihat). Tanpa cookie atau data aplikasi, tetapi ini beda dari prinsip "tidak ada data keluar perangkat"; perlu keputusan tim bila foto mulai diisi (alternatif: simpan berkas kecil di `public/`).

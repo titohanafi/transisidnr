@@ -1,5 +1,6 @@
 import { ClipboardCheck, ExternalLink, Hammer } from "lucide-react";
 import { AksiHalaman, KembaliKeRencana, useKonteksAksi } from "../components/AksiHalaman";
+import { GambarProduk } from "../components/GambarProduk";
 import { Tanda } from "../components/Lencana";
 import { TombolAksi } from "../components/TombolAksi";
 import { aksiTersedia } from "../domain/aksi";
@@ -30,7 +31,8 @@ export function AksiBeli() {
                     <h2 className="text-judulKartu">{b.nama}</h2>
                     {b.afiliasi && <Tanda>{t.afiliasi}</Tanda>}
                   </div>
-                  {b.afiliasi && <p className="mt-1 text-kecil text-redup">{t.afiliasiPenjelasan}</p>}
+                  <GambarProduk gambar={b.gambar} />
+                  {b.afiliasi && <p className="mt-3 text-kecil text-redup">{t.afiliasiPenjelasan}</p>}
 
                   <div className="mt-4 flex gap-3 rounded-tombol border border-catatan-garis bg-catatan-muda p-4 text-catatan">
                     <ClipboardCheck className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />

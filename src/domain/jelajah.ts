@@ -74,6 +74,7 @@ export interface AlatItem {
   kisaran_harga: string | null;
   link: string | null;
   afiliasi: boolean;
+  gambar: { url: string; alt: string } | null;
   /** Panduan tempat alat ini muncul, beserta tingkat yang memuatnya. */
   panduan: { id: string; judul: string; tingkat: Tingkat }[];
 }

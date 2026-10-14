@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { GambarProduk } from "./GambarProduk";
 import { Tanda } from "./Lencana";
 import { konten } from "../domain/content";
 import type { AlatItem } from "../domain/jelajah";
@@ -18,6 +19,7 @@ export function DaftarAlat({ alat }: { alat: AlatItem[] }) {
       {alat.map((b) => (
         <li key={b.nama} className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
           <h2 className="text-subjudul">{b.nama}</h2>
+          <GambarProduk gambar={b.gambar} />
           <p className="mt-2 rounded-tombol bg-aksen-muda p-2">
             <span className="font-semibold">{tk.cek}:</span> {b.cek_kecocokan}
           </p>
