@@ -1,7 +1,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { BilahTab } from "./BilahTab";
+import { BilahTab, namaMenu } from "./BilahTab";
 import { konten } from "../domain/content";
 
 const { app, umum } = konten.ui;
@@ -10,6 +10,7 @@ const { app, umum } = konten.ui;
 export function Halaman({ judul, children, kunciFokus }: { judul: string; children: ReactNode; kunciFokus?: string | number }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const menu = namaMenu(pathname);
   const dalam = !["/", "/jelajah", "/rencana", "/igd", "/saya"].includes(pathname);
   const h1 = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
@@ -40,9 +41,13 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
             <ChevronLeft className="h-7 w-7" strokeWidth={2.5} aria-hidden="true" focusable="false" />
           </button>
         )}
-        <Link to="/" className={`inline-flex min-h-sentuh items-center text-lg font-bold text-utama ${dalam ? "" : "px-2"}`}>
-          {app.nama}
-        </Link>
+        {menu ? (
+          <span className="inline-flex min-h-sentuh items-center px-2 text-lg font-bold text-utama">{menu}</span>
+        ) : (
+          <Link to="/" className={`inline-flex min-h-sentuh items-center text-lg font-bold text-utama ${dalam ? "" : "px-2"}`}>
+            {app.nama}
+          </Link>
+        )}
       </header>
       <main id="isi" className="flex flex-1 flex-col px-4 py-5">
         {/* Di Beranda judulnya sama dengan nama aplikasi di header: tetap ada untuk pembaca layar, tidak ditampilkan dua kali. */}

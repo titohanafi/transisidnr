@@ -333,3 +333,5 @@
 - Belum dibuat: checklist perkembangan pasien/caregiver. Butuh isi yang ditinjau ahli (aturan konten) dan sebaiknya tanpa skor. Layar `src/screens/Saya.tsx` disiapkan sebagai tempatnya.
 
 - Navbar bawah: hanya menu yang sedang aktif yang menampilkan nama (pil hijau berisi ikon dan nama); menu lain hanya ikon. Nama menu lain tetap dibaca pembaca layar (teks tersembunyi). Area sentuh tiap menu minimal 48px.
+
+- Koreksi: yang dimaksud pemilik adalah judul di header, bukan navbar. Navbar kembali menampilkan nama di semua menu (catatan "hanya menu aktif" di atas dibatalkan). Judul header kini mengikuti menu yang aktif: Panduan, Rencana, Darurat, Saya. Di Beranda header tetap "Transisi" (merek); layar dalam (detail panduan, aksi, dan sebagainya) juga tetap "Transisi" dengan tombol kembali.
