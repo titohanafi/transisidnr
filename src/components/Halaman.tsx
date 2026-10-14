@@ -13,6 +13,7 @@ export function Halaman({
   kunciFokus,
   kepala,
   judulTersembunyi = false,
+  latarMuda = false,
 }: {
   judul: string;
   children: ReactNode;
@@ -21,6 +22,8 @@ export function Halaman({
   kepala?: ReactNode;
   /** Judul tetap ada untuk pembaca layar tetapi tidak ditampilkan (bila sudah jelas dari menu). */
   judulTersembunyi?: boolean;
+  /** Latar halaman abu kehijauan muda (bukan putih), supaya kartu putih di atasnya menonjol. */
+  latarMuda?: boolean;
 }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -39,7 +42,9 @@ export function Halaman({
   );
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col bg-kertas md:border-x md:border-garis md:shadow-kartu print:shadow-none">
+    <div
+      className={`mx-auto flex min-h-screen max-w-md flex-col ${latarMuda ? "bg-permukaan" : "bg-kertas"} md:border-x md:border-garis md:shadow-kartu print:shadow-none`}
+    >
       <a
         href="#isi"
         onClick={(e) => {
