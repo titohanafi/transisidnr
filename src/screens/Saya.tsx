@@ -1,4 +1,4 @@
-import { CalendarDays, ClipboardList, DoorOpen, Flag, ListChecks, ShieldCheck, UserRound, type LucideIcon } from "lucide-react";
+import { CalendarDays, DoorOpen, Flag, ListChecks, ShieldCheck, UserRound, type LucideIcon } from "lucide-react";
 import { BarisTautan } from "../components/BarisTautan";
 import { RiwayatCheckin } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
@@ -58,10 +58,12 @@ export function Saya() {
     >
       <div className="flex flex-col gap-bagian">
         <section className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu" aria-labelledby="saya-jawaban">
-          {judulKartu("saya-jawaban", ClipboardList, t.jawabanJudul)}
+          <h2 id="saya-jawaban" className="text-kecil font-semibold">
+            {t.jawabanJudul}
+          </h2>
           {adaJawaban ? (
             <>
-              <dl className="mt-4 divide-y divide-garis/60 border-t border-garis/60">
+              <dl className="mt-2 divide-y divide-garis/60">
                 <div className="flex items-start gap-3 py-3.5">
                   {ikonBaris(DoorOpen)}
                   <div className="min-w-0 flex-1">
