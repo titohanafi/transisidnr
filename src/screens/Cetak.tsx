@@ -7,6 +7,7 @@ import { TAMPILKAN_ANGKA_DRAF, konten } from "../domain/content";
 import { kunciChecklist } from "../domain/aksi";
 import { susunTingkat } from "../domain/engine";
 import { bolehTampilkanUkuran } from "../domain/ukuran";
+import { ringkasRp } from "../lib/format";
 import { useRencana } from "../state/useRencana";
 import { useStore } from "../state/store";
 
@@ -84,7 +85,11 @@ export function Cetak() {
                       </ul>
                       <p className="mt-1 text-sm">
                         {tk.biaya}:{" "}
-                        {s.biaya.kisaran_rp ?? (s.biaya.estimasi_rp ? `${umum.estimasi} ${s.biaya.estimasi_rp}` : umum.biayaMenyusul)}
+                        {s.biaya.kisaran_rp
+                          ? ringkasRp(s.biaya.kisaran_rp)
+                          : s.biaya.estimasi_rp
+                            ? `${umum.estimasi} ${ringkasRp(s.biaya.estimasi_rp)}`
+                            : umum.biayaMenyusul}
                       </p>
                       {s.ukuran && s.ukuran.length > 0 && ukuranBoleh && (
                         <ul className="mt-1 list-disc pl-6 text-sm">
