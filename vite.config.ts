@@ -1,11 +1,53 @@
+import { loadEnv, type Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import autoprefixer from "autoprefixer";
 import tailwindcss from "tailwindcss";
 import tailwindConfig from "./tailwind.config.ts";
 
+// Saat `npm run dev`, fungsi di folder api/ (yang di Vercel berjalan sebagai fungsi server) dijalankan langsung oleh Vite,
+// dengan variabel lingkungan dari .env.local, supaya fitur yang memakainya bisa dicoba tanpa `vercel dev`.
+function apiLokal(): Plugin {
+  return {
+    name: "api-lokal",
+    apply: "serve",
+    configureServer(server) {
+      for (const [k, v] of Object.entries(loadEnv(server.config.mode, process.cwd(), ""))) process.env[k] ??= v;
+      server.middlewares.use(async (req, res, next) => {
+        const url = new URL(req.url ?? "/", "http://localhost");
+        const cocok = /^\/api\/([\w-]+)$/.exec(url.pathname);
+        if (!cocok) return next();
+        try {
+          const modul = (await server.ssrLoadModule(`/api/${cocok[1]}.ts`)) as Record<string, (r: Request) => Promise<Response>>;
+          const penangan = modul[req.method ?? "GET"];
+          if (!penangan) {
+            res.statusCode = 405;
+            return res.end();
+          }
+          const potongan: Buffer[] = [];
+          for await (const p of req) potongan.push(p as Buffer);
+          const hasil = await penangan(
+            new Request(`http://${req.headers.host}${req.url}`, {
+              method: req.method,
+              headers: req.headers as Record<string, string>,
+              body: req.method === "GET" || req.method === "HEAD" ? undefined : Buffer.concat(potongan),
+            }),
+          );
+          res.statusCode = hasil.status;
+          hasil.headers.forEach((v, k) => res.setHeader(k, v));
+          res.end(Buffer.from(await hasil.arrayBuffer()));
+        } catch (e) {
+          server.config.logger.error(String(e));
+          res.statusCode = 500;
+          res.end();
+        }
+      });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), apiLokal()],
   base: "./",
   // Konfigurasi Tailwind diberikan langsung dari sini. Vite memantau berkas yang diimpor vite.config.ts
   // dan memulai ulang server bila berubah, jadi token warna/jarak yang baru langsung terbaca tanpa Ctrl+C.

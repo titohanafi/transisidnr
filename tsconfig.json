@@ -17,5 +17,5 @@
     "allowImportingTsExtensions": true,
     "types": ["vite/client", "node"]
   },
-  "include": ["src", "tests", "scripts", "worker", "content", "vite.config.ts", "tailwind.config.ts"]
+  "include": ["src", "tests", "scripts", "api", "content", "vite.config.ts", "tailwind.config.ts"]
 }

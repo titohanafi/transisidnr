@@ -14,7 +14,7 @@ export class GalatPindai extends Error {
 
 const adalahObjek = (x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
 
-/** Memeriksa respons Worker (ditulis tangan agar zod tidak ikut bundel). Hal yang hilang dianggap tidak jelas. */
+/** Memeriksa respons fungsi pindai (ditulis tangan agar zod tidak ikut bundel). Hal yang hilang dianggap tidak jelas. */
 export function bacaRespons(x: unknown, idItem: string[]): HasilModel | null {
   if (!adalahObjek(x) || typeof x.kamar_mandi !== "boolean" || !Array.isArray(x.temuan)) return null;
   const temuan: Record<string, StatusItem> = Object.fromEntries(idItem.map((id) => [id, "tidak_jelas" as StatusItem]));
@@ -25,14 +25,13 @@ export function bacaRespons(x: unknown, idItem: string[]): HasilModel | null {
   return { kamarMandi: x.kamar_mandi, temuan };
 }
 
-/** Mengirim foto (data URL JPEG) ke Worker pindai dan mengembalikan hasil yang sudah diperiksa. */
+/** Mengirim foto (data URL JPEG) ke fungsi pindai (api/pindai.ts) dan mengembalikan hasil yang sudah diperiksa. */
 export async function pindaiFoto(
   dataUrl: string,
   idItem: string[],
-  url: string = import.meta.env.VITE_PINDAI_URL ?? "",
+  url: string = import.meta.env.VITE_PINDAI_URL || "/api/pindai",
   ambil: typeof fetch = fetch,
 ): Promise<HasilModel> {
-  if (!url) throw new GalatPindai("belum_diatur");
   const kontrol = new AbortController();
   const batas = setTimeout(() => kontrol.abort(), 30_000);
   try {
@@ -42,6 +41,18 @@ export async function pindaiFoto(
       body: JSON.stringify({ gambar: dataUrl.replace(/^data:image\/\w+;base64,/, "") }),
       signal: kontrol.signal,
     });
+    if (
+      res.status === 404 ||
+      (res.status === 500 &&
+        (
+          await res
+            .clone()
+            .json()
+            .catch(() => null)
+        )?.galat === "kunci belum diatur")
+    ) {
+      throw new GalatPindai("belum_diatur");
+    }
     if (!res.ok) throw new GalatPindai("jaringan");
     const hasil = bacaRespons(await res.json(), idItem);
     if (!hasil) throw new GalatPindai("respons");
