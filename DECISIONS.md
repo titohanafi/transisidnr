@@ -466,3 +466,9 @@
 - Jarak saran pencarian ke kartu "Cek kebutuhan di rumah" ditambah (24px menjadi sekitar 32px). Warna latar di luar area aplikasi (token `luar`) diganti dari abu kebiruan #DCE3E5 menjadi krem pasir hangat #E9E2D6 supaya jelas berbeda dari area aplikasi dan dari pita pencarian yang berwarna kehijauan. Token Tailwind berubah: server dev perlu dimulai ulang.
 
 - Latar di luar area aplikasi (token `luar`) diganti hijau tua pekat #0A4549 (sama dengan `utama-gelap`, agar selaras dengan palet) menggantikan krem pasir. Hanya terlihat di layar lebar; di ponsel aplikasi memenuhi layar. Token berubah: server dev perlu dimulai ulang.
+
+## Server dev membaca ulang Tailwind otomatis
+- Masalah: perubahan `tailwind.config.ts` (token warna, jarak, tipografi) tidak terbaca server dev yang sedang berjalan; harus Ctrl+C lalu `npm run dev`. Diuji: bahkan restart dalam proses yang sama dan "menyentuh" berkas CSS tidak membantu, karena Tailwind menyimpan konfigurasi di memori.
+- Perbaikan: konfigurasi Tailwind kini diberikan langsung dari `vite.config.ts` (`css.postcss.plugins`), sehingga Vite memantau `tailwind.config.ts` sebagai dependensi dan memulai ulang servernya sendiri bila berubah. Diuji dengan mengubah satu warna lalu mengembalikannya: CSS berubah tanpa Ctrl+C.
+- Berkas `postcss.config.js` dihapus karena fungsinya pindah ke `vite.config.ts`. `tsconfig.json` mendapat `allowImportingTsExtensions` (aman karena `noEmit`) agar impor `./tailwind.config.ts` sah tanpa peringatan.
+- Sekali ini server dev yang sedang berjalan tetap perlu dimulai ulang agar memakai pengaturan baru; sesudahnya tidak lagi.
