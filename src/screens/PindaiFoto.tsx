@@ -1,0 +1,249 @@
+import { Camera, Image as IkonGaleri, Loader2, ScanLine } from "lucide-react";
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { Halaman } from "../components/Halaman";
+import { PilihanPil } from "../components/Pilihan";
+import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
+import { Tombol, TombolLink } from "../components/Tombol";
+import { konten } from "../domain/content";
+import { hitungSkor, type StatusItem } from "../domain/pindai";
+import { kecilkanFoto } from "../lib/foto";
+import { GalatPindai, pindaiFoto } from "../lib/pindai";
+import { isi } from "../lib/teks";
+
+const t = konten.ui.pindai;
+const ID_ITEM = t.item.map((i) => i.id);
+
+type Tahap =
+  | { nama: "pilih" }
+  | { nama: "siap" }
+  | { nama: "memindai" }
+  | { nama: "galat"; pesan: string }
+  | { nama: "ceklis"; jawaban: Record<string, StatusItem> }
+  | { nama: "hasil"; temuan: Record<string, StatusItem> };
+
+const LABEL_STATUS: Record<StatusItem, string> = t.status;
+const GAYA_STATUS: Record<StatusItem, string> = {
+  ramah: "border-utama bg-utama-muda text-utama-gelap",
+  perhatian: "border-aksen bg-aksen-muda text-aksen",
+  tidak_jelas: "border-garis bg-white text-redup",
+};
+
+// Foto hanya ada di memori layar ini (tidak disimpan); hasil dihitung aplikasi dari temuan per hal.
+export function PindaiFoto() {
+  const kamera = useRef<HTMLInputElement>(null);
+  const galeri = useRef<HTMLInputElement>(null);
+  const [foto, setFoto] = useState<string | null>(null);
+  const [tahap, setTahap] = useState<Tahap>({ nama: "pilih" });
+  const [galatBaca, setGalatBaca] = useState<string | null>(null);
+
+  const pilih = async (berkas: File | undefined) => {
+    if (!berkas) return;
+    setGalatBaca(null);
+    try {
+      setFoto(await kecilkanFoto(berkas));
+      setTahap({ nama: "siap" });
+    } catch {
+      setGalatBaca(t.gagalBaca);
+    }
+  };
+
+  const pindai = async () => {
+    if (!foto) return;
+    setTahap({ nama: "memindai" });
+    try {
+      const hasil = await pindaiFoto(foto, ID_ITEM);
+      if (!hasil.kamarMandi) setTahap({ nama: "galat", pesan: t.bukanKamarMandi });
+      else setTahap({ nama: "hasil", temuan: hasil.temuan });
+    } catch (e) {
+      setTahap({ nama: "galat", pesan: e instanceof GalatPindai && e.kode === "belum_diatur" ? t.belumDiatur : t.gagalPindai });
+    }
+  };
+
+  const ulang = () => {
+    setFoto(null);
+    setTahap({ nama: "pilih" });
+  };
+
+  const masukan = (ref: React.RefObject<HTMLInputElement>, capture?: "environment") => (
+    <input
+      ref={ref}
+      type="file"
+      accept="image/*"
+      capture={capture}
+      hidden
+      onChange={(e) => {
+        void pilih(e.target.files?.[0]);
+        e.target.value = "";
+      }}
+    />
+  );
+
+  const pemilih = (
+    <div className="flex flex-col gap-3">
+      <Tombol onClick={() => kamera.current?.click()} className="gap-2">
+        <Camera className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+        {t.ambil}
+      </Tombol>
+      <Tombol gayaTombol="sekunder" onClick={() => galeri.current?.click()} className="gap-2">
+        <IkonGaleri className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+        {t.galeri}
+      </Tombol>
+    </div>
+  );
+
+  return (
+    <Halaman judul={t.judul} kepala={<p className="mt-2 text-redup">{t.penjelasan}</p>}>
+      {masukan(kamera, "environment")}
+      {masukan(galeri)}
+
+      {foto && (
+        <img src={foto} alt={t.alt} className="mb-4 max-h-64 w-full rounded-kartu border border-garis/70 object-contain shadow-kartu" />
+      )}
+
+      {tahap.nama === "pilih" && (
+        <>
+          <section className="mb-4 rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
+            <h2 className="mb-2 text-judulKartu">{t.tipJudul}</h2>
+            <ul className="list-disc space-y-1 pl-5">
+              {t.tip.map((x) => (
+                <li key={x}>{x}</li>
+              ))}
+            </ul>
+          </section>
+          {pemilih}
+          <p role="alert" className="mt-3 text-bahaya">
+            {galatBaca}
+          </p>
+        </>
+      )}
+
+      {tahap.nama === "siap" && (
+        <>
+          <p className="mb-4 text-kecil text-redup">{t.privasi}</p>
+          <div className="flex flex-col gap-3">
+            <Tombol onClick={() => void pindai()} className="gap-2">
+              <ScanLine className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+              {t.pindai}
+            </Tombol>
+            <Tombol gayaTombol="sekunder" onClick={() => galeri.current?.click()}>
+              {t.gantiFoto}
+            </Tombol>
+          </div>
+        </>
+      )}
+
+      {tahap.nama === "memindai" && (
+        <p role="status" className="flex items-center gap-3 rounded-kartu bg-utama-muda p-4 text-utama-gelap">
+          <Loader2 className="h-6 w-6 shrink-0 animate-spin motion-reduce:animate-none" aria-hidden="true" focusable="false" />
+          {t.memindai}
+        </p>
+      )}
+
+      {tahap.nama === "galat" && (
+        <>
+          <p role="alert" className="mb-4 rounded-kartu border border-bahaya bg-bahaya-muda p-4 text-tinta">
+            {tahap.pesan}
+          </p>
+          <div className="flex flex-col gap-3">
+            {tahap.pesan === t.gagalPindai && <Tombol onClick={() => void pindai()}>{t.coba}</Tombol>}
+            <Tombol gayaTombol="sekunder" onClick={() => setTahap({ nama: "ceklis", jawaban: {} })}>
+              {t.nilaiSendiri}
+            </Tombol>
+            <Tombol gayaTombol="sekunder" onClick={ulang}>
+              {t.gantiFoto}
+            </Tombol>
+          </div>
+        </>
+      )}
+
+      {tahap.nama === "ceklis" && (
+        <section aria-labelledby="judul-ceklis">
+          <h2 id="judul-ceklis" className="mb-1 text-judulKartu">
+            {t.ceklisJudul}
+          </h2>
+          <p className="mb-4 text-redup">{t.ceklisPenjelasan}</p>
+          <div className="flex flex-col gap-4">
+            {t.item.map((it) => (
+              <fieldset key={it.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
+                <legend className="px-1 font-semibold">{it.nama}</legend>
+                <p className="mb-3">{it.cek}</p>
+                <div className="flex flex-wrap gap-2">
+                  {(
+                    [
+                      ["ramah", t.ya],
+                      ["perhatian", t.tidak],
+                      ["tidak_jelas", t.tidakYakin],
+                    ] as const
+                  ).map(([nilai, label]) => (
+                    <PilihanPil
+                      key={nilai}
+                      nama={`cek-${it.id}`}
+                      label={label}
+                      aktif={tahap.jawaban[it.id] === nilai}
+                      onUbah={() => setTahap({ nama: "ceklis", jawaban: { ...tahap.jawaban, [it.id]: nilai } })}
+                    />
+                  ))}
+                </div>
+              </fieldset>
+            ))}
+          </div>
+          <Tombol className="mt-4 w-full" onClick={() => setTahap({ nama: "hasil", temuan: tahap.jawaban })}>
+            {t.lihatHasil}
+          </Tombol>
+        </section>
+      )}
+
+      {tahap.nama === "hasil" && <Hasil temuan={tahap.temuan} onUlang={ulang} />}
+    </Halaman>
+  );
+}
+
+function Hasil({ temuan, onUlang }: { temuan: Record<string, StatusItem>; onUlang: () => void }) {
+  const skor = hitungSkor(temuan, ID_ITEM);
+  const tingkat = t.tingkat[skor.tingkat];
+  return (
+    <>
+      <section aria-labelledby="judul-hasil" className="rounded-kartu border border-utama bg-utama-muda p-5">
+        <p className="text-kecil font-semibold text-utama-gelap">{t.hasilJudul}</p>
+        <h2 id="judul-hasil" tabIndex={-1} className="text-judulKartu text-tinta">
+          {tingkat.judul}
+        </h2>
+        <p className="mt-2">{tingkat.isi}</p>
+        {skor.jelas > 0 && <p className="mt-2 font-semibold">{isi(t.ringkasan, { ramah: skor.ramah, jelas: skor.jelas })}</p>}
+        {skor.tidakJelas > 0 && <p className="text-kecil text-redup">{isi(t.tidakJelasJumlah, { n: skor.tidakJelas })}</p>}
+      </section>
+
+      <h2 className="mb-2 mt-6 text-judulKartu">{t.temuanJudul}</h2>
+      <ul className="flex flex-col gap-3">
+        {t.item.map((it) => {
+          const status = temuan[it.id] ?? "tidak_jelas";
+          return (
+            <li key={it.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
+              <div className="flex items-start justify-between gap-3">
+                <p className="font-semibold">{it.nama}</p>
+                <span className={`shrink-0 rounded-full border px-2 py-0.5 text-sm font-medium ${GAYA_STATUS[status]}`}>
+                  {LABEL_STATUS[status]}
+                </span>
+              </div>
+              {status === "perhatian" && (
+                <Link to={`/kartu/${it.kartu}`} className="mt-1 inline-flex min-h-sentuh items-center font-semibold text-utama underline">
+                  {t.lihatPanduan}
+                </Link>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+
+      <p className="mt-4 text-kecil text-redup">{t.catatan}</p>
+      <PeringatanNonMedis />
+      <div className="mt-4 flex flex-col gap-3">
+        <TombolLink to="/rencana">{t.keRencana}</TombolLink>
+        <Tombol gayaTombol="sekunder" onClick={onUlang}>
+          {t.ulang}
+        </Tombol>
+      </div>
+    </>
+  );
+}

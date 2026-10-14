@@ -31,7 +31,7 @@ MVP hanya mencakup: kamar mandi, pengguna kursi roda (kruk dan walker bila ada w
 
 ## Aturan teknis
 - Vite + React 18 + TypeScript (strict) + Tailwind + React Router (HashRouter agar bisa dihosting statis) + Zod + Vitest.
-- Tanpa backend. State disimpan di localStorage dengan kunci berversi (`transisi:v1`). Tombol "Hapus data saya" wajib ada.
+- Tanpa backend, **kecuali** fitur Pindai (`worker/`, proxy ke Gemini; lihat DECISIONS.md). State disimpan di localStorage dengan kunci berversi (`transisi:v1`). Tombol "Hapus data saya" wajib ada.
 - Tidak ada data yang dikirim keluar perangkat. Jangan menaruh data pribadi di URL atau query string.
 - Mobile-first (lebar 360px), area sentuh minimal 44x44px, aman dipakai satu tangan.
 - Aksesibilitas WCAG 2.2 AA: kontras, fokus terlihat, label formulir, tidak mengandalkan warna saja, bisa dipakai dengan screen reader.

@@ -64,7 +64,7 @@ export function Halaman({
   }, [pitaGelap]);
   const gelap = pitaGelap && !digulir;
   const fokusHeader = gelap ? "focus-visible:outline-white" : "";
-  const dalam = !["/", "/jelajah", "/rencana", "/kontak", "/saya"].includes(pathname);
+  const dalam = !["/", "/jelajah", "/rencana", "/pindai", "/kontak", "/saya"].includes(pathname);
   const h1 = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     h1.current?.focus();

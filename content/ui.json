@@ -48,6 +48,7 @@
     "tabPanduan": "Panduan",
     "tabSaya": "Profil",
     "tabDarurat": "Dukungan",
+    "tabPindai": "Pindai",
     "headerPakaiAlat": "Produk Disabilitas",
     "halamanSebelumnya": "Halaman sebelumnya"
   },
@@ -418,5 +419,109 @@
     "judul": "Ruangan mana yang ingin dibereskan lebih dulu?",
     "segera": "Segera",
     "lanjut": "Lanjut"
+  },
+  "pindai": {
+    "judul": "Pindai ruangan",
+    "penjelasan": "Foto kamar mandi Anda, lalu kami beri perkiraan awal seberapa ramah ruangnya untuk pengguna kursi roda.",
+    "tipJudul": "Supaya hasilnya jelas",
+    "tip": [
+      "Berdiri di pintu agar sebagian besar ruangan terlihat.",
+      "Nyalakan lampu agar gambar terang.",
+      "Jangan memotret orang atau wajah."
+    ],
+    "ambil": "Ambil foto",
+    "galeri": "Pilih dari galeri",
+    "gantiFoto": "Ganti foto",
+    "alt": "Foto ruangan yang akan dipindai",
+    "gagalBaca": "Berkas ini tidak bisa dibuka sebagai foto.",
+    "privasi": "Saat dipindai, foto dikirim satu kali ke layanan analisis gambar pihak ketiga (Google Gemini) lewat internet. Foto tidak disimpan oleh aplikasi ini dan hilang saat Anda meninggalkan layar ini.",
+    "pindai": "Pindai foto ini",
+    "memindai": "Sedang memindai foto…",
+    "gagalPindai": "Pemindaian belum berhasil. Anda bisa mencoba lagi, atau menilai sendiri lewat beberapa pertanyaan singkat.",
+    "belumDiatur": "Layanan pemindaian belum disambungkan. Anda tetap bisa menilai sendiri lewat beberapa pertanyaan singkat.",
+    "coba": "Coba lagi",
+    "nilaiSendiri": "Nilai sendiri dari foto",
+    "bukanKamarMandi": "Foto ini sepertinya bukan kamar mandi. Coba foto lain, atau nilai sendiri lewat pertanyaan singkat.",
+    "ceklisJudul": "Nilai sendiri",
+    "ceklisPenjelasan": "Lihat foto Anda, lalu jawab setiap pertanyaan. Pilih \"Tidak yakin\" bila tidak terlihat.",
+    "ya": "Ya",
+    "tidak": "Tidak",
+    "tidakYakin": "Tidak yakin",
+    "lihatHasil": "Lihat hasil",
+    "hasilJudul": "Hasil pemindaian",
+    "ringkasan": "{ramah} dari {jelas} hal yang terlihat tampak sudah mendukung.",
+    "tidakJelasJumlah": "{n} hal tidak terlihat jelas di foto.",
+    "tingkat": {
+      "belum_cukup": {
+        "judul": "Foto belum cukup jelas",
+        "isi": "Terlalu banyak hal yang tidak terlihat. Coba foto ulang dari pintu dengan lampu menyala."
+      },
+      "banyak": {
+        "judul": "Perlu banyak penyesuaian",
+        "isi": "Banyak hal yang bisa dibuat lebih mudah. Mulai dari satu hal yang paling ringan, tidak perlu sekaligus."
+      },
+      "sebagian": {
+        "judul": "Sebagian sudah ramah",
+        "isi": "Ruangan ini sudah punya modal yang baik. Beberapa penyesuaian kecil bisa membuatnya lebih nyaman."
+      },
+      "cukup": {
+        "judul": "Cukup ramah",
+        "isi": "Dari foto, sebagian besar hal tampak sudah mendukung. Tetap periksa langsung di ruangan."
+      }
+    },
+    "temuanJudul": "Rincian per hal",
+    "status": {
+      "ramah": "Tampak mendukung",
+      "perhatian": "Perlu perhatian",
+      "tidak_jelas": "Tidak jelas di foto"
+    },
+    "lihatPanduan": "Lihat panduan",
+    "catatan": "Ini perkiraan awal dari satu foto, bukan penilaian ahli. Ukuran dan keamanan sebenarnya perlu diperiksa langsung. Untuk penilaian yang pasti, tanyakan ke terapis okupasi atau dokter rehabilitasi medik.",
+    "ulang": "Pindai foto lain",
+    "keRencana": "Buka panduan saya",
+    "item": [
+      {
+        "id": "lantai",
+        "nama": "Lantai",
+        "cek": "Apakah lantainya tampak tidak licin (kasar, bermotif, atau ada keset anti-selip)?",
+        "kartu": "bath-floor-slip"
+      },
+      {
+        "id": "pegangan",
+        "nama": "Pegangan",
+        "cek": "Apakah ada pegangan di dekat kloset atau area mandi?",
+        "kartu": "bath-grab-bar"
+      },
+      {
+        "id": "area_mandi",
+        "nama": "Area mandi",
+        "cek": "Apakah area mandi tampak bisa dimasuki tanpa bibir atau undakan?",
+        "kartu": "bath-shower-entry"
+      },
+      {
+        "id": "pintu",
+        "nama": "Pintu",
+        "cek": "Apakah pintunya tampak lebar dan mudah dibuka?",
+        "kartu": "bath-door"
+      },
+      {
+        "id": "ruang",
+        "nama": "Ruang gerak",
+        "cek": "Apakah lantainya tampak lega untuk memutar kursi roda dan ada ruang di samping kloset?",
+        "kartu": "bath-space-turning"
+      },
+      {
+        "id": "wastafel",
+        "nama": "Wastafel",
+        "cek": "Apakah wastafel tampak punya ruang kosong di bawahnya untuk kaki dan kursi roda?",
+        "kartu": "bath-sink-mirror"
+      },
+      {
+        "id": "jangkauan",
+        "nama": "Keran dan shower",
+        "cek": "Apakah keran, shower, dan tempat sabun tampak mudah dijangkau dari posisi duduk?",
+        "kartu": "bath-reach-controls"
+      }
+    ]
   }
 }
