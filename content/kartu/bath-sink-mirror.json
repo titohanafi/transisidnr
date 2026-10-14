@@ -30,7 +30,8 @@
         "Cek apakah ada ruang kosong di bawah wastafel untuk lutut atau kaki."
       ],
       "biaya": {
-        "kisaran_rp": null
+        "kisaran_rp": null,
+        "estimasi_rp": "Rp 100.000 - Rp 700.000"
       },
       "usaha": {
         "waktu": "1-2 jam",
@@ -64,7 +65,8 @@
         "Bungkus atau amankan pipa di bawah wastafel agar tidak melukai kaki."
       ],
       "biaya": {
-        "kisaran_rp": null
+        "kisaran_rp": null,
+        "estimasi_rp": "Rp 1.500.000 - Rp 6.000.000"
       },
       "usaha": {
         "waktu": "1-3 hari",

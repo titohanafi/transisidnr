@@ -31,7 +31,8 @@
         "Pasang ganjal pintu agar tidak menutup sendiri."
       ],
       "biaya": {
-        "kisaran_rp": null
+        "kisaran_rp": null,
+        "estimasi_rp": "Rp 100.000 - Rp 500.000"
       },
       "usaha": {
         "waktu": "1-2 jam",
@@ -65,7 +66,8 @@
         "Pasang gagang yang mudah dioperasikan dengan satu tangan."
       ],
       "biaya": {
-        "kisaran_rp": null
+        "kisaran_rp": null,
+        "estimasi_rp": "Rp 1.500.000 - Rp 6.000.000"
       },
       "usaha": {
         "waktu": "1-3 hari",

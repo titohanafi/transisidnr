@@ -497,3 +497,8 @@
 - Renovasi di `bath-space-turning`, `bath-shower-entry`, dan `bath-emergency-call` sengaja tetap kosong karena pekerjaannya (membongkar dinding, merencanakan, atau instalasi listrik) hampir pasti lebih lama dari "1-3 hari".
 - Kisaran biaya (`biaya.kisaran_rp`) TIDAK diisi: mesin rekomendasi membacanya untuk menghitung total dan menandai "di atas anggaran", jadi angka karangan akan diam-diam mengubah rekomendasi. Menunggu angka dari tim konten.
 - Semua kartu tetap berstatus `draf`; angka ini perlu ditinjau sebelum dianggap benar.
+
+## Estimasi biaya (placeholder, hanya tampilan)
+- Atas permintaan pemilik, pil biaya di Detail Panduan dan Cetak kini menampilkan "Estimasi Rp x - Rp y" untuk tingkat Alat tanpa bongkar dan Renovasi yang belum punya `kisaran_rp`. Angkanya disimpan di bidang BARU `biaya.estimasi_rp` (opsional, hanya tampilan). Mesin rekomendasi tetap hanya membaca `kisaran_rp`, jadi total biaya, "di atas anggaran", dan urutan rekomendasi TIDAK terpengaruh.
+- Angka ini adalah perkiraan kasar saya dari pengetahuan umum tentang harga barang di Indonesia, bukan dari survei atau sumber. Kisarannya sengaja lebar. Semua kartu masih `draf`. Perlu diganti dengan angka dari survei sebelum dipakai pengguna sungguhan; bila `kisaran_rp` diisi, ia menggantikan estimasi.
+- Tiga renovasi (`bath-space-turning`, `bath-shower-entry`, `bath-emergency-call`) dan kartu pendamping tidak diberi estimasi karena biayanya sangat bergantung pada kondisi rumah; pilnya tetap "Biaya menyusul".

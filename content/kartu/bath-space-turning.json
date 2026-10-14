@@ -30,7 +30,8 @@
         "Pertimbangkan papan pindah bila ruang tetap sempit, sesuai saran terapis."
       ],
       "biaya": {
-        "kisaran_rp": null
+        "kisaran_rp": null,
+        "estimasi_rp": "Rp 50.000 - Rp 1.200.000"
       },
       "usaha": {
         "waktu": "1-2 jam",

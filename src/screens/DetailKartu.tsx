@@ -146,7 +146,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                       <div className={`flex flex-wrap gap-2 px-4 ${buka ? "pb-3" : "pb-4"}`}>
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-kecil font-medium">
                           <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
-                          {s.biaya.kisaran_rp ?? umum.biayaMenyusul}
+                          {s.biaya.kisaran_rp ?? (s.biaya.estimasi_rp ? `${umum.estimasi} ${s.biaya.estimasi_rp}` : umum.biayaMenyusul)}
                         </span>
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-kecil font-medium">
                           <Clock className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />

@@ -31,7 +31,8 @@
         "Uji alatnya bersama caregiver dari ruangan yang berbeda."
       ],
       "biaya": {
-        "kisaran_rp": null
+        "kisaran_rp": null,
+        "estimasi_rp": "Rp 50.000 - Rp 300.000"
       },
       "usaha": {
         "waktu": "1-2 jam",

@@ -40,7 +40,8 @@ export const tingkatSolusiSchema = z.object({
   ringkasan: teks,
   langkah: z.array(teks).min(1),
   sifat: z.enum(["sementara", "permanen"]),
-  biaya: z.object({ kisaran_rp: z.string().nullable() }),
+  // `kisaran_rp` dibaca mesin rekomendasi (total dan anggaran). `estimasi_rp` hanya untuk tampilan: tidak memengaruhi rekomendasi.
+  biaya: z.object({ kisaran_rp: z.string().nullable(), estimasi_rp: z.string().nullable().optional() }),
   usaha: z.object({ waktu: z.string().nullable(), kesulitan: z.string().nullable() }),
   ukuran: z.array(ukuranSchema).optional(),
   barang: z.array(barangSchema).default([]),

@@ -31,7 +31,8 @@
         "Cek jenis dinding dan keramik sebelum membeli, lalu uji dengan tekanan perlahan sebelum dipakai bertumpu."
       ],
       "biaya": {
-        "kisaran_rp": null
+        "kisaran_rp": null,
+        "estimasi_rp": "Rp 150.000 - Rp 1.500.000"
       },
       "usaha": {
         "waktu": "1-2 jam",
@@ -65,7 +66,8 @@
         "Pastikan dinding mampu menahan beban sebelum dipasang."
       ],
       "biaya": {
-        "kisaran_rp": null
+        "kisaran_rp": null,
+        "estimasi_rp": "Rp 500.000 - Rp 2.000.000"
       },
       "usaha": {
         "waktu": "1-3 hari",
