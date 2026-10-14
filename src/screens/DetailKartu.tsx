@@ -171,6 +171,27 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
                           {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                         </div>
+                        {/* Ajakan bertindak ada di atas langkah; pertanyaan hasil di paling bawah. */}
+                        {(aksiTersedia(kartu, x.tingkat).includes("beli") ||
+                          (x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang"))) && (
+                          <div className="mt-5 flex flex-col gap-5">
+                            {aksiTersedia(kartu, x.tingkat).includes("beli") && (
+                              <TombolAksi
+                                jenis="beli"
+                                kartuId={kartu.id}
+                                tingkat={x.tingkat}
+                                gayaTombol={x.tingkat === "renovasi" ? "sekunder" : "utama"}
+                                className="w-full"
+                              />
+                            )}
+                            {x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang") && (
+                              <Jembatan teks={t.jembatanRenovasi}>
+                                <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" className="w-full" />
+                              </Jembatan>
+                            )}
+                          </div>
+                        )}
+
                         <h4 className="mt-5 font-semibold">{t.langkah}</h4>
                         <div className="mt-2">
                           <LangkahChecklist kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} peran={s.peran_langkah} />
@@ -189,27 +210,6 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                               </ul>
                             ) : (
                               <p className="mt-1 text-redup">{t.ukuranMenyusul}</p>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Ajakan bertindak ada di bawah langkah; pertanyaan hasil di paling bawah. */}
-                        {(aksiTersedia(kartu, x.tingkat).includes("beli") ||
-                          (x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang"))) && (
-                          <div className="mt-6 flex flex-col gap-5">
-                            {aksiTersedia(kartu, x.tingkat).includes("beli") && (
-                              <TombolAksi
-                                jenis="beli"
-                                kartuId={kartu.id}
-                                tingkat={x.tingkat}
-                                gayaTombol={x.tingkat === "renovasi" ? "sekunder" : "utama"}
-                                className="w-full"
-                              />
-                            )}
-                            {x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang") && (
-                              <Jembatan teks={t.jembatanRenovasi}>
-                                <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" className="w-full" />
-                              </Jembatan>
                             )}
                           </div>
                         )}

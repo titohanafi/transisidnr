@@ -560,3 +560,5 @@
 - Jawaban "Bagaimana hasilnya?" (Sudah cukup / Masih sulit) kini juga tampil sebagai penanda di baris panduan pada halaman Panduan: "Beres" (ikon centang) atau "Masih sulit" (ikon peringatan). Panduan yang belum dicatat tidak diberi penanda. Datanya sama dengan yang dipakai Panduan Saya (`state.hasil`), tersimpan di perangkat. Teks penanda ada di `jelajah.status`.
 
 - Tombol "Kembali ke panduan saya" setelah menjawab "Sudah cukup" dihapus (permintaan pemilik); pesan "Kabar baik. Panduan ini ditandai beres di Panduan Saya." tetap tampil. Teks `keRencana` dihapus dari konten.
+
+- Urutan panel solusi diperbarui lagi: ringkasan dan pil, ajakan bertindak ("Lihat alat" dan, di Renovasi, "Pesan ke tukang") DI ATAS langkah, lalu langkah bercentang, ukuran, dan "Bagaimana hasilnya?" di paling bawah.
