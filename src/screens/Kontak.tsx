@@ -1,4 +1,4 @@
-import { MessageCircle, Phone, TriangleAlert } from "lucide-react";
+import { ChevronDown, MessageCircle, Phone, TriangleAlert } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
@@ -68,37 +68,83 @@ export function Kontak() {
   return (
     <Halaman judul={t.judul} judulTersembunyi kepala={<p className="mt-2 text-redup">{t.pengantar}</p>}>
       <div className="flex flex-col gap-bagian">
-        <section className="rounded-kartu border border-bahaya/25 bg-bahaya-muda p-5" aria-labelledby="darurat">
-          <div className="flex items-center gap-3 text-bahaya">
-            <TriangleAlert className="h-6 w-6 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
-            <h2 id="darurat" className="text-subjudul">
-              {igd.judul}
+        {darurat && darurat.entri.length > 0 && (
+          <section aria-labelledby="nomor-darurat">
+            <h2 id="nomor-darurat" className="text-subjudul">
+              {darurat.kategori.nama}
             </h2>
-          </div>
-          <p className="mt-2">{igd.isi}</p>
-          {igd.tandaBahaya.length > 0 ? (
-            <ul className="mt-3 space-y-2">
-              {igd.tandaBahaya.map((x) => (
-                <li key={x} className="flex gap-3">
-                  <span aria-hidden="true" className="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-bahaya" />
-                  <span>{x}</span>
-                </li>
-              ))}
+            <ul className="mt-isi grid grid-cols-2 gap-3">
+              {darurat.entri.map((e) =>
+                e.telepon ? (
+                  <li key={e.id}>
+                    <a
+                      href={urlTelepon(e.telepon)}
+                      className="tekan flex h-full min-h-[92px] flex-col justify-between rounded-kartu border border-bahaya/25 bg-bahaya-muda p-4 hover:brightness-95"
+                    >
+                      <span className="flex items-center gap-2 text-bahaya">
+                        <Phone className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+                        <span className="text-subjudul tabular-nums">{e.telepon}</span>
+                      </span>
+                      <span className="mt-2 text-kecil font-medium text-tinta">{e.nama.replace(/\s*\(\d+\)$/, "")}</span>
+                      <span className="sr-only">
+                        {t.telepon} {e.telepon}
+                      </span>
+                    </a>
+                  </li>
+                ) : null,
+              )}
             </ul>
-          ) : (
-            <p className="mt-3">{igd.menyusul}</p>
-          )}
-          {darurat && darurat.entri.length > 0 && (
-            <ul className="mt-4 space-y-3 border-t border-bahaya/25 pt-4">
-              {darurat.entri.map((e) => (
-                <li key={e.id}>
-                  <p className="font-semibold">{e.nama}</p>
-                  {e.catatan && <p className="text-kecil text-redup">{e.catatan}</p>}
-                  <Aksi entri={e} />
-                </li>
-              ))}
-            </ul>
-          )}
+            <div className="mt-3 overflow-hidden rounded-kartu border border-garis bg-white">
+              <LipatBaris judul={t.keteranganSumber}>
+                <ul className="space-y-3">
+                  {darurat.entri.map((e) => (
+                    <li key={e.id}>
+                      <p className="font-semibold">{e.nama}</p>
+                      {e.catatan && <p className="text-kecil text-redup">{e.catatan}</p>}
+                      {e.sumber && (
+                        <a href={e.sumber} target="_blank" rel="noopener noreferrer" className="text-kecil text-utama underline">
+                          {t.sumber}
+                          <span className="sr-only">: {e.nama}</span>
+                        </a>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </LipatBaris>
+            </div>
+          </section>
+        )}
+
+        <section className="overflow-hidden rounded-kartu border border-bahaya/25 bg-bahaya-muda" aria-labelledby="tanda-bahaya">
+          <details className="group">
+            <summary className="flex min-h-[56px] cursor-pointer list-none items-center gap-3 px-4 py-3 text-bahaya [&::-webkit-details-marker]:hidden">
+              <TriangleAlert className="h-6 w-6 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+              <h2 id="tanda-bahaya" className="flex-1 text-judulKartu">
+                {igd.judul}
+              </h2>
+              <ChevronDown
+                className="h-5 w-5 shrink-0 motion-safe:transition-transform group-open:rotate-180"
+                strokeWidth={2}
+                aria-hidden="true"
+                focusable="false"
+              />
+            </summary>
+            <div className="px-4 pb-4">
+              <p>{igd.isi}</p>
+              {igd.tandaBahaya.length > 0 ? (
+                <ul className="mt-3 space-y-2">
+                  {igd.tandaBahaya.map((x) => (
+                    <li key={x} className="flex gap-3">
+                      <span aria-hidden="true" className="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-bahaya" />
+                      <span>{x}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-3">{igd.menyusul}</p>
+              )}
+            </div>
+          </details>
         </section>
 
         {kartu && disarankan.length > 0 && (

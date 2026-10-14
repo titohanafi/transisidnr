@@ -568,3 +568,7 @@
 - Kalimat pengantar di atas "Pesan ke tukang" pada tingkat Renovasi dihapus (permintaan pemilik); tombolnya berdiri sendiri. Teks `jembatanRenovasi` dihapus dari konten. Pengantar "Perlu dipasangkan, atau ingin alatnya dibuat khusus..." di halaman Lihat alat tidak berubah.
 
 - Bagian "Perhatian" (peringatan keselamatan panduan) dipindah dari bawah solusi ke hero Detail Panduan, di bawah kotak Situasi, supaya terbaca sebelum pengguna mengikuti langkah. Tampil di semua panduan yang punya peringatan, termasuk kartu yang isinya masih menyusul.
+
+## Penyempurnaan tampilan setelah melihat hasil render (Chrome headless)
+- Detail Panduan: hero diberi label kelompok (mis. "MANDI") di sebelah ikon; checklist memakai kotak centang kustom (garis tipis, terisi teal dengan tanda centang), pemisah tipis antarlangkah tanpa blok abu, bilah kemajuan tipis dengan hitungan n/N.
+- Kontak: nomor darurat kini di paling atas sebagai kisi tombol telepon dua kolom (nomor besar + nama), karena sebelumnya daftar tanda bahaya yang panjang mendorong nomor ke bawah. Tanda bahaya dan keterangan/sumber nomor dilipat. Dalam keadaan darurat orang perlu menelepon dulu, membaca kemudian.

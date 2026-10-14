@@ -207,6 +207,7 @@ export const uiSchema = z
       judul: teks,
       pengantar: teks,
       sumber: teks,
+      keteranganSumber: teks,
       filterSemua: teks,
       filterJudul: teks,
       telepon: teks,
