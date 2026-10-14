@@ -101,11 +101,11 @@ export function Beranda() {
       </aside>
     );
 
-  // Segmen pencarian selebar layar. Bagi pengunjung baru, kartu utama menimpa tepi bawahnya sekitar 40px.
+  // Segmen pencarian selebar layar, selalu di atas kartu utama. Bagi pengunjung baru, kartu utama menimpa tepi bawahnya sekitar 40px.
   const segmenCari = (
-    <div className={`-mx-4 bg-permukaan px-4 ${adaJawaban ? "py-5" : "-mt-6 pb-[72px] pt-6"}`}>
-      {!adaJawaban && cakupan("mb-isi")}
-      {!adaJawaban && sapaan("mb-isi")}
+    <div className={`-mx-4 -mt-6 bg-permukaan px-4 pt-6 ${adaJawaban ? "pb-6" : "pb-[72px]"}`}>
+      {cakupan("mb-isi")}
+      {sapaan("mb-isi")}
       {cari}
     </div>
   );
@@ -127,19 +127,8 @@ export function Beranda() {
       <h2 className="sr-only">{pilih.judul}</h2>
 
       <div className="flex flex-col gap-bagian">
-        {adaJawaban ? (
-          <>
-            {cakupan("")}
-            {sapaan("-mb-isi")}
-            {utama}
-            {segmenCari}
-          </>
-        ) : (
-          <>
-            {segmenCari}
-            {utama}
-          </>
-        )}
+        {segmenCari}
+        {utama}
         <CheckIn />
       </div>
     </Halaman>
