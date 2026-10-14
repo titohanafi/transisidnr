@@ -13,7 +13,7 @@ export function KartuKerangka({ kartu }: { kartu: Kartu }) {
     <Link to={`/kartu/${kartu.id}`} className="flex min-h-[56px] items-center gap-3 px-4 py-3 hover:bg-utama-muda">
       <Ikon kunci={kunciKelompok(kartu)} className="h-7 w-7 shrink-0 opacity-70" />
       <span className="flex-1">
-        <span className="block font-semibold leading-snug">{kartu.judul}</span>
+        <span className="block leading-snug">{kartu.judul}</span>
         <span className="block text-sm text-redup">{umum.isiMenyusul}</span>
       </span>
       <ChevronRight className="h-5 w-5 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
