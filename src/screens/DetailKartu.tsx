@@ -1,4 +1,4 @@
-import { Clock, TriangleAlert } from "lucide-react";
+import { Clock, TriangleAlert, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
@@ -140,12 +140,11 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           pilihTab(-1, i);
                         }
                       }}
-                      className={`tekan flex min-h-[84px] flex-col items-start justify-between gap-2 rounded-kartu border p-3 text-left ${
+                      className={`tekan flex min-h-[64px] items-start rounded-kartu border p-3 text-left ${
                         dipilih ? "border-utama bg-utama-muda" : "border-garis bg-white"
                       }`}
                     >
                       <span className="text-kecil font-semibold leading-snug">{t.tingkat[x.tingkat]}</span>
-                      <span className="text-mikro text-redup">{biayaPil(s.biaya)}</span>
                     </button>
                   );
                 })}
@@ -164,6 +163,10 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                       <>
                         <p className="text-redup">{s.ringkasan}</p>
                         <div className="mt-3 flex flex-wrap gap-2">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
+                            <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
+                            {biayaPil(s.biaya)}
+                          </span>
                           <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
                             <Clock className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
                             {s.usaha.waktu ?? umum.menyusul}
