@@ -1,3 +1,4 @@
+import { BilahKemajuan } from "../components/BilahKemajuan";
 import { TombolLink } from "../components/Tombol";
 import { Tombol } from "../components/Tombol";
 import { AksiHalaman, KembaliKeRencana, useKonteksAksi } from "../components/AksiHalaman";
@@ -33,19 +34,21 @@ export function AksiSendiri() {
           : t.dorongan.mulai;
 
   return (
-    <AksiHalaman judul={t.judul} kartu={ctx.kartu} tingkat={ctx.tingkat}>
-      <p className="mt-3">{t.bantuan}</p>
-      <p className="mt-3 font-semibold" aria-live="polite">
-        {isi(t.progres, { n: selesai.length, total: langkah.length })}
-      </p>
-      <ul className="mt-3 space-y-3">
+    <AksiHalaman judul={t.judul} kartu={ctx.kartu} tingkat={ctx.tingkat} pengantar={t.bantuan}>
+      <div>
+        <p className="font-semibold" aria-live="polite">
+          {isi(t.progres, { n: selesai.length, total: langkah.length })}
+        </p>
+        <BilahKemajuan n={selesai.length} total={langkah.length} label={isi(t.progres, { n: selesai.length, total: langkah.length })} />
+      </div>
+      <ul className="space-y-3">
         {langkah.map((l, i) => {
           const centang = selesai.includes(i);
           return (
             <li key={i}>
               <label
-                className={`flex min-h-sentuh cursor-pointer items-start gap-3 rounded-kartu border p-3 ${
-                  centang ? "border-utama bg-utama-muda" : "border-garis bg-white"
+                className={`flex min-h-sentuh cursor-pointer items-start gap-3 rounded-kartu border p-4 ${
+                  centang ? "border-utama/60 bg-utama-muda" : "border-garis/70 bg-white shadow-kartu"
                 }`}
               >
                 <input
@@ -62,13 +65,13 @@ export function AksiSendiri() {
       </ul>
       <div aria-live="polite">
         {dorongan && (
-          <p key={dorongan} className="mt-4 rounded-kartu bg-utama-muda p-4 font-medium motion-safe:animate-muncul">
+          <p key={dorongan} className="rounded-kartu bg-utama-muda p-5 font-medium motion-safe:animate-muncul">
             {dorongan}
           </p>
         )}
       </div>
       {semuaSelesai && (
-        <section className="mt-6 rounded-kartu border border-utama bg-white p-4" aria-labelledby="hasil">
+        <section className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu" aria-labelledby="hasil">
           <h2 id="hasil" className="text-subjudul">
             {t.hasil.judul}
           </h2>

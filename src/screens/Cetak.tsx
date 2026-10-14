@@ -23,17 +23,16 @@ export function Cetak() {
   const satuHal = rencana.satuHalHariIni;
 
   return (
-    <Halaman judul={t.judulKertas}>
-      <div className="mt-3 flex flex-col gap-2 print:hidden">
-        <p>{t.penjelasan}</p>
+    <Halaman judul={t.judulKertas} kepala={<p className="mt-2 text-redup print:hidden">{t.penjelasan}</p>}>
+      <div className="flex flex-col gap-3 print:hidden">
         <Tombol onClick={() => window.print()}>{t.tombol}</Tombol>
         <TombolLink to="/rencana" gayaTombol="sekunder">
           {konten.ui.kartu.kembaliKeRencana}
         </TombolLink>
       </div>
 
-      <div className="mt-6 print:mt-0">
-        <p className="mt-2 rounded-kartu border border-draf bg-draf-muda p-2 text-draf print:border-black print:bg-white print:text-black">
+      <div className="mt-bagian print:mt-0">
+        <p className="rounded-kartu border border-draf bg-draf-muda p-4 text-draf print:border-black print:bg-white print:text-black">
           {beranda.spandukDraf}
         </p>
         <PeringatanNonMedis />

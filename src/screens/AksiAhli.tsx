@@ -1,3 +1,4 @@
+import { UsersRound } from "lucide-react";
 import { Navigate, useParams } from "react-router-dom";
 import { AksiHalaman } from "../components/AksiHalaman";
 import { TombolAksi } from "../components/TombolAksi";
@@ -23,28 +24,32 @@ export function AksiAhli() {
   const tingkatTukang = aksiKartu(kartu, tampil).find((a) => a.jenis === "tukang")?.tingkat;
 
   return (
-    <AksiHalaman judul={t.judul} kartu={kartu}>
+    <AksiHalaman judul={t.judul} kartu={kartu} pengantar={kartu.bantuan && kartu.bantuan.length > 0 ? t.bantuan : undefined}>
       {kartu.bantuan && kartu.bantuan.length > 0 ? (
-        <>
-          <p className="mt-3">{t.bantuan}</p>
-          <ul className="mt-3 space-y-3">
-            {kartu.bantuan.map((b) => (
-              <li key={b.jenis} className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-3">
-                <h2 className="font-semibold">{tk.jenisBantuan[b.jenis].nama}</h2>
-                <p className="text-sm text-redup">{tk.jenisBantuan[b.jenis].arti}</p>
-                <p className="mt-1">{b.keterangan}</p>
-                {b.jenis === "tukang" && tingkatTukang && (
-                  <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={tingkatTukang} gayaTombol="sekunder" className="mt-3 w-full" />
-                )}
-              </li>
-            ))}
-          </ul>
-        </>
+        <ul className="space-y-3">
+          {kartu.bantuan.map((b) => (
+            <li key={b.jenis} className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
+                  <UsersRound className="h-6 w-6 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+                </span>
+                <div>
+                  <h2 className="text-judulKartu">{tk.jenisBantuan[b.jenis].nama}</h2>
+                  <p className="text-kecil text-redup">{tk.jenisBantuan[b.jenis].arti}</p>
+                </div>
+              </div>
+              <p className="mt-3">{b.keterangan}</p>
+              {b.jenis === "tukang" && tingkatTukang && (
+                <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={tingkatTukang} gayaTombol="sekunder" className="mt-4 w-full" />
+              )}
+            </li>
+          ))}
+        </ul>
       ) : (
-        <p className="mt-3">{t.kosong}</p>
+        <p>{t.kosong}</p>
       )}
-      <p className="mt-4 font-medium">{tk.direktoriMenyusul}</p>
-      <p role="note" className="mt-4 rounded-kartu border border-aksen bg-aksen-muda p-4">
+      <p className="font-medium">{tk.direktoriMenyusul}</p>
+      <p role="note" className="rounded-kartu border border-aksen/30 bg-aksen-muda p-5">
         {t.nyeri}
       </p>
     </AksiHalaman>

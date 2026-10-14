@@ -22,17 +22,39 @@ export function useKonteksAksi(): KonteksAksi | null {
   return { kartu, tingkat: t };
 }
 
-export function AksiHalaman({ judul, kartu, tingkat, children }: { judul: string; kartu: Kartu; tingkat?: Tingkat; children: ReactNode }) {
+export function AksiHalaman({
+  judul,
+  kartu,
+  tingkat,
+  pengantar,
+  children,
+}: {
+  judul: string;
+  kartu: Kartu;
+  tingkat?: Tingkat;
+  /** Kalimat penjelas di pita kepala, di bawah nama panduan. */
+  pengantar?: ReactNode;
+  children: ReactNode;
+}) {
   return (
-    <Halaman judul={judul}>
-      <p className="mt-2 text-redup">
-        {kartu.judul}
-        {tingkat && ` · ${tk.tingkat[tingkat]}`}
-      </p>
-      {children}
-      <TombolLink to={`/kartu/${kartu.id}${tingkat ? `/${tingkat}` : ""}`} gayaTombol="sekunder" className="mt-8">
-        {aksi.kembaliKeKartu}
-      </TombolLink>
+    <Halaman
+      judul={judul}
+      kepala={
+        <>
+          <p className="mt-2 font-medium text-utama-gelap">
+            {kartu.judul}
+            {tingkat && ` · ${tk.tingkat[tingkat]}`}
+          </p>
+          {pengantar && <p className="mt-2 text-redup">{pengantar}</p>}
+        </>
+      }
+    >
+      <div className="flex flex-col gap-bagian">
+        {children}
+        <TombolLink to={`/kartu/${kartu.id}${tingkat ? `/${tingkat}` : ""}`} gayaTombol="sekunder">
+          {aksi.kembaliKeKartu}
+        </TombolLink>
+      </div>
     </Halaman>
   );
 }

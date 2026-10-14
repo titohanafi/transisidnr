@@ -83,12 +83,10 @@ function Brief({ kartu, tingkat }: NonNullable<ReturnType<typeof useKonteksAksi>
   const pesan = susunBrief(butir);
 
   return (
-    <AksiHalaman judul={t.judul} kartu={kartu} tingkat={tingkat}>
-      <p className="mt-3">{t.bantuan}</p>
-
-      <ul className="mt-4 space-y-3">
+    <AksiHalaman judul={t.judul} kartu={kartu} tingkat={tingkat} pengantar={t.bantuan}>
+      <ul className="space-y-3">
         {butir.map((x) => (
-          <li key={x.id} className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-3">
+          <li key={x.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
             <label className="flex min-h-sentuh items-center gap-3 font-semibold">
               <input
                 type="checkbox"
@@ -104,23 +102,27 @@ function Brief({ kartu, tingkat }: NonNullable<ReturnType<typeof useKonteksAksi>
                 value={x.teks}
                 onChange={(e) => ubah(x.id, { teks: e.target.value })}
                 rows={Math.min(8, x.teks.split("\n").length + 1)}
-                className="mt-1 w-full rounded-tombol border border-garisKontrol p-2 text-base"
+                className="mt-1 w-full rounded-tombol border border-garisKontrol p-3 text-base"
               />
             </label>
           </li>
         ))}
       </ul>
 
-      <h2 className="mt-6 text-lg font-bold">{t.pratinjau}</h2>
-      {pesan ? (
-        <pre className="mt-2 whitespace-pre-wrap break-words rounded-kartu border border-garis/70 bg-white shadow-kartu p-3 font-sans text-base">
-          {pesan}
-        </pre>
-      ) : (
-        <p className="mt-2 text-redup">{t.kosong}</p>
-      )}
+      <section aria-labelledby="pratinjau">
+        <h2 id="pratinjau" className="text-subjudul">
+          {t.pratinjau}
+        </h2>
+        {pesan ? (
+          <pre className="mt-isi whitespace-pre-wrap break-words rounded-kartu border border-garis/70 bg-white p-5 font-sans text-base shadow-kartu">
+            {pesan}
+          </pre>
+        ) : (
+          <p className="mt-isi text-redup">{t.kosong}</p>
+        )}
+      </section>
 
-      <div className="mt-4 flex flex-col gap-3">
+      <div className="flex flex-col gap-3">
         <a
           href={pesan ? urlWhatsApp(pesan) : undefined}
           target="_blank"

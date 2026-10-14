@@ -14,17 +14,16 @@ export function AksiBeli() {
   const barang = ctx.kartu.solusi![ctx.tingkat]!.barang;
 
   return (
-    <AksiHalaman judul={t.judul} kartu={ctx.kartu} tingkat={ctx.tingkat}>
+    <AksiHalaman judul={t.judul} kartu={ctx.kartu} tingkat={ctx.tingkat} pengantar={barang.length > 0 ? t.bantuan : undefined}>
       {barang.length === 0 ? (
-        <p className="mt-4">{t.kosong}</p>
+        <p>{t.kosong}</p>
       ) : (
         <>
-          <p className="mt-3">{t.bantuan}</p>
-          <ul className="mt-4 space-y-4">
+          <ul className="space-y-4">
             {barang.map((b) => (
-              <li key={b.nama} className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4">
-                <h2 className="text-subjudul">{b.nama}</h2>
-                <p className="mt-2 rounded-tombol bg-aksen-muda p-2">
+              <li key={b.nama} className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
+                <h2 className="text-judulKartu">{b.nama}</h2>
+                <p className="mt-2 rounded-tombol bg-aksen-muda p-3">
                   <span className="font-semibold">{tk.cek}:</span> {b.cek_kecocokan}
                 </p>
                 <p className="mt-2">
@@ -39,7 +38,7 @@ export function AksiBeli() {
                     <p className="mt-1 text-sm text-redup">{t.afiliasiPenjelasan}</p>
                   </div>
                 )}
-                <div className="mt-3">
+                <div className="mt-4">
                   {b.link ? (
                     <a
                       href={b.link}
