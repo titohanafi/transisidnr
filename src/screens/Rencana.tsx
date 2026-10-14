@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BarisRuangan } from "../components/BarisRuangan";
 import { BilahKemajuan } from "../components/BilahKemajuan";
 import { Halaman } from "../components/Halaman";
@@ -14,6 +14,7 @@ import { terapkanHasil } from "../domain/hasil";
 import { track } from "../lib/events";
 import { formatRentang } from "../lib/format";
 import { kunciHari } from "../lib/tanggal";
+import { Jelajah } from "./Jelajah";
 import { isi } from "../lib/teks";
 import { useRencana } from "../state/useRencana";
 import { useStore } from "../state/store";
@@ -28,8 +29,8 @@ export function Rencana() {
     track("rencana_dibuat", { jumlah_kartu: jumlahKartu });
   }, [jumlahKartu]);
 
-  if (Object.keys(state.asesmen.status).length === 0)
-    return <Navigate to="/asesmen/aktivitas" replace />;
+  // Belum menjawab: tab ini menampilkan semua panduan dengan ajakan menyusun rencana, bukan langsung ke pertanyaan.
+  if (Object.keys(state.asesmen.status).length === 0) return <Jelajah />;
 
   // Bila caregiver bilang sedang lelah, tampilkan satu hal saja dan simpan sisanya di lipatan.
   // Yang dihitung hanya jawaban hari ini, supaya "lelah" minggu lalu tidak terus mengurangi rencana.
@@ -245,6 +246,9 @@ export function Rencana() {
           </article>
         </section>
       )}
+      <TombolLink to="/jelajah" gayaTombol="sekunder" className="mt-8 w-full">
+        {t.semuaPanduan}
+      </TombolLink>
       <PeringatanNonMedis />
     </Halaman>
   );

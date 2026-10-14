@@ -149,7 +149,8 @@ export const uiSchema = z
       pilih: z.object({
         judul: teks,
         susun: z.object({ judul: teks, deskripsi: teks, tombol: teks }),
-        tahu: z.object({ judul: teks, isi: teks, alat: teks, semua: teks }),
+        lanjut: z.object({ judul: teks, deskripsi: teks, tombol: teks }),
+        semua: teks,
       }),
     }),
     umum: rekamTeks,
@@ -178,7 +179,7 @@ export const uiSchema = z
       }),
     }),
     rencana: z.object({
-      judul: teks, prioritas: teks, ubahJawaban: teks, satuHal: teks, dariKartu: teks, lihatKartu: teks,
+      judul: teks, prioritas: teks, ubahJawaban: teks, semuaPanduan: teks, satuHal: teks, dariKartu: teks, lihatKartu: teks,
       mulaiDariSini: teks, semuaRekomendasi: teks, kosongJudul: teks, kosongIsi: teks, belumJelas: teks,
       total: teks, pendampingJudul: teks, bukaKartu: teks, cocokSewa: teks, cetak: teks, sedangDisusun: teks, belumAdaSiap: teks, ringan: z.object({ catatan: teks, lihatNanti: teks }), kemajuan: teks,
       beres: z.object({ judul: teks, ringkasan: teks, kosong: teks, lihat: teks }), perluLagi: teks,
@@ -216,9 +217,10 @@ export const uiSchema = z
       }),
     }),
     jelajah: z.object({
-      judul: teks, pengantar: teks, filterLabel: teks, kosongFilter: teks, caregiver: teks,
-      ajakanBelum: teks, ajakanMulai: teks, ajakanSudah: teks, ajakanRencana: teks, aksiKartu: teks,
-      filter: z.object({ semua: teks, alat: teks, ahli: teks }),
+      judul: teks, pengantar: teks, kosongFilter: teks, caregiver: teks,
+      ajakanJudul: teks, ajakanBelum: teks, ajakanMulai: teks, ajakanSudah: teks, ajakanRencana: teks, aksiKartu: teks,
+      semuaPanduan: teks,
+      lainnya: z.object({ judul: teks, alat: teks, ahli: teks }),
       judulFilter: z.object({ semua: teks, alat: teks, ahli: teks }),
       pengantarFilter: z.object({ semua: teks, alat: teks, ahli: teks }),
       alat: z.object({ dipakaiDi: teks, kosong: teks, detailMenyusul: teks }),

@@ -1,13 +1,12 @@
-import { BookOpen, House, ListChecks, ShieldAlert, UserRound, type LucideIcon } from "lucide-react";
+import { House, ListChecks, ShieldAlert, UserRound, type LucideIcon } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { konten } from "../domain/content";
 
 const { umum } = konten.ui;
 
-const TAB: { ke: string; label: string; ujung?: boolean; Ikon: LucideIcon }[] = [
+const TAB: { ke: string; label: string; ujung?: boolean; alias?: string; Ikon: LucideIcon }[] = [
   { ke: "/", label: umum.tabBeranda, ujung: true, Ikon: House },
-  { ke: "/jelajah", label: umum.tabPanduan, Ikon: BookOpen },
-  { ke: "/rencana", label: umum.tabRencana, Ikon: ListChecks },
+  { ke: "/rencana", label: umum.tabRencana, alias: "/jelajah", Ikon: ListChecks },
   { ke: "/igd", label: umum.tabDarurat, Ikon: ShieldAlert },
   { ke: "/saya", label: umum.tabSaya, Ikon: UserRound },
 ];
@@ -17,7 +16,8 @@ const TANPA_TAB = /^\/(mulai|ruangan|asesmen|cetak)(\/|$)/;
 
 /** Nama menu untuk judul header di layar menu utama; null untuk layar lain. */
 export function namaMenu(path: string): string | null {
-  const t = TAB.find((x) => (x.ujung ? path === x.ke : path === x.ke || path.startsWith(x.ke + "/")));
+  const cocok = (p: string, ke: string) => p === ke || p.startsWith(ke + "/");
+  const t = TAB.find((x) => (x.ujung ? path === x.ke : cocok(path, x.ke) || (x.alias ? cocok(path, x.alias) : false)));
   return t && !t.ujung ? t.label : null;
 }
 
@@ -40,11 +40,12 @@ export function BilahTab() {
             <NavLink
               to={t.ke}
               end={t.ujung}
-              className={({ isActive }) =>
-                `flex min-h-[56px] flex-col items-center justify-center gap-0.5 px-1 text-xs font-semibold ${
+              className={({ isActive: aktif }) => {
+                const isActive = aktif || (t.alias ? pathname === t.alias || pathname.startsWith(t.alias + "/") : false);
+                return `flex min-h-[56px] flex-col items-center justify-center gap-0.5 px-1 text-xs font-semibold ${
                   isActive ? "bg-utama-muda text-utama-gelap" : "text-redup"
-                }`
-              }
+                }`;
+              }}
             >
               {() => (
                 <>

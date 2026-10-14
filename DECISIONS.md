@@ -335,3 +335,12 @@
 - Navbar bawah: hanya menu yang sedang aktif yang menampilkan nama (pil hijau berisi ikon dan nama); menu lain hanya ikon. Nama menu lain tetap dibaca pembaca layar (teks tersembunyi). Area sentuh tiap menu minimal 48px.
 
 - Koreksi: yang dimaksud pemilik adalah judul di header, bukan navbar. Navbar kembali menampilkan nama di semua menu (catatan "hanya menu aktif" di atas dibatalkan). Judul header kini mengikuti menu yang aktif: Panduan, Rencana, Darurat, Saya. Di Beranda header tetap "Transisi" (merek); layar dalam (detail panduan, aksi, dan sebagainya) juga tetap "Transisi" dengan tombol kembali.
+
+## Penggabungan Rencana dan Panduan (hasil council UX)
+- Dasar: council lima penasihat menilai struktur lama sulit dipahami pengguna baru karena Rencana dan Panduan adalah daftar yang sama dengan urutan berbeda. Yang dinilai adalah deskripsi struktur, bukan uji dengan pengguna; uji dengan 3 orang tetap disarankan.
+- Navbar kini empat menu: Beranda, Rencana, Darurat, Saya. Tab Panduan dihapus.
+- Tab Rencana: bila belum menjawab, menampilkan semua panduan (halaman yang sama dengan `/jelajah`) dengan kartu ajakan "Susun rencana saya" di atas, tanpa langsung melempar ke pertanyaan. Bila sudah menjawab, menampilkan rencana pribadi seperti biasa, dengan tombol "Lihat semua panduan" di bawah.
+- `/jelajah` tetap ada (tautan lama tidak patah) dan juga menyorot tab Rencana. Judul header di sana "Rencana".
+- Pil Semua / Cari alat / Kenali peran ahli dihapus karena mencampur jenis berbeda (topik, produk, orang). Diganti bagian "Lainnya" di dasar daftar dengan dua tombol: "Daftar alat" dan "Peran ahli dan tukang" (`/jelajah/alat`, `/jelajah/ahli`).
+- Beranda: satu tindakan utama yang mengikuti keadaan: belum menjawab "Buat rencana untuk rumah Anda"; sudah menjawab "Lanjutkan rencana Anda" (ke Rencana). Satu tautan kecil "Lihat semua panduan" untuk yang ingin melihat-lihat dulu. Baris "Cari alat" dan "Lihat semua panduan" yang besar dihapus. Check-in tetap di bawahnya.
+- Belum dikerjakan (usul council): ganti kata "panduan" dengan "topik"/"langkah" (perlu diuji kata mana yang dipahami), layar sambutan singkat untuk kunjungan pertama, mengurangi 6+4 pertanyaan awal, pengukuran drop-off tanpa server (acara lokal), dan titik masuk terpisah untuk penyandang disabilitas vs caregiver.

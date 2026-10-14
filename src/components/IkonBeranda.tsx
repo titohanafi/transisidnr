@@ -1,13 +1,6 @@
-import { BookOpen, ClipboardList, Wrench } from "lucide-react";
+import { ClipboardList } from "lucide-react";
 
-// Ikon Beranda dari Lucide (ISC), diimpor satu per satu agar bundel tetap kecil. Dekoratif: artinya sudah ada di teks.
-const ikon = {
-  rencana: ClipboardList,
-  alat: Wrench,
-  panduan: BookOpen,
-} as const;
-
-export function IkonBeranda({ kunci, className = "h-8 w-8" }: { kunci: keyof typeof ikon; className?: string }) {
-  const Komponen = ikon[kunci];
-  return <Komponen className={`shrink-0 ${className}`} strokeWidth={2} aria-hidden="true" focusable="false" />;
+// Ikon Beranda dari Lucide (ISC). Dekoratif: artinya sudah ada di teks.
+export function IkonBeranda({ className = "h-8 w-8" }: { kunci?: "rencana"; className?: string }) {
+  return <ClipboardList className={`shrink-0 ${className}`} strokeWidth={2} aria-hidden="true" focusable="false" />;
 }

@@ -11,12 +11,12 @@
         "deskripsi": "Jawab ya atau tidak, tanpa mengukur. Anda akan mendapat langkah yang sesuai dengan rumah Anda.",
         "tombol": "Mulai"
       },
-      "tahu": {
-        "judul": "Atau lewati pertanyaan, langsung cari:",
-        "isi": "Langsung ke yang Anda butuhkan.",
-        "alat": "Cari alat",
-        "semua": "Lihat semua panduan"
-      }
+      "lanjut": {
+        "judul": "Lanjutkan rencana Anda",
+        "deskripsi": "Lihat satu hal untuk hari ini dan langkah berikutnya.",
+        "tombol": "Buka rencana"
+      },
+      "semua": "Lihat semua panduan"
     },
     "konteks": "Panduan dan rencana menyesuaikan rumah untuk pengguna kursi roda."
   },
@@ -43,7 +43,6 @@
     "menuUtama": "Menu utama",
     "dataPrivasi": "Data dan privasi",
     "tabBeranda": "Beranda",
-    "tabPanduan": "Panduan",
     "tabRencana": "Rencana",
     "tabSaya": "Saya",
     "tabDarurat": "Darurat",
@@ -187,6 +186,7 @@
     "judul": "Rencana Saya",
     "prioritas": "Prioritas Anda: {daftar}",
     "ubahJawaban": "Ubah jawaban",
+    "semuaPanduan": "Lihat semua panduan",
     "satuHal": "Satu hal untuk hari ini",
     "dariKartu": "Dari panduan: {judul}",
     "lihatKartu": "Lihat panduan",
@@ -377,19 +377,16 @@
   "jelajah": {
     "judul": "Semua panduan",
     "pengantar": "Buka panduan untuk melihat langkahnya. Bila sudah tahu ingin mencari alat atau mengenali peran ahli dan tukang, pilih saringan di bawah. Urutan panduan tidak dipengaruhi pembayaran.",
-    "filterLabel": "Tampilkan",
-    "filter": {
-      "semua": "Semua",
-      "alat": "Cari alat",
-      "ahli": "Kenali peran ahli"
-    },
     "kosongFilter": "Belum ada panduan dengan isi lengkap untuk pilihan ini. Isi panduan masih disusun.",
     "caregiver": "Untuk caregiver",
-    "ajakanBelum": "Ingin rencana yang disesuaikan dengan rumah Anda? Jawab beberapa pertanyaan singkat.",
-    "ajakanMulai": "Mulai pertanyaan",
+    "ajakanJudul": "Rencana",
+    "ajakanBelum": "Ingin langkah yang disesuaikan dengan rumah Anda? Jawab beberapa pertanyaan ya atau tidak.",
+    "ajakanMulai": "Susun rencana saya",
     "ajakanSudah": "Jawaban Anda sudah tersimpan. Buka rencana yang dibuat dari jawaban itu.",
     "ajakanRencana": "Lihat Rencana Saya",
     "aksiKartu": "Aksi untuk panduan ini",
+    "semuaPanduan": "Kembali ke semua panduan",
+    "lainnya": { "judul": "Lainnya", "alat": "Daftar alat", "ahli": "Peran ahli dan tukang" },
     "judulFilter": {
       "semua": "Semua panduan",
       "alat": "Alat yang mungkin Anda butuhkan",

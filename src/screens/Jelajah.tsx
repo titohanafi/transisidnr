@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { DaftarAhli } from "../components/DaftarAhli";
 import { DaftarAlat } from "../components/DaftarAlat";
 import { Halaman } from "../components/Halaman";
 import { KartuBaris } from "../components/KartuBaris";
-import { PilihanPil } from "../components/Pilihan";
 import { KartuKerangka } from "../components/KartuKerangka";
 import { Ikon } from "../components/Ikon";
 import { LencanaStatus, Tanda } from "../components/Lencana";
@@ -38,7 +36,7 @@ export function Jelajah() {
 function Daftar({ awal }: { awal: Filter }) {
   const { state } = useStore();
   const { konteks } = useRencana();
-  const [filter, setFilter] = useState<Filter>(awal);
+  const filter: Filter = awal;
 
   const adaJawaban = Object.keys(state.asesmen.status).length > 0;
   const label = (kunci: string) =>
@@ -80,23 +78,15 @@ function Daftar({ awal }: { awal: Filter }) {
     <Halaman judul={t.judulFilter[filter]}>
       <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>
 
-      {awal === "semua" && (
-        <div
-          role="radiogroup"
-          aria-label={t.filterLabel}
-          className="mt-4 flex flex-wrap gap-2"
-        >
-          {FILTER.map((f) => (
-            <PilihanPil
-              key={f}
-              nama="filter"
-              label={t.filter[f]}
-              aktif={filter === f}
-              onUbah={() => setFilter(f)}
-            />
-          ))}
-        </div>
+      {filter === "semua" && (
+        <section className="mt-4 rounded-kartu bg-utama-muda p-4" aria-label={t.ajakanJudul}>
+          <p>{adaJawaban ? t.ajakanSudah : t.ajakanBelum}</p>
+          <TombolLink to={adaJawaban ? "/rencana" : "/mulai/1"} className="mt-3 w-full">
+            {adaJawaban ? t.ajakanRencana : t.ajakanMulai}
+          </TombolLink>
+        </section>
       )}
+
 
       {filter === "alat" ? (
         <DaftarAlat alat={alat} />
@@ -203,19 +193,23 @@ function Daftar({ awal }: { awal: Filter }) {
         </>
       )}
 
-      <section
-        className="mt-8 rounded-kartu border border-garis bg-white p-3"
-        aria-label={umum.keBeranda}
-      >
-        <p>{adaJawaban ? t.ajakanSudah : t.ajakanBelum}</p>
-        <TombolLink
-          to={adaJawaban ? "/rencana" : "/mulai/1"}
-          gayaTombol="sekunder"
-          className="mt-2 w-full"
-        >
-          {adaJawaban ? t.ajakanRencana : t.ajakanMulai}
+      {filter === "semua" ? (
+        <nav aria-label={t.lainnya.judul} className="mt-8">
+          <h2 className="text-lg font-bold">{t.lainnya.judul}</h2>
+          <div className="mt-2 space-y-2">
+            <TombolLink to="/jelajah/alat" gayaTombol="sekunder" className="w-full">
+              {t.lainnya.alat}
+            </TombolLink>
+            <TombolLink to="/jelajah/ahli" gayaTombol="sekunder" className="w-full">
+              {t.lainnya.ahli}
+            </TombolLink>
+          </div>
+        </nav>
+      ) : (
+        <TombolLink to="/jelajah" gayaTombol="sekunder" className="mt-8 w-full">
+          {t.semuaPanduan}
         </TombolLink>
-      </section>
+      )}
 
       <TombolLink to="/" gayaTombol="sekunder" className="mt-4">
         {umum.keBeranda}
