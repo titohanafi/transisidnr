@@ -44,7 +44,7 @@ function Daftar({ awal }: { awal: Filter }) {
   const dariBeranda = (useLocation().state as { cari?: string } | null)?.cari;
   const [cari, setCari] = useState(dariBeranda ?? "");
   const [fokus, setFokus] = useState(false);
-  const placeholder = usePlaceholderBerjalan(t.cari.placeholder, t.cari.contoh, !fokus && cari === "");
+  const placeholder = usePlaceholderBerjalan(t.cari.contoh, !fokus && cari === "");
 
   const label = (kunci: string) =>
     kunci === "caregiver" ? t.caregiver : (konten.asesmen.aktivitas.find((a) => a.id === kunci)?.label.split(" (")[0] ?? kunci);

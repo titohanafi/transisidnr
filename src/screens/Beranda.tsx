@@ -26,7 +26,7 @@ export function Beranda() {
 
   const [fokus, setFokus] = useState(false);
   const [adaIsi, setAdaIsi] = useState(false);
-  const placeholder = usePlaceholderBerjalan(jc.placeholder, jc.contoh, !fokus && !adaIsi);
+  const placeholder = usePlaceholderBerjalan(jc.contoh, !fokus && !adaIsi);
 
   const cari = (
     <form

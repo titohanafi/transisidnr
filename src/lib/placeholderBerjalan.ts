@@ -4,13 +4,15 @@ const MENGETIK_MS = 55;
 const MENGHAPUS_MS = 28;
 const TAHAN_MS = 1600;
 const JEDA_MS = 350;
+const BACA_AWAL_MS = 3000;
 
 /**
- * Placeholder yang "mengetik" contoh satu per satu. Berhenti (menampilkan contoh pertama utuh) saat `aktif` false,
+ * Placeholder yang "mengetik" contoh satu per satu. Contoh pertama tampil utuh dulu (BACA_AWAL_MS) supaya sempat dibaca,
+ * baru dihapus dan berganti. Berhenti (menampilkan contoh pertama utuh) saat `aktif` false,
  * atau bila pengguna meminta gerak dikurangi. Hanya mengubah teks placeholder, jadi tidak mengganggu pembaca layar.
  */
-export function usePlaceholderBerjalan(awalan: string, contoh: string[], aktif: boolean): string {
-  const [teks, setTeks] = useState("");
+export function usePlaceholderBerjalan(contoh: string[], aktif: boolean): string {
+  const [teks, setTeks] = useState(contoh[0] ?? "");
   const kurangiGerak = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
   const diam = !aktif || kurangiGerak || contoh.length < 2;
 
@@ -19,8 +21,10 @@ export function usePlaceholderBerjalan(awalan: string, contoh: string[], aktif: 
     let batal = false;
     let timer: ReturnType<typeof setTimeout>;
     let i = 0;
-    let n = 0;
-    let menghapus = false;
+    let n = contoh[0].length;
+    let menghapus = true;
+    // Mulai dari contoh pertama utuh (bukan sisa ketikan sebelumnya), lewat timer agar tidak mengubah state langsung di efek.
+    const ulang = setTimeout(() => setTeks(contoh[0]), 0);
     const langkah = () => {
       if (batal) return;
       const kalimat = contoh[i];
@@ -45,12 +49,13 @@ export function usePlaceholderBerjalan(awalan: string, contoh: string[], aktif: 
         timer = setTimeout(langkah, MENGHAPUS_MS);
       }
     };
-    timer = setTimeout(langkah, JEDA_MS);
+    timer = setTimeout(langkah, BACA_AWAL_MS);
     return () => {
       batal = true;
+      clearTimeout(ulang);
       clearTimeout(timer);
     };
   }, [diam, contoh]);
 
-  return awalan + (diam ? (contoh[0] ?? "") : teks);
+  return diam ? (contoh[0] ?? "") : teks;
 }

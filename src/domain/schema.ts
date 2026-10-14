@@ -348,7 +348,6 @@ export const uiSchema = z
       semuaPanduan: teks,
       cari: z.object({
         label: teks,
-        placeholder: teks,
         contoh: z.array(teks).min(1),
         tombol: teks,
         hapus: teks,
