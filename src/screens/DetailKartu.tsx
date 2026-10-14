@@ -262,14 +262,14 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
             )}
 
             {kartu.peringatan && (
-              <section className="rounded-kartu border border-aksen/30 bg-aksen-muda p-5" aria-labelledby="peringatan">
-                <div className="flex items-center gap-3 text-aksen">
-                  <TriangleAlert className="h-6 w-6 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
-                  <h2 id="peringatan" className="text-subjudul">
+              <section className="flex items-start gap-3 rounded-tombol bg-permukaan p-4" aria-labelledby="peringatan">
+                <TriangleAlert className="mt-0.5 h-5 w-5 shrink-0 text-aksen" strokeWidth={2} aria-hidden="true" focusable="false" />
+                <div>
+                  <h2 id="peringatan" className="text-kecil font-semibold text-aksen">
                     {t.peringatan}
                   </h2>
+                  <p className="mt-0.5 text-kecil">{kartu.peringatan}</p>
                 </div>
-                <p className="mt-2">{kartu.peringatan}</p>
               </section>
             )}
 
