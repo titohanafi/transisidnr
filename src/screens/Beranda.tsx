@@ -74,9 +74,27 @@ export function Beranda() {
     </form>
   );
 
+  // Catatan cakupan: kuning lembut, selebar isi (bukan tepi ke tepi), bisa ditutup. Muncul lagi saat halaman dimuat ulang.
+  const cakupan = (kelas: string) =>
+    !cakupanTutup && (
+    <aside className={`flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda py-1 pl-3 pr-1 text-catatan ${kelas}`}>
+      <Info className="mt-3 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+      <p className="flex-1 py-2.5 text-kecil">{pilih.cakupan}</p>
+      <button
+        type="button"
+        onClick={() => setCakupanTutup(true)}
+        aria-label={pilih.tutupCakupan}
+        className="tekan inline-flex h-sentuh w-sentuh shrink-0 items-center justify-center rounded-tombol hover:bg-catatan-garis/40"
+      >
+        <X className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+      </button>
+    </aside>
+  );
+
   // Segmen pencarian selebar layar. Bagi pengunjung baru, kartu utama menimpa tepi bawahnya sekitar 40px.
   const segmenCari = (
     <div className={`-mx-4 bg-permukaan px-4 ${adaJawaban ? "py-5" : "-mt-6 pb-[72px] pt-6"}`}>
+      {!adaJawaban && cakupan("mb-isi")}
       {!adaJawaban && sapaan("mb-isi")}
       {cari}
     </div>
@@ -103,22 +121,6 @@ export function Beranda() {
     </section>
   );
 
-  // Catatan cakupan: kuning lembut, selebar isi (bukan tepi ke tepi), bisa ditutup. Muncul lagi saat halaman dimuat ulang.
-  const cakupan = !cakupanTutup && (
-    <aside className="flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda py-1 pl-3 pr-1 text-catatan">
-      <Info className="mt-3 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
-      <p className="flex-1 py-2.5 text-kecil">{pilih.cakupan}</p>
-      <button
-        type="button"
-        onClick={() => setCakupanTutup(true)}
-        aria-label={pilih.tutupCakupan}
-        className="tekan inline-flex h-sentuh w-sentuh shrink-0 items-center justify-center rounded-tombol hover:bg-catatan-garis/40"
-      >
-        <X className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
-      </button>
-    </aside>
-  );
-
   return (
     <Halaman judul={app.nama}>
       <h2 className="sr-only">{pilih.judul}</h2>
@@ -126,6 +128,7 @@ export function Beranda() {
       <div className="flex flex-col gap-bagian">
         {adaJawaban ? (
           <>
+            {cakupan("")}
             {sapaan("-mb-isi")}
             {utama}
             {segmenCari}
@@ -136,7 +139,6 @@ export function Beranda() {
             {utama}
           </>
         )}
-        {cakupan}
         <CheckIn />
       </div>
     </Halaman>
