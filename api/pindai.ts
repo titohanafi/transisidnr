@@ -101,5 +101,6 @@ export async function POST(request: Request): Promise<Response> {
       console.log("gemini respons tidak terbaca", model);
     }
   }
-  return jawab({ galat: "layanan analisis gagal", status }, 502);
+  // Kuota Gemini habis atau terlalu sering dipanggil: teruskan 429 supaya aplikasi menampilkan "coba lagi sebentar lagi".
+  return jawab({ galat: "layanan analisis gagal", status }, status === 429 ? 429 : 502);
 }

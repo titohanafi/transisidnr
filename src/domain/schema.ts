@@ -424,6 +424,7 @@ export const uiSchema = z
       memindai: teks,
       gagalPindai: teks,
       belumDiatur: teks,
+      terlaluSering: teks,
       coba: teks,
       nilaiSendiri: teks,
       bukanKamarMandi: teks,

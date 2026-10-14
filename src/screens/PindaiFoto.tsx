@@ -56,7 +56,11 @@ export function PindaiFoto() {
       if (!hasil.kamarMandi) setTahap({ nama: "galat", pesan: t.bukanKamarMandi });
       else setTahap({ nama: "hasil", temuan: hasil.temuan });
     } catch (e) {
-      setTahap({ nama: "galat", pesan: e instanceof GalatPindai && e.kode === "belum_diatur" ? t.belumDiatur : t.gagalPindai });
+      const kode = e instanceof GalatPindai ? e.kode : null;
+      setTahap({
+        nama: "galat",
+        pesan: kode === "belum_diatur" ? t.belumDiatur : kode === "terlalu_sering" ? t.terlaluSering : t.gagalPindai,
+      });
     }
   };
 
@@ -146,7 +150,7 @@ export function PindaiFoto() {
             {tahap.pesan}
           </p>
           <div className="flex flex-col gap-3">
-            {tahap.pesan === t.gagalPindai && <Tombol onClick={() => void pindai()}>{t.coba}</Tombol>}
+            {(tahap.pesan === t.gagalPindai || tahap.pesan === t.terlaluSering) && <Tombol onClick={() => void pindai()}>{t.coba}</Tombol>}
             <Tombol gayaTombol="sekunder" onClick={() => setTahap({ nama: "ceklis", jawaban: {} })}>
               {t.nilaiSendiri}
             </Tombol>

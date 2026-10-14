@@ -5,7 +5,7 @@ export interface HasilModel {
   temuan: Record<string, StatusItem>;
 }
 
-export type KodeGalat = "belum_diatur" | "jaringan" | "respons";
+export type KodeGalat = "belum_diatur" | "terlalu_sering" | "jaringan" | "respons";
 export class GalatPindai extends Error {
   constructor(public kode: KodeGalat) {
     super(kode);
@@ -53,6 +53,7 @@ export async function pindaiFoto(
     ) {
       throw new GalatPindai("belum_diatur");
     }
+    if (res.status === 429) throw new GalatPindai("terlalu_sering");
     if (!res.ok) throw new GalatPindai("jaringan");
     const hasil = bacaRespons(await res.json(), idItem);
     if (!hasil) throw new GalatPindai("respons");

@@ -439,6 +439,7 @@
     "memindai": "Sedang memindai foto…",
     "gagalPindai": "Pemindaian belum berhasil. Anda bisa mencoba lagi, atau menilai sendiri lewat beberapa pertanyaan singkat.",
     "belumDiatur": "Layanan pemindaian belum disambungkan. Anda tetap bisa menilai sendiri lewat beberapa pertanyaan singkat.",
+    "terlaluSering": "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi, atau nilai sendiri lewat beberapa pertanyaan singkat.",
     "coba": "Coba lagi",
     "nilaiSendiri": "Nilai sendiri dari foto",
     "bukanKamarMandi": "Foto ini sepertinya bukan kamar mandi. Coba foto lain, atau nilai sendiri lewat pertanyaan singkat.",
