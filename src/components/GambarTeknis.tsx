@@ -33,11 +33,11 @@ function lengan(bahu: [number, number], tangan: [number, number]): { siku: [numb
 }
 
 /** Pengguna kursi roda tampak samping, menghadap kanan. Titik (x, y) = tanah di bawah as roda besar. */
-export function Pengguna({ x, y, tangan = [34, -80] }: { x: number; y: number; tangan?: [number, number] }) {
+export function Pengguna({ x, y, tangan = [34, -80], skala = 1 }: { x: number; y: number; tangan?: [number, number]; skala?: number }) {
   const bahu: [number, number] = [-6, -94];
   const { siku, ujung } = lengan(bahu, tangan);
   return (
-    <g transform={`translate(${x} ${y})`}>
+    <g transform={`translate(${x} ${y}) scale(${skala})`}>
       <circle cx="0" cy="-30" r="30" className="fill-white stroke-tinta" strokeWidth="3" />
       <circle cx="0" cy="-30" r="23" fill="none" strokeWidth="1.500" className="stroke-tinta" />
       <circle cx="0" cy="-30" r="3" className="fill-tinta" />

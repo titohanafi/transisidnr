@@ -3,104 +3,88 @@ import { konten } from "../domain/content";
 import type { Tingkat } from "../domain/konstanta";
 import { Dinding, KursiRodaAtas, Kanvas, Panah, Pengguna, UkurMendatar, UkurTegak, angka, garisTinta } from "./GambarTeknis";
 
-// Ilustrasi selebar panel untuk pilihan solusi. Dibuat bertahap: baru panduan yang ada di daftar ini yang punya
-// ilustrasi (kunci "idKartu:tingkat"); panduan lain tidak menampilkan apa pun. Gaya: garis tipis (seperti gambar teknik),
-// isian tonal dari warna utama, satu aksen kecil. Dekoratif; hanya benda dan situasinya (tanpa orang, ukuran, atau cara pasang).
+// Ilustrasi selebar panel untuk pilihan solusi. Dibuat bertahap, satu panduan demi satu panduan: panduan yang belum ada di
+// daftar ini tidak menampilkan apa pun (kunci "idKartu:tingkat"). Gaya: petunjuk perabot hitam-putih (garis tinta tegas,
+// isian putih, panah dan garis ukur), bahan gambarnya di GambarTeknis.tsx. Dekoratif; pengguna kursi roda digambar aktif.
+// Angka hanya dari content/ui.json dan gambar berangka masuk daftar BERANGKA (ada catatan acuan umum di bawahnya).
 
-const LANTAI_ATAS = 92;
-const garisLantai = (n: number) =>
-  Array.from({ length: n }, (_, i) => {
-    const bawah = -120 + (i * 600) / (n - 1);
-    const atas = 180 + (bawah - 180) * 0.55;
-    return `M${atas.toFixed(1)} ${LANTAI_ATAS}L${bawah.toFixed(1)} 150`;
-  }).join("");
-
-/** Dinding berubin tipis di atas, lantai berperspektif di bawah. */
-const Ruang = ({ children }: { children: ReactNode }) => (
-  <>
-    <rect width="360" height="150" className="fill-white" />
-    <path d="M0 30h360M0 62h360M45 0v92M135 0v92M225 0v92M315 0v92" fill="none" strokeWidth="1" className="stroke-garis" />
-    <path d={`M0 ${LANTAI_ATAS}h360v58H0z`} className="fill-permukaan" />
-    <path d={garisLantai(13)} fill="none" strokeWidth="1" className="stroke-white" opacity="0.9" />
-    <path d={`M0 ${LANTAI_ATAS + 20}h360M0 ${LANTAI_ATAS + 40}h360`} fill="none" strokeWidth="1" className="stroke-white" opacity="0.9" />
-    <path d={`M0 ${LANTAI_ATAS}h360`} fill="none" strokeWidth="2" className="stroke-utama" opacity="0.35" />
-    {children}
-  </>
+const Bintik = ({ x, y, kolom, baris, jarak = 10 }: { x: number; y: number; kolom: number; baris: number; jarak?: number }) => (
+  <g className="fill-tinta">
+    {Array.from({ length: kolom * baris }, (_, i) => (
+      <circle key={i} cx={x + (i % kolom) * jarak} cy={y + Math.floor(i / kolom) * jarak} r="1.800" />
+    ))}
+  </g>
 );
 
-const garis = { fill: "none", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" } as const;
-
 const GAMBAR: Record<string, () => ReactNode> = {
-  // Jaga lantai tetap kering dan bersih dari benda yang menghalangi.
+  // Jaga lantai tetap kering dan bebas benda: ember dan botol dipindah ke rak, jalur kursi roda lapang.
   "bath-floor-slip:tanpa_biaya": () => (
-    <Ruang>
-      {/* Pancuran di dinding, dalam keadaan mati. */}
-      <path d="M58 6v30q0 8 8 8h28" {...garis} strokeWidth="3" className="stroke-utama" />
-      <rect x="92" y="38" width="40" height="11" rx="5.500" className="fill-white" />
-      <rect x="92" y="38" width="40" height="11" rx="5.500" {...garis} className="stroke-utama" />
-      <circle cx="58" cy="62" r="7" className="fill-white" />
-      <circle cx="58" cy="62" r="7" {...garis} strokeWidth="2" className="stroke-utama" />
-      <path d="M58 58v8" {...garis} strokeWidth="2" className="stroke-daun" />
-      {/* Saluran lantai. */}
-      <ellipse cx="112" cy="124" rx="22" ry="6" className="fill-white" />
-      <ellipse cx="112" cy="124" rx="22" ry="6" {...garis} strokeWidth="2" className="stroke-utama" />
+    <Kanvas>
+      <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <rect x="330" y="0" width="12" height="138" className="fill-tinta" />
+      <path d="M258 62H330M330 96L300 62" {...garisTinta} strokeWidth="4" className="stroke-tinta" />
+      <path d="M268 36h26l-4 26h-18z" className="fill-white stroke-tinta" strokeWidth="3" strokeLinejoin="round" />
+      <path d="M271 36q10-14 20 0" {...garisTinta} strokeWidth="2.500" className="stroke-tinta" />
+      <rect x="304" y="44" width="14" height="18" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+      <rect x="308" y="36" width="6" height="8" className="fill-white stroke-tinta" strokeWidth="3" />
+      <Pengguna x={96} y={138} tangan={[16, -56]} />
+      <path d="M166 112H224" {...garisTinta} strokeWidth="3" strokeDasharray="3 7" className="stroke-tinta" />
+      <Panah x={236} y={112} arah={0} />
       <path
-        d="M98 124h28M104 121.500v5M112 121.500v5M120 121.500v5"
-        {...garis}
-        strokeWidth="1.500"
-        className="stroke-utama"
+        d="M178 120l2.500 6 6 2.500-6 2.500-2.500 6-2.500-6-6-2.500 6-2.500zM216 124l2 4.500 4.500 2-4.500 2-2 4.500-2-4.500-4.500-2 4.500-2z"
+        className="fill-tinta"
+      />
+    </Kanvas>
+  ),
+  // Pasang keset atau stiker anti-slip di area berpindah (samping kloset) dan area mandi, tampak dari atas.
+  "bath-floor-slip:alat_tanpa_bongkar": () => (
+    <Kanvas>
+      <rect x="24" y="8" width="312" height="134" fill="none" strokeWidth="6" className="stroke-tinta" />
+      <rect x="44" y="16" width="34" height="12" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+      <ellipse cx="61" cy="46" rx="15" ry="18" className="fill-white stroke-tinta" strokeWidth="3" />
+      <ellipse cx="61" cy="48" rx="8" ry="10" fill="none" strokeWidth="2" className="stroke-tinta" />
+      <rect x="94" y="20" width="64" height="50" rx="4" className="fill-white stroke-tinta" strokeWidth="3" />
+      <Bintik x={106} y={32} kolom={6} baris={4} jarak={9} />
+      <rect
+        x="226"
+        y="18"
+        width="100"
+        height="116"
+        rx="4"
+        fill="none"
+        strokeWidth="2"
+        strokeDasharray="5 5"
+        className="stroke-tinta"
         opacity="0.6"
       />
-      {/* Kloset. */}
-      <rect x="262" y="40" width="34" height="30" rx="5" className="fill-white" />
-      <rect x="262" y="40" width="34" height="30" rx="5" {...garis} className="stroke-utama" />
-      <ellipse cx="285" cy="122" rx="30" ry="4" className="fill-utama" opacity="0.14" />
-      <path d="M252 78h66v6q0 14-18 18v14h-30v-14q-18-4-18-18z" className="fill-white" />
-      <path d="M252 78h66v6q0 14-18 18v14h-30v-14q-18-4-18-18z" {...garis} className="stroke-utama" />
-      <path d="M252 78h66" {...garis} strokeWidth="3" className="stroke-utama" />
-      {/* Kilau tanda lantai bersih dan kering. */}
-      <path d="M170 112l14-10M186 120l18-14M214 126l16-12" {...garis} strokeWidth="3" className="stroke-white" />
-    </Ruang>
+      <circle cx="276" cy="28" r="5" className="fill-tinta" />
+      <path d="M268 36l-3 7M276 36v8M284 36l3 7" {...garisTinta} strokeWidth="2" className="stroke-tinta" />
+      <rect x="240" y="54" width="72" height="70" rx="4" className="fill-white stroke-tinta" strokeWidth="3" />
+      <Bintik x={252} y={66} kolom={6} baris={6} jarak={10} />
+      <KursiRodaAtas x={126} y={108} />
+      <path d="M126 90V80" {...garisTinta} strokeWidth="2.500" className="stroke-tinta" />
+      <Panah x={126} y={78} arah={-90} />
+    </Kanvas>
   ),
-  // Pasang keset atau stiker anti-slip di area berpindah dan area mandi.
-  "bath-floor-slip:alat_tanpa_bongkar": () => (
-    <Ruang>
-      <path d="M84 138l38-34h116l38 34z" className="fill-white" />
-      <path d="M84 138l38-34h116l38 34z" {...garis} className="stroke-utama" />
-      <path d="M84 138v6h192v-6" className="fill-white" />
-      <path d="M84 138v6h192v-6" {...garis} strokeWidth="2" className="stroke-utama" />
-      <g className="fill-utama" opacity="0.55">
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-          <circle key={`a${i}`} cx={142 + i * 8.2} cy="110" r="1.500" />
-        ))}
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-          <circle key={`b${i}`} cx={130 + i * 9.8} cy="120" r="1.700" />
-        ))}
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
-          <circle key={`c${i}`} cx={118 + i * 11} cy="130" r="1.900" />
-        ))}
-      </g>
-      <path d="M36 112h32l6 7H42z" className="fill-white" />
-      <path d="M36 112h32l6 7H42z" {...garis} strokeWidth="2" className="stroke-daun" />
-      <path d="M30 126h32l6 7H36z" className="fill-white" />
-      <path d="M30 126h32l6 7H36z" {...garis} strokeWidth="2" className="stroke-daun" />
-    </Ruang>
-  ),
-  // Ganti lantai dengan permukaan anti-slip, perbaiki kemiringan ke saluran.
+  // Ganti lantai dengan permukaan anti-slip, kemiringan ke saluran, tanpa beda tinggi: potongan lantai dari samping.
   "bath-floor-slip:renovasi": () => (
-    <Ruang>
-      <path d="M150 112h60l8 20h-76z" className="fill-white" />
-      <path d="M150 112h60l8 20h-76z" {...garis} className="stroke-utama" />
-      <path d="M166 118l-4 10M178 118l-2 10M190 118v10M202 118l2 10M214 118l4 10" {...garis} strokeWidth="2" className="stroke-utama" />
-      <path d="M52 108q36 4 84 12M308 108q-36 4 -84 12" {...garis} strokeWidth="2" strokeDasharray="2 6" className="stroke-daun" />
-      <path d="M128 117l9 3-8 5M232 117l-9 3 8 5" {...garis} strokeWidth="2" className="stroke-daun" />
-      <g transform="rotate(-8 292 36)">
-        <rect x="244" y="26" width="96" height="20" rx="4" className="fill-white" />
-        <rect x="244" y="26" width="96" height="20" rx="4" {...garis} className="stroke-utama" />
-        <path d="M262 26v8M280 26v6M298 26v8M316 26v6" {...garis} strokeWidth="1.800" className="stroke-utama" />
-        <rect x="282" y="32" width="20" height="9" rx="4.500" {...garis} strokeWidth="1.800" className="fill-white stroke-utama" />
+    <Kanvas>
+      <path d="M0 146V108L172 116H188L360 108V146Z" className="fill-white stroke-tinta" strokeWidth="3" strokeLinejoin="round" />
+      <g className="fill-tinta">
+        {Array.from({ length: 12 }, (_, i) => (
+          <circle key={`k${i}`} cx={10 + i * 14} cy={116 + (10 + i * 14) * 0.046} r="1.500" />
+        ))}
+        {Array.from({ length: 12 }, (_, i) => (
+          <circle key={`r${i}`} cx={350 - i * 14} cy={116 + (10 + i * 14) * 0.046} r="1.500" />
+        ))}
       </g>
-    </Ruang>
+      <rect x="170" y="114" width="20" height="9" rx="2" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M176 114v9M180 114v9M184 114v9" {...garisTinta} strokeWidth="1.500" className="stroke-tinta" />
+      <path d="M124 104L160 109M236 104L200 109" {...garisTinta} strokeWidth="2.500" strokeDasharray="3 6" className="stroke-tinta" />
+      <Panah x={168} y={110} arah={8} />
+      <Panah x={192} y={110} arah={172} />
+      <Pengguna x={64} y={111} skala={0.62} tangan={[16, -56]} />
+    </Kanvas>
   ),
   // Pastikan pintu bisa dibuka leluasa: pintu terbuka penuh dan diganjal, jalur di depan pintu kosong.
   "bath-door:tanpa_biaya": () => (
