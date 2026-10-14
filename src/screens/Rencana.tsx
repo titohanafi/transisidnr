@@ -157,12 +157,6 @@ export function Rencana() {
   return (
     <Halaman judul={t.judul} kepala={kepala} kepalaPita="hijau" kepalaTumpang latarPutih>
       <div className="flex flex-col gap-bagian">
-        {ringan && (
-          <p role="note" className="rounded-kartu border border-aksen/30 bg-aksen-muda p-4 shadow-kartu motion-safe:animate-muncul">
-            {t.ringan.catatan}
-          </p>
-        )}
-
         {h.jumlahPanduan > 0 && (
           <section className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu" aria-label={t.beres.judul}>
             <div className="flex items-center gap-3">

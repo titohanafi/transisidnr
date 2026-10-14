@@ -288,7 +288,7 @@ export const uiSchema = z
       cetak: teks,
       sedangDisusun: teks,
       belumAdaSiap: teks,
-      ringan: z.object({ catatan: teks, lihatNanti: teks }),
+      ringan: z.object({ lihatNanti: teks }),
       kemajuan: teks,
       beres: z.object({ judul: teks, ringkasan: teks, kosong: teks, rincian: teks, belumDicoba: teks, lihat: teks }),
       perluLagi: teks,
