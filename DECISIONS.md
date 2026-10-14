@@ -393,3 +393,5 @@
 - Teks label ada di `content/ui.json` (`beranda.pilih.susun.cakupan`) dan cukup diubah saat layanan bertambah. Pertimbangan lanjutan: menurunkan label dari `config.json` (ruangan dengan `tersedia: true`) supaya otomatis, tetapi alat bantu belum ada di config.
 
 - Label cakupan dipindah ke baris tersendiri di bawah ikon (di atas judul kartu), memakai teks lengkap "Tersedia untuk kamar mandi dan kursi roda".
+
+- Label cakupan dipindah dari dalam kartu hijau ke bawah kolom cari, karena cakupan (kamar mandi dan kursi roda) berlaku untuk seluruh layanan termasuk pencarian. Tampil selalu (sebelum dan sesudah menjawab). Kuncinya kini `beranda.pilih.cakupan` di `content/ui.json`.

@@ -50,17 +50,17 @@ export function Beranda() {
             <Search className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" focusable="false" />
           </button>
         </div>
+        <p className="mt-3">
+          <span className="inline-block rounded-2xl bg-utama-muda px-3 py-1 text-sm font-semibold leading-snug text-utama-gelap [text-wrap:balance]">
+            {pilih.cakupan}
+          </span>
+        </p>
       </form>
 
       <section className="mt-6 rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-utama">
         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-utama">
           <IkonBeranda kunci="rencana" />
         </span>
-        {!adaJawaban && (
-          <p className="mt-3">
-            <span className="inline-block rounded-2xl border border-white px-3 py-1 text-sm font-semibold leading-snug [text-wrap:balance]">{pilih.susun.cakupan}</span>
-          </p>
-        )}
         <h3 id="jalur-utama" className="mt-3 text-xl font-bold leading-snug">
           {kartu.judul}
         </h3>

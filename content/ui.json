@@ -9,14 +9,14 @@
       "susun": {
         "judul": "Buat rencana untuk rumah Anda",
         "deskripsi": "Dapatkan langkah yang sesuai dengan kondisi dan rumah Anda.",
-        "tombol": "Mulai",
-        "cakupan": "Tersedia untuk kamar mandi dan kursi roda"
+        "tombol": "Mulai"
       },
       "lanjut": {
         "judul": "Lanjutkan rencana Anda",
         "deskripsi": "Lihat satu hal untuk hari ini dan langkah berikutnya.",
         "tombol": "Buka rencana"
       },
+      "cakupan": "Tersedia untuk kamar mandi dan kursi roda",
       "semua": "Lihat semua panduan",
       "cari": { "label": "Temukan panduan agar rumah lebih ramah disabilitas", "placeholder": "Mis. lantai licin atau pintu sempit", "tombol": "Cari" }
     }
