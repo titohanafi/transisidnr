@@ -228,7 +228,6 @@ export const uiSchema = z
     pilihRuangan: z.object({ judul: teks, segera: teks, lanjut: teks }),
     checkin: z.object({
       label: teks,
-      riwayatJudul: teks,
       hariIni: teks,
       belumDiisi: teks,
       artiIkon: teks,
