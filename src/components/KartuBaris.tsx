@@ -6,7 +6,7 @@ export function KartuBaris({ kartu }: { kartu: Kartu }) {
   return (
     <Link
       to={`/kartu/${kartu.id}`}
-      className="tekan flex min-h-sentuh items-center gap-3 rounded-kartu border border-garis bg-white p-3 hover:bg-utama-muda"
+      className="tekan flex min-h-sentuh items-center gap-3 rounded-kartu border border-garis/70 bg-white p-3 shadow-kartu hover:bg-utama-muda"
     >
       <span className="flex-1">
         <span className="block font-semibold leading-snug">{kartu.judul}</span>

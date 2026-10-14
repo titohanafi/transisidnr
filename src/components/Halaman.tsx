@@ -19,7 +19,7 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
   }, [judul, kunciFokus]);
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col bg-kertas md:border-x md:border-garis md:shadow-lg print:shadow-none">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col bg-kertas md:border-x md:border-garis md:shadow-kartu print:shadow-none">
       <a
         href="#isi"
         onClick={(e) => {
@@ -38,7 +38,7 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
             aria-label={umum.halamanSebelumnya}
             className="inline-flex h-sentuh w-sentuh items-center justify-center rounded-tombol text-utama"
           >
-            <ChevronLeft className="h-7 w-7" strokeWidth={2.5} aria-hidden="true" focusable="false" />
+            <ChevronLeft className="h-7 w-7" strokeWidth={2} aria-hidden="true" focusable="false" />
           </button>
         )}
         {menu ? (

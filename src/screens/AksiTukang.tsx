@@ -101,7 +101,7 @@ function Brief({ kartu, tingkat }: NonNullable<ReturnType<typeof useKonteksAksi>
                 value={x.teks}
                 onChange={(e) => ubah(x.id, { teks: e.target.value })}
                 rows={Math.min(8, x.teks.split("\n").length + 1)}
-                className="mt-1 w-full rounded-tombol border-2 border-garisKontrol p-2 text-base"
+                className="mt-1 w-full rounded-tombol border border-garisKontrol p-2 text-base"
               />
             </label>
           </li>

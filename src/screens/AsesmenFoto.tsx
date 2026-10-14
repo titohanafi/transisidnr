@@ -44,7 +44,7 @@ export function AsesmenFoto() {
         <button
           type="button"
           onClick={() => input.current?.click()}
-          className="mt-4 flex min-h-[10rem] w-full flex-col items-center justify-center gap-2 rounded-kartu border-2 border-dashed border-utama bg-utama-muda p-4 text-utama-gelap"
+          className="mt-4 flex min-h-[10rem] w-full flex-col items-center justify-center gap-2 rounded-kartu border border-dashed border-utama bg-utama-muda p-4 text-utama-gelap"
         >
           <Camera className="h-12 w-12 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
           <span className="text-lg font-semibold">{t.pilih}</span>

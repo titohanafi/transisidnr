@@ -30,7 +30,7 @@ export function HapusData() {
               {t.tombol}
             </Tombol>
           ) : (
-            <div role="alert" className="mt-6 rounded-kartu border-2 border-bahaya p-3">
+            <div role="alert" className="mt-6 rounded-kartu border border-bahaya p-3">
               <p className="font-semibold">{t.konfirmasi}</p>
               <div className="mt-3 flex gap-3">
                 <Tombol gayaTombol="sekunder" className="flex-1" onClick={() => setTahap("awal")}>

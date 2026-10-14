@@ -220,7 +220,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
           )}
 
           {kartu.peringatan && (
-            <section className="mt-5 rounded-kartu border-2 border-aksen bg-aksen-muda p-3" aria-labelledby="peringatan">
+            <section className="mt-5 rounded-kartu border border-aksen bg-aksen-muda p-3" aria-labelledby="peringatan">
               <h2 id="peringatan" className="text-lg font-bold text-aksen">
                 {t.peringatan}
               </h2>

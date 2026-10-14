@@ -163,7 +163,7 @@ export function Rencana() {
         <>
           {satuHal && (
             <section
-              className="mt-5 rounded-kartu border-2 border-utama bg-utama-muda p-4"
+              className="mt-5 rounded-kartu border border-utama bg-utama-muda p-4"
               aria-labelledby="satu-hal"
             >
               <h2 id="satu-hal" className="text-lg font-bold">

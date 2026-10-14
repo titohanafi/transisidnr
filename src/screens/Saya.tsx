@@ -83,7 +83,7 @@ export function Saya() {
           <span className="block font-semibold">{umum.dataPrivasi}</span>
           <span className="block text-sm text-redup">{t.dataIsi}</span>
         </span>
-        <ChevronRight className="h-6 w-6 shrink-0 text-redup" strokeWidth={2.5} aria-hidden="true" focusable="false" />
+        <ChevronRight className="h-6 w-6 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
       </Link>
     </Halaman>
   );

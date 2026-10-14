@@ -29,7 +29,7 @@ export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRenca
   const utama = (berikut && kartu.tingkat.find((t) => t.tingkat === berikut)) || tingkatUtama(kartu);
 
   return (
-    <article className="rounded-kartu border border-garis bg-white p-4">
+    <article className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
       <div className="flex items-start gap-3">
         <Ikon kunci={kunciKelompok(data)} className="mt-0.5 h-9 w-9" />
         <Judul className="text-lg font-semibold leading-snug">{data.judul}</Judul>
@@ -51,7 +51,7 @@ export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRenca
           {kartu.tingkat
             .filter((t) => t.tampil)
             .map((t) => (
-              <li key={t.tingkat} className="rounded-tombol bg-kertas p-2">
+              <li key={t.tingkat} className="rounded-tombol bg-permukaan p-3">
                 <p className="font-medium">{tk.tingkat[t.tingkat]}</p>
                 <div className="mt-1 flex flex-wrap gap-2">
                   <LencanaSifat sifat={t.sifat} />

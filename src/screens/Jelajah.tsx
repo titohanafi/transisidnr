@@ -97,7 +97,7 @@ function Daftar({ awal }: { awal: Filter }) {
             enterKeyHint="search"
             placeholder={t.cari.placeholder}
             autoFocus={dariBeranda === ""}
-            className="mt-1 min-h-sentuh w-full rounded-tombol border-2 border-garisKontrol bg-white px-3 text-base"
+            className="mt-1 min-h-sentuh w-full rounded-tombol border border-garisKontrol bg-white px-3 text-base"
           />
         </div>
       )}

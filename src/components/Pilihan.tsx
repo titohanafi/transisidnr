@@ -15,8 +15,8 @@ export function Pilihan({ tipe, nama, label, aktif, nonaktif, onUbah, ikon, lenc
 }) {
   return (
     <label
-      className={`flex min-h-sentuh items-center gap-3 rounded-kartu border-2 p-3 ${
-        aktif ? "border-utama bg-utama-muda font-semibold" : "border-garis bg-white"
+      className={`flex min-h-sentuh items-center gap-3 rounded-kartu border p-3 ${
+        aktif ? "border-utama bg-utama-muda font-semibold" : "border-garis bg-white shadow-kartu"
       } ${nonaktif ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
     >
       <input
@@ -45,7 +45,7 @@ export function PilihanPil({ nama, label, aktif, onUbah }: {
     <label className="relative inline-flex">
       <input type="radio" name={nama} checked={aktif} onChange={onUbah} className="peer sr-only" />
       <span
-        className={`inline-flex min-h-sentuh cursor-pointer items-center rounded-full border-2 px-4 py-2 text-base peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-utama ${
+        className={`inline-flex min-h-sentuh cursor-pointer items-center rounded-full border px-4 py-2 text-base peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-utama ${
           aktif ? "border-utama bg-utama font-semibold text-white" : "border-garisKontrol bg-white text-tinta"
         }`}
       >

@@ -55,7 +55,7 @@ export function Beranda() {
       <div className="relative mt-isi">
         <Search
           className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-redup"
-          strokeWidth={2.5}
+          strokeWidth={2}
           aria-hidden="true"
           focusable="false"
         />
@@ -66,7 +66,7 @@ export function Beranda() {
           autoComplete="off"
           enterKeyHint="search"
           placeholder={pilih.cari.placeholder}
-          className="h-12 w-full rounded-tombol border-2 border-garisKontrol bg-white pl-11 pr-3 text-isi"
+          className="h-12 w-full rounded-tombol border border-garisKontrol bg-white pl-11 pr-3 text-isi shadow-kartu"
         />
       </div>
       <button type="submit" className="sr-only">
@@ -82,7 +82,7 @@ export function Beranda() {
               <button
                 type="button"
                 onClick={() => navigate("/jelajah", { state: { cari: k } })}
-                className="tekan inline-flex min-h-sentuh items-center rounded-full border-2 border-garisKontrol bg-white px-3 text-kecil font-semibold text-tinta"
+                className="tekan inline-flex min-h-sentuh items-center rounded-full border border-garis bg-white px-3 text-kecil shadow-kartu font-semibold text-tinta"
               >
                 {k}
               </button>
@@ -103,7 +103,7 @@ export function Beranda() {
 
   const utama = (
     <section
-      className={`rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "relative -mt-16 shadow-sm"}`}
+      className={`rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "relative -mt-16 shadow-angkat"}`}
       aria-labelledby="jalur-utama"
     >
       <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-utama">

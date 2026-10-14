@@ -54,7 +54,7 @@ export function AksiSendiri() {
           return (
             <li key={i}>
               <label
-                className={`flex min-h-sentuh cursor-pointer items-start gap-3 rounded-kartu border-2 p-3 ${
+                className={`flex min-h-sentuh cursor-pointer items-start gap-3 rounded-kartu border p-3 ${
                   centang
                     ? "border-utama bg-utama-muda"
                     : "border-garis bg-white"
@@ -84,7 +84,7 @@ export function AksiSendiri() {
       </div>
       {semuaSelesai && (
         <section
-          className="mt-6 rounded-kartu border-2 border-utama bg-white p-4"
+          className="mt-6 rounded-kartu border border-utama bg-white p-4"
           aria-labelledby="hasil"
         >
           <h2 id="hasil" className="text-lg font-bold">

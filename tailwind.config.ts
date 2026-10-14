@@ -11,7 +11,7 @@ export default {
         luar: "#ECECEA", // latar di luar area aplikasi pada layar lebar
         tinta: "#1F2933", // teks utama (kontras tinggi)
         redup: "#4A5560", // teks sekunder
-        garis: "#CBD2D9", // pembatas dekoratif
+        garis: "#DCE2E7", // pembatas dekoratif (tipis, lembut)
         garisKontrol: "#6B7580", // batas kontrol formulir (kontras ≥ 3:1)
         utama: { DEFAULT: "#0F5E63", gelap: "#0A4549", muda: "#E3F1F1" }, // teal tenang
         aksen: { DEFAULT: "#9A4A12", muda: "#FBEBDD" }, // hangat
@@ -23,6 +23,11 @@ export default {
         sans: ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
       },
       borderRadius: { kartu: "16px", tombol: "12px" },
+      // Bayangan halus pengganti garis tebal: memberi kedalaman tanpa terlihat berat.
+      boxShadow: {
+        kartu: "0 1px 2px rgba(31,41,51,0.06), 0 2px 8px rgba(31,41,51,0.05)",
+        angkat: "0 4px 14px rgba(15,94,99,0.18)",
+      },
       // Skala tipografi dan ritme jarak (desainer cukup mengubah di sini).
       fontSize: {
         judul: ["1.5rem", { lineHeight: "1.3", fontWeight: "700" }],

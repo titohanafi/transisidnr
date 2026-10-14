@@ -34,7 +34,7 @@ export function CheckIn() {
             onClick={() => setMengubah(true)}
             className="tekan -mr-2 -mt-1 inline-flex min-h-sentuh shrink-0 items-center gap-1 rounded-tombol px-2 text-kecil font-semibold text-utama-gelap"
           >
-            <Pencil className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" focusable="false" />
+            <Pencil className="h-4 w-4" strokeWidth={2} aria-hidden="true" focusable="false" />
             {t.ubah}
           </button>
         </div>
@@ -43,7 +43,7 @@ export function CheckIn() {
           className="tekan mt-3 flex min-h-sentuh items-center justify-between gap-2 rounded-tombol border border-utama/25 bg-white px-4 py-2 font-semibold text-utama-gelap"
         >
           <span>{pilihan.bantuan.tombol}</span>
-          <ChevronRight className="h-5 w-5 shrink-0" strokeWidth={2.5} aria-hidden="true" focusable="false" />
+          <ChevronRight className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
         </Link>
       </section>
     );
@@ -111,9 +111,9 @@ export function RiwayatCheckin() {
               </span>
               <span
                 aria-hidden="true"
-                className={`flex h-9 w-9 items-center justify-center rounded-full border-2 text-lg leading-none ${
+                className={`flex h-9 w-9 items-center justify-center rounded-full border text-lg leading-none ${
                   p ? "border-utama bg-utama-muda" : "border-dashed border-garisKontrol text-redup"
-                } ${ini ? "ring-2 ring-utama ring-offset-1" : ""}`}
+                } ${ini ? "ring-1 ring-utama ring-offset-2" : ""}`}
               >
                 {p ? p.emoji : "·"}
               </span>
