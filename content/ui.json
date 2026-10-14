@@ -225,7 +225,6 @@
     "beres": {
       "judul": "Yang sudah teratasi",
       "ringkasan": "{n} dari {total} masalah teratasi",
-      "penjelasan": "Tiap panduan membahas satu masalah di rumah. Masalah dihitung teratasi setelah Anda menandai \"Sudah cukup\" di dalam panduannya. Yang masih sulit diarahkan ke pilihan berikutnya.",
       "kosong": "Belum ada masalah yang teratasi. Setelah mencoba satu panduan, catat hasilnya di sana.",
       "rincian": "Lihat rincian",
       "belumDicoba": "Belum dicoba",

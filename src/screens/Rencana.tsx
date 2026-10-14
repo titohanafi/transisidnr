@@ -177,7 +177,7 @@ export function Rencana() {
               label={isi(t.beres.ringkasan, { n: h.beres.length, total: h.jumlahPanduan })}
               className="mt-3"
             />
-            <p className="mt-3 text-kecil text-redup">{h.beres.length === 0 ? t.beres.kosong : t.beres.penjelasan}</p>
+            {h.beres.length === 0 && <p className="mt-3 text-kecil text-redup">{t.beres.kosong}</p>}
             <details className="group mt-2 border-t border-garis/60">
               <summary className="flex min-h-sentuh cursor-pointer list-none items-center justify-between gap-2 font-semibold text-utama [&::-webkit-details-marker]:hidden">
                 <span>{t.beres.rincian}</span>
