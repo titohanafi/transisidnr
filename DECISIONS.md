@@ -554,3 +554,4 @@
 - Tombol "Lihat kontak ahli" dihapus dari panel tingkat Renovasi karena sudah ada menu Kontak; yang tersisa hanya "Pesan ke tukang" dengan pengantar `kartu.jembatanRenovasi`. Tombol ke Kontak tetap muncul setelah pengguna menjawab "Masih sulit" di tingkat terakhir.
 
 - Tombol ke halaman Kontak setelah menjawab "Masih sulit" di tingkat terakhir dihapus (permintaan pemilik). Tersisa kalimat saja: "Ini sudah pilihan terakhir di panduan ini. Pertimbangkan bertanya ke ahli lewat menu Kontak." Satu-satunya jalan ke Kontak dari panduan kini lewat tab Kontak di bilah bawah.
+- Urutan isi panel solusi sekarang: ringkasan dan pil, langkah bercentang, ukuran (bila ada), ajakan bertindak ("Lihat alat" dan, di Renovasi, "Pesan ke tukang"), lalu pertanyaan "Bagaimana hasilnya?" di paling bawah (hanya muncul setelah semua langkah tercentang). Komponen dipecah menjadi `LangkahChecklist` dan `HasilLangkah`.

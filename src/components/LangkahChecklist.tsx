@@ -27,22 +27,16 @@ export function LangkahChecklist({
   tingkat,
   langkah,
   peran,
-  keTingkat,
 }: {
   kartu: Kartu;
   tingkat: Tingkat;
   langkah: string[];
   /** Siapa yang mengerjakan tiap langkah (urutan sama dengan `langkah`); bila kosong, tidak ada penanda. */
   peran?: readonly PeranLangkah[];
-  /** Pindah ke tingkat solusi lain di halaman yang sama. */
-  keTingkat: (t: Tingkat) => void;
 }) {
-  const { state, toggleLangkah, setHasil } = useStore();
+  const { state, toggleLangkah } = useStore();
   const kunci = kunciChecklist(kartu.id, tingkat);
-  const { selesai, semuaSelesai, dorongan: kodeDorongan } = ringkasLangkah(state.checklist[kunci] ?? [], langkah.length);
-  const hasil = state.hasil[kartu.id];
-  const hasilIni = hasil && hasil.tingkat === tingkat ? hasil.status : null;
-  const berikut = tingkatSetelah(kartu, tingkat);
+  const { selesai, dorongan: kodeDorongan } = ringkasLangkah(state.checklist[kunci] ?? [], langkah.length);
   const progres = isi(t.progres, { n: selesai.length, total: langkah.length });
   const dorongan =
     kodeDorongan === "selesai"
@@ -89,51 +83,75 @@ export function LangkahChecklist({
           </p>
         )}
       </div>
-
-      {semuaSelesai && (
-        <section className="mt-5 border-t border-garis/70 pt-4" aria-labelledby={`hasil-${tingkat}`}>
-          <h4 id={`hasil-${tingkat}`} className="font-semibold">
-            {t.hasil.judul}
-          </h4>
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            <Tombol
-              gayaTombol={hasilIni === "cukup" ? "utama" : "sekunder"}
-              aria-pressed={hasilIni === "cukup"}
-              onClick={() => setHasil(kartu.id, hasilIni === "cukup" ? null : { status: "cukup", tingkat })}
-            >
-              {t.hasil.cukup}
-            </Tombol>
-            <Tombol
-              gayaTombol={hasilIni === "masih_sulit" ? "utama" : "sekunder"}
-              aria-pressed={hasilIni === "masih_sulit"}
-              onClick={() => setHasil(kartu.id, hasilIni === "masih_sulit" ? null : { status: "masih_sulit", tingkat })}
-            >
-              {t.hasil.sulit}
-            </Tombol>
-          </div>
-          <div aria-live="polite">
-            {hasilIni === "cukup" && (
-              <>
-                <p className="mt-3 motion-safe:animate-muncul">{t.hasil.balasCukup}</p>
-                <TombolLink to="/rencana" className="mt-3 w-full">
-                  {t.hasil.keRencana}
-                </TombolLink>
-              </>
-            )}
-            {hasilIni === "masih_sulit" && (
-              <>
-                <p className="mt-3 motion-safe:animate-muncul">{berikut ? t.hasil.balasSulit : t.hasil.terakhir}</p>
-                {berikut && (
-                  <Tombol className="mt-3 w-full" onClick={() => keTingkat(berikut)}>
-                    {t.hasil.berikutnya}
-                  </Tombol>
-                )}
-              </>
-            )}
-          </div>
-        </section>
-      )}
     </div>
+  );
+}
+
+/**
+ * Pertanyaan "Bagaimana hasilnya?" yang muncul setelah semua langkah tercentang. Diletakkan terpisah dari daftar
+ * langkah supaya bisa ada di bagian paling bawah panel. Hasil dipakai Panduan Saya (beres atau tingkat berikutnya).
+ */
+export function HasilLangkah({
+  kartu,
+  tingkat,
+  langkah,
+  keTingkat,
+}: {
+  kartu: Kartu;
+  tingkat: Tingkat;
+  langkah: string[];
+  /** Pindah ke tingkat solusi lain di halaman yang sama. */
+  keTingkat: (t: Tingkat) => void;
+}) {
+  const { state, setHasil } = useStore();
+  const { semuaSelesai } = ringkasLangkah(state.checklist[kunciChecklist(kartu.id, tingkat)] ?? [], langkah.length);
+  const hasil = state.hasil[kartu.id];
+  const hasilIni = hasil && hasil.tingkat === tingkat ? hasil.status : null;
+  const berikut = tingkatSetelah(kartu, tingkat);
+  if (!semuaSelesai) return null;
+
+  return (
+    <section className="border-t border-garis/70 pt-4" aria-labelledby={`hasil-${tingkat}`}>
+      <h4 id={`hasil-${tingkat}`} className="font-semibold">
+        {t.hasil.judul}
+      </h4>
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <Tombol
+          gayaTombol={hasilIni === "cukup" ? "utama" : "sekunder"}
+          aria-pressed={hasilIni === "cukup"}
+          onClick={() => setHasil(kartu.id, hasilIni === "cukup" ? null : { status: "cukup", tingkat })}
+        >
+          {t.hasil.cukup}
+        </Tombol>
+        <Tombol
+          gayaTombol={hasilIni === "masih_sulit" ? "utama" : "sekunder"}
+          aria-pressed={hasilIni === "masih_sulit"}
+          onClick={() => setHasil(kartu.id, hasilIni === "masih_sulit" ? null : { status: "masih_sulit", tingkat })}
+        >
+          {t.hasil.sulit}
+        </Tombol>
+      </div>
+      <div aria-live="polite">
+        {hasilIni === "cukup" && (
+          <>
+            <p className="mt-3 motion-safe:animate-muncul">{t.hasil.balasCukup}</p>
+            <TombolLink to="/rencana" className="mt-3 w-full">
+              {t.hasil.keRencana}
+            </TombolLink>
+          </>
+        )}
+        {hasilIni === "masih_sulit" && (
+          <>
+            <p className="mt-3 motion-safe:animate-muncul">{berikut ? t.hasil.balasSulit : t.hasil.terakhir}</p>
+            {berikut && (
+              <Tombol className="mt-3 w-full" onClick={() => keTingkat(berikut)}>
+                {t.hasil.berikutnya}
+              </Tombol>
+            )}
+          </>
+        )}
+      </div>
+    </section>
   );
 }
 

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
 import { Jembatan } from "../components/Jembatan";
-import { LangkahChecklist } from "../components/LangkahChecklist";
+import { HasilLangkah, LangkahChecklist } from "../components/LangkahChecklist";
 import { LipatBaris } from "../components/Lipat";
 import { LencanaStatus, Tanda } from "../components/Lencana";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
@@ -171,26 +171,9 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
                           {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                         </div>
-                        {aksiTersedia(kartu, x.tingkat).includes("beli") && (
-                          <div className="mt-5">
-                            <TombolAksi
-                              jenis="beli"
-                              kartuId={kartu.id}
-                              tingkat={x.tingkat}
-                              gayaTombol={x.tingkat === "renovasi" ? "sekunder" : "utama"}
-                              className="w-full"
-                            />
-                          </div>
-                        )}
                         <h4 className="mt-5 font-semibold">{t.langkah}</h4>
                         <div className="mt-2">
-                          <LangkahChecklist
-                            kartu={kartu}
-                            tingkat={x.tingkat}
-                            langkah={s.langkah}
-                            peran={s.peran_langkah}
-                            keTingkat={setAktifTingkat}
-                          />
+                          <LangkahChecklist kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} peran={s.peran_langkah} />
                         </div>
 
                         {s.ukuran && s.ukuran.length > 0 && (
@@ -210,13 +193,30 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           </div>
                         )}
 
-                        {x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang") && (
-                          <div className="mt-6">
-                            <Jembatan teks={t.jembatanRenovasi}>
-                              <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" />
-                            </Jembatan>
+                        {/* Ajakan bertindak ada di bawah langkah; pertanyaan hasil di paling bawah. */}
+                        {(aksiTersedia(kartu, x.tingkat).includes("beli") ||
+                          (x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang"))) && (
+                          <div className="mt-6 flex flex-col gap-5">
+                            {aksiTersedia(kartu, x.tingkat).includes("beli") && (
+                              <TombolAksi
+                                jenis="beli"
+                                kartuId={kartu.id}
+                                tingkat={x.tingkat}
+                                gayaTombol={x.tingkat === "renovasi" ? "sekunder" : "utama"}
+                                className="w-full"
+                              />
+                            )}
+                            {x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang") && (
+                              <Jembatan teks={t.jembatanRenovasi}>
+                                <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" />
+                              </Jembatan>
+                            )}
                           </div>
                         )}
+
+                        <div className="mt-6 empty:hidden">
+                          <HasilLangkah kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} keTingkat={setAktifTingkat} />
+                        </div>
                       </>
                     );
                   })()}
