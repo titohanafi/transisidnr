@@ -377,3 +377,5 @@
 - Label kolom cari di Beranda diganti usul pemilik: "Temukan panduan agar tempat tinggal lebih ramah disabilitas" (menggantikan "Cari masalah di rumah Anda").
 
 - Label kolom cari di Beranda dinaikkan menjadi teks 18px tebal berwarna tinta (gelap) agar menjadi kalimat pertama yang terbaca.
+
+- Kolom cari di Beranda dinaikkan (jarak atas dikurangi) dan diberi jarak lebih longgar: label ke kolom 12px, kolom ke tombol cari 12px.

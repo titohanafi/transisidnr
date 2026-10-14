@@ -22,7 +22,7 @@ export function Beranda() {
 
       <form
         role="search"
-        className="mt-4"
+        className="-mt-2"
         onSubmit={(e) => {
           e.preventDefault();
           const q = new FormData(e.currentTarget).get("q");
@@ -32,7 +32,7 @@ export function Beranda() {
         <label htmlFor="cari-beranda" className="text-lg font-bold leading-snug text-tinta">
           {pilih.cari.label}
         </label>
-        <div className="mt-1 flex gap-2">
+        <div className="mt-3 flex gap-3">
           <input
             id="cari-beranda"
             name="q"
