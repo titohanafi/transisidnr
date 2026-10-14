@@ -23,11 +23,11 @@ import { useRencana } from "../state/useRencana";
 
 const { kartu: t, umum, rencana: tr } = konten.ui;
 
-// Setiap tingkat solusi punya warna latar tipis dan ikon sendiri (tanpa bayangan); nama tingkat tetap tertulis, jadi tidak bergantung warna saja.
-const WARNA_TINGKAT: Record<Tingkat, { latar: string; Ikon: LucideIcon }> = {
-  tanpa_biaya: { latar: "bg-utama-muda", Ikon: Hand },
-  alat_tanpa_bongkar: { latar: "bg-info-muda", Ikon: Wrench },
-  renovasi: { latar: "bg-aksen-muda", Ikon: Hammer },
+// Setiap tingkat solusi punya ikon sendiri; latar kartunya satu warna tipis yang sama (tanpa bayangan). Nama tingkat tetap tertulis.
+const IKON_TINGKAT: Record<Tingkat, LucideIcon> = {
+  tanpa_biaya: Hand,
+  alat_tanpa_bongkar: Wrench,
+  renovasi: Hammer,
 };
 
 export function DetailKartu() {
@@ -121,9 +121,9 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   if (!s) return null;
                   const buka = terbuka.has(x.tingkat);
                   const idPanel = `panel-${x.tingkat}`;
-                  const warna = WARNA_TINGKAT[x.tingkat];
+                  const IkonTingkat = IKON_TINGKAT[x.tingkat];
                   return (
-                    <div key={x.tingkat} className={`rounded-kartu ${warna.latar}`}>
+                    <div key={x.tingkat} className="rounded-kartu bg-utama-muda">
                       <h3>
                         <button
                           type="button"
@@ -133,7 +133,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           className="flex min-h-sentuh w-full items-center gap-3 rounded-kartu px-4 pb-2 pt-4 text-left text-judulKartu"
                         >
                           <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white">
-                            <warna.Ikon className="h-5 w-5 text-utama-gelap" strokeWidth={2} focusable="false" />
+                            <IkonTingkat className="h-5 w-5 text-utama-gelap" strokeWidth={2} focusable="false" />
                           </span>
                           <span className="flex-1">{t.tingkat[x.tingkat]}</span>
                           <ChevronDown
