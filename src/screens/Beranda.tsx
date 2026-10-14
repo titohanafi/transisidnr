@@ -107,11 +107,11 @@ export function Beranda() {
       className={`rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "relative -mt-16 shadow-angkat"}`}
       aria-labelledby="jalur-utama"
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-center gap-3">
+        <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-9 w-9 text-aksen-muda" />
         <h3 id="jalur-utama" className="text-subjudul">
           {kartu.judul}
         </h3>
-        <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-10 w-10 text-aksen-muda" />
       </div>
       <p className="mt-2 text-isi">{kartu.deskripsi}</p>
       <Link
