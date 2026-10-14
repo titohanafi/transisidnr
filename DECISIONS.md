@@ -593,3 +593,5 @@
 
 ## Halaman "Alat yang dibutuhkan" (Lihat alat) didesain ulang
 - Latar putih (pengaturan `latarPutih` di `AksiHalaman`, hanya dipakai halaman ini). Tiap alat berupa kartu bergaris tipis tanpa bayangan: nama dan label afiliasi di atas, kotak hijau muda "Cek kecocokan dulu" berikon, daftar Spesifikasi dan Harga sebagai baris berpemisah (label di kiri, nilai di kanan), lalu tombol "Lihat produk" berikon tautan luar. Bila tautan belum ada, bagian itu berupa kotak abu "Tautan produk menyusul", bukan tombol nonaktif yang pucat. Ajakan "Pesan ke tukang" berada di kotak abu muda dengan ikon palu.
+
+- Tombol "Kembali ke panduan" di dasar halaman "Alat yang dibutuhkan" dihapus (permintaan pemilik); panah kembali di header tetap ada. Halaman aksi lain (Pesan ke tukang) masih memilikinya.
