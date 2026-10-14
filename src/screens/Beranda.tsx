@@ -1,9 +1,10 @@
 import { Info, Search, X } from "lucide-react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
 import { IkonBeranda } from "../components/IkonBeranda";
+import { KartuHero, TautanHero } from "../components/KartuHero";
 import { konten } from "../domain/content";
 import { bagianHari } from "../lib/tanggal";
 import { useStore } from "../state/store";
@@ -103,29 +104,15 @@ export function Beranda() {
   );
 
   const utama = (
-    <section
-      className={`relative overflow-hidden rounded-kartu bg-utama p-5 text-white ${adaJawaban ? "" : "-mt-16 shadow-angkat"}`}
-      aria-labelledby="jalur-utama"
+    <KartuHero
+      id="jalur-utama"
+      ikon={<IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-9 w-9 text-daun" />}
+      judul={kartu.judul}
+      className={adaJawaban ? "" : "-mt-16 shadow-angkat"}
     >
-      {/* Hiasan: lingkaran teal lebih gelap dari latar kartu, jadi tidak pernah menurunkan kontras teks di atasnya. */}
-      <span aria-hidden="true" className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-utama-gelap/40" />
-      <span aria-hidden="true" className="pointer-events-none absolute -right-2 -top-20 h-32 w-32 rounded-full bg-utama-gelap/30" />
-      <span aria-hidden="true" className="pointer-events-none absolute -bottom-16 -left-10 h-36 w-36 rounded-full bg-utama-gelap/30" />
-
-      <div className="relative flex items-center gap-4">
-        <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-9 w-9 text-daun" />
-        <h3 id="jalur-utama" className="text-judulUtama">
-          {kartu.judul}
-        </h3>
-      </div>
       <p className="relative mt-2.5 text-isi text-utama-redup">{kartu.deskripsi}</p>
-      <Link
-        to={adaJawaban ? "/rencana" : "/mulai/1"}
-        className="tekan relative mt-6 inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-isi font-semibold text-utama-gelap hover:bg-utama-muda"
-      >
-        {kartu.tombol}
-      </Link>
-    </section>
+      <TautanHero to={adaJawaban ? "/rencana" : "/mulai/1"}>{kartu.tombol}</TautanHero>
+    </KartuHero>
   );
 
   return (

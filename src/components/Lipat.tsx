@@ -1,9 +1,19 @@
 import type { ReactNode } from "react";
 
 // Bagian yang bisa dilipat (details/summary asli, aksesibel tanpa skrip). Mengurangi tumpukan teks.
-export function Lipat({ judul, children, buka = false }: { judul: string; children: ReactNode; buka?: boolean }) {
+export function Lipat({
+  judul,
+  children,
+  buka = false,
+  className = "mt-isi",
+}: {
+  judul: string;
+  children: ReactNode;
+  buka?: boolean;
+  className?: string;
+}) {
   return (
-    <details open={buka} className="group mt-isi rounded-kartu border border-garis/70 bg-white shadow-kartu">
+    <details open={buka} className={`group ${className} rounded-kartu border border-garis/70 bg-white shadow-kartu`}>
       <summary className="flex min-h-sentuh cursor-pointer list-none items-center justify-between gap-2 px-4 py-2 text-judulKartu [&::-webkit-details-marker]:hidden">
         <span>{judul}</span>
         <span aria-hidden="true" className="text-utama group-open:hidden">

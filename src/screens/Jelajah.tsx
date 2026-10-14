@@ -1,9 +1,10 @@
-import { ChevronRight, Info, Search, UsersRound, Wrench } from "lucide-react";
+import { Info, Search, UsersRound, Wrench } from "lucide-react";
 import { useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { DaftarAhli } from "../components/DaftarAhli";
 import { DaftarAlat } from "../components/DaftarAlat";
 import { Halaman } from "../components/Halaman";
+import { BarisTautan } from "../components/BarisTautan";
 import { KartuBaris } from "../components/KartuBaris";
 import { KartuKerangka } from "../components/KartuKerangka";
 import { Ikon } from "../components/Ikon";
@@ -220,16 +221,7 @@ function Daftar({ awal }: { awal: Filter }) {
               { ke: "/jelajah/ahli", teks: t.lainnya.ahli, Ikon: UsersRound },
             ].map(({ ke, teks, Ikon: IkonBaris }) => (
               <li key={ke}>
-                <Link
-                  to={ke}
-                  className="tekan flex min-h-sentuh items-center gap-3 rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu hover:bg-utama-muda"
-                >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
-                    <IkonBaris className="h-6 w-6 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-                  </span>
-                  <span className="flex-1 font-semibold">{teks}</span>
-                  <ChevronRight className="h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-                </Link>
+                <BarisTautan ke={ke} teks={teks} Ikon={IkonBaris} />
               </li>
             ))}
           </ul>
