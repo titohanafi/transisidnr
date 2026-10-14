@@ -66,6 +66,7 @@ export function Beranda() {
         >
           {kartu.tombol}
         </Link>
+        {!adaJawaban && <p className="mt-2 text-center text-sm">{pilih.susun.catatan}</p>}
       </section>
 
       <Link to="/jelajah" className="mt-2 inline-flex min-h-sentuh items-center text-utama underline">

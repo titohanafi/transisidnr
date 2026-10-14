@@ -9,7 +9,8 @@
       "susun": {
         "judul": "Buat rencana untuk rumah Anda",
         "deskripsi": "Menyiapkan rumah agar lebih mudah dipakai, mulai dari kamar mandi. Untuk penyandang disabilitas pengguna kursi roda dan caregiver.",
-        "tombol": "Mulai"
+        "tombol": "Mulai",
+        "catatan": "Jawab ya atau tidak, tanpa mengukur."
       },
       "lanjut": {
         "judul": "Lanjutkan rencana Anda",
