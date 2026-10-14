@@ -84,7 +84,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
   );
 
   return (
-    <Halaman judul={kartu.judul} kepala={kepala} atasJudul={atasJudul} kepalaKartu>
+    <Halaman judul={kartu.judul} kepala={kepala} atasJudul={atasJudul} kepalaPutih>
       <div className="flex flex-col gap-bagian">
         {kartu.isi_menyusul || !kartu.solusi ? (
           <p className="rounded-kartu border border-draf bg-draf-muda p-4 font-medium text-draf">{umum.isiMenyusul}</p>

@@ -14,7 +14,7 @@ export function Halaman({
   kepala,
   judulTersembunyi = false,
   atasJudul,
-  kepalaKartu = false,
+  kepalaPutih = false,
 }: {
   judul: string;
   children: ReactNode;
@@ -25,8 +25,8 @@ export function Halaman({
   judulTersembunyi?: boolean;
   /** Elemen di atas judul di dalam kepala (mis. ikon). */
   atasJudul?: ReactNode;
-  /** Kepala berupa kartu hero putih (bukan pita tanpa tepi). */
-  kepalaKartu?: boolean;
+  /** Kepala berupa hero putih selebar layar (tanpa kotak), di atas latar halaman yang berwarna. */
+  kepalaPutih?: boolean;
 }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -85,12 +85,10 @@ export function Halaman({
         {/* Di Beranda judulnya sama dengan nama aplikasi di header: tetap ada untuk pembaca layar, tidak ditampilkan dua kali. */}
         {kepala ? (
           <>
-            <div className={kepalaKartu ? "px-4 pt-6" : "px-4 pb-5 pt-6"}>
-              <div className={kepalaKartu ? "rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu" : ""}>
-                {atasJudul}
-                {h1Elemen}
-                {kepala}
-              </div>
+            <div className={kepalaPutih ? "bg-white px-4 pb-6 pt-6" : "px-4 pb-5 pt-6"}>
+              {atasJudul}
+              {h1Elemen}
+              {kepala}
             </div>
             <div className="flex flex-1 flex-col px-4 pt-6">{children}</div>
           </>
