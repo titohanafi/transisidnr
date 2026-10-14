@@ -472,3 +472,5 @@
 - Perbaikan: konfigurasi Tailwind kini diberikan langsung dari `vite.config.ts` (`css.postcss.plugins`), sehingga Vite memantau `tailwind.config.ts` sebagai dependensi dan memulai ulang servernya sendiri bila berubah. Diuji dengan mengubah satu warna lalu mengembalikannya: CSS berubah tanpa Ctrl+C.
 - Berkas `postcss.config.js` dihapus karena fungsinya pindah ke `vite.config.ts`. `tsconfig.json` mendapat `allowImportingTsExtensions` (aman karena `noEmit`) agar impor `./tailwind.config.ts` sah tanpa peringatan.
 - Sekali ini server dev yang sedang berjalan tetap perlu dimulai ulang agar memakai pengaturan baru; sesudahnya tidak lagi.
+
+- Latar di luar area aplikasi (token `luar`) diganti abu netral tipis #ECECEA (menggantikan hijau tua pekat), sesuai permintaan pemilik.
