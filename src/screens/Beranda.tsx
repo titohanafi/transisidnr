@@ -104,14 +104,16 @@ export function Beranda() {
 
   const utama = (
     <section
-      className={`relative rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "-mt-16 shadow-angkat"}`}
+      className={`rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "relative -mt-16 shadow-angkat"}`}
       aria-labelledby="jalur-utama"
     >
-      <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="absolute right-4 top-4 h-10 w-10 text-aksen-muda" />
-      <h3 id="jalur-utama" className="pr-14 text-subjudul">
-        {kartu.judul}
-      </h3>
-      <p className="mt-1 text-isi">{kartu.deskripsi}</p>
+      <div className="flex items-start justify-between gap-3">
+        <h3 id="jalur-utama" className="text-subjudul">
+          {kartu.judul}
+        </h3>
+        <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-10 w-10 text-aksen-muda" />
+      </div>
+      <p className="mt-2 text-isi">{kartu.deskripsi}</p>
       <Link
         to={adaJawaban ? "/rencana" : "/mulai/1"}
         className="tekan mt-isi inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-isi font-semibold text-utama-gelap hover:bg-utama-muda"
