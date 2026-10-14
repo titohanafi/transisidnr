@@ -63,7 +63,7 @@ export function HiasanPita() {
   return (
     <>
       <span aria-hidden="true" className="pointer-events-none absolute -right-12 bottom-0 h-32 w-32 rounded-full bg-utama-gelap/40" />
-      <span aria-hidden="true" className="pointer-events-none absolute bottom-6 right-1 h-24 w-24 rounded-full bg-utama-gelap/30" />
+      <span aria-hidden="true" className="pointer-events-none absolute bottom-3 right-6 h-24 w-24 rounded-full bg-utama-gelap/30" />
       <span aria-hidden="true" className="pointer-events-none absolute -left-10 bottom-0 h-28 w-28 rounded-full bg-utama-gelap/30" />
     </>
   );
