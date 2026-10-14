@@ -598,4 +598,4 @@
 
 - Kalimat "Baca cara cek kecocokan dulu sebelum membeli." dihapus dari halaman "Alat yang dibutuhkan" (permintaan pemilik); kotak "Cek kecocokan dulu" pada tiap alat sudah menyampaikannya. Teksnya dihapus dari konten.
 
-- Tombol "Lihat alat" diganti "Lihat Spesifikasi dan Panduan Penggunaan" (`aksi.tombol.beli`; kapitalisasi mengikuti permintaan pemilik). Teks ini satu sumber, jadi berlaku di panel solusi dan tombol utama kartu rencana di Panduan Saya.
+- Tombol "Lihat alat" diganti "Lihat Spesifikasi dan Panduan" (`aksi.tombol.beli`; sempat lebih panjang, dipersingkat atas permintaan pemilik; kapitalisasi mengikuti permintaan pemilik). Teks ini satu sumber, jadi berlaku di panel solusi dan tombol utama kartu rencana di Panduan Saya.
