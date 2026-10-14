@@ -602,3 +602,5 @@
 
 - Header Detail Panduan (`/kartu/...`) dan halaman aksinya (`/aksi/...`) kini bertuliskan "Panduan" (dengan panah kembali) menggantikan logo "Transisi.", seperti halaman menu Panduan.
 - Header halaman "Alat yang dibutuhkan" (`/aksi/beli/...`) bertuliskan "Pakai Alat" (`umum.headerPakaiAlat`), mengikuti nama tingkat solusinya; halaman aksi lain tetap "Panduan".
+
+- Kepala halaman "Pakai Alat" diganti: label kecil "Alat yang dipakai ketika..." (`aksi.beli.label`) di atas, lalu judulnya adalah nama masalah panduan (mis. "Lantai licin saat basah") sehingga terbaca satu kalimat. Judul lama "Alat yang dibutuhkan" dan baris konteks "panduan · tingkat" dihapus. Saya menafsirkan "Masalahnya" sebagai judul masalah pada panduan; bila yang dimaksud teks harfiah "Masalahnya", cukup ubah `judul` di `AksiBeli.tsx`.

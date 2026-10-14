@@ -345,7 +345,7 @@
       }
     },
     "beli": {
-      "judul": "Alat yang dibutuhkan",
+      "label": "Alat yang dipakai ketika...",
       "lihatProduk": "Lihat produk",
       "linkMenyusul": "Tautan produk menyusul",
       "afiliasi": "Tautan afiliasi",

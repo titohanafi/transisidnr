@@ -29,6 +29,7 @@ export function AksiHalaman({
   pengantar,
   latarPutih = false,
   tanpaKembali = false,
+  labelAtas,
   children,
 }: {
   judul: string;
@@ -40,20 +41,27 @@ export function AksiHalaman({
   latarPutih?: boolean;
   /** Sembunyikan tombol "Kembali ke panduan" di dasar (panah kembali di header tetap ada). */
   tanpaKembali?: boolean;
+  /** Label kecil di atas judul. Bila ada, baris konteks (nama panduan dan tingkat) dan pengantar tidak ditampilkan. */
+  labelAtas?: string;
   children: ReactNode;
 }) {
   return (
     <Halaman
       judul={judul}
       latarPutih={latarPutih}
+      atasJudul={labelAtas ? <p className="mb-1 text-kecil font-semibold text-utama-gelap">{labelAtas}</p> : undefined}
       kepala={
-        <>
-          <p className="mt-2 font-medium text-utama-gelap">
-            {kartu.judul}
-            {tingkat && ` · ${tk.tingkat[tingkat]}`}
-          </p>
-          {pengantar && <p className="mt-2 text-redup">{pengantar}</p>}
-        </>
+        labelAtas ? (
+          <></>
+        ) : (
+          <>
+            <p className="mt-2 font-medium text-utama-gelap">
+              {kartu.judul}
+              {tingkat && ` · ${tk.tingkat[tingkat]}`}
+            </p>
+            {pengantar && <p className="mt-2 text-redup">{pengantar}</p>}
+          </>
+        )
       }
     >
       <div className="flex flex-col gap-bagian">

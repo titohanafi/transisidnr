@@ -346,7 +346,7 @@ export const uiSchema = z
         }),
       }),
       beli: z.object({
-        judul: teks,
+        label: teks,
         lihatProduk: teks,
         linkMenyusul: teks,
         afiliasi: teks,
