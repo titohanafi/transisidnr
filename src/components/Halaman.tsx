@@ -110,7 +110,7 @@ export function Halaman({
             <div
               className={
                 kepalaPita
-                  ? `${warnaPita[kepalaPita === true ? "biasa" : kepalaPita]} px-4 ${kepalaTumpang ? "pb-12" : "pb-6"} pt-6`
+                  ? `${warnaPita[kepalaPita === true ? "biasa" : kepalaPita]} px-4 ${kepalaPita === "gelap" ? (kepalaTumpang ? "pb-20 pt-8" : "pb-10 pt-8") : kepalaTumpang ? "pb-12 pt-6" : "pb-6 pt-6"}`
                   : "px-4 pb-5 pt-6"
               }
             >
