@@ -98,9 +98,9 @@ export function Kontak() {
     <Halaman judul={t.judul} judulTersembunyi latarPutih kepala={<p className="mt-2 text-redup">{t.pengantar}</p>}>
       <div className="flex flex-col gap-bagian">
         {darurat && darurat.entri.length > 0 && (
-          <section aria-labelledby="nomor-darurat">
-            <h2 id="nomor-darurat" className="flex items-center gap-2 text-subjudul">
-              <Siren className="h-5 w-5 shrink-0 text-bahaya" strokeWidth={2} aria-hidden="true" focusable="false" />
+          <section aria-labelledby="nomor-darurat" className="rounded-kartu border border-utama-redup bg-utama-muda p-4">
+            <h2 id="nomor-darurat" className="flex items-center gap-2 text-subjudul text-utama-gelap">
+              <Siren className="h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
               {darurat.kategori.nama}
             </h2>
             <ul className="mt-isi grid grid-cols-2 gap-3">
@@ -109,9 +109,9 @@ export function Kontak() {
                   <li key={e.id}>
                     <a
                       href={urlTelepon(e.telepon)}
-                      className="tekan flex h-full min-h-[92px] flex-col justify-between rounded-kartu border border-bahaya/25 bg-bahaya-muda p-4 hover:brightness-95"
+                      className="tekan flex h-full min-h-[92px] flex-col justify-between rounded-kartu border border-utama-redup bg-white p-4 shadow-kartu hover:bg-utama-muda"
                     >
-                      <span className="flex items-center gap-2 text-bahaya">
+                      <span className="flex items-center gap-2 text-utama">
                         <Phone className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
                         <span className="text-subjudul tabular-nums">{e.telepon}</span>
                       </span>
@@ -124,7 +124,7 @@ export function Kontak() {
                 ) : null,
               )}
             </ul>
-            <div className="mt-3 overflow-hidden rounded-kartu border border-garis bg-white">
+            <div className="mt-3 overflow-hidden rounded-kartu border border-utama-redup bg-white">
               <LipatBaris judul={t.keteranganSumber}>
                 <ul className="space-y-3">
                   {darurat.entri.map((e) => (
@@ -145,9 +145,9 @@ export function Kontak() {
           </section>
         )}
 
-        <section className="overflow-hidden rounded-kartu border border-bahaya/25 bg-bahaya-muda" aria-labelledby="tanda-bahaya">
+        <section className="overflow-hidden rounded-kartu border border-aksen/30 bg-aksen-muda" aria-labelledby="tanda-bahaya">
           <details className="group">
-            <summary className="flex min-h-[56px] cursor-pointer list-none items-center gap-3 px-4 py-3 text-bahaya [&::-webkit-details-marker]:hidden">
+            <summary className="flex min-h-[56px] cursor-pointer list-none items-center gap-3 px-4 py-3 text-aksen [&::-webkit-details-marker]:hidden">
               <TriangleAlert className="h-6 w-6 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
               <h2 id="tanda-bahaya" className="flex-1 text-judulKartu">
                 {igd.judul}
@@ -165,7 +165,7 @@ export function Kontak() {
                 <ul className="mt-3 space-y-2">
                   {igd.tandaBahaya.map((x) => (
                     <li key={x} className="flex gap-3">
-                      <span aria-hidden="true" className="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-bahaya" />
+                      <span aria-hidden="true" className="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-aksen" />
                       <span>{x}</span>
                     </li>
                   ))}

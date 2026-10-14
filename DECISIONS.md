@@ -630,3 +630,4 @@
 - Latar halaman putih (`latarPutih`), sesuai latar bawaan.
 - Setiap jenis kontak punya ikon dalam kotak hijau muda (`IKON_KATEGORI` di `src/screens/Kontak.tsx`, dari lucide-react, dekoratif). Jenis kontak baru di `KategoriKontak` wajib diberi ikon, kalau tidak typecheck gagal.
 - Alamat/kota memakai ikon pin dan baris sendiri, catatan di bawahnya. Tombol telepon dan WhatsApp selebar kartu, bertumpuk, supaya mudah ditekan satu tangan.
+- **Dukungan tanpa merah:** nomor darurat kini dalam panel teal muda dengan ubin putih bernomor teal; "Kapan harus ke dokter atau IGD" memakai warna hangat `aksen` (terakota), bukan `bahaya`. Pesan tetap jelas lewat ikon (sirene, segitiga peringatan) dan teks, bukan warna saja. Token `bahaya` hanya dipakai untuk hapus data dan galat.
