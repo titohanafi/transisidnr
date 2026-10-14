@@ -539,3 +539,6 @@
 - Yang TIDAK diisi: tukang, arsitek, komunitas, dan kontak ahli lokal. Itu bukan layanan pemerintah, sehingga tetap "sedang disiapkan".
 - Hal yang perlu diverifikasi manusia: (1) nomor BPJS 165 diambil dari ringkasan pencarian atas situs resmi BPJS karena halaman utamanya tidak bisa dibaca otomatis; (2) 110 dan 113 bersumber dari halaman Komdigi tentang 112 yang menyatakan nomor itu masih bisa dipakai; (3) layanan 112 berbeda antar daerah; (4) nomor rumah sakit bisa berubah. Semua entri berstatus `draf`.
 - Nomor WhatsApp Kemensos yang tertaut di situs lama (628877171171) sengaja TIDAK dipakai karena ada peringatan resmi pemerintah daerah tentang nomor WhatsApp palsu atas nama Kemensos; hanya telepon 171 yang dipakai.
+
+## Peran penyandang disabilitas dan caregiver pindah ke panel solusi
+- Kartu "peran" yang berdiri sendiri dihapus. Dua kalimat peran (`peran.penyandang_disabilitas` dan `peran.caregiver`) kini tampil sebagai dua baris kecil berlabel di dalam panel solusi, tepat di atas daftar langkah. Label daftar langkah tetap "Langkah" (bukan "Peran caregiver") karena sebagian langkah dikerjakan sendiri oleh penyandang disabilitas, dan prinsip produk menempatkan penyandang disabilitas sebagai pemegang keputusan.

@@ -184,6 +184,29 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                             />
                           </div>
                         )}
+                        {kartu.peran && (
+                          <dl className="mt-5 space-y-2 rounded-tombol bg-permukaan p-3 text-kecil">
+                            <div className="flex gap-2">
+                              <User className="mt-0.5 h-4 w-4 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+                              <div>
+                                <dt className="font-semibold">{t.peranPenyandang}</dt>
+                                <dd>{kartu.peran.penyandang_disabilitas}</dd>
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <HeartHandshake
+                                className="mt-0.5 h-4 w-4 shrink-0 text-utama"
+                                strokeWidth={2}
+                                aria-hidden="true"
+                                focusable="false"
+                              />
+                              <div>
+                                <dt className="font-semibold">{t.peranCaregiver}</dt>
+                                <dd>{kartu.peran.caregiver}</dd>
+                              </div>
+                            </div>
+                          </dl>
+                        )}
                         <h4 className="mt-5 font-semibold">{t.langkah}</h4>
                         <div className="mt-2">
                           <LangkahChecklist kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} keTingkat={setAktifTingkat} />
@@ -232,28 +255,6 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
               )}
               {adaDisembunyikan && <p className="mt-3 text-redup">{t.tingkatDisembunyikan}</p>}
             </section>
-
-            {kartu.peran && (
-              <section aria-labelledby="peran">
-                <h2 id="peran" className="sr-only">
-                  {t.peranPenyandang} / {t.peranCaregiver}
-                </h2>
-                <div className="divide-y divide-garis/70 overflow-hidden rounded-kartu border border-garis bg-white">
-                  {[
-                    { Ikon: User, judul: t.peranPenyandang, isi: kartu.peran.penyandang_disabilitas },
-                    { Ikon: HeartHandshake, judul: t.peranCaregiver, isi: kartu.peran.caregiver },
-                  ].map(({ Ikon: IkonPeran, judul, isi }) => (
-                    <div key={judul} className="flex gap-3 p-4">
-                      <IkonPeran className="mt-0.5 h-6 w-6 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-                      <div>
-                        <h3 className="font-semibold">{judul}</h3>
-                        <p className="mt-0.5">{isi}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
 
             {kartu.peringatan && (
               <section className="flex items-start gap-3 rounded-tombol bg-permukaan p-4" aria-labelledby="peringatan">
