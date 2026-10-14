@@ -49,6 +49,7 @@ describe("aksi per tingkat", () => {
   it("jalur dan kunci", () => {
     expect(jalurAksi("beli", "a", "alat_tanpa_bongkar")).toBe("/aksi/beli/a/alat_tanpa_bongkar");
     expect(jalurAksi("ahli", "a")).toBe("/aksi/ahli/a");
+    expect(jalurAksi("sendiri", "a", "tanpa_biaya")).toBe("/kartu/a/tanpa_biaya");
     expect(kunciChecklist("a", "renovasi")).toBe("a:renovasi");
   });
 });

@@ -20,7 +20,10 @@ export function aksiTersedia(kartu: Kartu, tingkat: Tingkat): Exclude<JenisAksi,
 }
 
 export function jalurAksi(jenis: JenisAksi, kartuId: string, tingkat?: Tingkat): string {
-  return jenis === "ahli" || !tingkat ? `/aksi/ahli/${kartuId}` : `/aksi/${jenis}/${kartuId}/${tingkat}`;
+  if (jenis === "ahli" || !tingkat) return `/aksi/ahli/${kartuId}`;
+  // Langkah dengan centang ada di panel solusi pada halaman panduan, bukan halaman terpisah.
+  if (jenis === "sendiri") return `/kartu/${kartuId}/${tingkat}`;
+  return `/aksi/${jenis}/${kartuId}/${tingkat}`;
 }
 
 export const kunciChecklist = (kartuId: string, tingkat: Tingkat): string => `${kartuId}:${tingkat}`;

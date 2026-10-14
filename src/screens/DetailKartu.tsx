@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
 import { Ikon } from "../components/Ikon";
+import { LangkahChecklist } from "../components/LangkahChecklist";
 import { LipatBaris } from "../components/Lipat";
 import { LencanaSifat, LencanaStatus, Tanda } from "../components/Lencana";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
@@ -172,19 +173,9 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                         </div>
                         <h4 className="mt-5 font-semibold">{t.langkah}</h4>
-                        <ol className="mt-2 space-y-2">
-                          {s.langkah.map((l, i) => (
-                            <li key={l} className="flex gap-3">
-                              <span
-                                aria-hidden="true"
-                                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-utama-muda text-sm font-bold text-utama-gelap"
-                              >
-                                {i + 1}
-                              </span>
-                              <span>{l}</span>
-                            </li>
-                          ))}
-                        </ol>
+                        <div className="mt-2">
+                          <LangkahChecklist kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} keTingkat={setAktifTingkat} />
+                        </div>
 
                         <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-redup">
                           <dt className="font-semibold">{t.kesulitan}</dt>
@@ -237,15 +228,9 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                         <div className="mt-6 flex flex-col gap-2">
                           {/* Tukang tidak diulang di sini: tombolnya ada di "Kenali peran ahli", pada baris Tukang. */}
                           {aksiTersedia(kartu, x.tingkat)
-                            .filter((j) => j !== "tukang")
+                            .filter((j) => j !== "tukang" && j !== "sendiri")
                             .map((j) => (
-                              <TombolAksi
-                                key={j}
-                                jenis={j}
-                                kartuId={kartu.id}
-                                tingkat={x.tingkat}
-                                gayaTombol={j === "sendiri" ? "utama" : "sekunder"}
-                              />
+                              <TombolAksi key={j} jenis={j} kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="sekunder" />
                             ))}
                         </div>
                       </>

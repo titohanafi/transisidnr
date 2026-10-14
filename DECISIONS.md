@@ -507,3 +507,7 @@
 - Sebelumnya halaman memuat sekitar 12 blok terpisah (3 kartu solusi, 2 kartu peran, peringatan, 2 bagian lipat, catatan non-medis, dua tombol). Sekarang: hero, satu wadah solusi (3 baris berpemisah), tombol ahli, peringatan, satu wadah peran (2 baris), satu wadah "istilah dan sumber" (2 baris lipat), dan catatan non-medis sebagai teks kecil tanpa kotak.
 - Hanya satu tingkat solusi terbuka pada satu waktu (membuka satu menutup yang lain). Tombol "Kembali ke ..." di dasar dihapus karena header sudah punya panah kembali.
 - Peringatan keselamatan sengaja tetap terlihat (tidak dilipat) dan berwarna.
+
+## Halaman "Ikuti langkahnya" digabung ke panel solusi
+- Halaman terpisah `/aksi/sendiri/...` hanya mengubah daftar langkah menjadi kotak centang. Sekarang daftar langkah di panel solusi (Detail Panduan) langsung berupa kotak centang, dengan bilah kemajuan dan pertanyaan "Bagaimana hasilnya?" yang muncul setelah semua langkah tercentang. Data tetap sama (`state.checklist` dan `state.hasil`), jadi Panduan Saya (beres atau tingkat berikutnya) dan halaman Cetak tidak berubah.
+- Tombol "Ikuti langkahnya" dihapus dari panel. Di Panduan Saya, tombol utama untuk tingkat tanpa barang kini berbunyi "Lihat langkahnya" dan menuju panel solusi tingkat itu. Alamat lama `/aksi/sendiri/...` diarahkan ke halaman panduan.
