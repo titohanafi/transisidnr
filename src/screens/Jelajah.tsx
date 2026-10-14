@@ -105,7 +105,7 @@ function Daftar({ awal }: { awal: Filter }) {
       kepalaPita={filter === "semua" ? "gelap" : false}
       kepalaTumpang={filter === "semua"}
     >
-      <div className={filter === "semua" ? "-mt-4" : undefined}>
+      <div className={filter === "semua" ? "-mt-8" : undefined}>
         {filter === "semua" && cari.trim() !== "" && (
           <aside className="mt-isi flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda p-3 text-catatan">
             <Info className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
