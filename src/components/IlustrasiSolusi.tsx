@@ -147,6 +147,67 @@ const GAMBAR: Record<string, () => ReactNode> = {
       <KursiRodaAtas x={160} y={132} />
     </Kanvas>
   ),
+  // Sepakati cara memanggil: pengguna memanggil dari kamar mandi, ponsel di tempat yang terjangkau, pintu tidak dikunci.
+  "bath-emergency-call:tanpa_biaya": () => (
+    <Kanvas>
+      <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <Pengguna x={90} y={138} tangan={[18, -134]} />
+      <path
+        d="M128 22A14 14 0 0 1 128 40M138 14A26 26 0 0 1 138 48M148 6A38 38 0 0 1 148 56"
+        {...garisTinta}
+        strokeWidth="2.500"
+        className="stroke-tinta"
+      />
+      <rect x="250" y="22" width="76" height="116" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M250 22L226 12V134L250 138z" className="fill-white stroke-tinta" strokeWidth="3" strokeLinejoin="round" />
+      <circle cx="234" cy="76" r="3.500" className="fill-tinta" />
+    </Kanvas>
+  ),
+  // Tambahkan alat panggil yang bisa dilepas: tombol panggil nirkabel di satu ruangan, penerima di ruangan lain.
+  "bath-emergency-call:alat_tanpa_bongkar": () => (
+    <Kanvas>
+      <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <rect x="176" y="0" width="8" height="138" className="fill-tinta" />
+      <rect x="60" y="44" width="52" height="52" rx="12" className="fill-white stroke-tinta" strokeWidth="3" />
+      <circle cx="86" cy="36" r="6" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M86 42V44" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <circle cx="86" cy="70" r="16" className="fill-white stroke-tinta" strokeWidth="3" />
+      <circle cx="86" cy="70" r="6" className="fill-tinta" />
+      <path
+        d="M122.700 61A14 14 0 0 1 122.700 79M132 53.300A26 26 0 0 1 132 86.700M141.100 45.600A38 38 0 0 1 141.100 94.400M150.300 37.900A50 50 0 0 1 150.300 102.100M159.500 30.200A62 62 0 0 1 159.500 109.800"
+        {...garisTinta}
+        strokeWidth="2.500"
+        className="stroke-tinta"
+      />
+      <rect x="232" y="50" width="60" height="40" rx="8" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M246 62H278M246 70H278M246 78H278" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <path d="M300 62A12 12 0 0 1 300 78M308 56A22 22 0 0 1 308 84" {...garisTinta} strokeWidth="2.500" className="stroke-tinta" />
+    </Kanvas>
+  ),
+  // Pasang sistem panggil permanen: tombol dan tali panggil di dinding dekat kloset, terhubung ke bel di ruangan lain.
+  "bath-emergency-call:renovasi": () => (
+    <Kanvas>
+      <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <rect x="250" y="0" width="12" height="138" className="fill-tinta" />
+      <rect x="212" y="64" width="28" height="40" rx="4" className="fill-white stroke-tinta" strokeWidth="3" />
+      <circle cx="226" cy="64" r="3" className="fill-tinta" />
+      <rect x="160" y="100" width="76" height="8" rx="4" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path
+        d="M170 108H232Q232 124 218 128V138H190V128Q170 124 170 108Z"
+        className="fill-white stroke-tinta"
+        strokeWidth="3"
+        strokeLinejoin="round"
+      />
+      <circle cx="246" cy="44" r="6" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M246 50V100" {...garisTinta} strokeWidth="2" className="stroke-tinta" />
+      <circle cx="246" cy="106" r="4" className="fill-tinta" />
+      <circle cx="246" cy="126" r="6" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M252 44H298" {...garisTinta} strokeWidth="2.500" strokeDasharray="3 5" className="stroke-tinta" />
+      <path d="M300 58h20q-2-4-2-12a8 8 0 0 0-16 0q0 8-2 12z" className="fill-white stroke-tinta" strokeWidth="3" strokeLinejoin="round" />
+      <circle cx="310" cy="63" r="3" className="fill-tinta" />
+      <path d="M328 36A8 8 0 0 1 328 52M334 30A16 16 0 0 1 334 58" {...garisTinta} strokeWidth="2.500" className="stroke-tinta" />
+    </Kanvas>
+  ),
 };
 
 /** Gambar yang memuat angka ukuran; di bawahnya tampil catatan bahwa angka hanya acuan umum. */
