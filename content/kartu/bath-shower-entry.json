@@ -12,6 +12,7 @@
         "Sementara belum aman masuk, pilih mandi duduk di area yang datar atau mandi lap.",
         "Latih cara masuk dan pindah bersama okupasi terapis, bukan dengan menarik tubuh pengguna."
       ],
+      "peran_langkah": ["caregiver", "penyandang_disabilitas", "bersama"],
       "biaya": {
         "kisaran_rp": "Rp 0"
       },
@@ -30,6 +31,7 @@
         "Bila bibir rendah, tanyakan apakah ramp kecil yang bisa dilepas cocok untuk rumah Anda.",
         "Pasang anti-slip di area duduk dan area berpijak."
       ],
+      "peran_langkah": ["penyandang_disabilitas", "penyandang_disabilitas", "bersama", "caregiver"],
       "biaya": {
         "kisaran_rp": null,
         "estimasi_rp": "Rp 150.000 - Rp 2.000.000"
@@ -73,6 +75,7 @@
         "Pasang lantai miring ke saluran dan permukaan anti-slip.",
         "Pasang tempat duduk lipat dan pegangan di dinding area mandi."
       ],
+      "peran_langkah": ["tukang", "tukang", "tukang"],
       "biaya": {
         "kisaran_rp": null
       },

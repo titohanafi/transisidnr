@@ -12,6 +12,7 @@
         "Coba dekati kloset dari sudut atau sisi yang berbeda dan catat yang paling leluasa.",
         "Bila pintu menghalangi, coba buka lebar atau lepas sementara tirai atau penghalang lain."
       ],
+      "peran_langkah": ["caregiver", "penyandang_disabilitas", "bersama"],
       "biaya": {
         "kisaran_rp": "Rp 0"
       },
@@ -29,6 +30,7 @@
         "Pindahkan barang ke dinding yang tidak menghalangi jalur kursi roda.",
         "Pertimbangkan papan pindah bila ruang tetap sempit, sesuai saran terapis."
       ],
+      "peran_langkah": ["caregiver", "caregiver", "penyandang_disabilitas"],
       "biaya": {
         "kisaran_rp": null,
         "estimasi_rp": "Rp 50.000 - Rp 1.200.000"
@@ -64,6 +66,7 @@
         "Pertimbangkan menggabungkan atau memperluas ruang bila memungkinkan.",
         "Ganti pintu yang memakan ruang dengan pintu geser."
       ],
+      "peran_langkah": ["tukang", "bersama", "tukang"],
       "biaya": {
         "kisaran_rp": null
       },

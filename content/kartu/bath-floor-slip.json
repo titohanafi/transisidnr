@@ -13,6 +13,7 @@
         "Pakai alas kaki atau kaus kaki dengan tapak karet bila masih berdiri sebentar untuk berpindah.",
         "Berpindah hanya setelah lantai kering, dan minta pendamping berada di dekat Anda."
       ],
+      "peran_langkah": ["caregiver", "caregiver", "penyandang_disabilitas", "penyandang_disabilitas"],
       "biaya": {
         "kisaran_rp": "Rp 0"
       },
@@ -30,6 +31,7 @@
         "Pastikan lantai bersih dan kering sebelum menempel, lalu cek tepinya tidak terangkat.",
         "Ganti bila sudah aus atau tepinya mulai terlepas."
       ],
+      "peran_langkah": ["caregiver", "caregiver", "caregiver"],
       "biaya": {
         "kisaran_rp": null,
         "estimasi_rp": "Rp 30.000 - Rp 150.000"
@@ -57,6 +59,7 @@
         "Perbaiki kemiringan lantai supaya air mengalir ke saluran dan tidak menggenang.",
         "Pastikan tidak ada beda tinggi yang membuat roda tersangkut."
       ],
+      "peran_langkah": ["tukang", "tukang", "tukang"],
       "biaya": {
         "kisaran_rp": null,
         "estimasi_rp": "Rp 2.000.000 - Rp 8.000.000"

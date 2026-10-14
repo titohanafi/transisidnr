@@ -260,6 +260,7 @@
     "bantuan": "Siapa yang bisa membantu",
     "peranPenyandang": "Peran penyandang disabilitas",
     "peranCaregiver": "Peran caregiver",
+    "peranLangkah": { "penyandang_disabilitas": "Penyandang disabilitas", "caregiver": "Caregiver", "bersama": "Bersama", "tukang": "Tukang" },
     "peringatan": "Perhatian",
     "sumber": "Sumber",
     "sumberMenyusul": "Sumber menyusul",

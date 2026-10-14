@@ -5,6 +5,7 @@ import {
   HUNIAN,
   JENIS_BANTUAN,
   KATEGORI_KONTAK,
+  PERAN_LANGKAH,
   STATUS_VALIDASI,
   TINGKAT,
   TINGKAT_BIAYA,
@@ -37,16 +38,22 @@ export const ukuranSchema = z.object({
   satuan: teks,
 });
 
-export const tingkatSolusiSchema = z.object({
-  ringkasan: teks,
-  langkah: z.array(teks).min(1),
-  sifat: z.enum(["sementara", "permanen"]),
-  // `kisaran_rp` dibaca mesin rekomendasi (total dan anggaran). `estimasi_rp` hanya untuk tampilan: tidak memengaruhi rekomendasi.
-  biaya: z.object({ kisaran_rp: z.string().nullable(), estimasi_rp: z.string().nullable().optional() }),
-  usaha: z.object({ waktu: z.string().nullable(), kesulitan: z.string().nullable() }),
-  ukuran: z.array(ukuranSchema).optional(),
-  barang: z.array(barangSchema).default([]),
-});
+export const tingkatSolusiSchema = z
+  .object({
+    ringkasan: teks,
+    langkah: z.array(teks).min(1),
+    /** Peran tiap langkah, urutannya sama dengan `langkah` (panjang harus sama). */
+    peran_langkah: z.array(z.enum(PERAN_LANGKAH)).optional(),
+    sifat: z.enum(["sementara", "permanen"]),
+    // `kisaran_rp` dibaca mesin rekomendasi (total dan anggaran). `estimasi_rp` hanya untuk tampilan: tidak memengaruhi rekomendasi.
+    biaya: z.object({ kisaran_rp: z.string().nullable(), estimasi_rp: z.string().nullable().optional() }),
+    usaha: z.object({ waktu: z.string().nullable(), kesulitan: z.string().nullable() }),
+    ukuran: z.array(ukuranSchema).optional(),
+    barang: z.array(barangSchema).default([]),
+  })
+  .refine((s) => !s.peran_langkah || s.peran_langkah.length === s.langkah.length, {
+    message: "peran_langkah harus sebanyak langkah",
+  });
 
 export const solusiSchema = z
   .object({
@@ -311,6 +318,7 @@ export const uiSchema = z
       bantuan: teks,
       peranPenyandang: teks,
       peranCaregiver: teks,
+      peranLangkah: z.object({ penyandang_disabilitas: teks, caregiver: teks, bersama: teks, tukang: teks }),
       peringatan: teks,
       sumber: teks,
       sumberMenyusul: teks,

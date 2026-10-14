@@ -1,4 +1,4 @@
-import { Clock, HeartHandshake, TriangleAlert, User } from "lucide-react";
+import { Clock, TriangleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
@@ -184,32 +184,15 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                             />
                           </div>
                         )}
-                        {kartu.peran && (
-                          <dl className="mt-5 space-y-2 rounded-tombol bg-permukaan p-3 text-kecil">
-                            <div className="flex gap-2">
-                              <User className="mt-0.5 h-4 w-4 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-                              <div>
-                                <dt className="font-semibold">{t.peranPenyandang}</dt>
-                                <dd>{kartu.peran.penyandang_disabilitas}</dd>
-                              </div>
-                            </div>
-                            <div className="flex gap-2">
-                              <HeartHandshake
-                                className="mt-0.5 h-4 w-4 shrink-0 text-utama"
-                                strokeWidth={2}
-                                aria-hidden="true"
-                                focusable="false"
-                              />
-                              <div>
-                                <dt className="font-semibold">{t.peranCaregiver}</dt>
-                                <dd>{kartu.peran.caregiver}</dd>
-                              </div>
-                            </div>
-                          </dl>
-                        )}
                         <h4 className="mt-5 font-semibold">{t.langkah}</h4>
                         <div className="mt-2">
-                          <LangkahChecklist kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} keTingkat={setAktifTingkat} />
+                          <LangkahChecklist
+                            kartu={kartu}
+                            tingkat={x.tingkat}
+                            langkah={s.langkah}
+                            peran={s.peran_langkah}
+                            keTingkat={setAktifTingkat}
+                          />
                         </div>
 
                         <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-redup">

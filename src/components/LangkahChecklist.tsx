@@ -1,5 +1,7 @@
 import { kunciChecklist } from "../domain/aksi";
 import { konten } from "../domain/content";
+import { Hammer, HeartHandshake, User, Users, type LucideIcon } from "lucide-react";
+import type { PeranLangkah } from "../domain/konstanta";
 import { ringkasLangkah, tingkatSetelah } from "../domain/langkah";
 import type { Kartu, Tingkat } from "../domain/schema";
 import { isi } from "../lib/teks";
@@ -8,6 +10,13 @@ import { BilahKemajuan } from "./BilahKemajuan";
 import { Tombol, TombolLink } from "./Tombol";
 
 const t = konten.ui.aksi.sendiri;
+const namaPeran = konten.ui.kartu.peranLangkah;
+const IKON_PERAN: Record<PeranLangkah, LucideIcon> = {
+  penyandang_disabilitas: User,
+  caregiver: HeartHandshake,
+  bersama: Users,
+  tukang: Hammer,
+};
 
 /**
  * Daftar langkah yang bisa dicentang langsung di panel solusi (tersimpan di perangkat), plus pertanyaan hasil
@@ -17,11 +26,14 @@ export function LangkahChecklist({
   kartu,
   tingkat,
   langkah,
+  peran,
   keTingkat,
 }: {
   kartu: Kartu;
   tingkat: Tingkat;
   langkah: string[];
+  /** Siapa yang mengerjakan tiap langkah (urutan sama dengan `langkah`); bila kosong, tidak ada penanda. */
+  peran?: readonly PeranLangkah[];
   /** Pindah ke tingkat solusi lain di halaman yang sama. */
   keTingkat: (t: Tingkat) => void;
 }) {
@@ -61,7 +73,10 @@ export function LangkahChecklist({
                   onChange={() => toggleLangkah(kunci, i)}
                   className="mt-0.5 h-6 w-6 shrink-0 accent-utama"
                 />
-                <span className={centang ? "line-through" : ""}>{l}</span>
+                <span>
+                  <span className={centang ? "line-through" : ""}>{l}</span>
+                  {peran?.[i] && <PenandaPeran peran={peran[i]} />}
+                </span>
               </label>
             </li>
           );
@@ -123,5 +138,16 @@ export function LangkahChecklist({
         </section>
       )}
     </div>
+  );
+}
+
+/** Penanda kecil siapa yang mengerjakan langkah. Teks selalu ada, ikon hanya hiasan. */
+function PenandaPeran({ peran }: { peran: PeranLangkah }) {
+  const Ikon = IKON_PERAN[peran];
+  return (
+    <span className="mt-1 flex items-center gap-1.5 text-mikro font-medium text-redup">
+      <Ikon className="h-3.5 w-3.5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+      {namaPeran[peran]}
+    </span>
   );
 }

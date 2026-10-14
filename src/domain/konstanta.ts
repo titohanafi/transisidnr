@@ -18,6 +18,10 @@ export const KATEGORI_KONTAK = [
 ] as const;
 export type KategoriKontak = (typeof KATEGORI_KONTAK)[number];
 
+/** Siapa yang mengerjakan sebuah langkah. "bersama" = diputuskan atau dikerjakan berdua. */
+export const PERAN_LANGKAH = ["penyandang_disabilitas", "caregiver", "bersama", "tukang"] as const;
+export type PeranLangkah = (typeof PERAN_LANGKAH)[number];
+
 export const AKTIVITAS = ["mandi", "toilet", "wudhu", "grooming", "umum"] as const;
 export const ALAT_BANTU = ["kursi_roda", "kruk", "walker"] as const;
 export const HUNIAN = ["milik_sendiri", "kontrakan", "kos", "apartemen"] as const;

@@ -12,6 +12,7 @@
         "Coba dekati wastafel dari sudut yang membuat kaki dan lutut nyaman.",
         "Gunakan cermin kecil yang dipegang atau disandarkan bila cermin terlalu tinggi."
       ],
+      "peran_langkah": ["caregiver", "penyandang_disabilitas", "penyandang_disabilitas"],
       "biaya": {
         "kisaran_rp": "Rp 0"
       },
@@ -29,6 +30,7 @@
         "Pakai baki, keranjang, atau troli kecil untuk perlengkapan.",
         "Cek apakah ada ruang kosong di bawah wastafel untuk lutut atau kaki."
       ],
+      "peran_langkah": ["caregiver", "bersama", "caregiver"],
       "biaya": {
         "kisaran_rp": null,
         "estimasi_rp": "Rp 100.000 - Rp 700.000"
@@ -64,6 +66,7 @@
         "Pasang wastafel gantung dengan ruang kosong di bawahnya untuk lutut atau kaki.",
         "Bungkus atau amankan pipa di bawah wastafel agar tidak melukai kaki."
       ],
+      "peran_langkah": ["tukang", "tukang", "tukang"],
       "biaya": {
         "kisaran_rp": null,
         "estimasi_rp": "Rp 1.500.000 - Rp 6.000.000"

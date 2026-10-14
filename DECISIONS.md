@@ -542,3 +542,7 @@
 
 ## Peran penyandang disabilitas dan caregiver pindah ke panel solusi
 - Kartu "peran" yang berdiri sendiri dihapus. Dua kalimat peran (`peran.penyandang_disabilitas` dan `peran.caregiver`) kini tampil sebagai dua baris kecil berlabel di dalam panel solusi, tepat di atas daftar langkah. Label daftar langkah tetap "Langkah" (bukan "Peran caregiver") karena sebagian langkah dikerjakan sendiri oleh penyandang disabilitas, dan prinsip produk menempatkan penyandang disabilitas sebagai pemegang keputusan.
+
+## Penanda peran di setiap langkah (checklist)
+- Kartu atau kotak peran dihapus dari Detail Panduan. Sebagai gantinya, setiap langkah di checklist diberi penanda kecil siapa yang mengerjakannya: Penyandang disabilitas, Caregiver, Bersama, atau Tukang (tingkat Renovasi). Data disimpan di bidang baru `peran_langkah` (urutan sama dengan `langkah`; jumlahnya harus sama, dijaga skema dan tes). Bidang `peran` lama di kartu tidak lagi ditampilkan.
+- Pembagian peran untuk 106 langkah DITENTUKAN ASISTEN dengan aturan sederhana dari kata kerja pertama dan sedikit penyesuaian manual: memutuskan, mencoba, dan memakai = penyandang disabilitas; menyiapkan, memasang, memindahkan, dan membeli = caregiver; melatih, menyepakati, dan menguji = bersama; pekerjaan bangunan di Renovasi = tukang; kartu pendamping semuanya caregiver. Ini penilaian, bukan fakta dari ahli. Semua kartu masih draf dan tim konten perlu meninjau penandanya.

@@ -13,6 +13,7 @@
         "Buka pintu sepenuhnya dan ganjal agar tidak menutup sendiri.",
         "Bila pintu tidak perlu dikunci, gunakan tirai sementara supaya privasi tetap terjaga."
       ],
+      "peran_langkah": ["caregiver", "penyandang_disabilitas", "caregiver", "bersama"],
       "biaya": {
         "kisaran_rp": "Rp 0"
       },
@@ -30,6 +31,7 @@
         "Pertimbangkan engsel khusus yang membuat pintu terbuka lebih lebar.",
         "Pasang ganjal pintu agar tidak menutup sendiri."
       ],
+      "peran_langkah": ["caregiver", "penyandang_disabilitas", "caregiver"],
       "biaya": {
         "kisaran_rp": null,
         "estimasi_rp": "Rp 100.000 - Rp 500.000"
@@ -65,6 +67,7 @@
         "Lebarkan bukaan pintu bila dinding memungkinkan.",
         "Pasang gagang yang mudah dioperasikan dengan satu tangan."
       ],
+      "peran_langkah": ["tukang", "tukang", "tukang"],
       "biaya": {
         "kisaran_rp": null,
         "estimasi_rp": "Rp 1.500.000 - Rp 6.000.000"

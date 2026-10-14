@@ -14,6 +14,7 @@
         "Perhatikan postur Anda sendiri supaya tidak cedera, dan minta terapis mengajarkan teknik pindah.",
         "Setelah selesai, tanyakan apa yang terasa nyaman dan apa yang tidak."
       ],
+      "peran_langkah": ["caregiver", "caregiver", "caregiver", "caregiver", "caregiver"],
       "biaya": { "kisaran_rp": "Rp 0" },
       "usaha": { "waktu": "15 menit", "kesulitan": "Perlu latihan bersama terapis" },
       "barang": []

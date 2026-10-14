@@ -13,6 +13,7 @@
         "Siapkan handuk dalam jangkauan sebelum mulai.",
         "Bila ada pertanyaan tata cara dalam kondisi tertentu, tanyakan kepada ustaz atau tokoh agama yang Anda percaya."
       ],
+      "peran_langkah": ["caregiver", "penyandang_disabilitas", "caregiver", "penyandang_disabilitas"],
       "biaya": {
         "kisaran_rp": "Rp 0"
       },
@@ -31,6 +32,7 @@
         "Pertimbangkan selang dengan keran supaya air bisa diarahkan dari posisi duduk.",
         "Pasang anti-slip di lantai sekitar tempat wudhu."
       ],
+      "peran_langkah": ["penyandang_disabilitas", "caregiver", "penyandang_disabilitas", "caregiver"],
       "biaya": {
         "kisaran_rp": null,
         "estimasi_rp": "Rp 200.000 - Rp 1.000.000"
@@ -66,6 +68,7 @@
         "Buat bangku wudhu permanen dengan lantai miring dan anti-slip.",
         "Pastikan ada ruang untuk kursi roda mendekat."
       ],
+      "peran_langkah": ["tukang", "tukang", "tukang"],
       "biaya": {
         "kisaran_rp": null,
         "estimasi_rp": "Rp 2.000.000 - Rp 8.000.000"
