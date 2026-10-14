@@ -331,3 +331,5 @@
 - Isi: (1) Jawaban Anda: ruangan, status tiap aktivitas, prioritas, dan tombol "Ubah jawaban" (atau ajakan mulai bila belum ada jawaban); (2) Check-in 7 hari terakhir (deretan emoji, dipindah dari Beranda); (3) tautan Data dan privasi (halaman hapus data), menggantikan ikon perisai di header yang dihapus.
 - Check-in di Beranda tetap, tetapi saat sudah diisi menjadi satu baris: emoji, "Hari ini: <perasaan>", tautan bantuan kecil, dan "Ubah". Kalimat balasan dan riwayat tidak lagi tampil di Beranda.
 - Belum dibuat: checklist perkembangan pasien/caregiver. Butuh isi yang ditinjau ahli (aturan konten) dan sebaiknya tanpa skor. Layar `src/screens/Saya.tsx` disiapkan sebagai tempatnya.
+
+- Navbar bawah: hanya menu yang sedang aktif yang menampilkan nama (pil hijau berisi ikon dan nama); menu lain hanya ikon. Nama menu lain tetap dibaca pembaca layar (teks tersembunyi). Area sentuh tiap menu minimal 48px.

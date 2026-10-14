@@ -28,22 +28,22 @@ export function BilahTab() {
       aria-label={umum.menuUtama}
       className="sticky bottom-0 z-10 border-t border-garis bg-white pb-[env(safe-area-inset-bottom)] print:hidden"
     >
-      <ul className="flex">
+      <ul className="flex items-center justify-between px-3 py-2">
         {TAB.map((t) => (
-          <li key={t.ke} className="flex-1">
+          <li key={t.ke} className="flex">
             <NavLink
               to={t.ke}
               end={t.ujung}
               className={({ isActive }) =>
-                `flex min-h-[56px] flex-col items-center justify-center gap-0.5 px-1 text-xs font-semibold ${
-                  isActive ? "bg-utama-muda text-utama-gelap" : "text-redup"
+                `flex min-h-[48px] items-center justify-center gap-2 rounded-full px-3 text-sm font-semibold ${
+                  isActive ? "bg-utama text-white" : "min-w-[48px] text-redup"
                 }`
               }
             >
               {({ isActive }) => (
                 <>
-                  <t.Ikon className="h-6 w-6" strokeWidth={2} aria-hidden="true" focusable="false" />
-                  <span className={isActive ? "underline decoration-2 underline-offset-4" : ""}>{t.label}</span>
+                  <t.Ikon className="h-6 w-6 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+                  <span className={isActive ? "" : "sr-only"}>{t.label}</span>
                 </>
               )}
             </NavLink>
