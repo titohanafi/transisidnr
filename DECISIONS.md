@@ -632,3 +632,4 @@
 - Alamat/kota memakai ikon pin dan baris sendiri, catatan di bawahnya. Tombol telepon dan WhatsApp selebar kartu, bertumpuk, supaya mudah ditekan satu tangan.
 - **Dukungan tanpa merah:** nomor darurat kini dalam panel teal muda dengan ubin putih bernomor teal; "Kapan harus ke dokter atau IGD" memakai warna hangat `aksen` (terakota), bukan `bahaya`. Pesan tetap jelas lewat ikon (sirene, segitiga peringatan) dan teks, bukan warna saja. Token `bahaya` hanya dipakai untuk hapus data dan galat.
 - **Revisi:** "Kapan harus ke dokter atau IGD" kembali memakai warna merah `bahaya` (permintaan pemilik). Nomor darurat tetap teal. Token `bahaya` dipakai untuk hapus data, galat, dan tanda bahaya medis.
+- **Revisi warna Dukungan (permintaan pemilik):** panel "Nomor Kontak Darurat" merah (`bahaya`), kotak "Kapan harus ke dokter atau IGD" kuning lembut (token `catatan`, sama dengan catatan lain). Tetap ada ikon dan teks, jadi arti tidak bergantung pada warna.
