@@ -321,6 +321,7 @@ export const uiSchema = z
         waCatatan: teks,
       }),
       brief: z.object({
+        alatKhusus: teks,
         sapaan: teks,
         ruangan: teks,
         masalah: teks,

@@ -57,6 +57,22 @@ describe("aksi per tingkat", () => {
 describe("brief untuk tukang", () => {
   const teks = (o?: Partial<BahanBrief>) => susunBrief(butirBrief(bahan(o), t));
 
+  it("butir 'alat dibuat khusus' hanya ada untuk alat tanpa bongkar dan tidak dicentang dari awal", () => {
+    const alat = butirBrief(bahan({ tingkat: "alat_tanpa_bongkar" }), t);
+    const khusus = alat.find((x) => x.id === "alat_khusus");
+    expect(khusus?.ikut).toBe(false);
+    expect(khusus?.teks).toBe(t.alatKhusus);
+    expect(butirBrief(bahan({ tingkat: "renovasi" }), t).some((x) => x.id === "alat_khusus")).toBe(false);
+    expect(butirBrief(bahan({ tingkat: "tanpa_biaya" }), t).some((x) => x.id === "alat_khusus")).toBe(false);
+  });
+
+  it("butir 'alat dibuat khusus' masuk pesan hanya bila dicentang", () => {
+    const alat = butirBrief(bahan({ tingkat: "alat_tanpa_bongkar" }), t);
+    expect(susunBrief(alat)).not.toContain(t.alatKhusus);
+    const dicentang = alat.map((x) => (x.id === "alat_khusus" ? { ...x, ikut: true } : x));
+    expect(susunBrief(dicentang)).toContain(t.alatKhusus);
+  });
+
   it("memuat ruangan, masalah, modifikasi, hunian, dan budget", () => {
     const x = teks();
     expect(x).toContain("Ruangan: Kamar mandi");

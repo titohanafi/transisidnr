@@ -358,6 +358,7 @@
       "ruangan": "Ruangan: {ruangan}",
       "masalah": "Masalah: {judul}",
       "modifikasi": "Yang diinginkan:",
+      "alatKhusus": "Alat ingin dibuat khusus sesuai ukuran dan kondisi di rumah, bukan beli jadi.",
       "hunian": "Jenis hunian: {hunian}",
       "izinPemilik": "Tidak boleh bongkar permanen tanpa izin pemilik.",
       "budget": "Budget kasar: {budget}",

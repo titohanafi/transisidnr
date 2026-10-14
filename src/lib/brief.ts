@@ -39,6 +39,8 @@ export function butirBrief(b: BahanBrief, t: Brief): Butir[] {
       teks: [t.modifikasi, s.ringkasan, ...s.langkah.map((l) => `- ${l}`)].join("\n"),
     });
   }
+  // Butir pilihan (tidak dicentang dari awal): hanya relevan untuk alat yang bisa dibuatkan tukang.
+  if (b.tingkat === "alat_tanpa_bongkar") butir.push({ id: "alat_khusus", ikut: false, teks: t.alatKhusus });
   if (b.hunianLabel) {
     const sewa = b.hunianId === "kontrakan" || b.hunianId === "kos";
     butir.push({

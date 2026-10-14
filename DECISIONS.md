@@ -519,3 +519,6 @@
 
 ## Alat tanpa bongkar: beli dulu, tukang hanya untuk memasang
 - Di tingkat "Alat tanpa bongkar", tombol utama (hijau penuh) adalah "Lihat alat". "Pesan ke tukang" tetap ada tetapi sekunder, dengan pengantar "Perlu dipasangkan, atau ingin alatnya dibuat khusus oleh tukang? ..." (`kartu.jembatanPasang`). Di tingkat Renovasi sebaliknya: "Pesan ke tukang" utama dengan pengantar "Ingin dikerjakan tukang? ..." dan "Lihat alat" (bila ada barang) sekunder. Kalimat pengantar baru ditulis asisten; perlu ditinjau.
+
+## Butir pilihan "alat dibuat khusus" di pesan ke tukang
+- Untuk tingkat "Alat tanpa bongkar", pesan ke tukang punya butir tambahan "Alat ingin dibuat khusus sesuai ukuran dan kondisi di rumah, bukan beli jadi." Butir ini TIDAK dicentang dari awal dan baru masuk pesan bila pengguna mencentangnya (teksnya bisa disunting). Tidak muncul di tingkat lain. Kalimatnya ditulis asisten (`aksi.brief.alatKhusus`); perlu ditinjau.
