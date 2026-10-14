@@ -525,3 +525,4 @@
 
 - Pembaruan: pengantar dan tombol "Pesan ke tukang" untuk tingkat Alat tanpa bongkar dipindah dari panel di Detail Panduan ke halaman "Lihat alat" (di bawah daftar barang), karena di sanalah orang memutuskan membeli, memasang, atau membuat khusus. Di panel Detail Panduan, tukang hanya tampil di tingkat Renovasi. Komponen `Jembatan` kini dipakai bersama.
 - Daftar "Barang yang dibutuhkan" (nama, cek kecocokan, spesifikasi, harga) dihapus dari panel di Detail Panduan karena isinya sama dengan halaman "Lihat alat" yang dibuka tombolnya. Informasi barang kini hanya ada di satu tempat.
+- Di tingkat Renovasi, "Pesan ke tukang" dan "Kenali peran ahli" digabung dalam satu blok dengan satu kalimat pengantar (`kartu.jembatanRenovasi`), karena halaman peran ahli sudah memuat tukang sebagai salah satu jenis bantuan. Dua kalimat pengantar terpisah sebelumnya (`jembatanTukang`, `jembatanAhli`) dihapus.
