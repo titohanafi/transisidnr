@@ -127,9 +127,9 @@ export function Kontak() {
           </section>
         )}
 
-        <section className="overflow-hidden rounded-kartu border border-aksen/30 bg-aksen-muda" aria-labelledby="tanda-bahaya">
+        <section className="overflow-hidden rounded-kartu border border-bahaya/25 bg-bahaya-muda" aria-labelledby="tanda-bahaya">
           <details className="group">
-            <summary className="flex min-h-[56px] cursor-pointer list-none items-center gap-3 px-4 py-3 text-aksen [&::-webkit-details-marker]:hidden">
+            <summary className="flex min-h-[56px] cursor-pointer list-none items-center gap-3 px-4 py-3 text-bahaya [&::-webkit-details-marker]:hidden">
               <TriangleAlert className="h-6 w-6 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
               <h2 id="tanda-bahaya" className="flex-1 text-judulKartu">
                 {igd.judul}
@@ -147,7 +147,7 @@ export function Kontak() {
                 <ul className="mt-3 space-y-2">
                   {igd.tandaBahaya.map((x) => (
                     <li key={x} className="flex gap-3">
-                      <span aria-hidden="true" className="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-aksen" />
+                      <span aria-hidden="true" className="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-bahaya" />
                       <span>{x}</span>
                     </li>
                   ))}
