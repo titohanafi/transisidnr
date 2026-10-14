@@ -1,4 +1,4 @@
-import { Info, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
@@ -9,27 +9,6 @@ import { useStore } from "../state/store";
 
 const { app, beranda } = konten.ui;
 const { pilih } = beranda;
-
-// Info cakupan layanan. Pengunjung baru melihatnya sebagai banner di atas; yang sudah menjawab
-// melihatnya sebagai catatan kecil di dasar halaman agar bagian atas dipakai untuk aksinya.
-function Cakupan({ banner }: { banner: boolean }) {
-  const isi = (
-    <>
-      <Info className="mt-0.5 h-5 w-5 shrink-0 text-info" strokeWidth={2} aria-hidden="true" focusable="false" />
-      <p className="text-kecil text-tinta">
-        {pilih.cakupan}{" "}
-        <Link to="/jelajah" className="whitespace-nowrap py-2 font-semibold text-info underline">
-          {pilih.semua}
-        </Link>
-      </p>
-    </>
-  );
-  return banner ? (
-    <aside className="-mx-4 -mt-6 flex items-start gap-2 border-b border-info/25 bg-info-muda px-4 py-3">{isi}</aside>
-  ) : (
-    <aside className="flex items-start gap-2 rounded-kartu bg-info-muda px-3 py-3">{isi}</aside>
-  );
-}
 
 // Satu tindakan utama: belum menjawab -> cek kebutuhan; sudah -> lanjutkan panduan. Urutan mengikuti keadaan pengguna.
 export function Beranda() {
@@ -126,8 +105,6 @@ export function Beranda() {
     <Halaman judul={app.nama}>
       <h2 className="sr-only">{pilih.judul}</h2>
 
-      {!adaJawaban && <Cakupan banner />}
-
       <div className="flex flex-col gap-bagian">
         {adaJawaban ? (
           <>
@@ -142,7 +119,6 @@ export function Beranda() {
           </>
         )}
         <CheckIn />
-        {adaJawaban && <Cakupan banner={false} />}
       </div>
     </Halaman>
   );

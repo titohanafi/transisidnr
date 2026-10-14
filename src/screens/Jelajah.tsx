@@ -1,3 +1,4 @@
+import { Info } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { DaftarAhli } from "../components/DaftarAhli";
@@ -100,6 +101,13 @@ function Daftar({ awal }: { awal: Filter }) {
             className="mt-1 min-h-sentuh w-full rounded-tombol border border-garisKontrol bg-white px-3 text-base"
           />
         </div>
+      )}
+
+      {filter === "semua" && cari.trim() !== "" && (
+        <aside className="mt-4 flex items-start gap-2 rounded-kartu bg-info-muda p-3">
+          <Info className="mt-0.5 h-5 w-5 shrink-0 text-info" strokeWidth={2} aria-hidden="true" focusable="false" />
+          <p className="text-kecil text-tinta">{t.cari.cakupan}</p>
+        </aside>
       )}
 
       {filter === "semua" && (
