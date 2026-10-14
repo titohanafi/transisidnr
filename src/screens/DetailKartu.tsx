@@ -173,6 +173,17 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
                           {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                         </div>
+                        {aksiTersedia(kartu, x.tingkat).includes("beli") && (
+                          <div className="mt-5">
+                            <TombolAksi
+                              jenis="beli"
+                              kartuId={kartu.id}
+                              tingkat={x.tingkat}
+                              gayaTombol={x.tingkat === "renovasi" ? "sekunder" : "utama"}
+                              className="w-full"
+                            />
+                          </div>
+                        )}
                         <h4 className="mt-5 font-semibold">{t.langkah}</h4>
                         <div className="mt-2">
                           <LangkahChecklist kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} keTingkat={setAktifTingkat} />
@@ -201,14 +212,6 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                         )}
 
                         <div className="mt-6 flex flex-col gap-5">
-                          {aksiTersedia(kartu, x.tingkat).includes("beli") && (
-                            <TombolAksi
-                              jenis="beli"
-                              kartuId={kartu.id}
-                              tingkat={x.tingkat}
-                              gayaTombol={x.tingkat === "renovasi" ? "sekunder" : "utama"}
-                            />
-                          )}
                           {x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang") && (
                             <Jembatan teks={t.jembatanTukang}>
                               <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="utama" />
