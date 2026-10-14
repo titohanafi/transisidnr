@@ -85,7 +85,7 @@ function Brief({ kartu, tingkat }: NonNullable<ReturnType<typeof useKonteksAksi>
 
       <ul className="mt-4 space-y-3">
         {butir.map((x) => (
-          <li key={x.id} className="rounded-kartu border border-garis bg-white p-3">
+          <li key={x.id} className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-3">
             <label className="flex min-h-sentuh items-center gap-3 font-semibold">
               <input
                 type="checkbox"
@@ -110,7 +110,7 @@ function Brief({ kartu, tingkat }: NonNullable<ReturnType<typeof useKonteksAksi>
 
       <h2 className="mt-6 text-lg font-bold">{t.pratinjau}</h2>
       {pesan ? (
-        <pre className="mt-2 whitespace-pre-wrap break-words rounded-kartu border border-garis bg-white p-3 font-sans text-base">{pesan}</pre>
+        <pre className="mt-2 whitespace-pre-wrap break-words rounded-kartu border border-garis/70 bg-white shadow-kartu p-3 font-sans text-base">{pesan}</pre>
       ) : (
         <p className="mt-2 text-redup">{t.kosong}</p>
       )}

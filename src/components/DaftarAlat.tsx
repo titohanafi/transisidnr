@@ -19,9 +19,9 @@ export function DaftarAlat({ alat }: { alat: AlatItem[] }) {
       {alat.map((b) => (
         <li
           key={b.nama}
-          className="rounded-kartu border border-garis bg-white p-4"
+          className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4"
         >
-          <h2 className="text-lg font-semibold">{b.nama}</h2>
+          <h2 className="text-subjudul">{b.nama}</h2>
           <p className="mt-2 rounded-tombol bg-aksen-muda p-2">
             <span className="font-semibold">{tk.cek}:</span> {b.cek_kecocokan}
           </p>

@@ -29,7 +29,7 @@ export function AksiAhli() {
           <p className="mt-3">{t.bantuan}</p>
           <ul className="mt-3 space-y-3">
             {kartu.bantuan.map((b) => (
-              <li key={b.jenis} className="rounded-kartu border border-garis bg-white p-3">
+              <li key={b.jenis} className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-3">
                 <h2 className="font-semibold">{tk.jenisBantuan[b.jenis].nama}</h2>
                 <p className="text-sm text-redup">{tk.jenisBantuan[b.jenis].arti}</p>
                 <p className="mt-1">{b.keterangan}</p>

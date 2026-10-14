@@ -44,7 +44,7 @@ export function AsesmenAktivitas() {
             key={a.id}
             role="radiogroup"
             aria-labelledby={`akt-judul-${a.id}`}
-            className="rounded-kartu border border-garis bg-white p-3"
+            className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-3"
           >
             <p
               id={`akt-judul-${a.id}`}

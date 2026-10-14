@@ -11,8 +11,8 @@ export function DaftarAhli({ ahli }: { ahli: AhliItem[] }) {
     <>
       <ul className="mt-5 space-y-4">
         {ahli.map((a) => (
-          <li key={a.jenis} className="rounded-kartu border border-garis bg-white p-4">
-            <h2 className="text-lg font-semibold">{tk.jenisBantuan[a.jenis].nama}</h2>
+          <li key={a.jenis} className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4">
+            <h2 className="text-subjudul">{tk.jenisBantuan[a.jenis].nama}</h2>
             <p className="text-sm text-redup">{tk.jenisBantuan[a.jenis].arti}</p>
             <p className="mt-3 font-semibold">{tj.ahli.membantuDi}</p>
             <ul className="mt-1 space-y-2">

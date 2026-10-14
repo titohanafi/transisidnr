@@ -87,7 +87,7 @@ export function AksiSendiri() {
           className="mt-6 rounded-kartu border border-utama bg-white p-4"
           aria-labelledby="hasil"
         >
-          <h2 id="hasil" className="text-lg font-bold">
+          <h2 id="hasil" className="text-subjudul">
             {t.hasil.judul}
           </h2>
           <div className="mt-3 grid grid-cols-2 gap-2">

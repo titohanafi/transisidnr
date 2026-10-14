@@ -50,12 +50,12 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
           </Link>
         )}
       </header>
-      <main id="isi" className="flex flex-1 flex-col px-4 py-5">
+      <main id="isi" className="flex flex-1 flex-col px-4 pb-8 pt-6">
         {/* Di Beranda judulnya sama dengan nama aplikasi di header: tetap ada untuk pembaca layar, tidak ditampilkan dua kali. */}
         <h1
           ref={h1}
           tabIndex={-1}
-          className={judul === app.nama ? "sr-only" : "text-2xl font-bold leading-snug outline-none"}
+          className={judul === app.nama ? "sr-only" : "mb-1 text-judul text-tinta outline-none"}
         >
           {judul}
         </h1>

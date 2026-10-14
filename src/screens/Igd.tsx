@@ -11,8 +11,8 @@ export function Igd() {
     <Halaman judul={igd.judul}>
       <p className="mt-4 text-lg">{igd.isi}</p>
       {siap ? (
-        <section className="mt-6" aria-labelledby="judul-tanda-bahaya">
-          <h2 id="judul-tanda-bahaya" className="text-xl font-semibold">
+        <section className="mt-bagian" aria-labelledby="judul-tanda-bahaya">
+          <h2 id="judul-tanda-bahaya" className="text-subjudul">
             {igd.daftarJudul}
           </h2>
           <ul className="mt-3 list-disc space-y-2 pl-6">
@@ -22,7 +22,7 @@ export function Igd() {
           </ul>
         </section>
       ) : (
-        <p role="note" className="mt-4 rounded-kartu border border-garis bg-white p-3">
+        <p role="note" className="mt-4 rounded-kartu border border-garis/70 bg-white shadow-kartu p-3">
           {igd.menyusul}
         </p>
       )}

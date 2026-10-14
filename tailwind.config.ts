@@ -30,13 +30,14 @@ export default {
       },
       // Skala tipografi dan ritme jarak (desainer cukup mengubah di sini).
       fontSize: {
-        judul: ["1.5rem", { lineHeight: "1.3", fontWeight: "700" }],
-        subjudul: ["1.25rem", { lineHeight: "1.35", fontWeight: "700" }],
+        judul: ["1.625rem", { lineHeight: "1.25", fontWeight: "700", letterSpacing: "-0.015em" }], // judul halaman (h1)
+        subjudul: ["1.25rem", { lineHeight: "1.35", fontWeight: "700", letterSpacing: "-0.01em" }], // judul bagian (h2)
+        judulKartu: ["1.0625rem", { lineHeight: "1.4", fontWeight: "600" }], // judul kartu / sub-bagian (h3)
         isi: ["1rem", { lineHeight: "1.5" }],
         kecil: ["0.875rem", { lineHeight: "1.45" }],
         mikro: ["0.8125rem", { lineHeight: "1.3" }],
       },
-      spacing: { sentuh: "44px", bagian: "24px", isi: "12px" },
+      spacing: { sentuh: "44px", jeda: "32px", bagian: "24px", isi: "12px" }, // jeda: pemisah kelompok besar; bagian: antar-bagian; isi: judul ke isi
       minHeight: { sentuh: "44px" },
       minWidth: { sentuh: "44px" },
       keyframes: { muncul: { from: { opacity: "0", transform: "translateY(6px)" }, to: { opacity: "1", transform: "none" } } },

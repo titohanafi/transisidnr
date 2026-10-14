@@ -156,9 +156,9 @@ function Daftar({ awal }: { awal: Filter }) {
                   return (
                     <article
                       key={k.id}
-                      className="rounded-kartu border border-garis bg-white p-4"
+                      className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4"
                     >
-                      <h3 className="text-lg font-semibold leading-snug">
+                      <h3 className="text-judulKartu">
                         {k.judul}
                       </h3>
                       <div className="mt-2 empty:hidden">
@@ -219,7 +219,7 @@ function Daftar({ awal }: { awal: Filter }) {
 
       {filter === "semua" ? (
         <nav aria-label={t.lainnya.judul} className="mt-8">
-          <h2 className="text-lg font-bold">{t.lainnya.judul}</h2>
+          <h2 className="text-subjudul">{t.lainnya.judul}</h2>
           <div className="mt-2 space-y-2">
             <TombolLink to="/jelajah/alat" gayaTombol="sekunder" className="w-full">
               {t.lainnya.alat}

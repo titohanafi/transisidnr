@@ -39,8 +39,8 @@ export function Cetak() {
         <PeringatanNonMedis />
 
         {satuHal && (
-          <section className="mt-5 break-inside-avoid" aria-labelledby="cetak-satu">
-            <h2 id="cetak-satu" className="text-xl font-bold">
+          <section className="mt-bagian break-inside-avoid" aria-labelledby="cetak-satu">
+            <h2 id="cetak-satu" className="text-subjudul">
               {t.satuHal}
             </h2>
             <p className="mt-1">{satuHal.langkah}</p>
@@ -56,7 +56,7 @@ export function Cetak() {
           const ukuranBoleh = bolehTampilkanUkuran(k.status_validasi, TAMPILKAN_ANGKA_DRAF);
           return (
             <article key={id} className="mt-6 break-inside-avoid border-t border-garis pt-4">
-              <h2 className="text-xl font-bold leading-snug">{k.judul}</h2>
+              <h2 className="text-subjudul">{k.judul}</h2>
               <div className="mt-1 empty:hidden">
                 <LencanaStatus status={k.status_validasi} />
               </div>
@@ -70,7 +70,7 @@ export function Cetak() {
                   const selesai = state.checklist[kunciChecklist(id, x.tingkat)] ?? [];
                   return (
                     <section key={x.tingkat} className="mt-3 break-inside-avoid">
-                      <h3 className="text-lg font-semibold">
+                      <h3 className="text-judulKartu">
                         {tk.tingkat[x.tingkat]} ({x.sifat === "sementara" ? umum.sementara : umum.permanen})
                         {x.ditandaiPermanen && ` · ${umum.menunggu}`}
                       </h3>
@@ -109,8 +109,8 @@ export function Cetak() {
         })}
 
         {foto && (
-          <section className="mt-6 break-inside-avoid border-t border-garis pt-4" aria-labelledby="cetak-foto">
-            <h2 id="cetak-foto" className="text-xl font-bold">
+          <section className="mt-bagian break-inside-avoid border-t border-garis pt-4" aria-labelledby="cetak-foto">
+            <h2 id="cetak-foto" className="text-subjudul">
               {t.foto}
             </h2>
             <img src={foto} alt={aksi.cetak.foto} className="mt-2 max-h-96 w-full object-contain" />

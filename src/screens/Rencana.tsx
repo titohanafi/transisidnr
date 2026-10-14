@@ -55,8 +55,8 @@ export function Rencana() {
   const daftarLengkap = (
     <>
       {h.mulai.length > 0 && (
-        <section className="mt-5" aria-labelledby="mulai">
-          <h2 id="mulai" className="text-xl font-bold">
+        <section className="mt-bagian" aria-labelledby="mulai">
+          <h2 id="mulai" className="text-subjudul">
             {t.mulaiDariSini}
           </h2>
           <div className="mt-3 space-y-3">
@@ -68,8 +68,8 @@ export function Rencana() {
       )}
 
       {lainnya.length > 0 && (
-        <section className="mt-6" aria-labelledby="lainnya">
-          <h2 id="lainnya" className="text-xl font-bold">
+        <section className="mt-bagian" aria-labelledby="lainnya">
+          <h2 id="lainnya" className="text-subjudul">
             {t.semuaRekomendasi}
           </h2>
           <div className="mt-3 space-y-3">
@@ -154,7 +154,7 @@ export function Rencana() {
           className="mt-5 rounded-kartu border border-utama bg-utama-muda p-4"
           aria-labelledby="kosong"
         >
-          <h2 id="kosong" className="text-lg font-semibold">
+          <h2 id="kosong" className="text-subjudul">
             {t.kosongJudul}
           </h2>
           <p className="mt-2">{t.kosongIsi}</p>
@@ -166,7 +166,7 @@ export function Rencana() {
               className="mt-5 rounded-kartu border border-utama bg-utama-muda p-4"
               aria-labelledby="satu-hal"
             >
-              <h2 id="satu-hal" className="text-lg font-bold">
+              <h2 id="satu-hal" className="text-subjudul">
                 {t.satuHal}
               </h2>
               <p className="mt-2 text-lg">{satuHal.langkah}</p>
@@ -217,21 +217,21 @@ export function Rencana() {
         </>
       )}
 
-      <div className="mt-6">
+      <div className="mt-bagian">
         <TombolLink to="/cetak" gayaTombol="sekunder" className="w-full">
           {t.cetak}
         </TombolLink>
       </div>
 
       {pendamping && (
-        <section className="mt-8" aria-labelledby="pendamping">
-          <h2 id="pendamping" className="text-xl font-bold">
+        <section className="mt-jeda" aria-labelledby="pendamping">
+          <h2 id="pendamping" className="text-subjudul">
             {t.pendampingJudul}
           </h2>
-          <article className="mt-3 rounded-kartu border border-garis bg-white p-4">
+          <article className="mt-3 rounded-kartu border border-garis/70 bg-white shadow-kartu p-4">
             <div className="flex items-start gap-3">
               <Ikon kunci="caregiver" className="mt-0.5 h-9 w-9" />
-              <h3 className="text-lg font-semibold leading-snug">
+              <h3 className="text-judulKartu">
                 {pendamping.judul}
               </h3>
             </div>
@@ -246,7 +246,7 @@ export function Rencana() {
           </article>
         </section>
       )}
-      <TombolLink to="/jelajah" gayaTombol="sekunder" className="mt-8 w-full">
+      <TombolLink to="/jelajah" gayaTombol="sekunder" className="mt-jeda w-full">
         {t.semuaPanduan}
       </TombolLink>
       <PeringatanNonMedis />

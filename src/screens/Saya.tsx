@@ -22,8 +22,8 @@ export function Saya() {
 
   return (
     <Halaman judul={t.judul}>
-      <section className="mt-4 rounded-kartu border border-garis bg-white p-4" aria-labelledby="saya-jawaban">
-        <h2 id="saya-jawaban" className="text-lg font-bold">
+      <section className="mt-4 rounded-kartu border border-garis/70 bg-white shadow-kartu p-4" aria-labelledby="saya-jawaban">
+        <h2 id="saya-jawaban" className="text-subjudul">
           {t.jawabanJudul}
         </h2>
         {adaJawaban ? (
@@ -67,8 +67,8 @@ export function Saya() {
         )}
       </section>
 
-      <section className="mt-5 rounded-kartu border border-garis bg-white p-4" aria-labelledby="saya-checkin">
-        <h2 id="saya-checkin" className="text-lg font-bold">
+      <section className="mt-bagian rounded-kartu border border-garis/70 bg-white shadow-kartu p-4" aria-labelledby="saya-checkin">
+        <h2 id="saya-checkin" className="text-subjudul">
           {t.riwayatJudul}
         </h2>
         <div className="mt-3">{adaCheckin ? <RiwayatCheckin /> : <p className="text-redup">{t.riwayatKosong}</p>}</div>

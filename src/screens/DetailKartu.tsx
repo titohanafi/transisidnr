@@ -84,8 +84,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
             </Lipat>
           )}
 
-          <section className="mt-5" aria-labelledby="solusi">
-            <h2 id="solusi" className="text-xl font-bold">
+          <section className="mt-bagian" aria-labelledby="solusi">
+            <h2 id="solusi" className="text-subjudul">
               {t.solusi}
             </h2>
             <div className="mt-3 space-y-3">
@@ -202,16 +202,16 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
           )}
 
           {kartu.peran && (
-            <section className="mt-5" aria-labelledby="peran">
+            <section className="mt-bagian" aria-labelledby="peran">
               <h2 id="peran" className="sr-only">
                 {t.peranPenyandang} / {t.peranCaregiver}
               </h2>
               <div className="space-y-3">
-                <div className="rounded-kartu border border-garis bg-white p-3">
+                <div className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-3">
                   <h3 className="font-semibold">{t.peranPenyandang}</h3>
                   <p>{kartu.peran.penyandang_disabilitas}</p>
                 </div>
-                <div className="rounded-kartu border border-garis bg-white p-3">
+                <div className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-3">
                   <h3 className="font-semibold">{t.peranCaregiver}</h3>
                   <p>{kartu.peran.caregiver}</p>
                 </div>
@@ -220,8 +220,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
           )}
 
           {kartu.peringatan && (
-            <section className="mt-5 rounded-kartu border border-aksen bg-aksen-muda p-3" aria-labelledby="peringatan">
-              <h2 id="peringatan" className="text-lg font-bold text-aksen">
+            <section className="mt-bagian rounded-kartu border border-aksen bg-aksen-muda p-3" aria-labelledby="peringatan">
+              <h2 id="peringatan" className="text-subjudul text-aksen">
                 {t.peringatan}
               </h2>
               <p className="mt-1">{kartu.peringatan}</p>
