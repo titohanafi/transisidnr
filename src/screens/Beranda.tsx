@@ -120,7 +120,7 @@ export function Beranda() {
           {kartu.judul}
         </h3>
       </div>
-      <p className="relative mt-3 text-isi text-utama-redup">{kartu.deskripsi}</p>
+      <p className="relative mt-1.5 text-isi text-utama-redup">{kartu.deskripsi}</p>
       <Link
         to={adaJawaban ? "/rencana" : "/mulai/1"}
         className="tekan relative mt-5 inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-isi font-semibold text-utama-gelap hover:bg-utama-muda"
