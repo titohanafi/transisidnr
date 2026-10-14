@@ -637,3 +637,8 @@
 ## Menu Saya menjadi Profil
 - Nama menu dan header: "Saya" menjadi "Profil" (`umum.tabSaya`, `saya.judul`). Alamat tetap `/saya`. Judul besar dan kalimat pengantar dihapus (judul tetap ada untuk pembaca layar); latar halaman putih.
 - Kartu jawaban memakai baris berikon (ruangan, aktivitas, prioritas) dan status aktivitas berbentuk pil abu muda, supaya terbaca sekilas.
+
+## Panduan Saya (setelah asesmen) dirapikan
+- Kepala memakai pita hijau muda dan kartu pertama menimpa tepinya (seperti halaman Pakai Alat). Ikon bendera di depan penanda prioritas.
+- Kartu kemajuan dan perkiraan biaya mendapat ikon dalam kotak hijau muda. Judul "Mulai dari sini" dan "Rekomendasi lainnya" menampilkan jumlah panduan dalam pil kecil.
+- Kartu panduan (`KartuRingkas`): ikon dalam kotak hijau muda, tingkat solusi jadi baris bernomor 1-2-3 (urutan dari yang paling ringan), dan garis pemisah di atas tombol.

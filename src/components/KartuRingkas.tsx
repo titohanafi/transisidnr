@@ -36,8 +36,10 @@ export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRenca
 
   return (
     <article className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
-      <div className="flex items-start gap-3">
-        <Ikon kunci={kunciKelompok(data)} className="mt-0.5 h-9 w-9" />
+      <div className="flex items-center gap-3">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
+          <Ikon kunci={kunciKelompok(data)} className="h-7 w-7" />
+        </span>
         <Judul className="text-judulKartu">{data.judul}</Judul>
       </div>
       <div className="mt-2 flex flex-wrap gap-2 empty:hidden">
@@ -56,10 +58,16 @@ export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRenca
         <ul className="mt-3 space-y-2" aria-label={tk.solusi}>
           {kartu.tingkat
             .filter((t) => t.tampil)
-            .map((t) => (
-              <li key={t.tingkat} className="rounded-tombol bg-permukaan p-3">
-                <p className="font-medium">{tk.tingkat[t.tingkat]}</p>
-                <div className="mt-1 flex flex-wrap gap-2 empty:hidden">
+            .map((t, i) => (
+              <li key={t.tingkat} className="flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-tombol bg-permukaan px-3 py-2.5">
+                <span
+                  aria-hidden="true"
+                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-utama-redup bg-white text-kecil font-semibold text-utama-gelap"
+                >
+                  {i + 1}
+                </span>
+                <p className="font-semibold">{tk.tingkat[t.tingkat]}</p>
+                <div className="flex flex-wrap gap-2 empty:hidden">
                   <LencanaSifat sifat={t.sifat} />
                   {t.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
                   {t.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
@@ -70,7 +78,7 @@ export function KartuRingkas({ kartu, judulTingkat = "h3" }: { kartu: KartuRenca
         </ul>
       )}
 
-      <div className="mt-4">
+      <div className="mt-4 border-t border-garis/60 pt-4">
         {utama ? (
           <TombolAksi
             jenis={aksiUtama(utama.tingkat, data.solusi?.[utama.tingkat]?.barang.length ?? 0)}

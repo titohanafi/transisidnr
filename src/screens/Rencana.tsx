@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { BookOpen, Printer, Sun } from "lucide-react";
+import { BookOpen, CircleCheck, Flag, Printer, Sun, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import { BarisTautan } from "../components/BarisTautan";
 import { BarisRuangan } from "../components/BarisRuangan";
@@ -23,6 +23,11 @@ import { useRencana } from "../state/useRencana";
 import { useStore } from "../state/store";
 
 const { rencana: t } = konten.ui;
+
+// Jumlah panduan di samping judul bagian, dalam pil kecil.
+function Hitungan({ n }: { n: number }) {
+  return <span className="rounded-full bg-utama-muda px-2.5 py-0.5 text-kecil font-semibold tabular-nums text-utama-gelap">{n}</span>;
+}
 
 export function Rencana() {
   const { state } = useStore();
@@ -49,7 +54,7 @@ export function Rencana() {
   const labelAkt = (id: string) => konten.asesmen.aktivitas.find((a) => a.id === id)?.label.split(" (")[0] ?? id;
 
   const daftarKartu = (daftar: typeof h.mulai) => (
-    <div className="mt-isi space-y-3">
+    <div className="mt-isi space-y-4">
       {daftar.map((k) => (
         <KartuRingkas key={k.id} kartu={k} />
       ))}
@@ -60,8 +65,9 @@ export function Rencana() {
     <div className="flex flex-col gap-bagian">
       {h.mulai.length > 0 && (
         <section aria-labelledby="mulai">
-          <h2 id="mulai" className="text-subjudul">
+          <h2 id="mulai" className="flex items-center gap-2 text-subjudul">
             {t.mulaiDariSini}
+            <Hitungan n={h.mulai.length} />
           </h2>
           {daftarKartu(h.mulai)}
         </section>
@@ -69,8 +75,9 @@ export function Rencana() {
 
       {lainnya.length > 0 && (
         <section aria-labelledby="lainnya">
-          <h2 id="lainnya" className="text-subjudul">
+          <h2 id="lainnya" className="flex items-center gap-2 text-subjudul">
             {t.semuaRekomendasi}
+            <Hitungan n={lainnya.length} />
           </h2>
           {daftarKartu(lainnya)}
         </section>
@@ -103,6 +110,7 @@ export function Rencana() {
     <>
       <BarisRuangan />
       <div className="mt-2 flex flex-wrap items-center gap-2">
+        <Flag className="h-4 w-4 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
         {masukan.prioritas.map((a) => (
           <Tanda key={a}>{labelAkt(a)}</Tanda>
         ))}
@@ -114,21 +122,27 @@ export function Rencana() {
   );
 
   return (
-    <Halaman judul={t.judul} kepala={kepala}>
+    <Halaman judul={t.judul} kepala={kepala} kepalaPita="hijau" kepalaTumpang>
       <div className="flex flex-col gap-bagian">
         {ringan && (
-          <p role="note" className="rounded-kartu bg-aksen-muda p-4 motion-safe:animate-muncul">
+          <p role="note" className="rounded-kartu border border-aksen/30 bg-aksen-muda p-4 shadow-kartu motion-safe:animate-muncul">
             {t.ringan.catatan}
           </p>
         )}
 
         {h.jumlahPanduan > 0 && (
-          <section className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu" aria-label={t.beres.judul}>
-            <p className="font-semibold">{isi(t.beres.ringkasan, { n: h.beres.length, total: h.jumlahPanduan })}</p>
+          <section className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu" aria-label={t.beres.judul}>
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda text-utama">
+                <CircleCheck className="h-6 w-6" strokeWidth={2} aria-hidden="true" focusable="false" />
+              </span>
+              <p className="font-semibold">{isi(t.beres.ringkasan, { n: h.beres.length, total: h.jumlahPanduan })}</p>
+            </div>
             <BilahKemajuan
               n={h.beres.length}
               total={h.jumlahPanduan}
               label={isi(t.beres.ringkasan, { n: h.beres.length, total: h.jumlahPanduan })}
+              className="mt-3"
             />
           </section>
         )}
@@ -163,15 +177,20 @@ export function Rencana() {
             )}
 
             {(rencana.total.diketahui || rencana.kebutuhanJangkaPanjangBelumJelas) && (
-              <div className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
-                {rencana.total.diketahui && (
-                  <p className="font-medium">
-                    {isi(t.total, { rentang: formatRentang({ min: rencana.total.minRp, max: rencana.total.maksRp }) })}
-                  </p>
-                )}
-                {rencana.kebutuhanJangkaPanjangBelumJelas && (
-                  <p className={`text-kecil text-redup ${rencana.total.diketahui ? "mt-2" : ""}`}>{t.belumJelas}</p>
-                )}
+              <div className="flex items-start gap-3 rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda text-utama">
+                  <Wallet className="h-6 w-6" strokeWidth={2} aria-hidden="true" focusable="false" />
+                </span>
+                <div className="min-w-0 flex-1 self-center">
+                  {rencana.total.diketahui && (
+                    <p className="font-medium">
+                      {isi(t.total, { rentang: formatRentang({ min: rencana.total.minRp, max: rencana.total.maksRp }) })}
+                    </p>
+                  )}
+                  {rencana.kebutuhanJangkaPanjangBelumJelas && (
+                    <p className={`text-kecil text-redup ${rencana.total.diketahui ? "mt-1" : ""}`}>{t.belumJelas}</p>
+                  )}
+                </div>
               </div>
             )}
 
