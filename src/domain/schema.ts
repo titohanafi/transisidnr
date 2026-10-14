@@ -241,7 +241,7 @@ export const uiSchema = z
       ya: teks,
       batal: teks,
     }),
-    onboarding: z.object({ judul: teks, indikator: teks, cakupan: teks, lanjutTerakhir: teks }),
+    onboarding: z.object({ judul: teks, indikator: teks, lanjutTerakhir: teks }),
     asesmen: z.object({
       ruangan: teks,
       ubahRuangan: teks,

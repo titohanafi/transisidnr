@@ -1,4 +1,3 @@
-import { Info } from "lucide-react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { BilahKemajuan } from "../components/BilahKemajuan";
 import { Halaman } from "../components/Halaman";
@@ -41,12 +40,6 @@ export function Onboarding() {
             {indikator}
           </p>
           <BilahKemajuan n={n} total={soal.length} label={indikator} />
-          {n === 1 && (
-            <aside className="mt-4 flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda p-3 text-catatan">
-              <Info className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
-              <p className="text-kecil">{teks.cakupan}</p>
-            </aside>
-          )}
         </>
       }
     >
