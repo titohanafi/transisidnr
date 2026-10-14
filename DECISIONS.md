@@ -415,3 +415,5 @@
 - Banner informasi di Beranda diberi latar krem (token `aksen-muda`) dengan garis tepi tipis berwarna aksen, ikon info dalam lingkaran putih, teks tinta, dan tautan "Lihat panduan yang tersedia" berpanah berwarna aksen. Kombinasi warnanya sudah ada di tes kontras. Judul kolom cari dan teks lain tidak berubah.
 
 - Banner: kalimat menjadi "Saat ini baru tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda." dan tautannya diperpendek menjadi "Lihat panduan", disatukan dalam paragraf yang sama dengan kalimat (tautan sebaris, berwarna aksen dan bergaris bawah; ikon panah dihapus).
+
+- Banner informasi kini selebar layar: menempel ke header di atas dan ke tepi kiri-kanan (tanpa sudut membulat, hanya garis bawah tipis). Letaknya di luar formulir cari.

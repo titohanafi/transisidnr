@@ -20,28 +20,29 @@ export function Beranda() {
     <Halaman judul={app.nama}>
       <h2 className="sr-only">{pilih.judul}</h2>
 
+      <aside className="-mx-4 -mt-5 flex gap-3 border-b border-aksen/25 bg-aksen-muda px-4 py-3">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-aksen">
+          <Info className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm leading-relaxed text-tinta">
+            {pilih.cakupan}{" "}
+            <Link to="/jelajah" className="whitespace-nowrap py-2 font-semibold text-aksen underline">
+              {pilih.semua}
+            </Link>
+          </p>
+        </div>
+      </aside>
+
       <form
         role="search"
-        className="mt-1"
+        className="mt-5"
         onSubmit={(e) => {
           e.preventDefault();
           const q = new FormData(e.currentTarget).get("q");
           navigate("/jelajah", { state: { cari: typeof q === "string" ? q.trim() : "" } });
         }}
       >
-        <aside className="mb-5 flex gap-3 rounded-kartu border border-aksen/25 bg-aksen-muda p-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-aksen">
-            <Info className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm leading-relaxed text-tinta">
-              {pilih.cakupan}{" "}
-              <Link to="/jelajah" className="whitespace-nowrap py-2 font-semibold text-aksen underline">
-                {pilih.semua}
-              </Link>
-            </p>
-          </div>
-        </aside>
         <label htmlFor="cari-beranda" className="text-2xl font-bold leading-snug text-tinta">
           {pilih.cari.label}
         </label>
