@@ -172,15 +172,15 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   aria-labelledby={`tab-${aktif.tingkat}`}
                   className="mt-3 overflow-hidden rounded-kartu border border-garis bg-white"
                 >
+                  <p className="px-4 pb-3 pt-4 text-judulKartu text-tinta">{kartu.solusi[aktif.tingkat]!.ringkasan}</p>
                   <IlustrasiSolusi kartuId={kartu.id} tingkat={aktif.tingkat} />
-                  <div className="px-4 pb-4 pt-6">
+                  <div className="px-4 pb-4 pt-4">
                     {(() => {
                       const s = kartu.solusi![aktif.tingkat]!;
                       const x = aktif;
                       return (
                         <>
-                          <p className="text-judulKartu text-tinta">{s.ringkasan}</p>
-                          <div className="mt-5 flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-2">
                             <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
                               <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
                               {biayaPil(s.biaya)}
