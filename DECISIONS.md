@@ -546,3 +546,5 @@
 ## Penanda peran di setiap langkah (checklist)
 - Kartu atau kotak peran dihapus dari Detail Panduan. Sebagai gantinya, setiap langkah di checklist diberi penanda kecil siapa yang mengerjakannya: Penyandang disabilitas, Caregiver, Bersama, atau Tukang (tingkat Renovasi). Data disimpan di bidang baru `peran_langkah` (urutan sama dengan `langkah`; jumlahnya harus sama, dijaga skema dan tes). Bidang `peran` lama di kartu tidak lagi ditampilkan.
 - Pembagian peran untuk 106 langkah DITENTUKAN ASISTEN dengan aturan sederhana dari kata kerja pertama dan sedikit penyesuaian manual: memutuskan, mencoba, dan memakai = penyandang disabilitas; menyiapkan, memasang, memindahkan, dan membeli = caregiver; melatih, menyepakati, dan menguji = bersama; pekerjaan bangunan di Renovasi = tukang; kartu pendamping semuanya caregiver. Ini penilaian, bukan fakta dari ahli. Semua kartu masih draf dan tim konten perlu meninjau penandanya.
+
+- Baris "Kesulitan" (mis. "Mudah, bisa sendiri") dihapus dari panel solusi karena penanda peran di setiap langkah sudah menunjukkan siapa yang terlibat. Datanya (`usaha.kesulitan`) tetap ada di konten.

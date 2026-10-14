@@ -195,11 +195,6 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           />
                         </div>
 
-                        <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-redup">
-                          <dt className="font-semibold">{t.kesulitan}</dt>
-                          <dd>{s.usaha.kesulitan ?? umum.menyusul}</dd>
-                        </dl>
-
                         {s.ukuran && s.ukuran.length > 0 && (
                           <div className="mt-4">
                             <h4 className="font-semibold">{t.ukuran}</h4>
