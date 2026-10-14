@@ -162,7 +162,7 @@ export const uiSchema = z
     hapusData: z.object({
       judul: teks, penjelasan: teks, tombol: teks, selesai: teks, konfirmasi: teks, ya: teks, batal: teks,
     }),
-    onboarding: z.object({ judul: teks, indikator: teks, lanjutTerakhir: teks }),
+    onboarding: z.object({ judul: teks, indikator: teks, cakupan: teks, lanjutTerakhir: teks }),
     asesmen: z.object({
       ruangan: teks,
       ubahRuangan: teks,

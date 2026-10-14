@@ -1,3 +1,4 @@
+import { Info } from "lucide-react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { BilahKemajuan } from "../components/BilahKemajuan";
 import { Halaman } from "../components/Halaman";
@@ -36,6 +37,13 @@ export function Onboarding() {
         {indikator}
       </p>
       <BilahKemajuan n={n} total={soal.length} label={indikator} />
+
+      {n === 1 && (
+        <aside className="mt-4 flex items-start gap-2 rounded-kartu bg-info-muda p-3">
+          <Info className="mt-0.5 h-5 w-5 shrink-0 text-info" strokeWidth={2} aria-hidden="true" focusable="false" />
+          <p className="text-kecil text-tinta">{teks.cakupan}</p>
+        </aside>
+      )}
 
       <fieldset className="mt-5">
         <legend className="sr-only">{q.pertanyaan}</legend>
