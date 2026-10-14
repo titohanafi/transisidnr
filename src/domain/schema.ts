@@ -163,7 +163,7 @@ export const uiSchema = z
         lanjut: z.object({ judul: teks, deskripsi: teks, tombol: teks }),
         cakupan: teks,
         tutupCakupan: teks,
-        cari: z.object({ label: teks, placeholder: teks, tombol: teks, saranJudul: teks, saran: z.array(teks).min(1) }),
+        cari: z.object({ label: teks, tombol: teks, saranJudul: teks, saran: z.array(teks).min(1) }),
       }),
     }),
     umum: rekamTeks,

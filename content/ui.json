@@ -19,7 +19,7 @@
         "deskripsi": "Lihat satu hal untuk hari ini dan langkah berikutnya.",
         "tombol": "Buka Panduan Saya"
       },
-      "cari": { "label": "Temukan panduan dan solusi agar rumah lebih ramah disabilitas", "placeholder": "Mis. cara mengatasi lantai licin", "tombol": "Cari", "saranJudul": "Coba cari", "saran": ["Lantai licin", "Pintu sempit", "Pegangan kloset"] }
+      "cari": { "label": "Temukan panduan dan solusi agar rumah lebih ramah disabilitas", "tombol": "Cari", "saranJudul": "Coba cari", "saran": ["Lantai licin", "Pintu sempit", "Pegangan kloset"] }
     }
   },
   "umum": {

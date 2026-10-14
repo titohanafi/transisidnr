@@ -6,11 +6,13 @@ import { Halaman } from "../components/Halaman";
 import { IkonBeranda } from "../components/IkonBeranda";
 import { KartuHero, TautanHero } from "../components/KartuHero";
 import { konten } from "../domain/content";
+import { usePlaceholderBerjalan } from "../lib/placeholderBerjalan";
 import { bagianHari } from "../lib/tanggal";
 import { useStore } from "../state/store";
 
 const { app, beranda } = konten.ui;
 const { pilih } = beranda;
+const jc = konten.ui.jelajah.cari;
 
 // Satu tindakan utama: belum menjawab -> cek kebutuhan; sudah -> lanjutkan panduan. Urutan mengikuti keadaan pengguna.
 export function Beranda() {
@@ -21,6 +23,10 @@ export function Beranda() {
   const kartu = adaJawaban ? pilih.lanjut : pilih.susun;
 
   const sapaan = (kelas: string) => <p className={`text-isi font-semibold text-utama ${kelas}`}>{beranda.sapaan[bagianHari()]}</p>;
+
+  const [fokus, setFokus] = useState(false);
+  const [adaIsi, setAdaIsi] = useState(false);
+  const placeholder = usePlaceholderBerjalan(jc.placeholder, jc.contoh, !fokus && !adaIsi);
 
   const cari = (
     <form
@@ -35,25 +41,26 @@ export function Beranda() {
         {pilih.cari.label}
       </label>
       <div className="relative mt-isi">
-        <Search
-          className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-redup"
-          strokeWidth={2}
-          aria-hidden="true"
-          focusable="false"
-        />
         <input
           id="cari-beranda"
           name="q"
           type="search"
           autoComplete="off"
           enterKeyHint="search"
-          placeholder={pilih.cari.placeholder}
-          className="h-12 w-full rounded-tombol border border-garisKontrol bg-white pl-11 pr-3 text-isi shadow-kartu"
+          placeholder={placeholder}
+          onChange={(e) => setAdaIsi(e.target.value !== "")}
+          onFocus={() => setFokus(true)}
+          onBlur={() => setFokus(false)}
+          className="h-12 w-full rounded-tombol border border-garisKontrol bg-white pl-4 pr-14 text-isi shadow-kartu placeholder:text-redup"
         />
+        <button
+          type="submit"
+          aria-label={pilih.cari.tombol}
+          className="tekan absolute right-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-tombol bg-utama text-white hover:bg-utama-gelap"
+        >
+          <Search className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+        </button>
       </div>
-      <button type="submit" className="sr-only">
-        {pilih.cari.tombol}
-      </button>
       <div className="mt-isi">
         <p id="saran-cari" className="text-kecil text-redup">
           {pilih.cari.saranJudul}
