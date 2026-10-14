@@ -53,7 +53,8 @@ function Aksi({ entri }: { entri: EntriKontak }) {
       {entri.telepon && (
         <a href={urlTelepon(entri.telepon)} className={tombolTelepon}>
           <Phone className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
-          {t.telepon} {entri.telepon}
+          <span className="sr-only">{t.telepon} </span>
+          {entri.telepon}
           <span className="sr-only">: {entri.nama}</span>
         </a>
       )}
