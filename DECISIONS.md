@@ -606,3 +606,5 @@
 - Kepala halaman "Pakai Alat" diganti: label kecil "Alat yang dipakai ketika..." (`aksi.beli.label`) di atas, lalu judulnya adalah nama masalah panduan (mis. "Lantai licin saat basah") sehingga terbaca satu kalimat. Judul lama "Alat yang dibutuhkan" dan baris konteks "panduan · tingkat" dihapus. Saya menafsirkan "Masalahnya" sebagai judul masalah pada panduan; bila yang dimaksud teks harfiah "Masalahnya", cukup ubah `judul` di `AksiBeli.tsx`.
 
 - Kepala halaman "Pakai Alat" kini berwarna hijau muda (`utama-muda`) dan memakai ilustrasi kelompok panduan di sisi kanan judul, seperti hero Detail Panduan. Pengaturan `kepalaPita` di kerangka halaman kini menerima `"hijau"` selain `true` (abu kehijauan).
+
+- Hero halaman "Pakai Alat": ilustrasi dihapus; kartu alat pertama kini sedikit menimpa tepi bawah hero (pengaturan `kepalaTumpang` di kerangka halaman: hero diberi ruang bawah ekstra, isi naik 32px).

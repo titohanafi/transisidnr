@@ -15,6 +15,7 @@ export function Halaman({
   judulTersembunyi = false,
   atasJudul,
   kepalaPita = false,
+  kepalaTumpang = false,
   hiasan,
   latarPutih = false,
 }: {
@@ -29,6 +30,8 @@ export function Halaman({
   atasJudul?: ReactNode;
   /** Kepala berupa hero abu kehijauan muda selebar layar (tanpa kotak), sama dengan latar halaman Panduan. */
   kepalaPita?: boolean | "hijau";
+  /** Isi halaman naik menimpa bagian bawah pita kepala (kartu pertama sedikit menumpuk di atas hero). */
+  kepalaTumpang?: boolean;
   /** Hiasan di sisi kanan judul pada kepala pita (mis. ilustrasi). Dekoratif. */
   hiasan?: ReactNode;
   /** Latar halaman putih (bawaan: abu kehijauan muda). Dipakai Beranda, yang punya pita pencarian berwarna. */
@@ -96,7 +99,13 @@ export function Halaman({
         {/* Di Beranda judulnya sama dengan nama aplikasi di header: tetap ada untuk pembaca layar, tidak ditampilkan dua kali. */}
         {kepala ? (
           <>
-            <div className={kepalaPita ? `${kepalaPita === "hijau" ? "bg-utama-muda" : "bg-permukaan"} px-4 pb-6 pt-6` : "px-4 pb-5 pt-6"}>
+            <div
+              className={
+                kepalaPita
+                  ? `${kepalaPita === "hijau" ? "bg-utama-muda" : "bg-permukaan"} px-4 ${kepalaTumpang ? "pb-12" : "pb-6"} pt-6`
+                  : "px-4 pb-5 pt-6"
+              }
+            >
               {hiasan ? (
                 <div className="flex items-center gap-2">
                   <div className="min-w-0 flex-1">
@@ -113,7 +122,7 @@ export function Halaman({
               )}
               {kepala}
             </div>
-            <div className="flex flex-1 flex-col px-4 pt-6">{children}</div>
+            <div className={`flex flex-1 flex-col px-4 ${kepalaTumpang ? "relative -mt-8" : "pt-6"}`}>{children}</div>
           </>
         ) : (
           <>

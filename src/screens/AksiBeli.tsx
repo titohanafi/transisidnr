@@ -1,11 +1,9 @@
 import { ClipboardCheck, ExternalLink, Hammer } from "lucide-react";
 import { AksiHalaman, KembaliKeRencana, useKonteksAksi } from "../components/AksiHalaman";
 import { Tanda } from "../components/Lencana";
-import { Ilustrasi } from "../components/Ilustrasi";
 import { TombolAksi } from "../components/TombolAksi";
 import { aksiTersedia } from "../domain/aksi";
 import { konten } from "../domain/content";
-import { kunciKelompok } from "../domain/jelajah";
 import { track } from "../lib/events";
 
 const { aksi, kartu: tk, umum } = konten.ui;
@@ -18,15 +16,7 @@ export function AksiBeli() {
   const barang = ctx.kartu.solusi![ctx.tingkat]!.barang;
 
   return (
-    <AksiHalaman
-      judul={ctx.kartu.judul}
-      labelAtas={t.label}
-      hiasan={<Ilustrasi kunci={kunciKelompok(ctx.kartu)} />}
-      kartu={ctx.kartu}
-      tingkat={ctx.tingkat}
-      latarPutih
-      tanpaKembali
-    >
+    <AksiHalaman judul={ctx.kartu.judul} labelAtas={t.label} kartu={ctx.kartu} tingkat={ctx.tingkat} latarPutih tanpaKembali>
       {barang.length === 0 ? (
         <p>{t.kosong}</p>
       ) : (

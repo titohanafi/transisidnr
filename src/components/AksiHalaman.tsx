@@ -30,7 +30,6 @@ export function AksiHalaman({
   latarPutih = false,
   tanpaKembali = false,
   labelAtas,
-  hiasan,
   children,
 }: {
   judul: string;
@@ -44,8 +43,6 @@ export function AksiHalaman({
   tanpaKembali?: boolean;
   /** Label kecil di atas judul. Bila ada, baris konteks (nama panduan dan tingkat) dan pengantar tidak ditampilkan. */
   labelAtas?: string;
-  /** Hiasan di sisi kanan judul pada kepala berwarna (mis. ilustrasi). Hanya dipakai bersama `labelAtas`. */
-  hiasan?: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -53,7 +50,7 @@ export function AksiHalaman({
       judul={judul}
       latarPutih={latarPutih}
       kepalaPita={labelAtas ? "hijau" : undefined}
-      hiasan={labelAtas ? hiasan : undefined}
+      kepalaTumpang={Boolean(labelAtas)}
       atasJudul={labelAtas ? <p className="mb-1 text-kecil font-semibold text-utama-gelap">{labelAtas}</p> : undefined}
       kepala={
         labelAtas ? (
