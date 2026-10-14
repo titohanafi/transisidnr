@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import {
   BookOpen,
   ChevronDown,
-  ChevronRight,
   Circle,
   CircleAlert,
   CircleCheck,
@@ -212,16 +211,13 @@ export function Rencana() {
                     return (
                       <li key={k.id}>
                         <Link to={`/kartu/${k.id}`} className="tekan flex min-h-[56px] items-center gap-3 py-3">
-                          <span className="min-w-0 flex-1">
-                            <span className="block leading-snug">{dataKartu(k.id)?.judul}</span>
-                            <span
-                              className={`mt-1.5 inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-kecil font-medium ${kelas}`}
-                            >
-                              <Ikon className="h-3.5 w-3.5 shrink-0" strokeWidth={2.25} aria-hidden="true" focusable="false" />
-                              {label}
-                            </span>
+                          <span className="min-w-0 flex-1 leading-snug">{dataKartu(k.id)?.judul}</span>
+                          <span
+                            className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-0.5 text-kecil font-medium ${kelas}`}
+                          >
+                            <Ikon className="h-3.5 w-3.5 shrink-0" strokeWidth={2.25} aria-hidden="true" focusable="false" />
+                            {label}
                           </span>
-                          <ChevronRight className="h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
                         </Link>
                       </li>
                     );
