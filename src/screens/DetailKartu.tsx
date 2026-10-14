@@ -183,7 +183,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                     const x = aktif;
                     return (
                       <>
-                        <p className="text-redup">{s.ringkasan}</p>
+                        <p className="text-judulKartu text-tinta">{s.ringkasan}</p>
                         <div className="mt-3 flex flex-wrap gap-2">
                           <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
                             <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
