@@ -513,6 +513,6 @@
 - Tombol "Ikuti langkahnya" dihapus dari panel. Di Panduan Saya, tombol utama untuk tingkat tanpa barang kini berbunyi "Lihat langkahnya" dan menuju panel solusi tingkat itu. Alamat lama `/aksi/sendiri/...` diarahkan ke halaman panduan.
 
 ## Tombol "Kenali peran ahli" dan "Pesan ke tukang" diberi konteks
-- Tombol "Kenali peran ahli" yang berdiri sendiri di bawah daftar solusi dihapus karena muncul tanpa alasan. Sekarang tombol itu muncul di dua tempat yang masuk akal: (1) di panel tingkat Renovasi, dengan kalimat pengantar "Ragu atau ada nyeri? ...", dan (2) sebagai saran setelah pengguna menjawab "Masih sulit" di tingkat terakhir.
+- Tombol "Kenali peran ahli" yang berdiri sendiri di bawah daftar solusi dihapus karena muncul tanpa alasan. Sekarang tombol itu muncul di dua tempat yang masuk akal: (1) di panel tingkat Renovasi, dengan kalimat pengantar "Renovasi sering perlu dibantu ahli dan tukang. Kenali siapa yang cocok untuk panduan ini.", dan (2) sebagai saran setelah pengguna menjawab "Masih sulit" di tingkat terakhir.
 - Tombol "Pesan ke tukang" kini langsung di panel tingkat yang mendukungnya, dengan kalimat pengantar. Sebelumnya hanya bisa dicapai lewat halaman peran ahli.
 - Kalimat pengantar baru (`kartu.jembatanTukang`, `kartu.jembatanAhli`) ditulis oleh asisten dan perlu ditinjau tim konten.
