@@ -57,7 +57,7 @@ export function Saya() {
       }
     >
       <div className="flex flex-col gap-bagian">
-        <section className="-mt-6 rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu" aria-labelledby="saya-jawaban">
+        <section className="-mt-4 rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu" aria-labelledby="saya-jawaban">
           <h2 id="saya-jawaban" className="text-kecil font-semibold">
             {t.jawabanJudul}
           </h2>
