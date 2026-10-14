@@ -104,21 +104,26 @@ export function Beranda() {
 
   const utama = (
     <section
-      className={`rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "relative -mt-16 shadow-angkat"}`}
+      className={`relative overflow-hidden rounded-kartu bg-utama p-5 text-white ${adaJawaban ? "" : "-mt-16 shadow-angkat"}`}
       aria-labelledby="jalur-utama"
     >
-      <div className="flex items-center gap-3">
+      {/* Hiasan: lingkaran teal lebih gelap dari latar kartu, jadi tidak pernah menurunkan kontras teks di atasnya. */}
+      <span aria-hidden="true" className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-utama-gelap/40" />
+      <span aria-hidden="true" className="pointer-events-none absolute -right-2 -top-20 h-32 w-32 rounded-full bg-utama-gelap/30" />
+      <span aria-hidden="true" className="pointer-events-none absolute -bottom-16 -left-10 h-36 w-36 rounded-full bg-utama-gelap/30" />
+
+      <div className="relative flex items-center gap-3">
         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-daun">
           <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-6 w-6 text-white" />
         </span>
-        <h3 id="jalur-utama" className="text-subjudul">
+        <h3 id="jalur-utama" className="text-judulKartu font-bold">
           {kartu.judul}
         </h3>
       </div>
-      <p className="mt-2 text-isi text-utama-redup">{kartu.deskripsi}</p>
+      <p className="relative mt-3 text-isi text-utama-redup">{kartu.deskripsi}</p>
       <Link
         to={adaJawaban ? "/rencana" : "/mulai/1"}
-        className="tekan mt-isi inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-isi font-semibold text-utama-gelap hover:bg-utama-muda"
+        className="tekan relative mt-5 inline-flex min-h-sentuh w-full items-center justify-center rounded-tombol bg-white px-5 py-2 text-isi font-semibold text-utama-gelap hover:bg-utama-muda"
       >
         {kartu.tombol}
       </Link>
