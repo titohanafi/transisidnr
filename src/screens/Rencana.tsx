@@ -5,6 +5,7 @@ import {
   Circle,
   CircleAlert,
   CircleCheck,
+  CircleDot,
   DoorOpen,
   Flag,
   Printer,
@@ -186,21 +187,25 @@ export function Rencana() {
                 {rencana.daftar
                   .filter((k) => !k.isiMenyusul)
                   .map((k) => {
+                    // Urutan: hasil yang dicatat pengguna, lalu langkah yang sudah dicentang (setengah jalan), lalu belum dicoba.
                     const hasil = state.hasil[k.id]?.status;
-                    const Ikon = hasil === "cukup" ? CircleCheck : hasil === "masih_sulit" ? CircleAlert : Circle;
-                    const warna = hasil === "cukup" ? "text-utama" : hasil === "masih_sulit" ? "text-aksen" : "text-redup";
+                    const setengah = Object.entries(state.checklist).some(
+                      ([kunci, nomor]) => kunci.startsWith(`${k.id}:`) && nomor.length > 0,
+                    );
+                    const status = hasil ?? (setengah ? "sedang" : "belum");
+                    const tampilan = {
+                      cukup: { Ikon: CircleCheck, warna: "text-utama", label: konten.ui.jelajah.status.cukup },
+                      masih_sulit: { Ikon: CircleAlert, warna: "text-aksen", label: konten.ui.jelajah.status.masih_sulit },
+                      sedang: { Ikon: CircleDot, warna: "text-utama-gelap", label: t.beres.sedang },
+                      belum: { Ikon: Circle, warna: "text-redup", label: t.beres.belumDicoba },
+                    }[status];
+                    const { Ikon, warna } = tampilan;
                     return (
                       <li key={k.id}>
                         <Link to={`/kartu/${k.id}`} className="tekan flex min-h-[48px] items-center gap-3 py-2">
                           <Ikon className={`h-5 w-5 shrink-0 ${warna}`} strokeWidth={2} aria-hidden="true" focusable="false" />
                           <span className="flex-1 leading-snug">{dataKartu(k.id)?.judul}</span>
-                          <span className={`shrink-0 text-kecil font-medium ${warna}`}>
-                            {hasil === "cukup"
-                              ? konten.ui.jelajah.status.cukup
-                              : hasil === "masih_sulit"
-                                ? konten.ui.jelajah.status.masih_sulit
-                                : t.beres.belumDicoba}
-                          </span>
+                          <span className={`shrink-0 text-kecil font-medium ${warna}`}>{tampilan.label}</span>
                         </Link>
                       </li>
                     );
