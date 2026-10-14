@@ -76,7 +76,7 @@ export function AksiSendiri() {
         {dorongan && (
           <p
             key={dorongan}
-            className="mt-4 rounded-kartu bg-utama-muda p-3 font-medium motion-safe:animate-muncul"
+            className="mt-4 rounded-kartu bg-utama-muda p-4 font-medium motion-safe:animate-muncul"
           >
             {dorongan}
           </p>

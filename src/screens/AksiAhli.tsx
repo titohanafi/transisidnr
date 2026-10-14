@@ -44,7 +44,7 @@ export function AksiAhli() {
         <p className="mt-3">{t.kosong}</p>
       )}
       <p className="mt-4 font-medium">{tk.direktoriMenyusul}</p>
-      <p role="note" className="mt-4 rounded-kartu border border-aksen bg-aksen-muda p-3">
+      <p role="note" className="mt-4 rounded-kartu border border-aksen bg-aksen-muda p-4">
         {t.nyeri}
       </p>
     </AksiHalaman>

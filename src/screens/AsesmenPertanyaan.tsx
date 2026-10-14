@@ -58,7 +58,7 @@ export function AsesmenPertanyaan() {
       </p>
       <BilahKemajuan n={n} total={daftar.length} label={indikator} />
 
-      <p className="mt-4 rounded-kartu bg-utama-muda p-3">
+      <p className="mt-4 rounded-kartu bg-utama-muda p-4">
         <span className="font-semibold">{t.penjelasanJudul}</span>{" "}
         {q.penjelasan}
       </p>

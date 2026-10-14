@@ -110,7 +110,7 @@ export function Rencana() {
       <BarisRuangan />
       {h.jumlahPanduan > 0 && (
         <section
-          className="mt-3 rounded-kartu bg-aksen-muda p-3"
+          className="mt-3 rounded-kartu bg-aksen-muda p-4"
           aria-label={t.beres.judul}
         >
           <p className="font-semibold">
@@ -132,7 +132,7 @@ export function Rencana() {
       {ringan && (
         <p
           role="note"
-          className="mt-2 rounded-kartu bg-aksen-muda p-3 motion-safe:animate-muncul"
+          className="mt-2 rounded-kartu bg-aksen-muda p-4 motion-safe:animate-muncul"
         >
           {t.ringan.catatan}
         </p>
@@ -187,7 +187,7 @@ export function Rencana() {
           {!satuHal && h.mulai.length === 0 && (
             <p
               role="note"
-              className="mt-5 rounded-kartu border border-draf bg-draf-muda p-3 text-draf"
+              className="mt-5 rounded-kartu border border-draf bg-draf-muda p-4 text-draf"
             >
               {t.belumAdaSiap}
             </p>

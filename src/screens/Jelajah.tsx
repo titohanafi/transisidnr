@@ -120,7 +120,7 @@ function Daftar({ awal }: { awal: Filter }) {
         <>
           <div aria-live="polite">
             {kelompok.length === 0 && (
-              <p className="mt-5 rounded-kartu bg-draf-muda p-3 text-draf">
+              <p className="mt-5 rounded-kartu bg-draf-muda p-4 text-draf">
                 {cari.trim() ? t.cari.kosong : t.kosongFilter}
               </p>
             )}

@@ -67,15 +67,15 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
         <Ikon kunci={kunciKelompok(kartu)} className="h-12 w-12" />
         <LencanaStatus status={kartu.status_validasi} />
       </div>
-      <section className="mt-4 rounded-kartu bg-utama-muda p-4" aria-labelledby="situasi">
+      <section className="mt-bagian rounded-kartu bg-utama-muda p-4" aria-labelledby="situasi">
         <h2 id="situasi" className="text-sm font-semibold uppercase tracking-wide text-utama-gelap">
           {t.situasi}
         </h2>
-        <p className="mt-1 text-lg">{kartu.situasi}</p>
+        <p className="mt-2 text-lg">{kartu.situasi}</p>
       </section>
 
       {kartu.isi_menyusul || !kartu.solusi ? (
-        <p className="mt-5 rounded-kartu border border-draf bg-draf-muda p-3 font-medium text-draf">{umum.isiMenyusul}</p>
+        <p className="mt-bagian rounded-kartu border border-draf bg-draf-muda p-4 font-medium text-draf">{umum.isiMenyusul}</p>
       ) : (
         <>
           {kartu.kenapa_penting && (
@@ -95,30 +95,30 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                 const buka = terbuka.has(x.tingkat);
                 const idPanel = `panel-${x.tingkat}`;
                 return (
-                  <div key={x.tingkat} className="rounded-kartu border border-garis bg-white">
+                  <div key={x.tingkat} className="rounded-kartu border border-garis/70 bg-white shadow-kartu">
                     <h3>
                       <button
                         type="button"
                         aria-expanded={buka}
                         aria-controls={idPanel}
                         onClick={() => ubah(x.tingkat)}
-                        className="flex min-h-sentuh w-full items-center justify-between gap-2 p-3 text-left text-lg font-semibold"
+                        className="flex min-h-sentuh w-full items-center justify-between gap-2 px-4 py-3 text-left text-judulKartu"
                       >
                         <span>{t.tingkat[x.tingkat]}</span>
                         <span aria-hidden="true">{buka ? "−" : "+"}</span>
                       </button>
                     </h3>
-                    <p className="px-3 text-redup">{s.ringkasan}</p>
-                    <p className="mt-1 px-3 text-sm font-medium">
+                    <p className="px-4 text-redup">{s.ringkasan}</p>
+                    <p className="mt-2 px-4 text-sm font-medium">
                       {s.biaya.kisaran_rp ?? umum.biayaMenyusul} · {s.usaha.waktu ?? umum.menyusul}
                     </p>
-                    <div className="mt-2 flex flex-wrap gap-2 px-3 pb-3">
+                    <div className="mt-2 flex flex-wrap gap-2 px-4 pb-4">
                       <LencanaSifat sifat={x.sifat} />
                       {x.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
                       {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
                       {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                     </div>
-                    <div id={idPanel} hidden={!buka} className="border-t border-garis p-3">
+                    <div id={idPanel} hidden={!buka} className="border-t border-garis/70 p-4">
                       <h4 className="font-semibold">{t.langkah}</h4>
                       <ol className="mt-2 space-y-2">
                         {s.langkah.map((l, i) => (
@@ -158,7 +158,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           <h4 className="font-semibold">{t.barang}</h4>
                           <ul className="mt-2 space-y-3">
                             {s.barang.map((b) => (
-                              <li key={b.nama} className="rounded-tombol bg-kertas p-3">
+                              <li key={b.nama} className="rounded-tombol bg-permukaan p-3">
                                 <p className="font-medium">{b.nama}</p>
                                 <p className="mt-1">
                                   <span className="font-semibold">{t.cek}:</span> {b.cek_kecocokan}
@@ -175,7 +175,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           </ul>
                         </div>
                       )}
-                      <div className="mt-5 flex flex-col gap-2">
+                      <div className="mt-6 flex flex-col gap-2">
                         {/* Tukang tidak diulang di sini: tombolnya ada di "Kenali peran ahli", pada baris Tukang. */}
                         {aksiTersedia(kartu, x.tingkat).filter((j) => j !== "tukang").map((j) => (
                           <TombolAksi
@@ -196,7 +196,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
           </section>
 
           {kartu.bantuan && kartu.bantuan.length > 0 && (
-            <div className="mt-5">
+            <div className="mt-bagian">
               <TombolAksi jenis="ahli" kartuId={kartu.id} gayaTombol="sekunder" className="w-full" />
             </div>
           )}
@@ -207,12 +207,12 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                 {t.peranPenyandang} / {t.peranCaregiver}
               </h2>
               <div className="space-y-3">
-                <div className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-3">
-                  <h3 className="font-semibold">{t.peranPenyandang}</h3>
+                <div className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4">
+                  <h3 className="text-judulKartu mb-1">{t.peranPenyandang}</h3>
                   <p>{kartu.peran.penyandang_disabilitas}</p>
                 </div>
-                <div className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-3">
-                  <h3 className="font-semibold">{t.peranCaregiver}</h3>
+                <div className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4">
+                  <h3 className="text-judulKartu mb-1">{t.peranCaregiver}</h3>
                   <p>{kartu.peran.caregiver}</p>
                 </div>
               </div>
@@ -220,7 +220,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
           )}
 
           {kartu.peringatan && (
-            <section className="mt-bagian rounded-kartu border border-aksen bg-aksen-muda p-3" aria-labelledby="peringatan">
+            <section className="mt-bagian rounded-kartu border border-aksen bg-aksen-muda p-4" aria-labelledby="peringatan">
               <h2 id="peringatan" className="text-subjudul text-aksen">
                 {t.peringatan}
               </h2>

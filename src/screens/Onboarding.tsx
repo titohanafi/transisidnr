@@ -57,7 +57,7 @@ export function Onboarding() {
         </div>
         <div aria-live="polite" className="mt-4 min-h-[3.5rem]">
           {respons && (
-            <p key={respons} className="rounded-kartu bg-aksen-muda p-3 motion-safe:animate-muncul">
+            <p key={respons} className="rounded-kartu bg-aksen-muda p-4 motion-safe:animate-muncul">
               {respons}
             </p>
           )}

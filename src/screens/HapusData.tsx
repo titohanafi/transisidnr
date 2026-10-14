@@ -14,7 +14,7 @@ export function HapusData() {
     <Halaman judul={t.judul}>
       {tahap === "selesai" ? (
         <>
-          <p role="status" className="mt-4 rounded-kartu border border-utama bg-utama-muda p-3">
+          <p role="status" className="mt-4 rounded-kartu border border-utama bg-utama-muda p-4">
             {t.selesai}
           </p>
           <TombolLink to="/" className="mt-6">

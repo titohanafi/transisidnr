@@ -29,7 +29,7 @@ export function DaftarAhli({ ahli }: { ahli: AhliItem[] }) {
         ))}
       </ul>
       <p className="mt-4 font-medium">{tk.direktoriMenyusul}</p>
-      <p role="note" className="mt-4 rounded-kartu border border-aksen bg-aksen-muda p-3">
+      <p role="note" className="mt-4 rounded-kartu border border-aksen bg-aksen-muda p-4">
         {aksi.ahli.nyeri}
       </p>
     </>
