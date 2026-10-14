@@ -8,7 +8,7 @@
       "judul": "Apa yang ingin Anda lakukan?",
       "susun": {
         "judul": "Cek kebutuhan di rumah",
-        "deskripsi": "Jawab beberapa pertanyaan, lalu dapatkan langkah yang sesuai dengan kondisi Anda.",
+        "deskripsi": "Jawab beberapa pertanyaan, lalu dapatkan solusi yang sesuai dengan kondisi Anda.",
         "tombol": "Mulai"
       },
       "lanjut": {
@@ -381,7 +381,7 @@
     "kosongFilter": "Belum ada panduan dengan isi lengkap untuk pilihan ini. Isi panduan masih disusun.",
     "caregiver": "Untuk caregiver",
     "ajakanJudul": "Panduan saya",
-    "ajakanBelum": "Ingin langkah yang disesuaikan dengan rumah Anda? Jawab beberapa pertanyaan ya atau tidak.",
+    "ajakanBelum": "Ingin solusi yang disesuaikan dengan kondisi Anda? Jawab beberapa pertanyaan ya atau tidak.",
     "ajakanMulai": "Cek kebutuhan di rumah",
     "ajakanSudah": "Jawaban Anda sudah tersimpan. Buka panduan yang disusun dari jawaban itu.",
     "ajakanRencana": "Lihat Panduan Saya",
