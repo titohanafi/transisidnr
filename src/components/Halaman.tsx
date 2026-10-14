@@ -7,7 +7,18 @@ import { konten } from "../domain/content";
 const { app, umum } = konten.ui;
 
 // Kerangka semua layar: header, tautan lewati, dan fokus ke judul saat layar berganti.
-export function Halaman({ judul, children, kunciFokus }: { judul: string; children: ReactNode; kunciFokus?: string | number }) {
+export function Halaman({
+  judul,
+  children,
+  kunciFokus,
+  kepala,
+}: {
+  judul: string;
+  children: ReactNode;
+  kunciFokus?: string | number;
+  /** Isi pita kepala selebar layar di bawah judul (mis. pengantar dan pencarian). Tanpa ini, halaman memakai tata letak biasa. */
+  kepala?: ReactNode;
+}) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const menu = namaMenu(pathname);
@@ -17,6 +28,12 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
     h1.current?.focus();
     document.title = judul === app.nama ? app.nama : `${judul} | ${app.nama}`;
   }, [judul, kunciFokus]);
+
+  const h1Elemen = (
+    <h1 ref={h1} tabIndex={-1} className={judul === app.nama ? "sr-only" : "mb-1 text-judul text-tinta outline-none"}>
+      {judul}
+    </h1>
+  );
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col bg-kertas md:border-x md:border-garis md:shadow-kartu print:shadow-none">
@@ -55,12 +72,22 @@ export function Halaman({ judul, children, kunciFokus }: { judul: string; childr
           </Link>
         )}
       </header>
-      <main id="isi" className="flex flex-1 flex-col px-4 pb-8 pt-6">
+      <main id="isi" className={`flex flex-1 flex-col pb-8 ${kepala ? "" : "px-4 pt-6"}`}>
         {/* Di Beranda judulnya sama dengan nama aplikasi di header: tetap ada untuk pembaca layar, tidak ditampilkan dua kali. */}
-        <h1 ref={h1} tabIndex={-1} className={judul === app.nama ? "sr-only" : "mb-1 text-judul text-tinta outline-none"}>
-          {judul}
-        </h1>
-        {children}
+        {kepala ? (
+          <>
+            <div className="bg-permukaan px-4 pb-5 pt-6 print:bg-white">
+              {h1Elemen}
+              {kepala}
+            </div>
+            <div className="flex flex-1 flex-col px-4 pt-6">{children}</div>
+          </>
+        ) : (
+          <>
+            {h1Elemen}
+            {children}
+          </>
+        )}
       </main>
       <BilahTab />
     </div>

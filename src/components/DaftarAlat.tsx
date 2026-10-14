@@ -12,11 +12,11 @@ const belumAdaDetail = (b: AlatItem) => b.kisaran_harga === null && /^menyusul/i
 
 // Daftar alat dari semua panduan. Cara cek kecocokan tampil di atas tombol; tombol produk aktif hanya bila ada tautan.
 export function DaftarAlat({ alat }: { alat: AlatItem[] }) {
-  if (alat.length === 0) return <p className="mt-5">{tj.alat.kosong}</p>;
+  if (alat.length === 0) return <p>{tj.alat.kosong}</p>;
   return (
-    <ul className="mt-5 space-y-4">
+    <ul className="space-y-4">
       {alat.map((b) => (
-        <li key={b.nama} className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4">
+        <li key={b.nama} className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
           <h2 className="text-subjudul">{b.nama}</h2>
           <p className="mt-2 rounded-tombol bg-aksen-muda p-2">
             <span className="font-semibold">{tk.cek}:</span> {b.cek_kecocokan}

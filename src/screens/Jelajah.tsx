@@ -1,6 +1,6 @@
-import { Info } from "lucide-react";
+import { ChevronRight, Info, Search, UsersRound, Wrench } from "lucide-react";
 import { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { DaftarAhli } from "../components/DaftarAhli";
 import { DaftarAlat } from "../components/DaftarAlat";
 import { Halaman } from "../components/Halaman";
@@ -79,37 +79,49 @@ function Daftar({ awal }: { awal: Filter }) {
   const ahli = kumpulkanAhli(konten.kartu);
 
   return (
-    <Halaman judul={t.judulFilter[filter]}>
-      <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>
-
-      {filter === "semua" && (
-        <div className="mt-4">
-          <label htmlFor="cari-panduan" className="text-sm font-semibold text-redup">
-            {t.cari.label}
-          </label>
-          <input
-            id="cari-panduan"
-            type="search"
-            value={cari}
-            onChange={(e) => setCari(e.target.value)}
-            autoComplete="off"
-            enterKeyHint="search"
-            placeholder={t.cari.placeholder}
-            autoFocus={dariBeranda === ""}
-            className="mt-1 min-h-sentuh w-full rounded-tombol border border-garisKontrol bg-white px-3 text-base"
-          />
-        </div>
-      )}
-
+    <Halaman
+      judul={t.judulFilter[filter]}
+      kepala={
+        <>
+          <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>
+          {filter === "semua" && (
+            <div className="mt-4">
+              <label htmlFor="cari-panduan" className="text-kecil font-semibold text-redup">
+                {t.cari.label}
+              </label>
+              <div className="relative mt-1">
+                <Search
+                  className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-redup"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                  focusable="false"
+                />
+                <input
+                  id="cari-panduan"
+                  type="search"
+                  value={cari}
+                  onChange={(e) => setCari(e.target.value)}
+                  autoComplete="off"
+                  enterKeyHint="search"
+                  placeholder={t.cari.placeholder}
+                  autoFocus={dariBeranda === ""}
+                  className="h-12 w-full rounded-tombol border border-garisKontrol bg-white pl-11 pr-3 text-isi shadow-kartu"
+                />
+              </div>
+            </div>
+          )}
+        </>
+      }
+    >
       {filter === "semua" && cari.trim() !== "" && (
-        <aside className="mt-4 flex items-start gap-2 rounded-kartu bg-info-muda p-3">
-          <Info className="mt-0.5 h-5 w-5 shrink-0 text-info" strokeWidth={2} aria-hidden="true" focusable="false" />
-          <p className="text-kecil text-tinta">{t.cari.cakupan}</p>
+        <aside className="mb-isi flex items-start gap-2 rounded-kartu border border-catatan-garis bg-catatan-muda p-3 text-catatan">
+          <Info className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+          <p className="text-kecil">{t.cari.cakupan}</p>
         </aside>
       )}
 
       {filter === "semua" && (
-        <section className="mt-4 rounded-kartu bg-utama-muda p-4" aria-label={t.ajakanJudul}>
+        <section className="rounded-kartu bg-utama-muda p-5" aria-label={t.ajakanJudul}>
           <p>{adaJawaban ? t.ajakanSudah : t.ajakanBelum}</p>
           <TombolLink to={adaJawaban ? "/rencana" : "/mulai/1"} className="mt-3 w-full">
             {adaJawaban ? t.ajakanRencana : t.ajakanMulai}
@@ -130,9 +142,11 @@ function Daftar({ awal }: { awal: Filter }) {
           </div>
 
           {kelompok.map((g) => (
-            <section key={g.kunci} className="mt-6" aria-labelledby={`grup-${g.kunci}`}>
-              <h2 id={`grup-${g.kunci}`} className="flex items-center gap-3 text-xl font-bold">
-                <Ikon kunci={g.kunci} className="h-9 w-9" />
+            <section key={g.kunci} className="mt-bagian first:mt-0" aria-labelledby={`grup-${g.kunci}`}>
+              <h2 id={`grup-${g.kunci}`} className="flex items-center gap-3 text-subjudul">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
+                  <Ikon kunci={g.kunci} className="h-6 w-6" />
+                </span>
                 {label(g.kunci)}
               </h2>
               <div className="mt-3 space-y-3">
@@ -148,7 +162,7 @@ function Daftar({ awal }: { awal: Filter }) {
                   if (k.isi_menyusul) return <KartuKerangka key={k.id} kartu={k} />;
                   if (aksi.length === 0) return <KartuBaris key={k.id} kartu={k} />;
                   return (
-                    <article key={k.id} className="rounded-kartu border border-garis/70 bg-white shadow-kartu p-4">
+                    <article key={k.id} className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
                       <h3 className="text-judulKartu">{k.judul}</h3>
                       <div className="mt-2 empty:hidden">
                         <LencanaStatus status={k.status_validasi} />
@@ -198,19 +212,30 @@ function Daftar({ awal }: { awal: Filter }) {
       )}
 
       {filter === "semua" ? (
-        <nav aria-label={t.lainnya.judul} className="mt-8">
+        <nav aria-label={t.lainnya.judul} className="mt-jeda">
           <h2 className="text-subjudul">{t.lainnya.judul}</h2>
-          <div className="mt-2 space-y-2">
-            <TombolLink to="/jelajah/alat" gayaTombol="sekunder" className="w-full">
-              {t.lainnya.alat}
-            </TombolLink>
-            <TombolLink to="/jelajah/ahli" gayaTombol="sekunder" className="w-full">
-              {t.lainnya.ahli}
-            </TombolLink>
-          </div>
+          <ul className="mt-isi space-y-3">
+            {[
+              { ke: "/jelajah/alat", teks: t.lainnya.alat, Ikon: Wrench },
+              { ke: "/jelajah/ahli", teks: t.lainnya.ahli, Ikon: UsersRound },
+            ].map(({ ke, teks, Ikon: IkonBaris }) => (
+              <li key={ke}>
+                <Link
+                  to={ke}
+                  className="tekan flex min-h-sentuh items-center gap-3 rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu hover:bg-utama-muda"
+                >
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
+                    <IkonBaris className="h-6 w-6 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+                  </span>
+                  <span className="flex-1 font-semibold">{teks}</span>
+                  <ChevronRight className="h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
       ) : (
-        <TombolLink to="/jelajah" gayaTombol="sekunder" className="mt-8 w-full">
+        <TombolLink to="/jelajah" gayaTombol="sekunder" className="mt-jeda w-full">
           {t.semuaPanduan}
         </TombolLink>
       )}
