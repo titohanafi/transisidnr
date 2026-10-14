@@ -109,7 +109,7 @@ export function Kontak() {
                   <li key={e.id}>
                     <a
                       href={urlTelepon(e.telepon)}
-                      className="tekan flex h-full min-h-[92px] flex-col justify-between rounded-kartu border border-bahaya/25 bg-white p-4 shadow-kartu hover:bg-bahaya-muda"
+                      className="tekan flex h-full min-h-[92px] flex-col justify-between rounded-kartu border border-bahaya/25 bg-white p-4 shadow-kartu"
                     >
                       <span className="flex items-center gap-2 text-bahaya">
                         <Phone className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
