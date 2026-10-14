@@ -150,7 +150,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           {s.biaya.kisaran_rp
                             ? ringkasRp(s.biaya.kisaran_rp)
                             : s.biaya.estimasi_rp
-                              ? `${umum.estimasi} ${ringkasRp(s.biaya.estimasi_rp)}`
+                              ? ringkasRp(s.biaya.estimasi_rp)
                               : umum.biayaMenyusul}
                         </span>
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-kecil font-medium">

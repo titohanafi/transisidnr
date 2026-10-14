@@ -88,7 +88,7 @@ export function Cetak() {
                         {s.biaya.kisaran_rp
                           ? ringkasRp(s.biaya.kisaran_rp)
                           : s.biaya.estimasi_rp
-                            ? `${umum.estimasi} ${ringkasRp(s.biaya.estimasi_rp)}`
+                            ? ringkasRp(s.biaya.estimasi_rp)
                             : umum.biayaMenyusul}
                       </p>
                       {s.ukuran && s.ukuran.length > 0 && ukuranBoleh && (
