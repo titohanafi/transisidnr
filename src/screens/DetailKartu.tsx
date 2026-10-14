@@ -237,11 +237,21 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                         )}
                         <div className="mt-6 flex flex-col gap-5">
                           {aksiTersedia(kartu, x.tingkat).includes("beli") && (
-                            <TombolAksi jenis="beli" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="sekunder" />
+                            <TombolAksi
+                              jenis="beli"
+                              kartuId={kartu.id}
+                              tingkat={x.tingkat}
+                              gayaTombol={x.tingkat === "renovasi" ? "sekunder" : "utama"}
+                            />
                           )}
                           {aksiTersedia(kartu, x.tingkat).includes("tukang") && (
-                            <Jembatan teks={t.jembatanTukang}>
-                              <TombolAksi jenis="tukang" kartuId={kartu.id} tingkat={x.tingkat} gayaTombol="sekunder" />
+                            <Jembatan teks={x.tingkat === "renovasi" ? t.jembatanTukang : t.jembatanPasang}>
+                              <TombolAksi
+                                jenis="tukang"
+                                kartuId={kartu.id}
+                                tingkat={x.tingkat}
+                                gayaTombol={x.tingkat === "renovasi" ? "utama" : "sekunder"}
+                              />
                             </Jembatan>
                           )}
                           {x.tingkat === "renovasi" && kartu.bantuan && kartu.bantuan.length > 0 && (

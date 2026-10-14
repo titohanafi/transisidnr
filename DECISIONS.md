@@ -516,3 +516,6 @@
 - Tombol "Kenali peran ahli" yang berdiri sendiri di bawah daftar solusi dihapus karena muncul tanpa alasan. Sekarang tombol itu muncul di dua tempat yang masuk akal: (1) di panel tingkat Renovasi, dengan kalimat pengantar "Renovasi sering perlu dibantu ahli dan tukang. Kenali siapa yang cocok untuk panduan ini.", dan (2) sebagai saran setelah pengguna menjawab "Masih sulit" di tingkat terakhir.
 - Tombol "Pesan ke tukang" kini langsung di panel tingkat yang mendukungnya, dengan kalimat pengantar. Sebelumnya hanya bisa dicapai lewat halaman peran ahli.
 - Kalimat pengantar baru (`kartu.jembatanTukang`, `kartu.jembatanAhli`) ditulis oleh asisten dan perlu ditinjau tim konten.
+
+## Alat tanpa bongkar: beli dulu, tukang hanya untuk memasang
+- Di tingkat "Alat tanpa bongkar", tombol utama (hijau penuh) adalah "Lihat alat". "Pesan ke tukang" tetap ada tetapi sekunder, dengan pengantar "Butuh bantuan memasang alatnya? ..." (`kartu.jembatanPasang`). Di tingkat Renovasi sebaliknya: "Pesan ke tukang" utama dengan pengantar "Ingin dikerjakan tukang? ..." dan "Lihat alat" (bila ada barang) sekunder. Kalimat pengantar baru ditulis asisten; perlu ditinjau.
