@@ -137,6 +137,11 @@ describe("cocokCari", () => {
     expect(cocokCari(kartuLicin, "LANTAI licin")).toBe(true);
     expect(cocokCari(kartuLicin, "lantai pintu")).toBe(false);
   });
+  it("kata penghubung dan kata tanya diabaikan ('cara mengatasi lantai licin')", () => {
+    expect(cocokCari(kartuLicin, "cara mengatasi lantai licin")).toBe(true);
+    expect(cocokCari(kartuLicin, "bagaimana mengatasi pintu")).toBe(false);
+    expect(cocokCari(kartuLicin, "cara")).toBe(true);
+  });
   it("kata yang tidak ada tidak cocok", () => {
     expect(cocokCari(kartuLicin, "xyz")).toBe(false);
   });

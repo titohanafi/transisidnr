@@ -437,3 +437,5 @@
 - Kartu setelah memilih emoji kini memakai latar hijau muda yang sama dengan kartu pertanyaan (satu keluarga). Isi: emoji besar dalam lingkaran putih, keterangan kecil "Hari ini · Untuk Anda yang merawat", jawaban tebal besar, tombol "Ubah" berikon pensil di pojok kanan atas, dan satu tombol bantuan lebar berpanah (putih, tepi tipis) di bawahnya. Sebelumnya berupa baris putih datar dengan tautan yang terlihat menggantung.
 
 - Placeholder kolom cari di Beranda: "Cari panduan, mis. lantai licin" (menyebut apa yang dicari, selaras dengan judul "Temukan panduan…", disusul satu contoh).
+
+- Placeholder kolom cari diganti "Mis. cara mengatasi lantai licin" (kata "cara" selaras dengan judul "Temukan panduan…", karena panduan adalah cara menangani suatu masalah). Agar contoh itu benar-benar menemukan hasil, pencarian kini mengabaikan kata penghubung dan kata tanya umum (cara, mengatasi, bagaimana, untuk, agar, dan sebagainya; daftar `KATA_ABAI` di `src/domain/jelajah.ts`, diuji). Daftar ini perlu dilengkapi bila uji pengguna menunjukkan kata lain yang sering diketik.

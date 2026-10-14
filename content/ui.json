@@ -18,7 +18,7 @@
       },
       "cakupan": "Saat ini baru tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda.",
       "semua": "Lihat panduan",
-      "cari": { "label": "Temukan panduan agar rumah lebih ramah disabilitas", "placeholder": "Cari panduan, mis. lantai licin", "tombol": "Cari" }
+      "cari": { "label": "Temukan panduan agar rumah lebih ramah disabilitas", "placeholder": "Mis. cara mengatasi lantai licin", "tombol": "Cari" }
     }
   },
   "umum": {
@@ -387,7 +387,7 @@
     "ajakanRencana": "Lihat Panduan Saya",
     "aksiKartu": "Aksi untuk panduan ini",
     "semuaPanduan": "Kembali ke semua panduan",
-    "cari": { "label": "Cari panduan", "placeholder": "Mis. lantai licin", "tombol": "Cari", "hapus": "Hapus pencarian", "kosong": "Tidak ada panduan yang cocok. Coba kata lain, atau cek kebutuhan di rumah supaya langkahnya disesuaikan dengan kondisi Anda." },
+    "cari": { "label": "Cari panduan", "placeholder": "Mis. cara mengatasi lantai licin", "tombol": "Cari", "hapus": "Hapus pencarian", "kosong": "Tidak ada panduan yang cocok. Coba kata lain, atau cek kebutuhan di rumah supaya langkahnya disesuaikan dengan kondisi Anda." },
     "lainnya": { "judul": "Lainnya", "alat": "Daftar alat", "ahli": "Peran ahli dan tukang" },
     "judulFilter": {
       "semua": "Semua panduan",
