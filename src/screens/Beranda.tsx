@@ -107,7 +107,7 @@ export function Beranda() {
       className={`rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "relative -mt-16 shadow-angkat"}`}
       aria-labelledby="jalur-utama"
     >
-      <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-10 w-10 text-white" />
+      <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-10 w-10 text-aksen-muda" />
       <h3 id="jalur-utama" className="mt-isi text-subjudul">
         {kartu.judul}
       </h3>

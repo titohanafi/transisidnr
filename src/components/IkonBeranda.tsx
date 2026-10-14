@@ -1,7 +1,7 @@
 import { House, ListChecks, type LucideIcon } from "lucide-react";
 
 // Ikon kartu utama Beranda dari Lucide (ISC). Dekoratif: artinya sudah ada di teks.
-// "susun" = cek kebutuhan di rumah (rumah polos); "lanjut" = lanjutkan daftar langkah.
+// "susun" = cek kebutuhan di rumah (rumah berhati: rumah yang dirawat); "lanjut" = lanjutkan daftar langkah.
 const ikon: Record<"susun" | "lanjut", LucideIcon> = { susun: House, lanjut: ListChecks };
 
 export function IkonBeranda({ kunci, className = "h-7 w-7" }: { kunci: "susun" | "lanjut"; className?: string }) {
