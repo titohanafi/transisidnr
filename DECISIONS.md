@@ -381,3 +381,9 @@
 - Kolom cari di Beranda dinaikkan (jarak atas dikurangi) dan diberi jarak lebih longgar: label ke kolom 12px, kolom ke tombol cari 12px.
 
 - Jarak kolom cari ke kartu hijau ditambah (16px menjadi 24px).
+
+## "Rumah" atau "tempat tinggal"
+- Hasil telusur: "rumah" dipakai di sekitar 12 tempat (judul kartu, asesmen, kartu panduan, kertas cetak); "tempat tinggal" hanya di pertanyaan jenis hunian (onboarding) dan label kolom cari yang baru. Opsi hunian: milik sendiri, kontrakan, kos, apartemen.
+- Keputusan: "rumah" dipakai sebagai kata umum di seluruh antarmuka (pendek, hangat, dan lazim dipakai untuk kos/apartemen: "di rumah"). "Tempat tinggal" hanya dipertahankan pada pertanyaan jenis hunian karena di situ perbedaan kos/kontrakan/apartemen memang ditanyakan. Label kolom cari diubah ke "Temukan panduan agar rumah lebih ramah disabilitas".
+- Risiko: penghuni kos mungkin terasa kurang disapa oleh kata "rumah". Periksa pada uji pengguna; alternatif yang lebih inklusif adalah "tempat tinggal" di semua tempat, dengan harga kata yang lebih formal.
+- Teks kartu "Buat rencana" disesuaikan dengan perannya (panduan yang dipersonalisasi sesuai kondisi), sedangkan kolom cari untuk semua orang: "Dapatkan langkah yang sesuai dengan kondisi dan rumah Anda, mulai dari kamar mandi. Untuk penyandang disabilitas pengguna kursi roda dan caregiver."
