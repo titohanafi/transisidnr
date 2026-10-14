@@ -1,4 +1,4 @@
-import { ChevronDown, Clock, HeartHandshake, TriangleAlert, User, Wallet } from "lucide-react";
+import { Clock, HeartHandshake, TriangleAlert, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
@@ -49,9 +49,17 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
 
   const awal =
     tampil.find((x) => x.tingkat === tingkatAwal) ?? tingkatUtama({ id: kartu.id, prioritas: false, isiMenyusul: false, tingkat });
-  const [terbuka, setTerbuka] = useState<Set<Tingkat>>(new Set(awal ? [awal.tingkat] : []));
-  // Satu tingkat terbuka pada satu waktu supaya halaman tidak memanjang dan pengguna fokus pada satu pilihan.
-  const ubah = (x: Tingkat) => setTerbuka((sekarang) => (sekarang.has(x) ? new Set() : new Set([x])));
+  // Pilihan solusi tampil sebagai tab: satu tingkat dipilih, isinya tampil di bawah deretan tab.
+  const [aktifTingkat, setAktifTingkat] = useState<Tingkat | undefined>(awal?.tingkat);
+  const pilihTab = (arah: number, dari: number) => {
+    const berikut = tampil[(dari + arah + tampil.length) % tampil.length];
+    setAktifTingkat(berikut.tingkat);
+    document.getElementById(`tab-${berikut.tingkat}`)?.focus();
+  };
+
+  const aktif = tampil.find((x) => x.tingkat === aktifTingkat) ?? tampil[0];
+  const biayaPil = (b: { kisaran_rp: string | null; estimasi_rp?: string | null }) =>
+    b.kisaran_rp ? ringkasRp(b.kisaran_rp) : b.estimasi_rp ? `~${ringkasRp(b.estimasi_rp)}` : umum.biayaMenyusul;
 
   const tampilkanUkuran = bolehTampilkanUkuran(kartu.status_validasi, TAMPILKAN_ANGKA_DRAF);
   const istilah = istilahDalam(JSON.stringify(kartu), konten.ui.istilah);
@@ -101,54 +109,69 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
               <h2 id="solusi" className="text-subjudul">
                 {t.solusi}
               </h2>
-              <div className="mt-isi divide-y divide-garis/70 overflow-hidden rounded-kartu border border-garis bg-white">
-                {tampil.map((x) => {
+              <div
+                role="tablist"
+                aria-labelledby="solusi"
+                className="mt-isi grid gap-2"
+                style={{ gridTemplateColumns: `repeat(${tampil.length}, minmax(0, 1fr))` }}
+              >
+                {tampil.map((x, i) => {
                   const s = kartu.solusi?.[x.tingkat];
                   if (!s) return null;
-                  const buka = terbuka.has(x.tingkat);
-                  const idPanel = `panel-${x.tingkat}`;
+                  const dipilih = aktif?.tingkat === x.tingkat;
                   return (
-                    <div key={x.tingkat}>
-                      <h3>
-                        <button
-                          type="button"
-                          aria-expanded={buka}
-                          aria-controls={idPanel}
-                          onClick={() => ubah(x.tingkat)}
-                          className="flex min-h-sentuh w-full items-center justify-between gap-3 px-4 pb-3 pt-4 text-left text-judulKartu"
-                        >
-                          <span>{t.tingkat[x.tingkat]}</span>
-                          <ChevronDown
-                            className={`h-5 w-5 shrink-0 text-utama-gelap motion-safe:transition-transform ${buka ? "rotate-180" : ""}`}
-                            strokeWidth={2}
-                            aria-hidden="true"
-                            focusable="false"
-                          />
-                        </button>
-                      </h3>
-                      <p className="px-4 pb-4 text-redup">{s.ringkasan}</p>
-                      <div className={`flex flex-wrap gap-2 px-4 ${buka ? "pb-3" : "pb-4"}`}>
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
-                          <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
-                          {s.biaya.kisaran_rp
-                            ? ringkasRp(s.biaya.kisaran_rp)
-                            : s.biaya.estimasi_rp
-                              ? `~${ringkasRp(s.biaya.estimasi_rp)}`
-                              : umum.biayaMenyusul}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
-                          <Clock className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
-                          {s.usaha.waktu ?? umum.menyusul}
-                        </span>
-                        {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
-                        {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
-                      </div>
-                      <div id={idPanel} hidden={!buka} className="border-t border-garis/70 p-4">
-                        <div className="mb-4 flex flex-wrap gap-2 empty:hidden">
+                    <button
+                      key={x.tingkat}
+                      id={`tab-${x.tingkat}`}
+                      type="button"
+                      role="tab"
+                      aria-selected={dipilih}
+                      aria-controls="panel-solusi"
+                      tabIndex={dipilih ? 0 : -1}
+                      onClick={() => setAktifTingkat(x.tingkat)}
+                      onKeyDown={(e) => {
+                        if (e.key === "ArrowRight") {
+                          e.preventDefault();
+                          pilihTab(1, i);
+                        } else if (e.key === "ArrowLeft") {
+                          e.preventDefault();
+                          pilihTab(-1, i);
+                        }
+                      }}
+                      className={`tekan flex min-h-[84px] flex-col items-start justify-between gap-2 rounded-kartu border p-3 text-left ${
+                        dipilih ? "border-utama bg-utama-muda" : "border-garis bg-white"
+                      }`}
+                    >
+                      <span className="text-kecil font-semibold leading-snug">{t.tingkat[x.tingkat]}</span>
+                      <span className="text-mikro text-redup">{biayaPil(s.biaya)}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              {aktif && kartu.solusi?.[aktif.tingkat] && (
+                <div
+                  id="panel-solusi"
+                  role="tabpanel"
+                  aria-labelledby={`tab-${aktif.tingkat}`}
+                  className="mt-3 rounded-kartu border border-garis bg-white p-4"
+                >
+                  {(() => {
+                    const s = kartu.solusi![aktif.tingkat]!;
+                    const x = aktif;
+                    return (
+                      <>
+                        <p className="text-redup">{s.ringkasan}</p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
+                            <Clock className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
+                            {s.usaha.waktu ?? umum.menyusul}
+                          </span>
                           <LencanaSifat sifat={x.sifat} />
                           {x.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
+                          {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
+                          {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                         </div>
-                        <h4 className="font-semibold">{t.langkah}</h4>
+                        <h4 className="mt-5 font-semibold">{t.langkah}</h4>
                         <ol className="mt-2 space-y-2">
                           {s.langkah.map((l, i) => (
                             <li key={l} className="flex gap-3">
@@ -225,11 +248,11 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                               />
                             ))}
                         </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
               {adaDisembunyikan && <p className="mt-3 text-redup">{t.tingkatDisembunyikan}</p>}
             </section>
 
