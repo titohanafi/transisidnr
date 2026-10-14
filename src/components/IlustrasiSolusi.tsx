@@ -18,7 +18,7 @@ import {
 // Ilustrasi selebar panel untuk pilihan solusi. Dibuat bertahap, satu panduan demi satu panduan: panduan yang belum ada di
 // daftar ini tidak menampilkan apa pun (kunci "idKartu:tingkat"). Gaya: petunjuk perabot hitam-putih (garis tinta tegas,
 // isian putih, panah dan garis ukur), bahan gambarnya di GambarTeknis.tsx. Dekoratif; pengguna kursi roda digambar aktif.
-// Angka hanya dari content/ui.json dan gambar berangka masuk daftar BERANGKA (ada catatan acuan umum di bawahnya).
+// Angka hanya dari content/ui.json. Gambar berangka masuk daftar BERANGKA: "ada" = acuan umum ADA 2010, "kartu" = angka dari isi kartu.
 
 const Bintik = ({ x, y, kolom, baris, jarak = 10 }: { x: number; y: number; kolom: number; baris: number; jarak?: number }) => (
   <g className="fill-tinta">
@@ -456,6 +456,78 @@ const GAMBAR: Record<string, () => ReactNode> = {
       <UkurMendatar x1={204} x2={284} y={134} angka={angka("ruangPutar")} />
     </Kanvas>
   ),
+  // Atur ruang dan kebiasaan, tampak dari atas: ruang kosong di samping kloset (ukuran dari kartu), ember dipindah, keset anti-slip.
+  "bath-transfer-toilet:tanpa_biaya": () => (
+    <Kanvas>
+      <rect x="24" y="8" width="312" height="134" fill="none" strokeWidth="6" className="stroke-tinta" />
+      <rect x="132" y="14" width="36" height="12" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+      <ellipse cx="150" cy="50" rx="15" ry="18" className="fill-white stroke-tinta" strokeWidth="3" />
+      <ellipse cx="150" cy="52" rx="8" ry="10" fill="none" strokeWidth="2" className="stroke-tinta" />
+      <circle cx="108" cy="44" r="9" fill="none" strokeWidth="2.500" strokeDasharray="3 3" className="stroke-tinta" opacity="0.7" />
+      <path d="M100 52Q84 70 70 96" {...garisTinta} strokeWidth="2.500" strokeDasharray="3 6" className="stroke-tinta" />
+      <Panah x={66} y={100} arah={120} />
+      <circle cx="56" cy="116" r="9" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M49 112q7-9 14 0" {...garisTinta} strokeWidth="2" className="stroke-tinta" />
+      <rect
+        x="172"
+        y="22"
+        width="86"
+        height="84"
+        rx="4"
+        fill="none"
+        strokeWidth="2"
+        strokeDasharray="5 5"
+        className="stroke-tinta"
+        opacity="0.5"
+      />
+      <rect x="190" y="36" width="52" height="58" rx="3" className="fill-white stroke-tinta" strokeWidth="2.500" />
+      <path
+        d="M190 46H242M190 56H242M190 66H242M190 76H242M190 86H242"
+        {...garisTinta}
+        strokeWidth="1.500"
+        className="stroke-tinta"
+        opacity="0.35"
+      />
+      <KursiRodaAtas x={216} y={72} />
+      <UkurMendatar x1={165} x2={255} y={126} angka={angka("ruangSamping")} />
+    </Kanvas>
+  ),
+  // Alat tanpa bongkar: pegangan klem di sisi kloset, dudukan kloset tambahan (lebih tinggi), bangku mandi lipat, keset anti-slip.
+  "bath-transfer-toilet:alat_tanpa_bongkar": () => (
+    <Kanvas>
+      <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <KlosetDepan x={100} />
+      <rect x="72" y="76" width="56" height="9" rx="4.500" className="fill-white stroke-tinta" strokeWidth="3" />
+      <rect x="138" y="94" width="8" height="14" rx="2" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M146 100H158V58H178" {...garisTinta} strokeWidth="5" className="stroke-tinta" />
+      <rect x="214" y="92" width="66" height="7" rx="3.500" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M224 99L262 138M270 99L232 138" {...garisTinta} strokeWidth="4" className="stroke-tinta" />
+      <rect x="296" y="130" width="52" height="8" rx="2" className="fill-white stroke-tinta" strokeWidth="3" />
+      <Bintik x={304} y={134} kolom={5} baris={1} jarak={9} />
+    </Kanvas>
+  ),
+  // Renovasi: kloset dinaikkan setinggi dudukan kursi roda (ukuran dari kartu), pegangan permanen di dinding, lantai anti-slip.
+  "bath-transfer-toilet:renovasi": () => (
+    <Kanvas>
+      <path d="M0 138H360" {...garisTinta} strokeWidth="3" className="stroke-tinta" />
+      <Bintik x={14} y={145} kolom={26} baris={1} jarak={13} />
+      <Pengguna x={96} y={138} />
+      <path d="M126 88H250" {...garisTinta} strokeWidth="2" strokeDasharray="3 5" className="stroke-tinta" opacity="0.6" />
+      <UkurTegak x={182} y1={88} y2={138} angka={angka("tinggiKloset")} />
+      <g transform="translate(36 0)">
+        <rect x="300" y="0" width="12" height="138" className="fill-tinta" />
+        <path d="M300 28H290V68H300" {...garisTinta} strokeWidth="5" className="stroke-tinta" />
+        <rect x="260" y="52" width="32" height="38" rx="4" className="fill-white stroke-tinta" strokeWidth="3" />
+        <rect x="214" y="88" width="76" height="7" rx="3.500" className="fill-white stroke-tinta" strokeWidth="3" />
+        <path
+          d="M224 95H286Q286 118 272 124V138H238V124Q224 118 224 95Z"
+          className="fill-white stroke-tinta"
+          strokeWidth="3"
+          strokeLinejoin="round"
+        />
+      </g>
+    </Kanvas>
+  ),
   // Pastikan pintu bisa dibuka leluasa: pintu terbuka penuh dan diganjal, jalur di depan pintu kosong.
   "bath-door:tanpa_biaya": () => (
     <Kanvas>
@@ -564,8 +636,14 @@ const GAMBAR: Record<string, () => ReactNode> = {
   ),
 };
 
-/** Gambar yang memuat angka ukuran; di bawahnya tampil catatan bahwa angka hanya acuan umum. */
-const BERANGKA = new Set(["bath-door:tanpa_biaya", "bath-door:alat_tanpa_bongkar", "bath-door:renovasi", "bath-space-turning:renovasi"]);
+const BERANGKA: Record<string, "ada" | "kartu"> = {
+  "bath-door:tanpa_biaya": "ada",
+  "bath-door:alat_tanpa_bongkar": "ada",
+  "bath-door:renovasi": "ada",
+  "bath-space-turning:renovasi": "ada",
+  "bath-transfer-toilet:tanpa_biaya": "kartu",
+  "bath-transfer-toilet:renovasi": "kartu",
+};
 
 /** Ilustrasi selebar panel untuk satu pilihan solusi; null bila panduan itu belum punya ilustrasi. */
 export function IlustrasiSolusi({ kartuId, tingkat }: { kartuId: string; tingkat: Tingkat }) {
@@ -577,7 +655,11 @@ export function IlustrasiSolusi({ kartuId, tingkat }: { kartuId: string; tingkat
       <svg viewBox="0 0 360 150" className="block h-auto w-full" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
         <Gambar />
       </svg>
-      {BERANGKA.has(kunci) && <p className="px-4 pt-2 text-mikro text-redup">{konten.ui.ilustrasi.catatanAngka}</p>}
+      {BERANGKA[kunci] && (
+        <p className="px-4 pt-2 text-mikro text-redup">
+          {BERANGKA[kunci] === "ada" ? konten.ui.ilustrasi.catatanAngka : konten.ui.ilustrasi.catatanAngkaKartu}
+        </p>
+      )}
     </>
   );
 }
