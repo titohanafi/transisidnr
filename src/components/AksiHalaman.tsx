@@ -28,6 +28,7 @@ export function AksiHalaman({
   tingkat,
   pengantar,
   latarPutih = false,
+  tanpaKembali = false,
   children,
 }: {
   judul: string;
@@ -37,6 +38,8 @@ export function AksiHalaman({
   pengantar?: ReactNode;
   /** Latar halaman putih (bawaan: abu kehijauan muda). */
   latarPutih?: boolean;
+  /** Sembunyikan tombol "Kembali ke panduan" di dasar (panah kembali di header tetap ada). */
+  tanpaKembali?: boolean;
   children: ReactNode;
 }) {
   return (
@@ -55,9 +58,11 @@ export function AksiHalaman({
     >
       <div className="flex flex-col gap-bagian">
         {children}
-        <TombolLink to={`/kartu/${kartu.id}${tingkat ? `/${tingkat}` : ""}`} gayaTombol="sekunder">
-          {aksi.kembaliKeKartu}
-        </TombolLink>
+        {!tanpaKembali && (
+          <TombolLink to={`/kartu/${kartu.id}${tingkat ? `/${tingkat}` : ""}`} gayaTombol="sekunder">
+            {aksi.kembaliKeKartu}
+          </TombolLink>
+        )}
       </div>
     </Halaman>
   );
