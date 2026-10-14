@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BilahTab, namaMenu } from "./BilahTab";
@@ -52,7 +52,17 @@ export function Halaman({
     ? umum.headerPakaiAlat
     : (namaMenu(pathname) ?? (/^\/(kartu|aksi)\//.test(pathname) ? umum.tabPanduan : null));
   // Pita kepala gelap: bilah atas ikut berwarna teal (tanpa garis bawah), dan cincin fokus diputihkan supaya tetap terlihat.
-  const gelap = kepalaPita === "gelap";
+  // Saat halaman digulir, bilah kembali putih (pita sudah tidak di belakangnya).
+  const [digulir, setDigulir] = useState(() => typeof window !== "undefined" && window.scrollY > 8);
+  const pitaGelap = kepalaPita === "gelap";
+  useEffect(() => {
+    if (!pitaGelap) return;
+    const baca = () => setDigulir(window.scrollY > 8);
+    baca();
+    window.addEventListener("scroll", baca, { passive: true });
+    return () => window.removeEventListener("scroll", baca);
+  }, [pitaGelap]);
+  const gelap = pitaGelap && !digulir;
   const fokusHeader = gelap ? "focus-visible:outline-white" : "";
   const dalam = !["/", "/jelajah", "/rencana", "/kontak", "/saya"].includes(pathname);
   const h1 = useRef<HTMLHeadingElement>(null);
@@ -82,8 +92,8 @@ export function Halaman({
         {umum.lewatiKeIsi}
       </a>
       <header
-        className={`sticky top-0 z-10 flex items-center gap-1 px-2 py-1 print:hidden ${
-          gelap ? "bg-utama text-white" : "border-b border-garis bg-white text-utama"
+        className={`sticky top-0 z-10 flex items-center gap-1 border-b px-2 py-1 transition-colors duration-150 motion-reduce:transition-none print:hidden ${
+          gelap ? "border-utama bg-utama text-white" : "border-garis bg-white text-utama"
         }`}
       >
         {dalam && (
