@@ -50,11 +50,13 @@ export function Beranda() {
             <Search className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" focusable="false" />
           </button>
         </div>
-        <p className="mt-3">
-          <span className="inline-block rounded-2xl bg-utama-muda px-3 py-1 text-sm font-semibold leading-snug text-utama-gelap [text-wrap:balance]">
-            {pilih.cakupan}
-          </span>
-        </p>
+        <ul aria-label={pilih.cakupanJudul} className="mt-3 flex flex-wrap gap-2">
+          {pilih.cakupan.map((c) => (
+            <li key={c.label} className="rounded-full bg-utama-muda px-3 py-1 text-sm text-utama-gelap">
+              <span className="font-semibold">{c.label}:</span> {c.nilai}
+            </li>
+          ))}
+        </ul>
       </form>
 
       <section className="mt-6 rounded-kartu bg-utama p-4 text-white" aria-labelledby="jalur-utama">
