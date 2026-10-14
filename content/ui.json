@@ -7,8 +7,8 @@
     "pilih": {
       "judul": "Apa yang ingin Anda lakukan?",
       "susun": {
-        "judul": "Buat rencana pribadi",
-        "deskripsi": "Dapatkan langkah yang sesuai dengan kondisi dan rumah Anda.",
+        "judul": "Cek kebutuhan di rumah",
+        "deskripsi": "Jawab beberapa pertanyaan, lalu dapatkan langkah yang sesuai dengan kondisi Anda.",
         "tombol": "Mulai"
       },
       "lanjut": {
