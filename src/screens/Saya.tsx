@@ -46,7 +46,7 @@ export function Saya() {
       kepalaPita="gelap"
       kepalaTumpang
       kepala={
-        <div className="flex justify-center">
+        <div className="-mt-2 flex justify-center">
           <span
             aria-hidden="true"
             className="flex h-16 w-16 items-center justify-center rounded-full border border-utama-redup bg-white text-utama shadow-kartu"
@@ -57,7 +57,7 @@ export function Saya() {
       }
     >
       <div className="flex flex-col gap-bagian">
-        <section className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu" aria-labelledby="saya-jawaban">
+        <section className="-mt-6 rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu" aria-labelledby="saya-jawaban">
           <h2 id="saya-jawaban" className="text-kecil font-semibold">
             {t.jawabanJudul}
           </h2>
