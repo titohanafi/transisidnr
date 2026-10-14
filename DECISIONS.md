@@ -462,3 +462,5 @@
 - Segmen pencarian di Beranda diberi latar tipis (token baru `permukaan` #F2F6F6, abu kehijauan sangat muda) dalam kartu membulat, supaya judul, kolom, dan saran terbaca sebagai satu kelompok. Kontras tinta dan redup di atasnya diuji. Padding saran dirapatkan agar tiga saran tetap satu baris. Token baru memerlukan server dev dimulai ulang.
 
 - Segmen pencarian kini pita selebar layar (tepi ke tepi) berlatar `permukaan`. Bagi pengunjung baru, sapaan ikut masuk ke dalam pita dan kartu "Cek kebutuhan di rumah" menimpa tepi bawahnya sekitar 40px (kartu diberi bayangan tipis); pita langsung menyambung di bawah banner cakupan. Setelah menjawab, pita berada di bawah kartu "Lanjutkan panduan Anda" tanpa tumpang tindih.
+
+- Jarak saran pencarian ke kartu "Cek kebutuhan di rumah" ditambah (24px menjadi sekitar 32px). Warna latar di luar area aplikasi (token `luar`) diganti dari abu kebiruan #DCE3E5 menjadi krem pasir hangat #E9E2D6 supaya jelas berbeda dari area aplikasi dan dari pita pencarian yang berwarna kehijauan. Token Tailwind berubah: server dev perlu dimulai ulang.
