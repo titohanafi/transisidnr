@@ -143,26 +143,24 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                         </button>
                       </h3>
                       <p className="-mt-2 px-4 pb-4 text-redup">{s.ringkasan}</p>
-                      <div className={`flex flex-wrap gap-2 px-4 empty:hidden ${buka ? "pb-3" : "pb-4"}`}>
+                      <div className={`flex flex-wrap gap-2 px-4 ${buka ? "pb-3" : "pb-4"}`}>
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-kecil font-medium">
+                          <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
+                          {s.biaya.kisaran_rp ?? umum.biayaMenyusul}
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-kecil font-medium">
+                          <Clock className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
+                          {s.usaha.waktu ?? umum.menyusul}
+                        </span>
                         {x.ditonjolkan && <Tanda>{tr.cocokSewa}</Tanda>}
                         {x.diAtasBudget && <Tanda>{umum.diAtasBudget}</Tanda>}
                       </div>
                       <div id={idPanel} hidden={!buka} className="mx-3 mb-3 rounded-tombol bg-white p-4">
-                        <div className="mb-3 flex flex-wrap gap-2 empty:hidden">
+                        <div className="mb-4 flex flex-wrap gap-2 empty:hidden">
                           <LencanaSifat sifat={x.sifat} />
                           {x.ditandaiPermanen && <Tanda>{umum.menunggu}</Tanda>}
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
-                            <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
-                            {s.biaya.kisaran_rp ?? umum.biayaMenyusul}
-                          </span>
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
-                            <Clock className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
-                            {s.usaha.waktu ?? umum.menyusul}
-                          </span>
-                        </div>
-                        <h4 className="mt-4 font-semibold">{t.langkah}</h4>
+                        <h4 className="font-semibold">{t.langkah}</h4>
                         <ol className="mt-2 space-y-2">
                           {s.langkah.map((l, i) => (
                             <li key={l} className="flex gap-3">
