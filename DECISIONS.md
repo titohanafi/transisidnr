@@ -373,3 +373,5 @@
 - Tulisan kecil "Jawab ya atau tidak, tanpa mengukur." ditambahkan di bawah tombol Mulai (hanya sebelum menjawab).
 
 - Catatan kecil di bawah Mulai dihapus (dianggap tidak penting). Label kolom cari di Beranda diganti "Cari masalah di rumah Anda" dengan contoh "Mis. lantai licin atau pintu sempit" supaya jelas apa yang bisa dicari tanpa istilah "panduan".
+
+- Label kolom cari di Beranda diganti usul pemilik: "Temukan panduan agar tempat tinggal lebih ramah disabilitas" (menggantikan "Cari masalah di rumah Anda").
