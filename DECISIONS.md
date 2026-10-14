@@ -662,3 +662,4 @@
 - Profil: judul kartu "Kebutuhan Anda" diperkecil sebesar label baris (teks kecil, tebal), ikon di sampingnya dan garis pemisah di bawahnya dihapus. Kartu "Check-in 7 hari terakhir" belum diubah.
 - Revisi: "Lihat rincian" di Panduan Saya kembali tertutup secara bawaan (permintaan pemilik).
 - **Dukungan: pita hijau muda di belakang bagian atas** (konsisten dengan hero halaman lain). Pita tanpa isi; panel "Nomor Kontak Darurat" menimpa sebagian tepi bawahnya, sehingga pita terlihat "setengah" di belakang panel.
+- Nomor darurat di Dukungan kini berbentuk daftar baris (ikon telepon, nama, nomor tebal di kanan) dalam satu kotak putih, bukan ubin dua kolom.

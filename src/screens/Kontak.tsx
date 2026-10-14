@@ -93,19 +93,14 @@ export function Kontak() {
               <Siren className="h-5 w-5 shrink-0 text-bahaya" strokeWidth={2} aria-hidden="true" focusable="false" />
               {darurat.kategori.nama}
             </h2>
-            <ul className="mt-isi grid grid-cols-2 gap-3">
+            <ul className="mt-isi divide-y divide-bahaya/20 overflow-hidden rounded-kartu border border-bahaya/25 bg-white">
               {darurat.entri.map((e) =>
                 e.telepon ? (
                   <li key={e.id}>
-                    <a
-                      href={urlTelepon(e.telepon)}
-                      className="tekan flex h-full min-h-[92px] flex-col justify-between rounded-kartu border border-bahaya/25 bg-white p-4 shadow-kartu"
-                    >
-                      <span className="flex items-center gap-2 text-bahaya">
-                        <Phone className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
-                        <span className="text-subjudul tabular-nums">{e.telepon}</span>
-                      </span>
-                      <span className="mt-2 text-kecil font-medium text-tinta">{e.nama.replace(/\s*\(\d+\)$/, "")}</span>
+                    <a href={urlTelepon(e.telepon)} className="tekan flex min-h-[56px] items-center gap-3 px-4 py-3">
+                      <Phone className="h-5 w-5 shrink-0 text-bahaya" strokeWidth={2} aria-hidden="true" focusable="false" />
+                      <span className="min-w-0 flex-1 font-medium leading-snug">{e.nama.replace(/\s*\(\d+\)$/, "")}</span>
+                      <span className="shrink-0 text-judulKartu font-bold tabular-nums text-bahaya">{e.telepon}</span>
                       <span className="sr-only">
                         {t.telepon} {e.telepon}
                       </span>
