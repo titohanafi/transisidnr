@@ -116,6 +116,8 @@ export const kontakSchema = z
         kota: z.string().nullable(),
         alamat: z.string().nullable(),
         catatan: z.string().nullable(),
+        /** Alamat halaman resmi tempat data ini diambil, supaya bisa diperiksa. */
+        sumber: urlHttp.nullable(),
         status_validasi: z.enum(STATUS_VALIDASI),
       }),
     ),
@@ -197,6 +199,7 @@ export const uiSchema = z
     kontak: z.object({
       judul: teks,
       pengantar: teks,
+      sumber: teks,
       filterSemua: teks,
       filterJudul: teks,
       telepon: teks,

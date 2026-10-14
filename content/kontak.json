@@ -6,6 +6,11 @@
       "arti": "Nomor yang bisa dihubungi saat keadaan gawat."
     },
     {
+      "id": "layanan_pemerintah",
+      "nama": "Layanan pemerintah",
+      "arti": "Pusat informasi dan pengaduan resmi, misalnya untuk kesehatan, jaminan kesehatan, dan bantuan sosial."
+    },
+    {
       "id": "dokter_rehabilitasi",
       "nama": "Dokter rehabilitasi medik",
       "arti": "Dokter yang menangani pemulihan fungsi tubuh, termasuk nyeri dan luka setelah amputasi."
@@ -45,23 +50,145 @@
     {
       "id": "nomor-darurat-nasional",
       "kategori": "darurat",
-      "nama": "Nomor darurat nasional",
+      "nama": "Nomor darurat nasional (112)",
       "telepon": "112",
       "whatsapp": null,
       "kota": null,
       "alamat": null,
-      "catatan": "Untuk keadaan gawat.",
+      "catatan": "Gratis dan 24 jam. Dijalankan pemerintah daerah, jadi belum semua daerah memilikinya.",
+      "sumber": "https://layanan112.komdigi.go.id/tentang",
       "status_validasi": "draf"
     },
     {
-      "id": "layanan-darurat-kesehatan",
+      "id": "ambulans-119",
       "kategori": "darurat",
-      "nama": "Layanan darurat kesehatan (ambulans)",
+      "nama": "Darurat medis dan ambulans (119)",
       "telepon": "119",
       "whatsapp": null,
       "kota": null,
       "alamat": null,
+      "catatan": "Layanan Kementerian Kesehatan. Gratis, bisa dari ponsel atau telepon rumah.",
+      "sumber": "https://kemkes.go.id/id/layanan-119-terobosan-baru-layanan-kegawatdaruratan-medik-di-indonesia",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "basarnas-115",
+      "kategori": "darurat",
+      "nama": "Basarnas (115)",
+      "telepon": "115",
+      "whatsapp": null,
+      "kota": null,
+      "alamat": null,
+      "catatan": "Untuk kecelakaan, bencana, atau keadaan yang membahayakan manusia.",
+      "sumber": "https://basarnas.go.id/berita/kabasarnas-darurat-sar-hubungi-115",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "polisi-110",
+      "kategori": "darurat",
+      "nama": "Polisi (110)",
+      "telepon": "110",
+      "whatsapp": null,
+      "kota": null,
+      "alamat": null,
       "catatan": null,
+      "sumber": "https://layanan112.komdigi.go.id/tentang",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "pemadam-113",
+      "kategori": "darurat",
+      "nama": "Pemadam kebakaran (113)",
+      "telepon": "113",
+      "whatsapp": null,
+      "kota": null,
+      "alamat": null,
+      "catatan": null,
+      "sumber": "https://layanan112.komdigi.go.id/tentang",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "halo-kemenkes",
+      "kategori": "layanan_pemerintah",
+      "nama": "Halo Kemenkes",
+      "telepon": "1500-567",
+      "whatsapp": "+62 811-10-500-567",
+      "kota": null,
+      "alamat": null,
+      "catatan": "Pusat informasi Kementerian Kesehatan.",
+      "sumber": "https://kemkes.go.id/id/layanan/halo-kemenkes",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "kemensos-171",
+      "kategori": "layanan_pemerintah",
+      "nama": "Kementerian Sosial (171)",
+      "telepon": "171",
+      "whatsapp": null,
+      "kota": null,
+      "alamat": null,
+      "catatan": "Layanan informasi dan pengaduan lewat telepon.",
+      "sumber": "https://kemensos.go.id/layanan-aspirasi-dan-pengaduan-online-rakyat-lapor-kementerian-sosial-ri",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "bpjs-kesehatan-165",
+      "kategori": "layanan_pemerintah",
+      "nama": "BPJS Kesehatan Care Center (165)",
+      "telepon": "165",
+      "whatsapp": null,
+      "kota": null,
+      "alamat": null,
+      "catatan": "Dari telepon rumah: 021-165. Untuk informasi, permintaan, dan keluhan.",
+      "sumber": "https://bpjs-kesehatan.go.id/",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "rso-surakarta-rehabilitasi",
+      "kategori": "dokter_rehabilitasi",
+      "nama": "RS Ortopedi Prof. Dr. R. Soeharso Surakarta",
+      "telepon": "0271 714458",
+      "whatsapp": null,
+      "kota": "Sukoharjo, Jawa Tengah",
+      "alamat": "Jl. Ahmad Yani No.157, Pabelan, Kartasura",
+      "catatan": "Rumah sakit Kemenkes. Punya spesialis rehabilitasi medik. Minta disambungkan ke unit rehabilitasi medik.",
+      "sumber": "https://rso.go.id/",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "rso-surakarta-prostetik",
+      "kategori": "prostetis_ortotis",
+      "nama": "RS Ortopedi Prof. Dr. R. Soeharso Surakarta",
+      "telepon": "0271 714458",
+      "whatsapp": null,
+      "kota": "Sukoharjo, Jawa Tengah",
+      "alamat": "Jl. Ahmad Yani No.157, Pabelan, Kartasura",
+      "catatan": "Punya layanan ortotik prostetik.",
+      "sumber": "https://rso.go.id/",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "rso-surakarta-okupasi",
+      "kategori": "okupasi_terapis",
+      "nama": "RS Ortopedi Prof. Dr. R. Soeharso Surakarta",
+      "telepon": "0271 714458",
+      "whatsapp": null,
+      "kota": "Sukoharjo, Jawa Tengah",
+      "alamat": "Jl. Ahmad Yani No.157, Pabelan, Kartasura",
+      "catatan": "Punya layanan okupasi terapi.",
+      "sumber": "https://rso.go.id/",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "rso-surakarta-fisioterapi",
+      "kategori": "fisioterapis",
+      "nama": "RS Ortopedi Prof. Dr. R. Soeharso Surakarta",
+      "telepon": "0271 714458",
+      "whatsapp": null,
+      "kota": "Sukoharjo, Jawa Tengah",
+      "alamat": "Jl. Ahmad Yani No.157, Pabelan, Kartasura",
+      "catatan": "Punya layanan fisioterapi.",
+      "sumber": "https://rso.go.id/",
       "status_validasi": "draf"
     }
   ]

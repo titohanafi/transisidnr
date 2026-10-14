@@ -37,6 +37,20 @@ describe("skema kontak", () => {
   });
 });
 
+describe("sumber kontak", () => {
+  it("setiap kontak punya alamat sumber resmi (go.id) dan minimal satu cara dihubungi", () => {
+    for (const e of kontak.entri) {
+      expect(e.sumber, e.id).not.toBeNull();
+      expect(new URL(e.sumber!).hostname, e.id).toMatch(/\.go\.id$/);
+      expect(e.telepon ?? e.whatsapp, e.id).not.toBeNull();
+    }
+  });
+
+  it("nomor WhatsApp memakai awalan internasional (+62) supaya tautan wa.me benar", () => {
+    for (const e of kontak.entri.filter((x) => x.whatsapp)) expect(e.whatsapp, e.id).toMatch(/^\+62/);
+  });
+});
+
 describe("kelompokkanKontak", () => {
   it("mengikuti urutan kategori dan menyertakan kategori tanpa entri", () => {
     const g = kelompokkanKontak(kontak);

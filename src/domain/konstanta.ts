@@ -7,6 +7,7 @@ export const JENIS_BANTUAN = ["tukang", "okupasi_terapis", "fisioterapis", "arsi
 /** Kategori kontak di halaman Kontak, berurut dari yang paling mendesak. Dipakai juga sebagai urutan tampil. */
 export const KATEGORI_KONTAK = [
   "darurat",
+  "layanan_pemerintah",
   "dokter_rehabilitasi",
   "prostetis_ortotis",
   "okupasi_terapis",

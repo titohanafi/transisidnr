@@ -24,7 +24,7 @@ function Aksi({ entri }: { entri: EntriKontak }) {
       {entri.telepon && (
         <a href={urlTelepon(entri.telepon)} className={tombolTelepon}>
           <Phone className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
-          {t.telepon}
+          {t.telepon} {entri.telepon}
           <span className="sr-only">: {entri.nama}</span>
         </a>
       )}
@@ -32,6 +32,17 @@ function Aksi({ entri }: { entri: EntriKontak }) {
         <a href={urlWhatsAppKontak(entri.whatsapp)} target="_blank" rel="noopener noreferrer" className={tombolSekunder}>
           <MessageCircle className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
           {t.whatsapp}
+          <span className="sr-only">: {entri.nama}</span>
+        </a>
+      )}
+      {entri.sumber && (
+        <a
+          href={entri.sumber}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-sentuh items-center px-1 text-kecil text-utama underline"
+        >
+          {t.sumber}
           <span className="sr-only">: {entri.nama}</span>
         </a>
       )}
