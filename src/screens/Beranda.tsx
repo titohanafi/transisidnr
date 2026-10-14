@@ -1,4 +1,4 @@
-import { Info, Search } from "lucide-react";
+import { ChevronRight, Info, Search } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { CheckIn } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
@@ -29,14 +29,17 @@ export function Beranda() {
           navigate("/jelajah", { state: { cari: typeof q === "string" ? q.trim() : "" } });
         }}
       >
-        <aside className="mb-4 rounded-kartu bg-utama-muda px-3 py-2 text-sm text-tinta">
-          <p className="flex items-start gap-2">
-            <Info className="mt-0.5 h-4 w-4 shrink-0 text-utama-gelap" strokeWidth={2} aria-hidden="true" focusable="false" />
-            <span>{pilih.cakupan}</span>
-          </p>
-          <Link to="/jelajah" className="ml-6 inline-flex min-h-sentuh items-center font-semibold text-utama-gelap underline">
-            {pilih.semua}
-          </Link>
+        <aside className="mb-5 flex gap-3 rounded-kartu border border-aksen/25 bg-aksen-muda p-3">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-aksen">
+            <Info className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm leading-relaxed text-tinta">{pilih.cakupan}</p>
+            <Link to="/jelajah" className="mt-1 inline-flex min-h-sentuh items-center gap-1 text-sm font-semibold text-aksen">
+              <span className="underline">{pilih.semua}</span>
+              <ChevronRight className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" focusable="false" />
+            </Link>
+          </div>
         </aside>
         <label htmlFor="cari-beranda" className="text-2xl font-bold leading-snug text-tinta">
           {pilih.cari.label}
