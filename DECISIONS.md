@@ -461,4 +461,4 @@
 
 - Segmen pencarian di Beranda diberi latar tipis (token baru `permukaan` #F2F6F6, abu kehijauan sangat muda) dalam kartu membulat, supaya judul, kolom, dan saran terbaca sebagai satu kelompok. Kontras tinta dan redup di atasnya diuji. Padding saran dirapatkan agar tiga saran tetap satu baris. Token baru memerlukan server dev dimulai ulang.
 
-- Segmen pencarian kini pita selebar layar (tepi ke tepi) berlatar `permukaan`. Bagi pengunjung baru, sapaan ikut masuk ke dalam pita dan kartu "Cek kebutuhan di rumah" menimpa tepi bawahnya sekitar 20px (kartu diberi bayangan tipis); pita langsung menyambung di bawah banner cakupan. Setelah menjawab, pita berada di bawah kartu "Lanjutkan panduan Anda" tanpa tumpang tindih.
+- Segmen pencarian kini pita selebar layar (tepi ke tepi) berlatar `permukaan`. Bagi pengunjung baru, sapaan ikut masuk ke dalam pita dan kartu "Cek kebutuhan di rumah" menimpa tepi bawahnya sekitar 40px (kartu diberi bayangan tipis); pita langsung menyambung di bawah banner cakupan. Setelah menjawab, pita berada di bawah kartu "Lanjutkan panduan Anda" tanpa tumpang tindih.

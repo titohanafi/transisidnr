@@ -93,9 +93,9 @@ export function Beranda() {
     </form>
   );
 
-  // Segmen pencarian selebar layar. Bagi pengunjung baru, kartu utama sedikit menimpa tepi bawahnya.
+  // Segmen pencarian selebar layar. Bagi pengunjung baru, kartu utama menimpa tepi bawahnya sekitar 40px.
   const segmenCari = (
-    <div className={`-mx-4 bg-permukaan px-4 ${adaJawaban ? "py-5" : "pb-10 pt-5"}`}>
+    <div className={`-mx-4 bg-permukaan px-4 ${adaJawaban ? "py-5" : "pb-16 pt-5"}`}>
       {!adaJawaban && sapaan("mb-isi")}
       {cari}
     </div>
@@ -103,7 +103,7 @@ export function Beranda() {
 
   const utama = (
     <section
-      className={`rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "relative -mt-11 shadow-sm"}`}
+      className={`rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "relative -mt-16 shadow-sm"}`}
       aria-labelledby="jalur-utama"
     >
       <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-utama">
