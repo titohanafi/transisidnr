@@ -85,15 +85,27 @@ export function Kontak() {
   const ahli = kumpulkanAhli(konten.kartu);
 
   return (
-    <Halaman judul={t.judul} judulTersembunyi latarPutih kepalaPita="hijau" kepalaTumpang kepala={<div aria-hidden="true" />}>
+    <Halaman
+      judul={t.judul}
+      judulTersembunyi
+      latarPutih
+      kepalaPita="hijau"
+      kepalaTumpang
+      kepala={
+        darurat && darurat.entri.length > 0 ? (
+          <h2 id="nomor-darurat" className="mt-3 flex items-center gap-2 text-subjudul text-bahaya">
+            <Siren className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+            {darurat.kategori.nama}
+          </h2>
+        ) : (
+          <div aria-hidden="true" />
+        )
+      }
+    >
       <div className="flex flex-col gap-bagian">
         {darurat && darurat.entri.length > 0 && (
           <section aria-labelledby="nomor-darurat" className="rounded-kartu border border-bahaya/25 bg-white p-4 shadow-kartu">
-            <h2 id="nomor-darurat" className="flex items-center gap-2 text-subjudul text-bahaya">
-              <Siren className="h-5 w-5 shrink-0 text-bahaya" strokeWidth={2} aria-hidden="true" focusable="false" />
-              {darurat.kategori.nama}
-            </h2>
-            <ul className="mt-2 divide-y divide-bahaya/20">
+            <ul className="divide-y divide-bahaya/20">
               {darurat.entri.map((e) =>
                 e.telepon ? (
                   <li key={e.id}>
