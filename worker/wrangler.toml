@@ -5,5 +5,5 @@ compatibility_date = "2025-01-01"
 [vars]
 # Ganti/tambahkan alamat aplikasi yang sudah dihosting, dipisah koma.
 IZIN_ASAL = "http://localhost:5173"
-# GEMINI_MODEL = "gemini-flash-latest"   # opsional; pastikan model ini ada di tingkat gratis AI Studio
-# Kunci API disimpan sebagai rahasia, bukan di file ini:  npx wrangler secret put GEMINI_API_KEY
+GEMINI_MODEL = "gemini-3.1-flash-lite"
+# Kunci API disimpan sebagai rahasia, bukan di file ini:  npx wrangler secret put GEMINI_API_KEY (lokal: worker/.dev.vars)
