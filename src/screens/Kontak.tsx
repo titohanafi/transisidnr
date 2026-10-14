@@ -93,7 +93,7 @@ export function Kontak() {
       kepalaTumpang
       kepala={
         darurat && darurat.entri.length > 0 ? (
-          <h2 id="nomor-darurat" className="-mt-2 flex items-center gap-2 text-subjudul text-white">
+          <h2 id="nomor-darurat" className="flex items-center gap-2 text-subjudul text-white">
             <Siren className="h-5 w-5 shrink-0 text-daun" strokeWidth={2} aria-hidden="true" focusable="false" />
             {darurat.kategori.nama}
           </h2>

@@ -46,7 +46,7 @@ export function Saya() {
       kepalaPita="gelap"
       kepalaTumpang
       kepala={
-        <div className="-mt-2 flex justify-center">
+        <div className="flex justify-center">
           <span
             aria-hidden="true"
             className="flex h-16 w-16 items-center justify-center rounded-full border border-utama-redup bg-white text-utama shadow-kartu"

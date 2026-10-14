@@ -672,3 +672,4 @@
 - Pita kepala gelap (Dukungan, Profil) dibuat lebih panjang: ruang atas 32px (sebelumnya 24px) dan ruang bawah 80px (sebelumnya 48px), jadi sekitar 40px lebih tinggi. Pita hijau muda di halaman lain tidak berubah.
 - Jarak di pita gelap dirapikan: ruang di atas judul/avatar dan jarak judul/avatar ke kartu sama-sama 24px, di Dukungan dan Profil (sebelumnya judul sekitar 48px dari kartu).
 - Jarak judul/avatar ke kartu di pita gelap dinaikkan menjadi 32px (ruang di atas tetap 24px).
+- Pita gelap: ruang di atas judul/avatar disamakan dengan jaraknya ke kartu, sama-sama 32px.
