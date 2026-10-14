@@ -39,10 +39,10 @@ export function Halaman({
 }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  // Header: halaman panduan dan aksinya memakai "Panduan"; halaman alat (beli) memakai "Pakai Alat".
-  const menu =
-    namaMenu(pathname) ??
-    (/^\/aksi\/beli\//.test(pathname) ? umum.headerPakaiAlat : /^\/(kartu|aksi)\//.test(pathname) ? umum.tabPanduan : null);
+  // Header: halaman panduan dan aksinya memakai "Panduan"; halaman alat (daftar alat dan beli) memakai "Produk Disabilitas".
+  const menu = /^\/(aksi\/beli|jelajah\/alat)(\/|$)/.test(pathname)
+    ? umum.headerPakaiAlat
+    : (namaMenu(pathname) ?? (/^\/(kartu|aksi)\//.test(pathname) ? umum.tabPanduan : null));
   const dalam = !["/", "/jelajah", "/rencana", "/kontak", "/saya"].includes(pathname);
   const h1 = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
