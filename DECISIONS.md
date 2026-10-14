@@ -660,3 +660,4 @@
 - Panduan Saya: urutan kartu ditukar (permintaan pemilik): "Satu hal untuk hari ini" (hero teal) di atas, lalu kartu kemajuan "n dari total masalah teratasi" dengan rincian, lalu tautan cetak dan semua panduan. Hero kini yang menimpa tepi bawah pita kepala.
 - "Lihat rincian" di kartu kemajuan Panduan Saya terbuka secara bawaan (permintaan pemilik); pengguna tetap bisa menutupnya.
 - Profil: judul kartu "Kebutuhan Anda" diperkecil sebesar label baris (teks kecil, tebal), ikon di sampingnya dan garis pemisah di bawahnya dihapus. Kartu "Check-in 7 hari terakhir" belum diubah.
+- Revisi: "Lihat rincian" di Panduan Saya kembali tertutup secara bawaan (permintaan pemilik).
