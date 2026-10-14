@@ -29,7 +29,7 @@ export function bacaRespons(x: unknown, idItem: string[]): HasilModel | null {
 export async function pindaiFoto(
   dataUrl: string,
   idItem: string[],
-  url: string | undefined = import.meta.env.VITE_PINDAI_URL,
+  url: string = import.meta.env.VITE_PINDAI_URL ?? "",
   ambil: typeof fetch = fetch,
 ): Promise<HasilModel> {
   if (!url) throw new GalatPindai("belum_diatur");

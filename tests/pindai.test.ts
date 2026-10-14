@@ -41,7 +41,7 @@ describe("respons pindai", () => {
     expect(Object.keys(r?.temuan ?? {})).toEqual(ids);
   });
   it("tanpa alamat Worker = belum_diatur; respons rusak = galat", async () => {
-    await expect(pindaiFoto("data:image/jpeg;base64,AA", ids, undefined)).rejects.toMatchObject({ kode: "belum_diatur" });
+    await expect(pindaiFoto("data:image/jpeg;base64,AA", ids, "")).rejects.toMatchObject({ kode: "belum_diatur" });
     const rusak = (async () => new Response(JSON.stringify({ x: 1 }))) as typeof fetch;
     await expect(pindaiFoto("data:image/jpeg;base64,AA", ids, "http://x", rusak)).rejects.toBeInstanceOf(GalatPindai);
   });
