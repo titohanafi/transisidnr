@@ -94,7 +94,7 @@ export function Kontak() {
       kepala={
         darurat && darurat.entri.length > 0 ? (
           <h2 id="nomor-darurat" className="mb-6 mt-3 flex items-center gap-2 text-subjudul text-white">
-            <Siren className="h-5 w-5 shrink-0 text-catatan-muda" strokeWidth={2} aria-hidden="true" focusable="false" />
+            <Siren className="h-5 w-5 shrink-0 text-daun" strokeWidth={2} aria-hidden="true" focusable="false" />
             {darurat.kategori.nama}
           </h2>
         ) : (
@@ -104,15 +104,15 @@ export function Kontak() {
     >
       <div className="flex flex-col gap-bagian">
         {darurat && darurat.entri.length > 0 && (
-          <section aria-labelledby="nomor-darurat" className="-mt-6 rounded-kartu border border-catatan-garis bg-white p-4 shadow-kartu">
-            <ul className="divide-y divide-catatan-garis/60">
+          <section aria-labelledby="nomor-darurat" className="-mt-6 rounded-kartu border border-utama-redup bg-white p-4 shadow-kartu">
+            <ul className="divide-y divide-utama-redup/60">
               {darurat.entri.map((e) =>
                 e.telepon ? (
                   <li key={e.id}>
                     <a href={urlTelepon(e.telepon)} className="tekan flex min-h-[56px] items-center gap-3 py-3">
-                      <Phone className="h-5 w-5 shrink-0 text-catatan" strokeWidth={2} aria-hidden="true" focusable="false" />
+                      <Phone className="h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
                       <span className="min-w-0 flex-1 font-medium leading-snug">{e.nama.replace(/\s*\(\d+\)$/, "")}</span>
-                      <span className="shrink-0 text-judulKartu font-bold tabular-nums text-catatan">{e.telepon}</span>
+                      <span className="shrink-0 text-judulKartu font-bold tabular-nums text-utama">{e.telepon}</span>
                       <span className="sr-only">
                         {t.telepon} {e.telepon}
                       </span>
