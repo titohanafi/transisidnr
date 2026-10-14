@@ -104,11 +104,11 @@ export function Beranda() {
 
   const utama = (
     <section
-      className={`rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "relative -mt-16 shadow-angkat"}`}
+      className={`relative rounded-kartu bg-utama p-4 text-white ${adaJawaban ? "" : "-mt-16 shadow-angkat"}`}
       aria-labelledby="jalur-utama"
     >
-      <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="h-10 w-10 text-aksen-muda" />
-      <h3 id="jalur-utama" className="mt-isi text-subjudul">
+      <IkonBeranda kunci={adaJawaban ? "lanjut" : "susun"} className="absolute right-4 top-4 h-10 w-10 text-aksen-muda" />
+      <h3 id="jalur-utama" className="pr-14 text-subjudul">
         {kartu.judul}
       </h3>
       <p className="mt-1 text-isi">{kartu.deskripsi}</p>
