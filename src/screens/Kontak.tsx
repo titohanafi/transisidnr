@@ -30,9 +30,9 @@ import { isi } from "../lib/teks";
 const { kontak: t, igd, aksi } = konten.ui;
 
 const tombolTelepon =
-  "tekan inline-flex min-h-sentuh w-full items-center justify-center gap-2 rounded-tombol bg-utama px-4 text-isi font-semibold text-white hover:bg-utama-gelap";
+  "tekan inline-flex min-h-sentuh min-w-0 flex-1 items-center justify-center gap-2 rounded-tombol bg-utama px-3 py-2 text-center text-isi font-semibold text-white hover:bg-utama-gelap";
 const tombolSekunder =
-  "tekan inline-flex min-h-sentuh w-full items-center justify-center gap-2 rounded-tombol border border-utama/60 bg-white px-4 text-isi font-semibold text-utama hover:bg-utama-muda";
+  "tekan inline-flex min-h-sentuh min-w-0 flex-1 items-center justify-center gap-2 rounded-tombol border border-utama/60 bg-white px-3 py-2 text-center text-isi font-semibold text-utama hover:bg-utama-muda";
 
 // Ikon per jenis kontak (dekoratif; artinya sudah ada di nama jenis di sebelahnya).
 const IKON_KATEGORI: Record<KategoriKontak, LucideIcon> = {
@@ -49,7 +49,7 @@ const IKON_KATEGORI: Record<KategoriKontak, LucideIcon> = {
 
 function Aksi({ entri }: { entri: EntriKontak }) {
   return (
-    <div className="mt-3 grid gap-2">
+    <div className="mt-3 flex gap-2">
       {entri.telepon && (
         <a href={urlTelepon(entri.telepon)} className={tombolTelepon}>
           <Phone className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
@@ -61,17 +61,6 @@ function Aksi({ entri }: { entri: EntriKontak }) {
         <a href={urlWhatsAppKontak(entri.whatsapp)} target="_blank" rel="noopener noreferrer" className={tombolSekunder}>
           <MessageCircle className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
           {t.whatsapp}
-          <span className="sr-only">: {entri.nama}</span>
-        </a>
-      )}
-      {entri.sumber && (
-        <a
-          href={entri.sumber}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex min-h-sentuh items-center justify-self-start px-1 text-kecil text-utama underline"
-        >
-          {t.sumber}
           <span className="sr-only">: {entri.nama}</span>
         </a>
       )}

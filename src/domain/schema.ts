@@ -207,7 +207,6 @@ export const uiSchema = z
     umum: rekamTeks,
     kontak: z.object({
       judul: teks,
-      sumber: teks,
       daftarJudul: teks,
       filterSemua: teks,
       filterJudul: teks,
