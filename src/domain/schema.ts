@@ -343,7 +343,6 @@ export const uiSchema = z
           balasSulit: teks,
           berikutnya: teks,
           terakhir: teks,
-          keRencana: teks,
         }),
       }),
       beli: z.object({

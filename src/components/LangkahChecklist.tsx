@@ -7,7 +7,7 @@ import type { Kartu, Tingkat } from "../domain/schema";
 import { isi } from "../lib/teks";
 import { useStore } from "../state/store";
 import { BilahKemajuan } from "./BilahKemajuan";
-import { Tombol, TombolLink } from "./Tombol";
+import { Tombol } from "./Tombol";
 
 const t = konten.ui.aksi.sendiri;
 const namaPeran = konten.ui.kartu.peranLangkah;
@@ -135,9 +135,6 @@ export function HasilLangkah({
         {hasilIni === "cukup" && (
           <>
             <p className="mt-3 motion-safe:animate-muncul">{t.hasil.balasCukup}</p>
-            <TombolLink to="/rencana" className="mt-3 w-full">
-              {t.hasil.keRencana}
-            </TombolLink>
           </>
         )}
         {hasilIni === "masih_sulit" && (
