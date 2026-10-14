@@ -209,15 +209,11 @@
     "semuaRekomendasi": "Rekomendasi lainnya",
     "kosongJudul": "Dari jawaban Anda, belum ada hambatan besar",
     "kosongIsi": "Jawaban bisa diubah kapan saja. Panduan untuk caregiver tetap ada di bawah.",
-    "pendampingJudul": "Untuk Anda yang mendampingi",
     "bukaKartu": "Buka panduan",
     "cocokSewa": "Cocok untuk kontrakan dan kos",
     "cetak": "Cetak panduan saya",
     "sedangDisusun": "Sedang disusun",
     "belumAdaSiap": "Panduan untuk prioritas Anda belum siap. Isinya sedang disusun; daftarnya ada di bawah.",
-    "ringan": {
-      "lihatNanti": "Lihat yang lain nanti"
-    },
     "kemajuan": "Anda sudah menyelesaikan {n} langkah. Terus berjalan, pelan-pelan juga maju.",
     "beres": {
       "judul": "Yang sudah teratasi",

@@ -16,17 +16,13 @@ import { Link } from "react-router-dom";
 import { BarisTautan } from "../components/BarisTautan";
 import { BilahKemajuan } from "../components/BilahKemajuan";
 import { Halaman } from "../components/Halaman";
-import { Ikon } from "../components/Ikon";
 import { KartuHero, TautanHero } from "../components/KartuHero";
 import { KartuRingkas } from "../components/KartuRingkas";
-import { LencanaStatus } from "../components/Lencana";
 import { Lipat } from "../components/Lipat";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
-import { TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
 import { terapkanHasil } from "../domain/hasil";
 import { track } from "../lib/events";
-import { kunciHari } from "../lib/tanggal";
 import { Jelajah } from "./Jelajah";
 import { isi } from "../lib/teks";
 import { useRencana } from "../state/useRencana";
@@ -52,16 +48,11 @@ export function Rencana() {
   // Belum menjawab: tab ini menampilkan semua panduan, bukan langsung ke pertanyaan.
   if (Object.keys(state.asesmen.status).length === 0) return <Jelajah />;
 
-  // Bila caregiver bilang sedang lelah, tampilkan satu hal saja dan simpan sisanya di lipatan.
-  // Yang dihitung hanya jawaban hari ini, supaya "lelah" minggu lalu tidak terus mengurangi rencana.
-  const hariIni = state.riwayatCheckin[kunciHari()];
-  const ringan = hariIni === "capek_fisik" || hariIni === "capek_emosi" || hariIni === "butuh_istirahat";
   const h = terapkanHasil(rencana, state.hasil, konten.kartu);
 
   const dataKartu = (id: string) => konten.kartu.find((k) => k.id === id);
   const lainnya = h.lainnya.filter((k) => !k.isiMenyusul);
   const disusun = h.lainnya.filter((k) => k.isiMenyusul);
-  const pendamping = rencana.pendamping ? dataKartu(rencana.pendamping) : undefined;
   const satuHal = h.satuHal;
   const labelAkt = (id: string) => konten.asesmen.aktivitas.find((a) => a.id === id)?.label.split(" (")[0] ?? id;
 
@@ -258,13 +249,7 @@ export function Rencana() {
               </p>
             )}
 
-            {ringan ? (
-              <Lipat className="" judul={t.ringan.lihatNanti}>
-                {daftarLengkap}
-              </Lipat>
-            ) : (
-              daftarLengkap
-            )}
+            {daftarLengkap}
           </>
         )}
 
@@ -276,30 +261,6 @@ export function Rencana() {
             <BarisTautan ke="/jelajah" teks={t.semuaPanduan} Ikon={BookOpen} />
           </li>
         </ul>
-
-        {pendamping && (
-          <section aria-labelledby="pendamping">
-            <h2 id="pendamping" className="text-subjudul">
-              {t.pendampingJudul}
-            </h2>
-            <article className="mt-isi rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
-              <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda">
-                  <Ikon kunci="caregiver" className="h-6 w-6" />
-                </span>
-                <h3 className="text-judulKartu">{pendamping.judul}</h3>
-              </div>
-              <div className="mt-2 empty:hidden">
-                <LencanaStatus status={pendamping.status_validasi} />
-              </div>
-              <p className="mt-2 text-redup">{pendamping.situasi}</p>
-              <TombolLink to={`/kartu/${pendamping.id}`} className="mt-4 w-full">
-                {t.bukaKartu}
-                <span className="sr-only">: {pendamping.judul}</span>
-              </TombolLink>
-            </article>
-          </section>
-        )}
       </div>
       <PeringatanNonMedis />
     </Halaman>
