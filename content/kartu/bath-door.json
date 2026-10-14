@@ -2,6 +2,7 @@
   "id": "bath-door",
   "judul": "Pintu sempit atau sulit dibuka",
   "situasi": "Pintu kamar mandi sempit atau sulit dibuka dari posisi duduk.",
+  "situasi_lengkap": "Pintu kamar mandi sempit atau berat, sehingga sulit dibuka dari posisi duduk. Anda perlu membukanya sambil mundur, dan kursi roda mudah tersangkut atau tangan terjepit.",
   "kenapa_penting": "Pintu yang sempit atau berat memaksa orang membuka sambil mundur, dan sering menjadi alasan kursi roda tersangkut atau tangan terjepit.",
   "solusi": {
     "tanpa_biaya": {

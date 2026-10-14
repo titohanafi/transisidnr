@@ -76,6 +76,8 @@ export const kartuSchema = z
     id: z.string().regex(/^[a-z0-9-]+$/),
     judul: teks,
     situasi: teks,
+    /** Uraian situasi yang lebih panjang, hanya untuk hero Detail Panduan (daftar tetap memakai `situasi`). */
+    situasi_lengkap: teks.optional(),
     kenapa_penting: teks.optional(),
     solusi: solusiSchema.optional(),
     bantuan: z.array(bantuanSchema).optional(),

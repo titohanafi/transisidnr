@@ -484,3 +484,8 @@
 - Prettier ditambahkan sebagai dependensi dev dengan `.prettierrc.json` (`printWidth` 140 agar sesuai gaya kode yang sudah ada, `trailingComma: all`). Perintah: `npm run format` dan `npm run format:cek`.
 - Diformat: `src/`, `tests/`, dan berkas konfigurasi di akar. Tidak diformat (lihat `.prettierignore`): `content/` (teks yang diedit tim non-teknis), berkas Markdown, dan `package-lock.json`.
 - Seluruh kode diformat sekali dalam satu commit terpisah; tidak ada perubahan perilaku (lint, typecheck, tes, dan build lulus).
+
+## Situasi lengkap di hero Detail Panduan
+- Di hero Detail Panduan, judul dan teks "Situasi" sering nyaris sama (mis. "Lantai licin saat basah" dan "Lantai kamar mandi licin saat basah."). Ditambahkan bidang opsional `situasi_lengkap` di kartu; hero memakainya bila ada, kalau tidak jatuh ke `situasi`. Daftar, Panduan Saya, Cetak, dan pencarian tetap memakai `situasi` yang singkat supaya daftar tidak memanjang.
+- Isi `situasi_lengkap` untuk 10 dari 11 kartu ditulis dari pernyataan yang sudah ada di kartu itu sendiri (situasi, kenapa penting, peran). Tidak ada angka, ukuran, harga, atau klaim medis baru. Kartu `bath-transfer-toilet` tidak diberi bidang ini karena `situasi`-nya sudah panjang.
+- Semua kartu masih berstatus `draf`; tulisan ini perlu ditinjau tim konten atau ahli sebelum dianggap final.

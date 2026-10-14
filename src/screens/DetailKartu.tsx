@@ -83,7 +83,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
         <h2 id="situasi" className="text-kecil font-semibold uppercase tracking-wide">
           {t.situasi}
         </h2>
-        <p className="mt-1 text-lg">{kartu.situasi}</p>
+        <p className="mt-1 text-lg">{kartu.situasi_lengkap ?? kartu.situasi}</p>
         {adaKenapa && (
           <details className="group mt-3 border-t border-catatan-garis">
             <summary className="flex min-h-sentuh cursor-pointer list-none items-center justify-between gap-2 font-semibold [&::-webkit-details-marker]:hidden">

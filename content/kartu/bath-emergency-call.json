@@ -2,6 +2,7 @@
   "id": "bath-emergency-call",
   "judul": "Tidak ada cara memanggil bantuan",
   "situasi": "Tidak ada tombol atau cara memanggil bantuan dari kamar mandi.",
+  "situasi_lengkap": "Kamar mandi sering tertutup dan berisiko jatuh. Bila terjadi sesuatu di dalam, belum ada tombol atau cara untuk memanggil bantuan dengan cepat.",
   "kenapa_penting": "Kamar mandi adalah tempat yang berisiko jatuh dan sering tertutup. Bila terjadi sesuatu, orang perlu cara memanggil bantuan dengan cepat.",
   "solusi": {
     "tanpa_biaya": {

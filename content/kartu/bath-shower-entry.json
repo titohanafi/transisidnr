@@ -2,6 +2,7 @@
   "id": "bath-shower-entry",
   "judul": "Sulit masuk ke area mandi",
   "situasi": "Bak atau area shower sulit dimasuki karena ada bibir atau tinggi.",
+  "situasi_lengkap": "Bak atau area shower punya bibir atau beda tinggi yang sulit dilewati kursi roda. Akibatnya orang kadang digendong atau memaksakan diri berdiri, dan itu berisiko bagi pengguna maupun caregiver.",
   "kenapa_penting": "Bibir atau beda tinggi di area mandi sering memaksa orang digendong atau memaksakan diri berdiri, dan itu berisiko bagi pengguna maupun caregiver.",
   "solusi": {
     "tanpa_biaya": {

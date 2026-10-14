@@ -2,6 +2,7 @@
   "id": "bath-floor-slip",
   "judul": "Lantai licin saat basah",
   "situasi": "Lantai kamar mandi licin saat basah.",
+  "situasi_lengkap": "Lantai kamar mandi licin saat basah. Tangan dan roda kursi roda mudah tergelincir, terutama saat berpindah, dan itu salah satu cara paling umum orang jatuh di kamar mandi.",
   "kenapa_penting": "Lantai licin membuat tumpuan tangan dan roda kursi roda tergelincir. Terpeleset saat berpindah adalah salah satu cara paling umum orang jatuh di kamar mandi.",
   "solusi": {
     "tanpa_biaya": {

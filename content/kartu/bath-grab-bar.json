@@ -2,6 +2,7 @@
   "id": "bath-grab-bar",
   "judul": "Tidak ada pegangan di dekat kloset",
   "situasi": "Tidak ada pegangan di dekat kloset.",
+  "situasi_lengkap": "Di dekat kloset tidak ada pegangan. Saat berpindah, duduk, atau berdiri, tidak ada tumpuan yang aman, sehingga orang cenderung bertumpu pada benda yang tidak kokoh.",
   "kenapa_penting": "Pegangan memberi tumpuan saat berpindah, duduk, dan berdiri. Tanpa pegangan, orang cenderung bertumpu pada benda yang tidak aman.",
   "solusi": {
     "tanpa_biaya": {
