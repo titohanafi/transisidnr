@@ -435,3 +435,5 @@
 
 ## Check-in terisi dirancang ulang
 - Kartu setelah memilih emoji kini memakai latar hijau muda yang sama dengan kartu pertanyaan (satu keluarga). Isi: emoji besar dalam lingkaran putih, keterangan kecil "Hari ini · Untuk Anda yang merawat", jawaban tebal besar, tombol "Ubah" berikon pensil di pojok kanan atas, dan satu tombol bantuan lebar berpanah (putih, tepi tipis) di bawahnya. Sebelumnya berupa baris putih datar dengan tautan yang terlihat menggantung.
+
+- Placeholder kolom cari di Beranda: "Cari panduan, mis. lantai licin" (menyebut apa yang dicari, selaras dengan judul "Temukan panduan…", disusul satu contoh).
