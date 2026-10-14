@@ -1,4 +1,4 @@
-import { CalendarDays, ClipboardList, DoorOpen, Flag, ListChecks, ShieldCheck, type LucideIcon } from "lucide-react";
+import { CalendarDays, ClipboardList, DoorOpen, Flag, ListChecks, ShieldCheck, UserRound, type LucideIcon } from "lucide-react";
 import { BarisTautan } from "../components/BarisTautan";
 import { RiwayatCheckin } from "../components/CheckIn";
 import { Halaman } from "../components/Halaman";
@@ -39,7 +39,23 @@ export function Saya() {
   );
 
   return (
-    <Halaman judul={t.judul} judulTersembunyi latarPutih>
+    <Halaman
+      judul={t.judul}
+      judulTersembunyi
+      latarPutih
+      kepalaPita="hijau"
+      kepalaTumpang
+      kepala={
+        <div className="flex justify-center">
+          <span
+            aria-hidden="true"
+            className="flex h-16 w-16 items-center justify-center rounded-full border border-utama-redup bg-white text-utama shadow-kartu"
+          >
+            <UserRound className="h-8 w-8" strokeWidth={2} focusable="false" />
+          </span>
+        </div>
+      }
+    >
       <div className="flex flex-col gap-bagian">
         <section className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu" aria-labelledby="saya-jawaban">
           {judulKartu("saya-jawaban", ClipboardList, t.jawabanJudul)}
