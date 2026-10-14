@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ChevronRight, Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
 import { konten } from "../domain/content";
 import { hariTerakhir, kunciHari, labelHari, namaHariSingkat, tanggalDalamBulan } from "../lib/tanggal";
@@ -17,28 +18,33 @@ export function CheckIn() {
 
   if (pilihan && !mengubah) {
     return (
-      <section aria-label={t.label} className="flex items-center gap-3 rounded-kartu border border-garis bg-white px-4 py-3">
-        <span aria-hidden="true" className="text-3xl leading-none">
-          {pilihan.emoji}
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="font-semibold">
-            {t.hariIni}: {pilihan.label}
-          </p>
-          <Link
-            to={pilihan.bantuan.panduan ? `/kartu/${pilihan.bantuan.panduan}` : (pilihan.bantuan.ke ?? "/")}
-            className="inline-flex min-h-sentuh items-center text-sm font-semibold text-utama-gelap underline"
+      <section aria-label={t.label} className="rounded-kartu bg-utama-muda p-4">
+        <div className="flex items-start gap-3">
+          <span aria-hidden="true" className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-3xl leading-none">
+            {pilihan.emoji}
+          </span>
+          <div className="min-w-0 flex-1 pt-0.5">
+            <p className="text-sm text-utama-gelap">
+              {t.hariIni} · {t.label}
+            </p>
+            <p className="mt-0.5 text-lg font-bold leading-snug">{pilihan.label}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setMengubah(true)}
+            className="-mr-2 -mt-1 inline-flex min-h-sentuh shrink-0 items-center gap-1 rounded-tombol px-2 text-sm font-semibold text-utama-gelap"
           >
-            {pilihan.bantuan.tombol}
-          </Link>
+            <Pencil className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" focusable="false" />
+            {t.ubah}
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={() => setMengubah(true)}
-          className="-mr-2 min-h-sentuh min-w-sentuh shrink-0 px-2 text-sm font-semibold text-utama-gelap underline"
+        <Link
+          to={pilihan.bantuan.panduan ? `/kartu/${pilihan.bantuan.panduan}` : (pilihan.bantuan.ke ?? "/")}
+          className="mt-3 flex min-h-sentuh items-center justify-between gap-2 rounded-tombol border border-utama/25 bg-white px-4 py-2 font-semibold text-utama-gelap"
         >
-          {t.ubah}
-        </button>
+          <span>{pilihan.bantuan.tombol}</span>
+          <ChevronRight className="h-5 w-5 shrink-0" strokeWidth={2.5} aria-hidden="true" focusable="false" />
+        </Link>
       </section>
     );
   }
