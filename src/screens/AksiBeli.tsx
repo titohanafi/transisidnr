@@ -16,14 +16,7 @@ export function AksiBeli() {
   const barang = ctx.kartu.solusi![ctx.tingkat]!.barang;
 
   return (
-    <AksiHalaman
-      judul={t.judul}
-      kartu={ctx.kartu}
-      tingkat={ctx.tingkat}
-      pengantar={barang.length > 0 ? t.bantuan : undefined}
-      latarPutih
-      tanpaKembali
-    >
+    <AksiHalaman judul={t.judul} kartu={ctx.kartu} tingkat={ctx.tingkat} latarPutih tanpaKembali>
       {barang.length === 0 ? (
         <p>{t.kosong}</p>
       ) : (
