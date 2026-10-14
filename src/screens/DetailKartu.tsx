@@ -1,4 +1,4 @@
-import { ChevronDown, Clock, Hammer, Hand, HeartHandshake, TriangleAlert, User, Wallet, Wrench, type LucideIcon } from "lucide-react";
+import { ChevronDown, Clock, HeartHandshake, TriangleAlert, User, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Halaman } from "../components/Halaman";
@@ -23,13 +23,6 @@ import { useStore } from "../state/store";
 import { useRencana } from "../state/useRencana";
 
 const { kartu: t, umum, rencana: tr } = konten.ui;
-
-// Setiap tingkat solusi punya ikon sendiri; kartunya putih dengan garis tipis (tanpa bayangan dan tanpa warna latar). Nama tingkat tetap tertulis.
-const IKON_TINGKAT: Record<Tingkat, LucideIcon> = {
-  tanpa_biaya: Hand,
-  alat_tanpa_bongkar: Wrench,
-  renovasi: Hammer,
-};
 
 export function DetailKartu() {
   const { id, tingkat: tingkatParam } = useParams();
@@ -122,7 +115,6 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   if (!s) return null;
                   const buka = terbuka.has(x.tingkat);
                   const idPanel = `panel-${x.tingkat}`;
-                  const IkonTingkat = IKON_TINGKAT[x.tingkat];
                   return (
                     <div key={x.tingkat} className="rounded-kartu border border-garis bg-white">
                       <h3>
@@ -131,21 +123,18 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           aria-expanded={buka}
                           aria-controls={idPanel}
                           onClick={() => ubah(x.tingkat)}
-                          className="flex min-h-sentuh w-full items-start justify-between gap-3 rounded-kartu px-4 pb-4 pt-4 text-left text-judulKartu"
+                          className="flex min-h-sentuh w-full items-center justify-between gap-3 rounded-kartu px-4 pb-3 pt-4 text-left text-judulKartu"
                         >
-                          <span className="flex flex-col gap-3">
-                            <IkonTingkat className="h-7 w-7 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-                            <span>{t.tingkat[x.tingkat]}</span>
-                          </span>
+                          <span>{t.tingkat[x.tingkat]}</span>
                           <ChevronDown
-                            className={`mt-0.5 h-5 w-5 shrink-0 text-utama-gelap motion-safe:transition-transform ${buka ? "rotate-180" : ""}`}
+                            className={`h-5 w-5 shrink-0 text-utama-gelap motion-safe:transition-transform ${buka ? "rotate-180" : ""}`}
                             strokeWidth={2}
                             aria-hidden="true"
                             focusable="false"
                           />
                         </button>
                       </h3>
-                      <p className="-mt-1 px-4 pb-4 text-redup">{s.ringkasan}</p>
+                      <p className="px-4 pb-4 text-redup">{s.ringkasan}</p>
                       <div className={`flex flex-wrap gap-2 px-4 ${buka ? "pb-3" : "pb-4"}`}>
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
                           <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
