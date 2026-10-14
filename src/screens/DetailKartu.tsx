@@ -173,14 +173,14 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                   className="mt-3 overflow-hidden rounded-kartu border border-garis bg-white"
                 >
                   <IlustrasiSolusi kartuId={kartu.id} tingkat={aktif.tingkat} />
-                  <div className="px-4 pb-4 pt-5">
+                  <div className="px-4 pb-4 pt-6">
                     {(() => {
                       const s = kartu.solusi![aktif.tingkat]!;
                       const x = aktif;
                       return (
                         <>
                           <p className="text-judulKartu text-tinta">{s.ringkasan}</p>
-                          <div className="mt-4 flex flex-wrap gap-2">
+                          <div className="mt-5 flex flex-wrap gap-2">
                             <span className="inline-flex items-center gap-1.5 rounded-full bg-permukaan px-3 py-1 text-kecil font-medium">
                               <Wallet className="h-4 w-4 shrink-0 text-redup" strokeWidth={2} aria-hidden="true" focusable="false" />
                               {biayaPil(s.biaya)}
@@ -195,7 +195,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           {/* Ajakan bertindak ada di atas langkah; pertanyaan hasil di paling bawah. */}
                           {(aksiTersedia(kartu, x.tingkat).includes("beli") ||
                             (x.tingkat === "renovasi" && aksiTersedia(kartu, x.tingkat).includes("tukang"))) && (
-                            <div className="mt-5 flex flex-col gap-5">
+                            <div className="mt-6 flex flex-col gap-5">
                               {aksiTersedia(kartu, x.tingkat).includes("beli") && (
                                 <TombolAksi
                                   jenis="beli"
@@ -211,7 +211,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                             </div>
                           )}
 
-                          <hr className="-mx-4 mt-5 border-t border-garis/70" />
+                          <hr className="-mx-4 mt-6 border-t border-garis/70" />
                           <h4 className="mt-5 font-semibold">{t.langkah}</h4>
                           <div className="mt-2">
                             <LangkahChecklist kartu={kartu} tingkat={x.tingkat} langkah={s.langkah} peran={s.peran_langkah} />
