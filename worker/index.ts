@@ -61,7 +61,12 @@ export default {
       return new Response(null, {
         status: asal ? 204 : 403,
         headers: asal
-          ? { "Access-Control-Allow-Origin": asal, "Access-Control-Allow-Methods": "POST", "Access-Control-Allow-Headers": "Content-Type", Vary: "Origin" }
+          ? {
+              "Access-Control-Allow-Origin": asal,
+              "Access-Control-Allow-Methods": "POST",
+              "Access-Control-Allow-Headers": "Content-Type",
+              Vary: "Origin",
+            }
           : {},
       });
     }
@@ -77,24 +82,47 @@ export default {
       return jawab({ galat: "gambar tidak valid" }, 400, asal);
     }
 
-    const model = env.GEMINI_MODEL ?? "gemini-flash-latest";
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: PROMPT }, { inlineData: { mimeType: "image/jpeg", data: gambar } }] }],
-        generationConfig: { responseMimeType: "application/json", responseSchema: SKEMA, temperature: 0 },
-      }),
+    // Model gratis sering sibuk (429/503): coba model utama, lalu cadangan, dengan jeda singkat.
+    const daftarModel = [
+      env.GEMINI_MODEL ?? "gemini-3.1-flash-lite",
+      "gemini-3.1-flash-lite",
+      "gemini-3.5-flash-lite",
+      "gemini-flash-lite-latest",
+    ].filter((m, i, semua) => semua.indexOf(m) === i);
+    const badan = JSON.stringify({
+      contents: [{ parts: [{ text: PROMPT }, { inlineData: { mimeType: "image/jpeg", data: gambar } }] }],
+      generationConfig: { responseMimeType: "application/json", responseSchema: SKEMA, temperature: 0 },
     });
-    if (!res.ok) return jawab({ galat: "layanan analisis gagal" }, 502, asal);
-
-    try {
-      const data = (await res.json()) as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
-      const teks = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-      const hasil = JSON.parse(teks) as { kamar_mandi: boolean; temuan: unknown[] };
-      return jawab({ kamar_mandi: hasil.kamar_mandi, temuan: hasil.temuan }, 200, asal);
-    } catch {
-      return jawab({ galat: "respons tidak terbaca" }, 502, asal);
+    const SEMENTARA = [429, 500, 502, 503, 504];
+    let status = 0;
+    for (const [i, model] of daftarModel.entries()) {
+      if (i > 0) await new Promise((r) => setTimeout(r, 700));
+      let res: Response;
+      try {
+        res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
+          body: badan,
+        });
+      } catch (e) {
+        console.log("gemini jaringan", model, String(e));
+        continue;
+      }
+      status = res.status;
+      if (!res.ok) {
+        console.log("gemini", model, status, (await res.text()).slice(0, 300));
+        if (SEMENTARA.includes(status) || status === 404) continue;
+        break;
+      }
+      try {
+        const data = (await res.json()) as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
+        const teks = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+        const hasil = JSON.parse(teks) as { kamar_mandi: boolean; temuan: unknown[] };
+        return jawab({ kamar_mandi: hasil.kamar_mandi, temuan: hasil.temuan }, 200, asal);
+      } catch {
+        console.log("gemini respons tidak terbaca", model);
+      }
     }
+    return jawab({ galat: "layanan analisis gagal", status }, 502, asal);
   },
 };
