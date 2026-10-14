@@ -69,17 +69,22 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
     </span>
   );
 
+  const adaKenapa = Boolean(kartu.kenapa_penting) && !kartu.isi_menyusul && Boolean(kartu.solusi);
+
   const kepala = (
     <>
       <div className="mt-2 empty:hidden">
         <LencanaStatus status={kartu.status_validasi} />
       </div>
-      <section className="mt-4 rounded-kartu border border-catatan-garis bg-catatan-muda p-4 text-catatan" aria-labelledby="situasi">
+      <section
+        className={`mt-4 rounded-kartu border border-catatan-garis bg-catatan-muda px-4 pt-4 text-catatan ${adaKenapa ? "pb-1" : "pb-4"}`}
+        aria-labelledby="situasi"
+      >
         <h2 id="situasi" className="text-kecil font-semibold uppercase tracking-wide">
           {t.situasi}
         </h2>
         <p className="mt-1 text-lg">{kartu.situasi}</p>
-        {kartu.kenapa_penting && !kartu.isi_menyusul && kartu.solusi && (
+        {adaKenapa && (
           <details className="group mt-3 border-t border-catatan-garis">
             <summary className="flex min-h-sentuh cursor-pointer list-none items-center justify-between gap-2 font-semibold [&::-webkit-details-marker]:hidden">
               {t.kenapa}
