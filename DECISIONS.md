@@ -566,3 +566,5 @@
 - Nama tingkat "Alat tanpa bongkar" di antarmuka diganti "Pakai alat" supaya sejajar dengan "Tanpa biaya" dan "Renovasi" (dua kata, pola sama). Kunci data `alat_tanpa_bongkar` dan prinsip "tanpa bongkar" tidak berubah. Maksud "tanpa bongkar" tetap dijelaskan di ringkasan tiap solusi ("alat yang bisa dilepas").
 
 - Kalimat pengantar di atas "Pesan ke tukang" pada tingkat Renovasi dihapus (permintaan pemilik); tombolnya berdiri sendiri. Teks `jembatanRenovasi` dihapus dari konten. Pengantar "Perlu dipasangkan, atau ingin alatnya dibuat khusus..." di halaman Lihat alat tidak berubah.
+
+- Bagian "Perhatian" (peringatan keselamatan panduan) dipindah dari bawah solusi ke hero Detail Panduan, di bawah kotak Situasi, supaya terbaca sebelum pengguna mengikuti langkah. Tampil di semua panduan yang punya peringatan, termasuk kartu yang isinya masih menyusul.
