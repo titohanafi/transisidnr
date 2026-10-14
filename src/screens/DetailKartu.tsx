@@ -74,8 +74,8 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
       <div className="mt-2 empty:hidden">
         <LencanaStatus status={kartu.status_validasi} />
       </div>
-      <section className="mt-4" aria-labelledby="situasi">
-        <h2 id="situasi" className="text-kecil font-semibold uppercase tracking-wide text-utama-gelap">
+      <section className="mt-4 rounded-kartu border border-catatan-garis bg-catatan-muda p-4 text-catatan" aria-labelledby="situasi">
+        <h2 id="situasi" className="text-kecil font-semibold uppercase tracking-wide">
           {t.situasi}
         </h2>
         <p className="mt-1 text-lg">{kartu.situasi}</p>
