@@ -23,6 +23,7 @@ import {
   kumpulkanAlat,
   type Filter,
 } from "../domain/jelajah";
+import { usePlaceholderBerjalan } from "../lib/placeholderBerjalan";
 import { useRencana } from "../state/useRencana";
 
 const { jelajah: t, umum, rencana: tr } = konten.ui;
@@ -42,6 +43,8 @@ function Daftar({ awal }: { awal: Filter }) {
   // Kata kunci bisa datang dari kolom cari di Beranda (lewat state riwayat, bukan alamat).
   const dariBeranda = (useLocation().state as { cari?: string } | null)?.cari;
   const [cari, setCari] = useState(dariBeranda ?? "");
+  const [fokus, setFokus] = useState(false);
+  const placeholder = usePlaceholderBerjalan(t.cari.placeholder, t.cari.contoh, !fokus && cari === "");
 
   const label = (kunci: string) =>
     kunci === "caregiver" ? t.caregiver : (konten.asesmen.aktivitas.find((a) => a.id === kunci)?.label.split(" (")[0] ?? kunci);
@@ -85,10 +88,10 @@ function Daftar({ awal }: { awal: Filter }) {
           {filter !== "semua" && <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>}
           {filter === "semua" && (
             <div>
-              <label htmlFor="cari-panduan" className="text-kecil font-semibold text-redup">
+              <label htmlFor="cari-panduan" className="sr-only">
                 {t.cari.label}
               </label>
-              <div className="relative mt-1">
+              <div className="relative">
                 <Search
                   className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-redup"
                   strokeWidth={2}
@@ -102,9 +105,11 @@ function Daftar({ awal }: { awal: Filter }) {
                   onChange={(e) => setCari(e.target.value)}
                   autoComplete="off"
                   enterKeyHint="search"
-                  placeholder={t.cari.placeholder}
+                  placeholder={placeholder}
+                  onFocus={() => setFokus(true)}
+                  onBlur={() => setFokus(false)}
                   autoFocus={dariBeranda === ""}
-                  className="h-12 w-full rounded-tombol border border-garisKontrol bg-white pl-11 pr-3 text-isi shadow-kartu"
+                  className="h-12 w-full rounded-tombol border border-garisKontrol bg-white pl-11 pr-3 text-isi shadow-kartu placeholder:text-redup"
                 />
               </div>
             </div>
