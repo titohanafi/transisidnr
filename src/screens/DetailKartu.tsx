@@ -132,9 +132,7 @@ function Isi({ kartu, tingkatAwal }: { kartu: Kartu; tingkatAwal?: Tingkat }) {
                           onClick={() => ubah(x.tingkat)}
                           className="flex min-h-sentuh w-full items-center gap-3 rounded-kartu px-4 pb-4 pt-4 text-left text-judulKartu"
                         >
-                          <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white">
-                            <IkonTingkat className="h-5 w-5 text-utama-gelap" strokeWidth={2} focusable="false" />
-                          </span>
+                          <IkonTingkat className="h-6 w-6 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
                           <span className="flex-1">{t.tingkat[x.tingkat]}</span>
                           <ChevronDown
                             className={`h-5 w-5 shrink-0 text-utama-gelap motion-safe:transition-transform ${buka ? "rotate-180" : ""}`}
