@@ -362,6 +362,100 @@ const GAMBAR: Record<string, () => ReactNode> = {
       <Pengguna x={190} y={138} tangan={[232, 58]} />
     </Kanvas>
   ),
+  // Bebaskan ruang yang sudah ada, tampak dari atas: ember dan keranjang (bayangan putus-putus) dipindah ke sudut, sisi kloset lapang.
+  "bath-space-turning:tanpa_biaya": () => (
+    <Kanvas>
+      <rect x="24" y="8" width="312" height="134" fill="none" strokeWidth="6" className="stroke-tinta" />
+      <rect x="154" y="14" width="36" height="12" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+      <ellipse cx="172" cy="50" rx="15" ry="18" className="fill-white stroke-tinta" strokeWidth="3" />
+      <ellipse cx="172" cy="52" rx="8" ry="10" fill="none" strokeWidth="2" className="stroke-tinta" />
+      <circle cx="130" cy="50" r="9" fill="none" strokeWidth="2.500" strokeDasharray="3 3" className="stroke-tinta" opacity="0.7" />
+      <rect
+        x="112"
+        y="72"
+        width="22"
+        height="16"
+        rx="3"
+        fill="none"
+        strokeWidth="2.500"
+        strokeDasharray="3 3"
+        className="stroke-tinta"
+        opacity="0.7"
+      />
+      <path d="M118 62Q96 80 76 104" {...garisTinta} strokeWidth="2.500" strokeDasharray="3 6" className="stroke-tinta" />
+      <Panah x={72} y={108} arah={125} />
+      <circle cx="56" cy="118" r="9" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M49 114q7-9 14 0" {...garisTinta} strokeWidth="2" className="stroke-tinta" />
+      <rect x="76" y="114" width="22" height="16" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M76 120H98M76 125H98" {...garisTinta} strokeWidth="1.500" className="stroke-tinta" opacity="0.5" />
+      <rect
+        x="206"
+        y="22"
+        width="76"
+        height="92"
+        rx="4"
+        fill="none"
+        strokeWidth="2"
+        strokeDasharray="5 5"
+        className="stroke-tinta"
+        opacity="0.5"
+      />
+      <KursiRodaAtas x={244} y={76} />
+      <path d="M232 52Q214 32 192 44" {...garisTinta} strokeWidth="2.500" strokeDasharray="3 6" className="stroke-tinta" />
+      <Panah x={190} y={46} arah={150} />
+    </Kanvas>
+  ),
+  // Alat tanpa bongkar: rak dinding dan keranjang gantung mengosongkan lantai; papan pindah menjembatani kursi roda dan kloset.
+  "bath-space-turning:alat_tanpa_bongkar": () => (
+    <Kanvas>
+      <rect x="24" y="8" width="312" height="134" fill="none" strokeWidth="6" className="stroke-tinta" />
+      <rect x="154" y="14" width="36" height="12" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+      <ellipse cx="172" cy="50" rx="15" ry="18" className="fill-white stroke-tinta" strokeWidth="3" />
+      <ellipse cx="172" cy="52" rx="8" ry="10" fill="none" strokeWidth="2" className="stroke-tinta" />
+      <rect x="52" y="14" width="68" height="12" rx="2" className="fill-white stroke-tinta" strokeWidth="3" />
+      <rect x="60" y="17" width="10" height="6" rx="1.500" className="fill-tinta" />
+      <circle cx="88" cy="20" r="3.500" className="fill-tinta" />
+      <rect x="100" y="17" width="12" height="6" rx="1.500" className="fill-tinta" />
+      <rect x="310" y="34" width="20" height="48" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M310 46H330M310 58H330M310 70H330" {...garisTinta} strokeWidth="1.500" className="stroke-tinta" opacity="0.5" />
+      <rect x="188" y="42" width="46" height="12" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+      <path d="M224 48H206" {...garisTinta} strokeWidth="2" className="stroke-tinta" />
+      <Panah x={202} y={48} arah={180} />
+      <KursiRodaAtas x={254} y={50} />
+      <path
+        d="M96 100l2.500 6 6 2.500-6 2.500-2.500 6-2.500-6-6-2.500 6-2.500zM280 104l2 4.500 4.500 2-4.500 2-2 4.500-2-4.500-4.500-2 4.500-2z"
+        className="fill-tinta"
+      />
+    </Kanvas>
+  ),
+  // Renovasi: tata ruang diubah (kloset digeser, pintu geser) hingga ada ruang putar dan ruang di samping kloset.
+  "bath-space-turning:renovasi": () => (
+    <Kanvas>
+      <path d="M24 8V142H336V8M24 8H268M312 8H336" fill="none" strokeWidth="6" strokeLinecap="square" className="stroke-tinta" />
+      <path d="M200 17H268" {...garisTinta} strokeWidth="4" className="stroke-tinta" />
+      <path d="M268 17H312" {...garisTinta} strokeWidth="2" strokeDasharray="4 4" className="stroke-tinta" opacity="0.6" />
+      <rect x="102" y="14" width="36" height="12" rx="3" className="fill-white stroke-tinta" strokeWidth="3" />
+      <ellipse cx="120" cy="50" rx="15" ry="18" className="fill-white stroke-tinta" strokeWidth="3" />
+      <ellipse cx="120" cy="52" rx="8" ry="10" fill="none" strokeWidth="2" className="stroke-tinta" />
+      <rect
+        x="146"
+        y="28"
+        width="30"
+        height="72"
+        rx="4"
+        fill="none"
+        strokeWidth="2"
+        strokeDasharray="5 5"
+        className="stroke-tinta"
+        opacity="0.5"
+      />
+      <circle cx="244" cy="70" r="40" fill="none" strokeWidth="2" strokeDasharray="5 5" className="stroke-tinta" />
+      <Panah x={266} y={36} arah={30} />
+      <Panah x={222} y={104} arah={210} />
+      <KursiRodaAtas x={244} y={70} />
+      <UkurMendatar x1={204} x2={284} y={134} angka={angka("ruangPutar")} />
+    </Kanvas>
+  ),
   // Pastikan pintu bisa dibuka leluasa: pintu terbuka penuh dan diganjal, jalur di depan pintu kosong.
   "bath-door:tanpa_biaya": () => (
     <Kanvas>
@@ -471,7 +565,7 @@ const GAMBAR: Record<string, () => ReactNode> = {
 };
 
 /** Gambar yang memuat angka ukuran; di bawahnya tampil catatan bahwa angka hanya acuan umum. */
-const BERANGKA = new Set(["bath-door:tanpa_biaya", "bath-door:alat_tanpa_bongkar", "bath-door:renovasi"]);
+const BERANGKA = new Set(["bath-door:tanpa_biaya", "bath-door:alat_tanpa_bongkar", "bath-door:renovasi", "bath-space-turning:renovasi"]);
 
 /** Ilustrasi selebar panel untuk satu pilihan solusi; null bila panduan itu belum punya ilustrasi. */
 export function IlustrasiSolusi({ kartuId, tingkat }: { kartuId: string; tingkat: Tingkat }) {
