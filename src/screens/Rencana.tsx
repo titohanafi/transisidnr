@@ -213,7 +213,7 @@ export function Rencana() {
                         <Link to={`/kartu/${k.id}`} className="tekan flex min-h-[56px] items-center gap-3 py-3">
                           <span className="min-w-0 flex-1 leading-snug">{dataKartu(k.id)?.judul}</span>
                           <span
-                            className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-0.5 text-kecil font-medium ${kelas}`}
+                            className={`inline-flex w-[8.5rem] shrink-0 items-center justify-center gap-1 rounded-full border px-2 py-0.5 text-kecil font-medium ${kelas}`}
                           >
                             <Ikon className="h-3.5 w-3.5 shrink-0" strokeWidth={2.25} aria-hidden="true" focusable="false" />
                             {label}
