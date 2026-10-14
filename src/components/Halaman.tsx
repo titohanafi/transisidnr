@@ -12,12 +12,15 @@ export function Halaman({
   children,
   kunciFokus,
   kepala,
+  judulTersembunyi = false,
 }: {
   judul: string;
   children: ReactNode;
   kunciFokus?: string | number;
   /** Isi pita kepala selebar layar di bawah judul (mis. pengantar dan pencarian). Tanpa ini, halaman memakai tata letak biasa. */
   kepala?: ReactNode;
+  /** Judul tetap ada untuk pembaca layar tetapi tidak ditampilkan (bila sudah jelas dari menu). */
+  judulTersembunyi?: boolean;
 }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -30,7 +33,7 @@ export function Halaman({
   }, [judul, kunciFokus]);
 
   const h1Elemen = (
-    <h1 ref={h1} tabIndex={-1} className={judul === app.nama ? "sr-only" : "mb-1 text-judul text-tinta outline-none"}>
+    <h1 ref={h1} tabIndex={-1} className={judul === app.nama || judulTersembunyi ? "sr-only" : "mb-1 text-judul text-tinta outline-none"}>
       {judul}
     </h1>
   );

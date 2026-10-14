@@ -82,11 +82,12 @@ function Daftar({ awal }: { awal: Filter }) {
   return (
     <Halaman
       judul={t.judulFilter[filter]}
+      judulTersembunyi={filter === "semua"}
       kepala={
         <>
-          <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>
+          {filter !== "semua" && <p className="mt-2 text-redup">{t.pengantarFilter[filter]}</p>}
           {filter === "semua" && (
-            <div className="mt-4">
+            <div>
               <label htmlFor="cari-panduan" className="text-kecil font-semibold text-redup">
                 {t.cari.label}
               </label>
