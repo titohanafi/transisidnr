@@ -25,7 +25,7 @@ function Cakupan({ banner }: { banner: boolean }) {
     </>
   );
   return banner ? (
-    <aside className="-mx-4 -mt-5 flex items-start gap-2 border-b border-info/25 bg-info-muda px-4 py-3">{isi}</aside>
+    <aside className="-mx-4 -mt-6 flex items-start gap-2 border-b border-info/25 bg-info-muda px-4 py-3">{isi}</aside>
   ) : (
     <aside className="flex items-start gap-2 rounded-kartu bg-info-muda px-3 py-3">{isi}</aside>
   );
