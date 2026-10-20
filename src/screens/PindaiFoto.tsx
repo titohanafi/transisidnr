@@ -112,21 +112,18 @@ export function PindaiFoto() {
           tampil (judulTersembunyi) — sama seperti alasan Beranda menyembunyikan h1-nya sendiri.
           Jarak antar-bagian lain di bawah ini dipusatkan lewat `gap-bagian` (bukan mb-4/mt-6 per elemen). */}
       <div className="flex flex-col gap-bagian">
-        {tahap.nama === "pilih" && (
-          <div className="-mx-4 -mt-6 bg-permukaan px-4 pb-28 pt-6">
-            <div className="flex items-center gap-2">
-              <ScanLine className="h-6 w-6 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-              <h2 className="text-judulKartu text-tinta">{t.heroJudul}</h2>
-            </div>
-            <p className="mt-isi text-redup">{t.penjelasan}</p>
+        {/* Judul hero ("Kamar mandi Anda") selalu tampil, di semua tahap — supaya tidak hilang-muncul begitu foto
+            dipilih. Penjelasan cuma tampil di tahap "pilih" (sebelum ada foto); begitu ada foto, kartunya dibungkus
+            penuh di dalam backdrop yang sama (bukan cuma menumpang di atasnya) supaya latar hijau menutup seluruh
+            tinggi kartu, bukan cuma mengintip di separuh atas seperti kartu tip. */}
+        <div className={`-mx-4 -mt-6 bg-permukaan px-4 pt-6 ${tahap.nama === "pilih" ? "pb-28" : "pb-6"}`}>
+          <div className="flex items-center gap-2">
+            <ScanLine className="h-6 w-6 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+            <h2 className="text-judulKartu text-tinta">{t.heroJudul}</h2>
           </div>
-        )}
-
-        {/* Begitu ada foto, kartunya dibungkus penuh di dalam backdrop (bukan cuma menumpang di atasnya) supaya
-            latar hijau menutup seluruh tinggi kartu, bukan cuma mengintip di separuh atas seperti kartu tip. */}
-        {foto && (
-          <div className="-mx-4 -mt-6 bg-permukaan px-4 pb-6 pt-6">
-            <div className="relative overflow-hidden rounded-kartu border border-garis/70 bg-kertas shadow-kartu">
+          {tahap.nama === "pilih" && <p className="mt-isi text-redup">{t.penjelasan}</p>}
+          {foto && (
+            <div className="relative mt-isi overflow-hidden rounded-kartu border border-garis/70 bg-kertas shadow-kartu">
               <img src={foto} alt={t.alt} className="max-h-64 w-full object-contain" />
               {tahap.nama === "memindai" && (
                 <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-kartu">
@@ -150,13 +147,15 @@ export function PindaiFoto() {
                 </div>
               )}
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {tahap.nama === "pilih" && (
           <>
             <section className="-mt-28 rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
-              <h2 className="mb-2 text-judulKartu">{t.tipJudul}</h2>
+              {/* Gaya label (kecil, bukan h2 sejajar judul hero) supaya tidak bersaing dengan judul "Kamar mandi
+                  Anda" di atasnya — sama seperti pola label "Hasil pemindaian" / "Situasi" di tempat lain. */}
+              <h2 className="mb-2 text-kecil font-semibold text-utama-gelap">{t.tipJudul}</h2>
               <ul className="space-y-2">
                 {t.tip.map((x) => (
                   <li key={x} className="flex items-start gap-2">
