@@ -411,6 +411,7 @@ export const uiSchema = z
     ilustrasi: z.object({ angka: rekamTeks, gambar: rekamTeks }),
     pindai: z.object({
       judul: teks,
+      heroJudul: teks,
       penjelasan: teks,
       tipJudul: teks,
       tip: z.array(teks).min(1),

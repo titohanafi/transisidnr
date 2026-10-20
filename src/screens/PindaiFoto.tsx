@@ -114,15 +114,11 @@ export function PindaiFoto() {
       <div className="flex flex-col gap-bagian">
         {tahap.nama === "pilih" && (
           <div className="-mx-4 -mt-6 bg-permukaan px-4 pb-24 pt-6">
-            <div className="flex items-center gap-3">
-              <span
-                aria-hidden="true"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-white text-utama shadow-kartu"
-              >
-                <ScanLine className="h-5 w-5" strokeWidth={2} focusable="false" />
-              </span>
-              <p className="text-redup">{t.penjelasan}</p>
+            <div className="flex items-center gap-2">
+              <ScanLine className="h-6 w-6 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+              <h2 className="text-judulKartu text-tinta">{t.heroJudul}</h2>
             </div>
+            <p className="mt-2 text-redup">{t.penjelasan}</p>
           </div>
         )}
 
