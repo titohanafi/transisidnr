@@ -1,4 +1,4 @@
-import { Camera, CircleCheck, CircleHelp, Image as IkonGaleri, Loader2, ScanLine } from "lucide-react";
+import { Camera, CircleCheck, Image as IkonGaleri, Info, Loader2, ScanLine } from "lucide-react";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { DenahKamarMandi } from "../components/DenahKamarMandi";
@@ -273,7 +273,7 @@ function Hasil({
   const NOMOR_ITEM = nomorItemHasil(ID_ITEM, temuan);
   return (
     <>
-      <section aria-labelledby="judul-hasil" className="relative -mt-24 overflow-hidden rounded-kartu bg-utama p-5 text-white shadow-angkat">
+      <section aria-labelledby="judul-hasil" className="relative -mt-16 overflow-hidden rounded-kartu bg-utama p-5 text-white shadow-angkat">
         <HiasanLingkaran />
         <div className="relative">
           <p className="text-kecil font-semibold text-white">{t.hasilJudul}</p>
@@ -284,24 +284,22 @@ function Hasil({
             </h2>
           </div>
           <p className="mt-2.5 text-isi text-utama-redup">{tingkat.isi}</p>
-          {(skor.jelas > 0 || skor.tidakJelas > 0) && (
-            <div className="mt-4 flex flex-col gap-2 border-t border-white/20 pt-4">
-              {skor.jelas > 0 && (
-                <p className="flex items-center gap-2 font-semibold">
-                  <CircleCheck className="h-5 w-5 shrink-0 text-daun" strokeWidth={2} aria-hidden="true" focusable="false" />
-                  {isi(t.ringkasan, { ramah: skor.ramah, jelas: skor.jelas })}
-                </p>
-              )}
-              {skor.tidakJelas > 0 && (
-                <p className="flex items-center gap-2 text-kecil text-utama-redup">
-                  <CircleHelp className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
-                  {isi(t.tidakJelasJumlah, { n: skor.tidakJelas })}
-                </p>
-              )}
-            </div>
-          )}
         </div>
       </section>
+
+      {/* Statistik (berapa hal yang mendukung/belum jelas) digabung satu kalimat dan ditaruh sebagai banner info
+          terpisah (warna "info" di tailwind.config, dipakai khusus untuk banner informasi) — dulu dua kalimat
+          bertumpuk di dalam kartu teal, sekarang satu baris ringkas di luar kartu supaya kartu hasil tidak padat. */}
+      {(skor.jelas > 0 || skor.tidakJelas > 0) && (
+        <p role="note" className="flex items-start gap-2 rounded-kartu border border-info bg-info-muda p-3 text-kecil text-info">
+          <Info className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+          {skor.jelas > 0 && skor.tidakJelas > 0
+            ? isi(t.ringkasanGabungan, { ramah: skor.ramah, jelas: skor.jelas, tidakJelas: skor.tidakJelas })
+            : skor.jelas > 0
+              ? isi(t.ringkasan, { ramah: skor.ramah, jelas: skor.jelas })
+              : isi(t.tidakJelasJumlah, { n: skor.tidakJelas })}
+        </p>
+      )}
 
       <DenahKamarMandi temuan={temuan} objek={objek} />
 

@@ -438,6 +438,7 @@ export const uiSchema = z
       hasilJudul: teks,
       ringkasan: teks,
       tidakJelasJumlah: teks,
+      ringkasanGabungan: teks,
       tingkat: z.object({
         belum_cukup: z.object({ judul: teks, isi: teks }),
         banyak: z.object({ judul: teks, isi: teks }),

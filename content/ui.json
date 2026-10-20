@@ -453,6 +453,7 @@
     "hasilJudul": "Hasil pemindaian",
     "ringkasan": "{ramah} dari {jelas} hal yang terlihat tampak sudah mendukung.",
     "tidakJelasJumlah": "{n} hal tidak terlihat jelas di foto.",
+    "ringkasanGabungan": "{ramah} dari {jelas} hal tampak sudah mendukung, {tidakJelas} hal belum terlihat jelas di foto.",
     "tingkat": {
       "belum_cukup": {
         "judul": "Foto belum cukup jelas",
