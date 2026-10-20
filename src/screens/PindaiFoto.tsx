@@ -298,7 +298,6 @@ function Hasil({
         );
       })}
 
-      <p className="mt-4 text-kecil text-redup">{t.catatan}</p>
       <PeringatanNonMedis />
       <div className="mt-4 flex flex-col gap-3">
         <TombolLink to="/rencana">{t.keRencana}</TombolLink>

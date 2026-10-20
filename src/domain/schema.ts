@@ -450,7 +450,6 @@ export const uiSchema = z
       denahLabelToggle: teks,
       status: z.object({ ramah: teks, perhatian: teks, tidak_jelas: teks }),
       lihatPanduan: teks,
-      catatan: teks,
       ulang: teks,
       keRencana: teks,
       item: z.array(z.object({ id: teks, nama: teks, cek: teks, kartu: teks })).min(1),

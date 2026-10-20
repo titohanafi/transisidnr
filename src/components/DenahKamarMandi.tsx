@@ -468,16 +468,17 @@ export function DenahKamarMandi({
   const [tampilkanLabel, setTampilkanLabel] = useState(false);
 
   return (
-    <figure className="mb-6 rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
+    <figure className="mt-6 mb-6 rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
       <h2 className="mb-3 text-judulKartu">{t.denahJudul}</h2>
 
-      <div role="radiogroup" aria-label={t.denahFilterLabel} className="mb-3 flex flex-wrap gap-2">
+      <div role="radiogroup" aria-label={t.denahFilterLabel} className="mb-3 flex gap-1 rounded-kartu bg-permukaan p-1">
         {STATUS_ITEM.map((s) => (
           <PilihanPil
             key={s}
             nama="denah-filter"
             aktif={filter === s}
             onUbah={() => setFilter(s)}
+            gaya="tab"
             label={
               <span className="flex items-center gap-1.5">
                 <span className={`h-3 w-3 shrink-0 rounded-full border-2 ${GAYA_BADGE[s]}`} />
