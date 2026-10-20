@@ -1,8 +1,9 @@
-import { Camera, CircleCheck, Image as IkonGaleri, Loader2, ScanLine } from "lucide-react";
+import { Camera, CircleCheck, CircleHelp, Image as IkonGaleri, Loader2, ScanLine } from "lucide-react";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { DenahKamarMandi } from "../components/DenahKamarMandi";
 import { Halaman } from "../components/Halaman";
+import { HiasanLingkaran } from "../components/KartuHero";
 import { PilihanPil } from "../components/Pilihan";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { Tombol, TombolLink } from "../components/Tombol";
@@ -116,7 +117,9 @@ export function PindaiFoto() {
             dipilih. Penjelasan cuma tampil di tahap "pilih" (sebelum ada foto); begitu ada foto, kartunya dibungkus
             penuh di dalam backdrop yang sama (bukan cuma menumpang di atasnya) supaya latar hijau menutup seluruh
             tinggi kartu, bukan cuma mengintip di separuh atas seperti kartu tip. */}
-        <div className={`-mx-4 -mt-6 bg-permukaan px-4 pt-6 ${tahap.nama === "pilih" ? "pb-28" : "pb-6"}`}>
+        <div
+          className={`-mx-4 -mt-6 bg-permukaan px-4 pt-6 ${tahap.nama === "pilih" ? "pb-28" : tahap.nama === "hasil" ? "pb-20" : "pb-6"}`}
+        >
           <div className="flex items-center gap-2">
             <ScanLine className="h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
             <h2 className="text-subjudul text-tinta">{t.heroJudul}</h2>
@@ -270,14 +273,34 @@ function Hasil({
   const NOMOR_ITEM = nomorItemHasil(ID_ITEM, temuan);
   return (
     <>
-      <section aria-labelledby="judul-hasil" className="rounded-kartu border border-utama bg-utama-muda p-5">
-        <p className="text-kecil font-semibold text-utama-gelap">{t.hasilJudul}</p>
-        <h2 id="judul-hasil" tabIndex={-1} className="text-judulKartu text-tinta">
-          {tingkat.judul}
-        </h2>
-        <p className="mt-2">{tingkat.isi}</p>
-        {skor.jelas > 0 && <p className="mt-2 font-semibold">{isi(t.ringkasan, { ramah: skor.ramah, jelas: skor.jelas })}</p>}
-        {skor.tidakJelas > 0 && <p className="text-kecil text-redup">{isi(t.tidakJelasJumlah, { n: skor.tidakJelas })}</p>}
+      <section aria-labelledby="judul-hasil" className="relative -mt-24 overflow-hidden rounded-kartu bg-utama p-5 text-white shadow-angkat">
+        <HiasanLingkaran />
+        <div className="relative">
+          <p className="text-kecil font-semibold text-white">{t.hasilJudul}</p>
+          <div className="mt-1 flex items-center gap-3">
+            <CircleCheck className="h-8 w-8 shrink-0 text-daun" strokeWidth={2} aria-hidden="true" focusable="false" />
+            <h2 id="judul-hasil" tabIndex={-1} className="text-judulUtama">
+              {tingkat.judul}
+            </h2>
+          </div>
+          <p className="mt-2.5 text-isi text-utama-redup">{tingkat.isi}</p>
+          {(skor.jelas > 0 || skor.tidakJelas > 0) && (
+            <div className="mt-4 flex flex-col gap-2 border-t border-white/20 pt-4">
+              {skor.jelas > 0 && (
+                <p className="flex items-center gap-2 font-semibold">
+                  <CircleCheck className="h-5 w-5 shrink-0 text-daun" strokeWidth={2} aria-hidden="true" focusable="false" />
+                  {isi(t.ringkasan, { ramah: skor.ramah, jelas: skor.jelas })}
+                </p>
+              )}
+              {skor.tidakJelas > 0 && (
+                <p className="flex items-center gap-2 text-kecil text-utama-redup">
+                  <CircleHelp className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+                  {isi(t.tidakJelasJumlah, { n: skor.tidakJelas })}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </section>
 
       <DenahKamarMandi temuan={temuan} objek={objek} />
