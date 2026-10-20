@@ -113,12 +113,12 @@ export function PindaiFoto() {
           Jarak antar-bagian lain di bawah ini dipusatkan lewat `gap-bagian` (bukan mb-4/mt-6 per elemen). */}
       <div className="flex flex-col gap-bagian">
         {tahap.nama === "pilih" && (
-          <div className="-mx-4 -mt-6 bg-permukaan px-4 pb-24 pt-6">
+          <div className="-mx-4 -mt-6 bg-permukaan px-4 pb-28 pt-6">
             <div className="flex items-center gap-2">
               <ScanLine className="h-6 w-6 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
               <h2 className="text-judulKartu text-tinta">{t.heroJudul}</h2>
             </div>
-            <p className="mt-2 text-redup">{t.penjelasan}</p>
+            <p className="mt-isi text-redup">{t.penjelasan}</p>
           </div>
         )}
 
