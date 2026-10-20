@@ -1,4 +1,4 @@
-import { Camera, Image as IkonGaleri, Loader2, ScanLine } from "lucide-react";
+import { Camera, CircleCheck, Image as IkonGaleri, Loader2, ScanLine } from "lucide-react";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { DenahKamarMandi } from "../components/DenahKamarMandi";
@@ -160,9 +160,12 @@ export function PindaiFoto() {
           <>
             <section className="-mt-4 rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
               <h2 className="mb-2 text-judulKartu">{t.tipJudul}</h2>
-              <ul className="list-disc space-y-1 pl-5">
+              <ul className="space-y-2">
                 {t.tip.map((x) => (
-                  <li key={x}>{x}</li>
+                  <li key={x} className="flex items-start gap-2">
+                    <CircleCheck className="mt-0.5 h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+                    <span>{x}</span>
+                  </li>
                 ))}
               </ul>
             </section>
