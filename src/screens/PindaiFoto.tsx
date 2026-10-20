@@ -105,7 +105,17 @@ export function PindaiFoto() {
     <Halaman
       judul={t.judul}
       judulTersembunyi
-      kepala={<p className="mt-2 text-white">{t.penjelasan}</p>}
+      kepala={
+        <div className="mt-2 flex flex-col items-center gap-3 text-center">
+          <span
+            aria-hidden="true"
+            className="flex h-16 w-16 items-center justify-center rounded-full border border-utama-redup bg-white text-utama shadow-kartu"
+          >
+            <ScanLine className="h-8 w-8" strokeWidth={2} focusable="false" />
+          </span>
+          <p className="text-white">{t.penjelasan}</p>
+        </div>
+      }
       kepalaPita="gelap"
       kepalaTumpang
       latarPutih
