@@ -118,8 +118,8 @@ export function PindaiFoto() {
             tinggi kartu, bukan cuma mengintip di separuh atas seperti kartu tip. */}
         <div className={`-mx-4 -mt-6 bg-permukaan px-4 pt-6 ${tahap.nama === "pilih" ? "pb-28" : "pb-6"}`}>
           <div className="flex items-center gap-2">
-            <ScanLine className="h-6 w-6 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
-            <h2 className="text-judulKartu text-tinta">{t.heroJudul}</h2>
+            <ScanLine className="h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+            <h2 className="text-subjudul text-tinta">{t.heroJudul}</h2>
           </div>
           {tahap.nama === "pilih" && <p className="mt-isi text-redup">{t.penjelasan}</p>}
           {foto && (
