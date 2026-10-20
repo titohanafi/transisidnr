@@ -104,35 +104,28 @@ export function PindaiFoto() {
   return (
     <Halaman
       judul={t.judul}
-      judulTersembunyi
-      // Hero (pita gelap + ikon + penjelasan) cuma tampil sebelum ada foto: begitu foto dipilih, fokus harus
-      // langsung ke fotonya, bukan terbagi dengan hero — jadi layarnya sengaja berganti ke header polos di tahap
-      // lain (foto dan hero tidak pernah tampil bersamaan, karena `foto` baru terisi setelah tahap "pilih" berlalu).
+      // Ikon+penjelasan cuma tampil sebelum ada foto (tahap "pilih"); dibuat elemen biasa di badan halaman (bukan
+      // pita berwarna) supaya header tidak berganti warna tiap pindah tahap — sebelumnya pita gelap dipakai di sini
+      // lalu hilang begitu foto dipilih, yang membuat bilah atas ikut melompat warna setiap kali bolak-balik tahap.
       kepala={
         tahap.nama === "pilih" ? (
-          <div className="mt-2 flex flex-col items-center gap-3 text-center">
+          <div className="mt-3 flex items-start gap-3">
             <span
               aria-hidden="true"
-              className="flex h-16 w-16 items-center justify-center rounded-full border border-utama-redup bg-white text-utama shadow-kartu"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda text-utama"
             >
-              <ScanLine className="h-8 w-8" strokeWidth={2} focusable="false" />
+              <ScanLine className="h-5 w-5" strokeWidth={2} focusable="false" />
             </span>
-            <p className="text-white">{t.penjelasan}</p>
+            <p className="text-redup">{t.penjelasan}</p>
           </div>
         ) : undefined
       }
-      kepalaPita="gelap"
-      kepalaTumpang
       latarPutih
     >
       {masukan(kamera, "environment")}
       {masukan(galeri)}
 
-      {/* Judul "Pindai" sudah ada di bilah atas (lihat <Halaman>), jadi h1 di sini disembunyikan (`judulTersembunyi`)
-          supaya tidak berulang — sama seperti tab Dukungan dan Profil. Kartu tip di tahap "pilih" sengaja tumpang di
-          atas pita gelap (`kepalaTumpang`), motif yang sama dipakai tab itu juga; `-mt-4` tambahan menyesuaikan pita
-          gelap yang lebih tinggi dari pita hijau biasa. Jarak antar-bagian di bawah ini dipusatkan lewat `gap-bagian`
-          (bukan mb-4/mt-6 per elemen) supaya ritmenya rata. */}
+      {/* Jarak antar-bagian di bawah ini dipusatkan lewat `gap-bagian` (bukan mb-4/mt-6 per elemen) supaya ritmenya rata. */}
       <div className="flex flex-col gap-bagian">
         {foto && (
           <div className="relative overflow-hidden rounded-kartu border border-garis/70 bg-kertas shadow-kartu">
@@ -163,7 +156,7 @@ export function PindaiFoto() {
 
         {tahap.nama === "pilih" && (
           <>
-            <section className="-mt-4 rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
+            <section className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
               <h2 className="mb-2 text-judulKartu">{t.tipJudul}</h2>
               <ul className="space-y-2">
                 {t.tip.map((x) => (
