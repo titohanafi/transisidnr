@@ -117,7 +117,7 @@ export function PindaiFoto() {
           semua bagian di bawah ini dipusatkan lewat `gap-bagian` (bukan mb-4/mt-6 per elemen) supaya ritmenya rata. */}
       <div className="flex flex-col gap-bagian">
         {foto && (
-          <div className="relative overflow-hidden rounded-kartu border border-garis/70 shadow-kartu">
+          <div className="relative overflow-hidden rounded-kartu border border-garis/70 bg-kertas shadow-kartu">
             <img src={foto} alt={t.alt} className="max-h-64 w-full object-contain" />
             {tahap.nama === "memindai" && (
               <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-kartu">
