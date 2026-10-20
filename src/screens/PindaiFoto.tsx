@@ -102,131 +102,144 @@ export function PindaiFoto() {
   );
 
   return (
-    <Halaman judul={t.judul} kepala={<p className="mt-2 text-redup">{t.penjelasan}</p>}>
+    <Halaman
+      judul={t.judul}
+      kepala={<p className="mt-2 text-redup">{t.penjelasan}</p>}
+      kepalaPita="hijau"
+      kepalaTumpang
+      latarPutih
+    >
       {masukan(kamera, "environment")}
       {masukan(galeri)}
 
-      {foto && (
-        <div className="relative mb-4 overflow-hidden rounded-kartu border border-garis/70 shadow-kartu">
-          <img src={foto} alt={t.alt} className="max-h-64 w-full object-contain" />
-          {tahap.nama === "memindai" && (
-            <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-kartu">
-              {/* Vinyet gelap lembut agar sinar pindai terlihat kontras di atas foto apa pun */}
-              <div className="absolute inset-0 bg-tinta/20" />
-              {/* Kisi titik halus dan statis, kesan "dibaca sistem" tanpa berkedip-kedip */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.55)_1px,transparent_1.5px)] bg-[length:18px_18px] opacity-25" />
+      {/* Kartu pertama (foto, atau kartu tip bila belum ada foto) sengaja tumpang di atas pita hijau (`kepalaTumpang`
+          di <Halaman>) — motif yang sama dipakai tab Rencana, supaya layar fitur utama terasa senada. Jarak antar
+          semua bagian di bawah ini dipusatkan lewat `gap-bagian` (bukan mb-4/mt-6 per elemen) supaya ritmenya rata. */}
+      <div className="flex flex-col gap-bagian">
+        {foto && (
+          <div className="relative overflow-hidden rounded-kartu border border-garis/70 shadow-kartu">
+            <img src={foto} alt={t.alt} className="max-h-64 w-full object-contain" />
+            {tahap.nama === "memindai" && (
+              <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-kartu">
+                {/* Vinyet gelap lembut agar sinar pindai terlihat kontras di atas foto apa pun */}
+                <div className="absolute inset-0 bg-tinta/20" />
+                {/* Kisi titik halus dan statis, kesan "dibaca sistem" tanpa berkedip-kedip */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.55)_1px,transparent_1.5px)] bg-[length:18px_18px] opacity-25" />
 
-              <div className="absolute inset-x-0 h-2/5 animate-pindai bg-gradient-to-b from-transparent via-utama/50 to-transparent blur-[3px] motion-reduce:hidden" />
-              <div className="absolute inset-x-0 top-[-10%] h-px animate-pindai bg-utama-redup shadow-[0_0_14px_3px_rgba(15,94,99,0.85)] motion-reduce:hidden" />
+                <div className="absolute inset-x-0 h-2/5 animate-pindai bg-gradient-to-b from-transparent via-utama/50 to-transparent blur-[3px] motion-reduce:hidden" />
+                <div className="absolute inset-x-0 top-[-10%] h-px animate-pindai bg-utama-redup shadow-[0_0_14px_3px_rgba(15,94,99,0.85)] motion-reduce:hidden" />
 
-              {/* Bingkai sudut ala bidik kamera, statis supaya tidak ramai */}
-              {[
-                "left-2 top-2 border-l-2 border-t-2 rounded-tl-sm",
-                "right-2 top-2 border-r-2 border-t-2 rounded-tr-sm",
-                "left-2 bottom-2 border-l-2 border-b-2 rounded-bl-sm",
-                "right-2 bottom-2 border-r-2 border-b-2 rounded-br-sm",
-              ].map((gaya) => (
-                <span key={gaya} className={`absolute h-6 w-6 border-utama-redup ${gaya}`} />
+                {/* Bingkai sudut ala bidik kamera, statis supaya tidak ramai */}
+                {[
+                  "left-2 top-2 border-l-2 border-t-2 rounded-tl-sm",
+                  "right-2 top-2 border-r-2 border-t-2 rounded-tr-sm",
+                  "left-2 bottom-2 border-l-2 border-b-2 rounded-bl-sm",
+                  "right-2 bottom-2 border-r-2 border-b-2 rounded-br-sm",
+                ].map((gaya) => (
+                  <span key={gaya} className={`absolute h-6 w-6 border-utama-redup ${gaya}`} />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {tahap.nama === "pilih" && (
+          <>
+            <section className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
+              <h2 className="mb-2 text-judulKartu">{t.tipJudul}</h2>
+              <ul className="list-disc space-y-1 pl-5">
+                {t.tip.map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+            </section>
+            {pemilih}
+            {galatBaca && (
+              <p role="alert" className="text-bahaya">
+                {galatBaca}
+              </p>
+            )}
+          </>
+        )}
+
+        {tahap.nama === "siap" && (
+          <>
+            <p className="text-kecil text-redup">{t.privasi}</p>
+            <div className="flex flex-col gap-3">
+              <Tombol onClick={() => void pindai()} className="gap-2">
+                <ScanLine className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+                {t.pindai}
+              </Tombol>
+              <Tombol gayaTombol="sekunder" onClick={() => galeri.current?.click()}>
+                {t.gantiFoto}
+              </Tombol>
+            </div>
+          </>
+        )}
+
+        {tahap.nama === "memindai" && (
+          <p role="status" className="flex items-center gap-3 rounded-kartu bg-utama-muda p-4 text-utama-gelap">
+            <Loader2 className="h-6 w-6 shrink-0 animate-spin motion-reduce:animate-none" aria-hidden="true" focusable="false" />
+            {t.memindai}
+          </p>
+        )}
+
+        {tahap.nama === "galat" && (
+          <>
+            <p role="alert" className="rounded-kartu border border-bahaya bg-bahaya-muda p-4 text-tinta">
+              {tahap.pesan}
+            </p>
+            <div className="flex flex-col gap-3">
+              {(tahap.pesan === t.gagalPindai || tahap.pesan === t.terlaluSering) && <Tombol onClick={() => void pindai()}>{t.coba}</Tombol>}
+              <Tombol gayaTombol="sekunder" onClick={() => setTahap({ nama: "ceklis", jawaban: {} })}>
+                {t.nilaiSendiri}
+              </Tombol>
+              <Tombol gayaTombol="sekunder" onClick={ulang}>
+                {t.gantiFoto}
+              </Tombol>
+            </div>
+          </>
+        )}
+
+        {tahap.nama === "ceklis" && (
+          <section aria-labelledby="judul-ceklis">
+            <h2 id="judul-ceklis" className="mb-1 text-judulKartu">
+              {t.ceklisJudul}
+            </h2>
+            <p className="mb-4 text-redup">{t.ceklisPenjelasan}</p>
+            <div className="flex flex-col gap-4">
+              {t.item.map((it) => (
+                <fieldset key={it.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
+                  <legend className="px-1 font-semibold">{it.nama}</legend>
+                  <p className="mb-3">{it.cek}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {(
+                      [
+                        ["ramah", t.ya],
+                        ["perhatian", t.tidak],
+                        ["tidak_jelas", t.tidakYakin],
+                      ] as const
+                    ).map(([nilai, label]) => (
+                      <PilihanPil
+                        key={nilai}
+                        nama={`cek-${it.id}`}
+                        label={label}
+                        aktif={tahap.jawaban[it.id] === nilai}
+                        onUbah={() => setTahap({ nama: "ceklis", jawaban: { ...tahap.jawaban, [it.id]: nilai } })}
+                      />
+                    ))}
+                  </div>
+                </fieldset>
               ))}
             </div>
-          )}
-        </div>
-      )}
-
-      {tahap.nama === "pilih" && (
-        <>
-          <section className="mb-4 rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
-            <h2 className="mb-2 text-judulKartu">{t.tipJudul}</h2>
-            <ul className="list-disc space-y-1 pl-5">
-              {t.tip.map((x) => (
-                <li key={x}>{x}</li>
-              ))}
-            </ul>
+            <Tombol className="mt-4 w-full" onClick={() => setTahap({ nama: "hasil", temuan: tahap.jawaban, objek: POSISI_BAWAAN })}>
+              {t.lihatHasil}
+            </Tombol>
           </section>
-          {pemilih}
-          <p role="alert" className="mt-3 text-bahaya">
-            {galatBaca}
-          </p>
-        </>
-      )}
+        )}
 
-      {tahap.nama === "siap" && (
-        <>
-          <p className="mb-4 text-kecil text-redup">{t.privasi}</p>
-          <div className="flex flex-col gap-3">
-            <Tombol onClick={() => void pindai()} className="gap-2">
-              <ScanLine className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
-              {t.pindai}
-            </Tombol>
-            <Tombol gayaTombol="sekunder" onClick={() => galeri.current?.click()}>
-              {t.gantiFoto}
-            </Tombol>
-          </div>
-        </>
-      )}
-
-      {tahap.nama === "memindai" && (
-        <p role="status" className="flex items-center gap-3 rounded-kartu bg-utama-muda p-4 text-utama-gelap">
-          <Loader2 className="h-6 w-6 shrink-0 animate-spin motion-reduce:animate-none" aria-hidden="true" focusable="false" />
-          {t.memindai}
-        </p>
-      )}
-
-      {tahap.nama === "galat" && (
-        <>
-          <p role="alert" className="mb-4 rounded-kartu border border-bahaya bg-bahaya-muda p-4 text-tinta">
-            {tahap.pesan}
-          </p>
-          <div className="flex flex-col gap-3">
-            {(tahap.pesan === t.gagalPindai || tahap.pesan === t.terlaluSering) && <Tombol onClick={() => void pindai()}>{t.coba}</Tombol>}
-            <Tombol gayaTombol="sekunder" onClick={() => setTahap({ nama: "ceklis", jawaban: {} })}>
-              {t.nilaiSendiri}
-            </Tombol>
-            <Tombol gayaTombol="sekunder" onClick={ulang}>
-              {t.gantiFoto}
-            </Tombol>
-          </div>
-        </>
-      )}
-
-      {tahap.nama === "ceklis" && (
-        <section aria-labelledby="judul-ceklis">
-          <h2 id="judul-ceklis" className="mb-1 text-judulKartu">
-            {t.ceklisJudul}
-          </h2>
-          <p className="mb-4 text-redup">{t.ceklisPenjelasan}</p>
-          <div className="flex flex-col gap-4">
-            {t.item.map((it) => (
-              <fieldset key={it.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
-                <legend className="px-1 font-semibold">{it.nama}</legend>
-                <p className="mb-3">{it.cek}</p>
-                <div className="flex flex-wrap gap-2">
-                  {(
-                    [
-                      ["ramah", t.ya],
-                      ["perhatian", t.tidak],
-                      ["tidak_jelas", t.tidakYakin],
-                    ] as const
-                  ).map(([nilai, label]) => (
-                    <PilihanPil
-                      key={nilai}
-                      nama={`cek-${it.id}`}
-                      label={label}
-                      aktif={tahap.jawaban[it.id] === nilai}
-                      onUbah={() => setTahap({ nama: "ceklis", jawaban: { ...tahap.jawaban, [it.id]: nilai } })}
-                    />
-                  ))}
-                </div>
-              </fieldset>
-            ))}
-          </div>
-          <Tombol className="mt-4 w-full" onClick={() => setTahap({ nama: "hasil", temuan: tahap.jawaban, objek: POSISI_BAWAAN })}>
-            {t.lihatHasil}
-          </Tombol>
-        </section>
-      )}
-
-      {tahap.nama === "hasil" && <Hasil temuan={tahap.temuan} objek={tahap.objek} onUlang={ulang} />}
+        {tahap.nama === "hasil" && <Hasil temuan={tahap.temuan} objek={tahap.objek} onUlang={ulang} />}
+      </div>
     </Halaman>
   );
 }
@@ -257,49 +270,55 @@ function Hasil({
 
       <DenahKamarMandi temuan={temuan} objek={objek} />
 
-      <h2 className="mb-2 mt-6 text-judulKartu">{t.temuanJudul}</h2>
-      {/* Dikelompokkan per status (perlu perhatian dulu, paling actionable) bukan urutan konten, supaya hal yang
-          perlu ditindaklanjuti terlihat lebih dulu. Kelompok kosong (mis. tidak ada yang "tidak jelas") dilewati. */}
-      {(["perhatian", "tidak_jelas", "ramah"] as const).map((s) => {
-        const butir = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === s);
-        if (butir.length === 0) return null;
-        return (
-          <section key={s} className="mt-4 first:mt-0">
-            <h3 className={`mb-2 inline-flex items-center rounded-full border px-3 py-1 text-kecil font-semibold ${GAYA_STATUS[s]}`}>
-              {LABEL_STATUS[s]} ({butir.length})
-            </h3>
-            <ul className="flex flex-col gap-3">
-              {butir.map((it) => (
-                <li key={it.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
-                  <p className="flex items-center gap-2 font-semibold">
-                    {NOMOR_ITEM[it.id] !== undefined && (
-                      <span
-                        aria-hidden="true"
-                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_STATUS[s]}`}
-                      >
-                        {NOMOR_ITEM[it.id]}
-                      </span>
-                    )}
-                    {it.nama}
-                  </p>
-                  <p className="mt-1 text-kecil text-redup">{it.cek}</p>
-                  {s === "perhatian" && (
-                    <Link
-                      to={`/kartu/${it.kartu}`}
-                      className="mt-2 inline-flex min-h-sentuh items-center font-semibold text-utama underline"
-                    >
-                      {t.lihatPanduan}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </section>
-        );
-      })}
+      <section aria-labelledby="judul-temuan">
+        <h2 id="judul-temuan" className="mb-isi text-judulKartu">
+          {t.temuanJudul}
+        </h2>
+        <div className="flex flex-col gap-isi">
+          {/* Dikelompokkan per status (perlu perhatian dulu, paling actionable) bukan urutan konten, supaya hal yang
+              perlu ditindaklanjuti terlihat lebih dulu. Kelompok kosong (mis. tidak ada yang "tidak jelas") dilewati. */}
+          {(["perhatian", "tidak_jelas", "ramah"] as const).map((s) => {
+            const butir = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === s);
+            if (butir.length === 0) return null;
+            return (
+              <div key={s}>
+                <h3 className={`mb-2 inline-flex items-center rounded-full border px-3 py-1 text-kecil font-semibold ${GAYA_STATUS[s]}`}>
+                  {LABEL_STATUS[s]} ({butir.length})
+                </h3>
+                <ul className="flex flex-col gap-3">
+                  {butir.map((it) => (
+                    <li key={it.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
+                      <p className="flex items-center gap-2 font-semibold">
+                        {NOMOR_ITEM[it.id] !== undefined && (
+                          <span
+                            aria-hidden="true"
+                            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_STATUS[s]}`}
+                          >
+                            {NOMOR_ITEM[it.id]}
+                          </span>
+                        )}
+                        {it.nama}
+                      </p>
+                      <p className="mt-1 text-kecil text-redup">{it.cek}</p>
+                      {s === "perhatian" && (
+                        <Link
+                          to={`/kartu/${it.kartu}`}
+                          className="mt-2 inline-flex min-h-sentuh items-center font-semibold text-utama underline"
+                        >
+                          {t.lihatPanduan}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
       <PeringatanNonMedis />
-      <div className="mt-4 flex flex-col gap-3">
+      <div className="flex flex-col gap-3">
         <TombolLink to="/rencana">{t.keRencana}</TombolLink>
         <Tombol gayaTombol="sekunder" onClick={onUlang}>
           {t.ulang}
