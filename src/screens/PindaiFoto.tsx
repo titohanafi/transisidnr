@@ -102,61 +102,64 @@ export function PindaiFoto() {
   );
 
   return (
-    <Halaman
-      judul={t.judul}
-      // Ikon+penjelasan cuma tampil sebelum ada foto (tahap "pilih"); dibuat elemen biasa di badan halaman (bukan
-      // pita berwarna) supaya header tidak berganti warna tiap pindah tahap — sebelumnya pita gelap dipakai di sini
-      // lalu hilang begitu foto dipilih, yang membuat bilah atas ikut melompat warna setiap kali bolak-balik tahap.
-      kepala={
-        tahap.nama === "pilih" ? (
-          <div className="mt-3 flex items-start gap-3">
-            <span
-              aria-hidden="true"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-utama-muda text-utama"
-            >
-              <ScanLine className="h-5 w-5" strokeWidth={2} focusable="false" />
-            </span>
-            <p className="text-redup">{t.penjelasan}</p>
-          </div>
-        ) : undefined
-      }
-      latarPutih
-    >
+    <Halaman judul={t.judul} judulTersembunyi latarPutih>
       {masukan(kamera, "environment")}
       {masukan(galeri)}
 
-      {/* Jarak antar-bagian di bawah ini dipusatkan lewat `gap-bagian` (bukan mb-4/mt-6 per elemen) supaya ritmenya rata. */}
+      {/* Backdrop hijau pucat (warna sama seperti segmen pencarian di Beranda, "bg-permukaan"), dibangun manual di
+          sini — bukan lewat <Halaman kepalaPita> — supaya bilah atas tidak pernah ikut berubah warna. Dibuat edge-
+          to-edge lewat -mx-4 -mt-6 (menegasikan padding bawaan <main>), yang hanya rapi kalau h1 di atasnya tidak
+          tampil (judulTersembunyi) — sama seperti alasan Beranda menyembunyikan h1-nya sendiri.
+          Jarak antar-bagian lain di bawah ini dipusatkan lewat `gap-bagian` (bukan mb-4/mt-6 per elemen). */}
       <div className="flex flex-col gap-bagian">
+        {tahap.nama === "pilih" && (
+          <div className="-mx-4 -mt-6 bg-permukaan px-4 pb-24 pt-6">
+            <div className="flex items-center gap-3">
+              <span
+                aria-hidden="true"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tombol bg-white text-utama shadow-kartu"
+              >
+                <ScanLine className="h-5 w-5" strokeWidth={2} focusable="false" />
+              </span>
+              <p className="text-redup">{t.penjelasan}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Begitu ada foto, kartunya dibungkus penuh di dalam backdrop (bukan cuma menumpang di atasnya) supaya
+            latar hijau menutup seluruh tinggi kartu, bukan cuma mengintip di separuh atas seperti kartu tip. */}
         {foto && (
-          <div className="relative overflow-hidden rounded-kartu border border-garis/70 bg-kertas shadow-kartu">
-            <img src={foto} alt={t.alt} className="max-h-64 w-full object-contain" />
-            {tahap.nama === "memindai" && (
-              <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-kartu">
-                {/* Vinyet gelap lembut agar sinar pindai terlihat kontras di atas foto apa pun */}
-                <div className="absolute inset-0 bg-tinta/20" />
-                {/* Kisi titik halus dan statis, kesan "dibaca sistem" tanpa berkedip-kedip */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.55)_1px,transparent_1.5px)] bg-[length:18px_18px] opacity-25" />
+          <div className="-mx-4 -mt-6 bg-permukaan px-4 pb-6 pt-6">
+            <div className="relative overflow-hidden rounded-kartu border border-garis/70 bg-kertas shadow-kartu">
+              <img src={foto} alt={t.alt} className="max-h-64 w-full object-contain" />
+              {tahap.nama === "memindai" && (
+                <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-kartu">
+                  {/* Vinyet gelap lembut agar sinar pindai terlihat kontras di atas foto apa pun */}
+                  <div className="absolute inset-0 bg-tinta/20" />
+                  {/* Kisi titik halus dan statis, kesan "dibaca sistem" tanpa berkedip-kedip */}
+                  <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.55)_1px,transparent_1.5px)] bg-[length:18px_18px] opacity-25" />
 
-                <div className="absolute inset-x-0 h-2/5 animate-pindai bg-gradient-to-b from-transparent via-utama/50 to-transparent blur-[3px] motion-reduce:hidden" />
-                <div className="absolute inset-x-0 top-[-10%] h-px animate-pindai bg-utama-redup shadow-[0_0_14px_3px_rgba(15,94,99,0.85)] motion-reduce:hidden" />
+                  <div className="absolute inset-x-0 h-2/5 animate-pindai bg-gradient-to-b from-transparent via-utama/50 to-transparent blur-[3px] motion-reduce:hidden" />
+                  <div className="absolute inset-x-0 top-[-10%] h-px animate-pindai bg-utama-redup shadow-[0_0_14px_3px_rgba(15,94,99,0.85)] motion-reduce:hidden" />
 
-                {/* Bingkai sudut ala bidik kamera, statis supaya tidak ramai */}
-                {[
-                  "left-2 top-2 border-l-2 border-t-2 rounded-tl-sm",
-                  "right-2 top-2 border-r-2 border-t-2 rounded-tr-sm",
-                  "left-2 bottom-2 border-l-2 border-b-2 rounded-bl-sm",
-                  "right-2 bottom-2 border-r-2 border-b-2 rounded-br-sm",
-                ].map((gaya) => (
-                  <span key={gaya} className={`absolute h-6 w-6 border-utama-redup ${gaya}`} />
-                ))}
-              </div>
-            )}
+                  {/* Bingkai sudut ala bidik kamera, statis supaya tidak ramai */}
+                  {[
+                    "left-2 top-2 border-l-2 border-t-2 rounded-tl-sm",
+                    "right-2 top-2 border-r-2 border-t-2 rounded-tr-sm",
+                    "left-2 bottom-2 border-l-2 border-b-2 rounded-bl-sm",
+                    "right-2 bottom-2 border-r-2 border-b-2 rounded-br-sm",
+                  ].map((gaya) => (
+                    <span key={gaya} className={`absolute h-6 w-6 border-utama-redup ${gaya}`} />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
 
         {tahap.nama === "pilih" && (
           <>
-            <section className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
+            <section className="-mt-28 rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
               <h2 className="mb-2 text-judulKartu">{t.tipJudul}</h2>
               <ul className="space-y-2">
                 {t.tip.map((x) => (
