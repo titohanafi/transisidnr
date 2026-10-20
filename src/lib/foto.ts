@@ -7,8 +7,8 @@ export function ukuranBaru(lebar: number, tinggi: number, maks = SISI_MAKS): { l
   return { lebar: Math.max(1, Math.round(lebar * skala)), tinggi: Math.max(1, Math.round(tinggi * skala)) };
 }
 
-/** Mengecilkan foto di perangkat (tanpa unggah) menjadi data URL JPEG kecil. */
-export async function kecilkanFoto(berkas: File): Promise<string> {
+/** Mengecilkan foto di perangkat (tanpa unggah) menjadi data URL JPEG kecil. `File` adalah `Blob`, jadi berkas dari `<input>` tetap cocok. */
+export async function kecilkanFoto(berkas: Blob): Promise<string> {
   const bmp = await createImageBitmap(berkas);
   try {
     const { lebar, tinggi } = ukuranBaru(bmp.width, bmp.height);

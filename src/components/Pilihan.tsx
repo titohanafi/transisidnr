@@ -37,7 +37,18 @@ export function Pilihan({
 }
 
 /** Pilihan ringkas berbentuk pil, untuk kelompok pilihan pendek yang boleh membungkus ke baris berikutnya. */
-export function PilihanPil({ nama, label, aktif, onUbah }: { nama: string; label: string; aktif: boolean; onUbah: () => void }) {
+export function PilihanPil({
+  nama,
+  label,
+  aktif,
+  onUbah,
+}: {
+  nama: string;
+  /** Biasanya teks; boleh elemen (mis. titik warna + teks) untuk menandai kategori lewat warna juga, tidak cuma teks. */
+  label: ReactNode;
+  aktif: boolean;
+  onUbah: () => void;
+}) {
   return (
     <label className="relative inline-flex">
       <input type="radio" name={nama} checked={aktif} onChange={onUbah} className="peer sr-only" />

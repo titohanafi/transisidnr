@@ -471,6 +471,10 @@
       }
     },
     "temuanJudul": "Rincian per hal",
+    "denahJudul": "Perkiraan denah kamar mandi Anda",
+    "denahCatatan": "Posisi benda adalah perkiraan arah dari foto (bukan ukuran sebenarnya); bila dinilai sendiri, posisi memakai tata letak umum. Titik warna menandai hasil tiap hal; nomornya cocok dengan nomor di \"Rincian per hal\" di bawah.",
+    "denahFilterLabel": "Tampilkan hal dengan status",
+    "denahLabelToggle": "Tampilkan nama benda",
     "status": {
       "ramah": "Tampak mendukung",
       "perhatian": "Perlu perhatian",

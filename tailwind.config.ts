@@ -43,8 +43,14 @@ export default {
       spacing: { sentuh: "44px", jeda: "32px", bagian: "24px", isi: "12px" }, // jeda: pemisah kelompok besar; bagian: antar-bagian; isi: judul ke isi
       minHeight: { sentuh: "44px" },
       minWidth: { sentuh: "44px" },
-      keyframes: { muncul: { from: { opacity: "0", transform: "translateY(6px)" }, to: { opacity: "1", transform: "none" } } },
-      animation: { muncul: "muncul 250ms ease-out" },
+      keyframes: {
+        muncul: { from: { opacity: "0", transform: "translateY(6px)" }, to: { opacity: "1", transform: "none" } },
+        pindai: { "0%, 100%": { top: "-10%" }, "50%": { top: "100%" } },
+      },
+      animation: {
+        muncul: "muncul 250ms ease-out",
+        pindai: "pindai 2.4s cubic-bezier(0.65,0,0.35,1) infinite",
+      },
     },
   },
   plugins: [],

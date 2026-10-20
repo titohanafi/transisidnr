@@ -1,3 +1,4 @@
+import { createReadStream } from "node:fs";
 import { loadEnv, type Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
@@ -46,8 +47,25 @@ function apiLokal(): Plugin {
   };
 }
 
+// Saat `VITE_PINDAI_MOCK=true npm run dev`, layar Pindai memakai foto contoh ini (dev/mock-foto.jpg, bukan di `public/`
+// supaya tidak ikut masuk ke berkas produksi) alih-alih foto yang sungguhan dipilih pengguna, supaya hasil uji coba
+// (termasuk perkiraan posisi denah) bisa dibandingkan dari foto yang sama setiap kali.
+function fotoMockPindai(): Plugin {
+  return {
+    name: "foto-mock-pindai",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        if (req.url !== "/__mock/foto-pindai.jpg") return next();
+        res.setHeader("Content-Type", "image/jpeg");
+        createReadStream(new URL("./dev/mock-foto.jpg", import.meta.url)).pipe(res);
+      });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), apiLokal()],
+  plugins: [react(), apiLokal(), fotoMockPindai()],
   base: "./",
   // Konfigurasi Tailwind diberikan langsung dari sini. Vite memantau berkas yang diimpor vite.config.ts
   // dan memulai ulang server bila berubah, jadi token warna/jarak yang baru langsung terbaca tanpa Ctrl+C.

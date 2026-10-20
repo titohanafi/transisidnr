@@ -59,3 +59,4 @@ tests/
 ## Perintah (perbarui setelah scaffold)
 - `npm run dev`, `npm run build` (validasi konten + typecheck + build), `npm test`, `npm run lint`, `npm run typecheck`, `npm run validasi` (hanya periksa `content/`), `npm run format` (rapikan kode dengan Prettier), `npm run format:cek`
 - Mode dev: `VITE_TAMPILKAN_ANGKA_DRAF=true npm run dev` menampilkan angka teknis kartu draf
+- Mode dev: `VITE_PINDAI_MOCK=true npm run dev` membuat fitur Pindai memakai hasil tiruan, tanpa memanggil `api/pindai.ts`/Gemini (tidak perlu kunci API, tidak kena kuota)

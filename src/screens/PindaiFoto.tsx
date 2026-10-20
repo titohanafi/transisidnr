@@ -1,12 +1,13 @@
 import { Camera, Image as IkonGaleri, Loader2, ScanLine } from "lucide-react";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { DenahKamarMandi } from "../components/DenahKamarMandi";
 import { Halaman } from "../components/Halaman";
 import { PilihanPil } from "../components/Pilihan";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { Tombol, TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
-import { hitungSkor, type StatusItem } from "../domain/pindai";
+import { hitungSkor, nomorItemHasil, POSISI_BAWAAN, type ObjekDenah, type PosisiObjek, type StatusItem } from "../domain/pindai";
 import { kecilkanFoto } from "../lib/foto";
 import { GalatPindai, pindaiFoto } from "../lib/pindai";
 import { isi } from "../lib/teks";
@@ -20,7 +21,7 @@ type Tahap =
   | { nama: "memindai" }
   | { nama: "galat"; pesan: string }
   | { nama: "ceklis"; jawaban: Record<string, StatusItem> }
-  | { nama: "hasil"; temuan: Record<string, StatusItem> };
+  | { nama: "hasil"; temuan: Record<string, StatusItem>; objek: Record<ObjekDenah, PosisiObjek> };
 
 const LABEL_STATUS: Record<StatusItem, string> = t.status;
 const GAYA_STATUS: Record<StatusItem, string> = {
@@ -41,7 +42,11 @@ export function PindaiFoto() {
     if (!berkas) return;
     setGalatBaca(null);
     try {
-      setFoto(await kecilkanFoto(berkas));
+      // Mode dev: abaikan berkas yang sungguhan dipilih, selalu pakai satu foto contoh supaya hasil (termasuk
+      // perkiraan posisi denah) bisa dibandingkan dari foto yang sama setiap kali dicoba.
+      const sumber =
+        import.meta.env.VITE_PINDAI_MOCK === "true" ? await (await fetch("/__mock/foto-pindai.jpg")).blob() : berkas;
+      setFoto(await kecilkanFoto(sumber));
       setTahap({ nama: "siap" });
     } catch {
       setGalatBaca(t.gagalBaca);
@@ -54,7 +59,7 @@ export function PindaiFoto() {
     try {
       const hasil = await pindaiFoto(foto, ID_ITEM);
       if (!hasil.kamarMandi) setTahap({ nama: "galat", pesan: t.bukanKamarMandi });
-      else setTahap({ nama: "hasil", temuan: hasil.temuan });
+      else setTahap({ nama: "hasil", temuan: hasil.temuan, objek: hasil.objek });
     } catch (e) {
       const kode = e instanceof GalatPindai ? e.kode : null;
       setTahap({
@@ -102,7 +107,30 @@ export function PindaiFoto() {
       {masukan(galeri)}
 
       {foto && (
-        <img src={foto} alt={t.alt} className="mb-4 max-h-64 w-full rounded-kartu border border-garis/70 object-contain shadow-kartu" />
+        <div className="relative mb-4 overflow-hidden rounded-kartu border border-garis/70 shadow-kartu">
+          <img src={foto} alt={t.alt} className="max-h-64 w-full object-contain" />
+          {tahap.nama === "memindai" && (
+            <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-kartu">
+              {/* Vinyet gelap lembut agar sinar pindai terlihat kontras di atas foto apa pun */}
+              <div className="absolute inset-0 bg-tinta/20" />
+              {/* Kisi titik halus dan statis, kesan "dibaca sistem" tanpa berkedip-kedip */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.55)_1px,transparent_1.5px)] bg-[length:18px_18px] opacity-25" />
+
+              <div className="absolute inset-x-0 h-2/5 animate-pindai bg-gradient-to-b from-transparent via-utama/50 to-transparent blur-[3px] motion-reduce:hidden" />
+              <div className="absolute inset-x-0 top-[-10%] h-px animate-pindai bg-utama-redup shadow-[0_0_14px_3px_rgba(15,94,99,0.85)] motion-reduce:hidden" />
+
+              {/* Bingkai sudut ala bidik kamera, statis supaya tidak ramai */}
+              {[
+                "left-2 top-2 border-l-2 border-t-2 rounded-tl-sm",
+                "right-2 top-2 border-r-2 border-t-2 rounded-tr-sm",
+                "left-2 bottom-2 border-l-2 border-b-2 rounded-bl-sm",
+                "right-2 bottom-2 border-r-2 border-b-2 rounded-br-sm",
+              ].map((gaya) => (
+                <span key={gaya} className={`absolute h-6 w-6 border-utama-redup ${gaya}`} />
+              ))}
+            </div>
+          )}
+        </div>
       )}
 
       {tahap.nama === "pilih" && (
@@ -192,20 +220,29 @@ export function PindaiFoto() {
               </fieldset>
             ))}
           </div>
-          <Tombol className="mt-4 w-full" onClick={() => setTahap({ nama: "hasil", temuan: tahap.jawaban })}>
+          <Tombol className="mt-4 w-full" onClick={() => setTahap({ nama: "hasil", temuan: tahap.jawaban, objek: POSISI_BAWAAN })}>
             {t.lihatHasil}
           </Tombol>
         </section>
       )}
 
-      {tahap.nama === "hasil" && <Hasil temuan={tahap.temuan} onUlang={ulang} />}
+      {tahap.nama === "hasil" && <Hasil temuan={tahap.temuan} objek={tahap.objek} onUlang={ulang} />}
     </Halaman>
   );
 }
 
-function Hasil({ temuan, onUlang }: { temuan: Record<string, StatusItem>; onUlang: () => void }) {
+function Hasil({
+  temuan,
+  objek,
+  onUlang,
+}: {
+  temuan: Record<string, StatusItem>;
+  objek: Record<ObjekDenah, PosisiObjek>;
+  onUlang: () => void;
+}) {
   const skor = hitungSkor(temuan, ID_ITEM);
   const tingkat = t.tingkat[skor.tingkat];
+  const NOMOR_ITEM = nomorItemHasil(ID_ITEM, temuan);
   return (
     <>
       <section aria-labelledby="judul-hasil" className="rounded-kartu border border-utama bg-utama-muda p-5">
@@ -218,27 +255,48 @@ function Hasil({ temuan, onUlang }: { temuan: Record<string, StatusItem>; onUlan
         {skor.tidakJelas > 0 && <p className="text-kecil text-redup">{isi(t.tidakJelasJumlah, { n: skor.tidakJelas })}</p>}
       </section>
 
+      <DenahKamarMandi temuan={temuan} objek={objek} />
+
       <h2 className="mb-2 mt-6 text-judulKartu">{t.temuanJudul}</h2>
-      <ul className="flex flex-col gap-3">
-        {t.item.map((it) => {
-          const status = temuan[it.id] ?? "tidak_jelas";
-          return (
-            <li key={it.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
-              <div className="flex items-start justify-between gap-3">
-                <p className="font-semibold">{it.nama}</p>
-                <span className={`shrink-0 rounded-full border px-2 py-0.5 text-sm font-medium ${GAYA_STATUS[status]}`}>
-                  {LABEL_STATUS[status]}
-                </span>
-              </div>
-              {status === "perhatian" && (
-                <Link to={`/kartu/${it.kartu}`} className="mt-1 inline-flex min-h-sentuh items-center font-semibold text-utama underline">
-                  {t.lihatPanduan}
-                </Link>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+      {/* Dikelompokkan per status (perlu perhatian dulu, paling actionable) bukan urutan konten, supaya hal yang
+          perlu ditindaklanjuti terlihat lebih dulu. Kelompok kosong (mis. tidak ada yang "tidak jelas") dilewati. */}
+      {(["perhatian", "tidak_jelas", "ramah"] as const).map((s) => {
+        const butir = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === s);
+        if (butir.length === 0) return null;
+        return (
+          <section key={s} className="mt-4 first:mt-0">
+            <h3 className={`mb-2 inline-flex items-center rounded-full border px-3 py-1 text-kecil font-semibold ${GAYA_STATUS[s]}`}>
+              {LABEL_STATUS[s]} ({butir.length})
+            </h3>
+            <ul className="flex flex-col gap-3">
+              {butir.map((it) => (
+                <li key={it.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
+                  <p className="flex items-center gap-2 font-semibold">
+                    {NOMOR_ITEM[it.id] !== undefined && (
+                      <span
+                        aria-hidden="true"
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_STATUS[s]}`}
+                      >
+                        {NOMOR_ITEM[it.id]}
+                      </span>
+                    )}
+                    {it.nama}
+                  </p>
+                  <p className="mt-1 text-kecil text-redup">{it.cek}</p>
+                  {s === "perhatian" && (
+                    <Link
+                      to={`/kartu/${it.kartu}`}
+                      className="mt-2 inline-flex min-h-sentuh items-center font-semibold text-utama underline"
+                    >
+                      {t.lihatPanduan}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })}
 
       <p className="mt-4 text-kecil text-redup">{t.catatan}</p>
       <PeringatanNonMedis />
