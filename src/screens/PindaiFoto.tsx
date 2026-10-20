@@ -104,20 +104,23 @@ export function PindaiFoto() {
   return (
     <Halaman
       judul={t.judul}
-      kepala={<p className="mt-2 text-redup">{t.penjelasan}</p>}
-      kepalaPita="hijau"
+      judulTersembunyi
+      kepala={<p className="mt-2 text-white">{t.penjelasan}</p>}
+      kepalaPita="gelap"
       kepalaTumpang
       latarPutih
     >
       {masukan(kamera, "environment")}
       {masukan(galeri)}
 
-      {/* Kartu pertama (foto, atau kartu tip bila belum ada foto) sengaja tumpang di atas pita hijau (`kepalaTumpang`
-          di <Halaman>) — motif yang sama dipakai tab Rencana, supaya layar fitur utama terasa senada. Jarak antar
-          semua bagian di bawah ini dipusatkan lewat `gap-bagian` (bukan mb-4/mt-6 per elemen) supaya ritmenya rata. */}
+      {/* Judul "Pindai" sudah ada di bilah atas (lihat <Halaman>), jadi h1 di sini disembunyikan (`judulTersembunyi`)
+          supaya tidak berulang — sama seperti tab Dukungan dan Profil. Kartu pertama (foto, atau kartu tip bila
+          belum ada foto) sengaja tumpang di atas pita gelap (`kepalaTumpang`), motif yang sama dipakai tab itu juga;
+          `-mt-4` tambahan di kartu pertama menyesuaikan pita gelap yang lebih tinggi dari pita hijau biasa. Jarak
+          antar-bagian di bawah ini dipusatkan lewat `gap-bagian` (bukan mb-4/mt-6 per elemen) supaya ritmenya rata. */}
       <div className="flex flex-col gap-bagian">
         {foto && (
-          <div className="relative overflow-hidden rounded-kartu border border-garis/70 bg-kertas shadow-kartu">
+          <div className="relative -mt-4 overflow-hidden rounded-kartu border border-garis/70 bg-kertas shadow-kartu">
             <img src={foto} alt={t.alt} className="max-h-64 w-full object-contain" />
             {tahap.nama === "memindai" && (
               <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-kartu">
@@ -145,7 +148,7 @@ export function PindaiFoto() {
 
         {tahap.nama === "pilih" && (
           <>
-            <section className="rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
+            <section className="-mt-4 rounded-kartu border border-garis/70 bg-white p-5 shadow-kartu">
               <h2 className="mb-2 text-judulKartu">{t.tipJudul}</h2>
               <ul className="list-disc space-y-1 pl-5">
                 {t.tip.map((x) => (
