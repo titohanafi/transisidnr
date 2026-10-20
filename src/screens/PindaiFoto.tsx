@@ -118,7 +118,7 @@ export function PindaiFoto() {
             penuh di dalam backdrop yang sama (bukan cuma menumpang di atasnya) supaya latar hijau menutup seluruh
             tinggi kartu, bukan cuma mengintip di separuh atas seperti kartu tip. */}
         <div
-          className={`-mx-4 -mt-6 bg-permukaan px-4 pt-6 ${tahap.nama === "pilih" ? "pb-28" : tahap.nama === "hasil" ? "pb-20" : "pb-6"}`}
+          className={`-mx-4 -mt-6 bg-permukaan px-4 pt-6 ${tahap.nama === "pilih" ? "pb-28" : tahap.nama === "hasil" ? "pb-14" : "pb-6"}`}
         >
           <div className="flex items-center gap-2">
             <ScanLine className="h-5 w-5 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
@@ -284,22 +284,21 @@ function Hasil({
             </h2>
           </div>
           <p className="mt-2.5 text-isi text-utama-redup">{tingkat.isi}</p>
+          {/* Statistik (berapa hal yang mendukung/belum jelas) digabung satu kalimat, ditaruh sebagai banner di
+              dalam kartu hasil (bukan terpisah) — warna disesuaikan untuk latar teal (bukan warna "info" biru
+              yang dipakai di atas latar putih), tetap satu baris ringkas supaya kartu tidak padat. */}
+          {(skor.jelas > 0 || skor.tidakJelas > 0) && (
+            <p role="note" className="mt-4 flex items-start gap-2 rounded-tombol border border-white/25 bg-white/10 p-3 text-kecil">
+              <Info className="mt-0.5 h-5 w-5 shrink-0 text-daun" strokeWidth={2} aria-hidden="true" focusable="false" />
+              {skor.jelas > 0 && skor.tidakJelas > 0
+                ? isi(t.ringkasanGabungan, { ramah: skor.ramah, jelas: skor.jelas, tidakJelas: skor.tidakJelas })
+                : skor.jelas > 0
+                  ? isi(t.ringkasan, { ramah: skor.ramah, jelas: skor.jelas })
+                  : isi(t.tidakJelasJumlah, { n: skor.tidakJelas })}
+            </p>
+          )}
         </div>
       </section>
-
-      {/* Statistik (berapa hal yang mendukung/belum jelas) digabung satu kalimat dan ditaruh sebagai banner info
-          terpisah (warna "info" di tailwind.config, dipakai khusus untuk banner informasi) — dulu dua kalimat
-          bertumpuk di dalam kartu teal, sekarang satu baris ringkas di luar kartu supaya kartu hasil tidak padat. */}
-      {(skor.jelas > 0 || skor.tidakJelas > 0) && (
-        <p role="note" className="flex items-start gap-2 rounded-kartu border border-info bg-info-muda p-3 text-kecil text-info">
-          <Info className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
-          {skor.jelas > 0 && skor.tidakJelas > 0
-            ? isi(t.ringkasanGabungan, { ramah: skor.ramah, jelas: skor.jelas, tidakJelas: skor.tidakJelas })
-            : skor.jelas > 0
-              ? isi(t.ringkasan, { ramah: skor.ramah, jelas: skor.jelas })
-              : isi(t.tidakJelasJumlah, { n: skor.tidakJelas })}
-        </p>
-      )}
 
       <DenahKamarMandi temuan={temuan} objek={objek} />
 

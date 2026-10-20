@@ -468,9 +468,9 @@ export function DenahKamarMandi({
   const [tampilkanLabel, setTampilkanLabel] = useState(false);
 
   return (
-    // Tanpa margin luar: dipakai satu-satunya di layar hasil Pindai, yang mengatur jarak antar-bagian lewat
-    // `gap-bagian` pada kontainer pemanggil (lihat PindaiFoto.tsx) supaya ritmenya konsisten dengan bagian lain.
-    <figure className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
+    // Tanpa kontainer kartu (border/bg/shadow) atau margin luar: dipakai satu-satunya di layar hasil Pindai, yang
+    // mengatur jarak antar-bagian lewat `gap-bagian` pada kontainer pemanggil (lihat PindaiFoto.tsx).
+    <figure>
       <h2 className="mb-3 text-judulKartu">{t.denahJudul}</h2>
 
       <div role="radiogroup" aria-label={t.denahFilterLabel} className="mb-3 flex gap-1 rounded-kartu bg-permukaan p-1">
