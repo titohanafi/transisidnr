@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { LANTAI_DALAM, LANTAI_LEBAR, posisiTiga } from "../domain/isoTigaGeometri";
+import { LANTAI_DALAM, LANTAI_LEBAR, posisiTiga, posisiTigaMenempel } from "../domain/isoTigaGeometri";
 import { OBJEK_DENAH, type LetakDenah, type ObjekDenah } from "../domain/pindai";
 
 const MODEL_SRC: Record<ObjekDenah, string> = {
@@ -168,7 +168,21 @@ export function PratinjauRuangIso3D({
     for (const id of OBJEK_DENAH) {
       // `letak(id)` (closure dari DenahKamarMandi.tsx) sudah menjatuhkan ke POSISI_BAWAAN kalau dindingnya
       // "tidak_terlihat" — selalu mengembalikan LetakDenah yang valid (4 dinding, tidak pernah "tidak_terlihat").
-      const posisi = posisiTiga(letak(id));
+      // `area_mandi` (kepala shower) pakai `posisiTigaMenempel` (rata ke garis dinding) karena itu benda yang
+      // sungguhan menempel dinding — beda dari kloset/wastafel yang wajar berjarak dari dinding (lihat komentar
+      // di isoTigaGeometri.ts). Tanpa ini shower terlihat mengambang di tengah ruangan, bukan menempel dinding.
+      const letakId = letak(id);
+      const posisi = id === "area_mandi" ? posisiTigaMenempel(letakId) : posisiTiga(letakId);
+      // Dorong sedikit ke dalam ruangan (menjauhi garis tengah dinding) supaya mesh shower tidak z-fighting /
+      // menembus dinding — kecil saja (separuh tebal dinding + sedikit), cukup supaya kelihatan menempel tanpa
+      // tenggelam di dalam geometri dinding.
+      if (id === "area_mandi") {
+        const dorong = TEBAL_DINDING / 2 + 0.02;
+        if (letakId.dinding === "kiri") posisi.x += dorong;
+        else if (letakId.dinding === "kanan") posisi.x -= dorong;
+        else if (letakId.dinding === "depan") posisi.z -= dorong;
+        else posisi.z += dorong;
+      }
       loader.load(
         MODEL_SRC[id],
         (gltf) => {

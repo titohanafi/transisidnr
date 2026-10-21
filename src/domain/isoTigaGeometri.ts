@@ -2,12 +2,17 @@
 // lihat DECISIONS.md). Mengonversi posisi 2D yang sudah dipakai tampak-atas/isometrik SVG (`titikDinding` di
 // `denahGeometri.ts`) ke koordinat 3D Three.js, supaya satu sumber posisi dipakai di ketiga tampilan (bukan
 // turunan baru yang bisa diam-diam beda).
-import { H, titikDinding, W } from "./denahGeometri";
+import { H, keDinding, titikDinding, W } from "./denahGeometri";
 import type { DindingDenah, LetakDenah } from "./pindai";
 
-// Ruangan 200x300 (W x H, satuan dunia SVG) dikonversi ke ~4x6 unit Three.js — skala yang wajar berdampingan
-// dengan model yang sudah dites di PratinjauIsoTiga (benda dinormalkan ke tinggi ~0.8 unit).
-export const SKALA_TIGA = 0.02;
+// Ruangan 200x300 (W x H, satuan dunia SVG) dikonversi ke satuan Three.js lewat SKALA_TIGA. Nilai sebelumnya
+// (0.02 -> lantai 4x6) dipilih sembarangan, TIDAK direlasikan ke TINGGI_DINDING (2.6, lihat
+// PratinjauRuangIso3D.tsx) — hasilnya lantai berbanding dinding jadi ~1.5x/~2.3x, user melapor "lantai terasa
+// luas banget, masih ada area kosong setelah pintu" (dibandingkan ke foto referensi kamar mandi kecil). Diturunkan
+// ke 0.012 (lantai jadi 2.4x3.6) supaya rasio lantai:tinggi-dinding (~0.9/~1.4) lebih dekat ke kamar mandi
+// sungguhan, sambil tetap menyisakan ruang muat kursi roda (bukan sekecil kamar mandi non-aksesibel di foto
+// referensi, yang secara desain untuk pengguna kursi roda terlalu sempit).
+export const SKALA_TIGA = 0.012;
 
 /** Rotasi sumbu-Y (radian) supaya benda "menghadap ke dalam ruangan" dari dinding tempat ia menempel — ini
  *  rotasi sumbu-tunggal sederhana karena modelnya objek 3D sungguhan, BEDA dari trik flip 2D yang dipakai kalau
@@ -40,6 +45,20 @@ export function posisiTiga(letak: LetakDenah): PosisiTiga {
   return {
     x: (titik.x - W / 2) * SKALA_TIGA,
     z: (titik.y - H / 2) * SKALA_TIGA,
+    rotasiY: rotasiMenghadapDalam(titik.dinding),
+  };
+}
+
+/** Sama seperti `posisiTiga`, tapi koordinat tegak lurus dinding dipaksa RATA ke garis dinding (lewat `keDinding`,
+ *  bukan digeser JARAK_DINDING seperti `titikDinding`) — dipakai untuk benda yang SUNGGUHAN menempel ke dinding
+ *  (mis. kepala shower), beda dari benda berdiri bebas (kloset/wastafel) yang memang wajar punya jarak dari
+ *  dinding. Tanpa ini, benda "menempel dinding" malah mengambang di tengah ruangan (lihat DECISIONS.md). */
+export function posisiTigaMenempel(letak: LetakDenah): PosisiTiga {
+  const titik = titikDinding(letak);
+  const rata = keDinding(titik.x, titik.y, titik.dinding);
+  return {
+    x: (rata.x - W / 2) * SKALA_TIGA,
+    z: (rata.y - H / 2) * SKALA_TIGA,
     rotasiY: rotasiMenghadapDalam(titik.dinding),
   };
 }
