@@ -63,6 +63,17 @@ export function footprintTiangSudut(sudut: "kiri" | "kanan"): TitikDatar[] {
       ];
 }
 
+/** Footprint oval datar (poligon N-sisi mendekati elips) — dipakai untuk mangkuk kloset supaya ada kurva lewat
+ *  `BentukIso`, bukan kotak persegi polos seperti sebelumnya (itu sumber kesan "abstrak, tidak berbentuk" yang
+ *  dilaporkan user). Bentuk dasar oval-di-atas-kotak ini konvensi umum ilustrasi isometrik kloset, bukan niruan
+ *  satu referensi spesifik — segmen 16 cukup halus untuk ukuran ikon ini tanpa elemen SVG berlebihan. */
+export function footprintOval(x: number, y: number, rx: number, ry: number, segmen = 16): TitikDatar[] {
+  return Array.from({ length: segmen }, (_, i) => {
+    const a = (i / segmen) * Math.PI * 2;
+    return { x: x + rx * Math.cos(a), y: y + ry * Math.sin(a) };
+  });
+}
+
 export const KLOSET_TINGGI_MANGKUK = 26;
 export const TANGKI_TINGGI = 36;
 

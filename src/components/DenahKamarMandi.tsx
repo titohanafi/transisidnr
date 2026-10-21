@@ -1073,15 +1073,19 @@ export function DenahKamarMandi({
           strokeWidth={1.4}
           strokeDasharray="4 4"
         />
-        {/* Kloset digambar dua kotak polos (mangkuk + tangki, sama seperti acuan) — elips/segi-delapan pernah
-            dicoba supaya kelihatan "membulat" tapi malah lebih sulit dikenali bentuknya; kotak lebih jelas.
-            Tangki DITUMPUK DI ATAS mangkuk (bukan disandingkan rata lantai seperti percobaan sebelumnya): dua
-            kotak terpisah yang bersentuhan di SATU SISI PENUH rata lantai saling "bocor" — tiap kotak digambar
-            sendiri-sendiri tanpa tahu ada tetangganya, jadi sisi yang seharusnya tertutup tetangga tetap ikut
-            tergambar dan menembus siluet tetangganya, kelihatan silang-menyilang kusut. Dengan ditumpuk (z dan
-            posisi tangki SENGAJA tumpang tindih sedikit dengan mangkuk — dites di browser, "pas bersentuhan"
-            tanpa tumpang tindih sama sekali malah kelihatan seperti dua benda terpisah melayang berdekatan,
-            bukan satu benda menyatu), siluet gabungannya terbaca sebagai satu kloset, sama seperti acuan. */}
+        {/* Kloset digambar dua kotak polos (mangkuk + tangki) — SUDAH DICOBA ULANG pakai footprintOval (mangkuk
+            berbentuk oval lewat BentukIso, dengan bayangan per-sisi) dan dicek visual, tapi hasilnya mereplikasi
+            persis temuan percobaan lama: gabungan oval+kotak jadi kelihatan seperti "ember dengan kotak di
+            atasnya", bukan lebih mirip kloset. Dikembalikan ke kotak. Kalau mau coba lagi, `footprintOval` masih
+            ada di `../domain/denahIsoGeometri.ts` — tapi pertimbangkan pendekatan lain (ikon custom, bukan cuma
+            ubah footprint) sebelum mencoba oval lagi, supaya tidak mengulang percobaan yang sama.
+            Tangki DITUMPUK DI ATAS mangkuk (bukan disandingkan rata lantai): dua kotak terpisah yang bersentuhan di
+            SATU SISI PENUH rata lantai saling "bocor" — tiap kotak digambar sendiri-sendiri tanpa tahu ada
+            tetangganya, jadi sisi yang seharusnya tertutup tetangga tetap ikut tergambar dan menembus siluet
+            tetangganya, kelihatan silang-menyilang kusut. Dengan ditumpuk (z dan posisi tangki SENGAJA tumpang
+            tindih sedikit dengan mangkuk — dites di browser, "pas bersentuhan" tanpa tumpang tindih sama sekali
+            malah kelihatan seperti dua benda terpisah melayang berdekatan, bukan satu benda menyatu), siluet
+            gabungannya terbaca sebagai satu kloset. */}
         <BentukIso
           footprint={footprintPersegi(kloset.x, kloset.y, sejajar(kloset.dinding) ? 24 : 17, sejajar(kloset.dinding) ? 17 : 24)}
           tinggi={KLOSET_TINGGI_MANGKUK}
@@ -1093,13 +1097,22 @@ export function DenahKamarMandi({
           z={TANGKI_Z_MULAI}
           kelas="text-tinta"
         />
-        {/* Wastafel: kotak konter polos + kotak keran kecil menonjol dekat dinding — sama seperti acuan (bukan
-            cekungan elips lagi, lihat komentar di kloset di atas). */}
+        {/* Wastafel: kotak konter + kotak keran kecil menonjol dekat dinding, DITAMBAH garis cekungan oval di atas
+            konter (bukan diekstrusi 3D — cuma garis datar di permukaan atas, lihat `isoLingkaran`) supaya terbaca
+            sebagai wastafel, bukan kotak kosong polos. */}
         <BentukIso
           footprint={footprintPersegi(wastafel.x, wastafel.y, sejajar(wastafel.dinding) ? 11 : 22, sejajar(wastafel.dinding) ? 22 : 11)}
           tinggi={26}
           kelas={warna("wastafel")}
           isi={latar("wastafel")}
+        />
+        <polygon
+          points={isoLingkaran(wastafel.x, wastafel.y, 7, 26)}
+          className={warna("wastafel")}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1}
+          pointerEvents="none"
         />
         <BentukIso
           footprint={footprintPersegi(wastafelKeran.x, wastafelKeran.y, 3, 3)}
