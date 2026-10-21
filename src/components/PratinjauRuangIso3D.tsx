@@ -11,27 +11,35 @@ const MODEL_SRC: Record<ObjekDenah, string> = {
   area_mandi: "/model/shower/poly-google-shower-head.glb",
 };
 
+// Tinggi dinding DIHITUNG DULU (bukan belakangan) supaya tinggi tiap benda bisa ditentukan sebagai PECAHAN
+// darinya — sebelumnya (Milestone 4) tinggi benda dipilih sembarangan tanpa acuan ke ukuran lantai, hasilnya
+// lantai 4x6 vs pintu tinggi cuma 1.0 kelihatan seperti lapangan kosong, dilaporkan user "kamar mandi terasa
+// luas banget, objek terlalu kecil, shower sampai tidak terlihat". Sekarang semua tinggi benda dihitung relatif
+// terhadap TINGGI_DINDING (bukan angka lepas), supaya proporsinya konsisten lepas dari skala lantai berubah.
+const TINGGI_DINDING = 2.6;
+const TEBAL_DINDING = 0.03;
+
 // Tinggi target tiap benda setelah dinormalkan (satuan Three.js, sama skala dengan lantai — lihat
-// `LANTAI_LEBAR`/`LANTAI_DALAM` di isoTigaGeometri.ts) — BEDA dari PratinjauIsoTiga.tsx (yang menyamakan semua
-// benda ke 0.8 supaya adil dibandingkan satu-satu) karena di sini benda-benda berdiri BERSAMA dalam satu ruangan,
-// jadi proporsi relatif antar benda penting (pintu harus jelas lebih tinggi dari kloset, dst). Angka-angka ini
-// perkiraan kasar (bukan ukuran nyata — dilarang mengarang ukuran kamar mandi pengguna, lihat CLAUDE.md), cuma
-// supaya siluetnya masuk akal berdampingan.
+// `LANTAI_LEBAR`/`LANTAI_DALAM` di isoTigaGeometri.ts), masing-masing sebagai PECAHAN dari TINGGI_DINDING —
+// BEDA dari PratinjauIsoTiga.tsx (yang menyamakan semua benda ke 0.8 supaya adil dibandingkan satu-satu) karena
+// di sini benda-benda berdiri BERSAMA dalam satu ruangan, jadi proporsi relatif antar benda DAN terhadap
+// ruangan penting. Angka-angka ini perkiraan kasar (bukan ukuran nyata — dilarang mengarang ukuran kamar mandi
+// pengguna, lihat CLAUDE.md), cuma supaya siluetnya masuk akal berdampingan dan terhadap ruangan.
 const TINGGI_TARGET: Record<ObjekDenah, number> = {
-  pintu: 1.0,
-  kloset: 0.4,
-  wastafel: 0.5,
-  area_mandi: 0.25,
+  pintu: TINGGI_DINDING * 0.85, // nyaris setinggi dinding, sisakan sedikit ambang di atas
+  wastafel: TINGGI_DINDING * 0.35,
+  kloset: TINGGI_DINDING * 0.2,
+  area_mandi: TINGGI_DINDING * 0.12,
 };
 
 // Dasar vertikal (y) tempat benda "berdiri" — kebanyakan di lantai (y=0), KECUALI kepala shower yang menempel
-// tinggi di dinding. Belum ada dinding 3D di milestone ini (lihat plan), jadi angka 0.9 ini perkiraan kasar posisi
-// "tinggi di dinding" tanpa acuan dinding sungguhan — akan dihitung ulang begitu dinding 3D ditambahkan.
+// tinggi di dinding (dekat atas TINGGI_DINDING, bukan angka lepas seperti Milestone 4 — sekarang ada dinding
+// sungguhan sebagai acuan tingginya).
 const DASAR_Y: Record<ObjekDenah, number> = {
   pintu: 0,
   kloset: 0,
   wastafel: 0,
-  area_mandi: 0.9,
+  area_mandi: TINGGI_DINDING * 0.78,
 };
 
 // Rotasi tambahan PER JENIS BENDA (radian, ditambahkan ke rotasi dasar dari `posisiTiga`) — model GLB diekspor
@@ -44,10 +52,6 @@ const ROTASI_KALIBRASI: Record<ObjekDenah, number> = {
   wastafel: 0,
   area_mandi: 0,
 };
-
-// Tinggi dinding (satuan Three.js) — konstan wajar berdampingan dengan tinggi pintu (TINGGI_TARGET.pintu).
-const TINGGI_DINDING = 1.4;
-const TEBAL_DINDING = 0.03;
 
 const ELEVASI_KAMERA = Math.atan(1 / Math.sqrt(2));
 const JARAK_KAMERA = 12;
@@ -124,8 +128,10 @@ export function PratinjauRuangIso3D({
     scene.add(dindingKanan);
     dindingKananRef.current = dindingKanan;
 
+    // Frustum harus cukup besar untuk memuat lantai DAN tinggi dinding (sebelumnya cuma dihitung dari diagonal
+    // lantai, jadi kalau TINGGI_DINDING dinaikkan bagian atas dinding/pintu bisa terpotong) — dicek visual.
     const ukuranDiagonal = Math.hypot(LANTAI_LEBAR, LANTAI_DALAM) / 2;
-    const ukuranFrustum = ukuranDiagonal * 1.15;
+    const ukuranFrustum = Math.max(ukuranDiagonal, TINGGI_DINDING * 1.1) * 1.2;
     const camera = new THREE.OrthographicCamera(-ukuranFrustum, ukuranFrustum, ukuranFrustum, -ukuranFrustum, 0.1, 30);
     camera.position.copy(posisiKamera(azimuthDariSudut(sudutAktif.x)));
     camera.lookAt(0, 0.3, 0);
