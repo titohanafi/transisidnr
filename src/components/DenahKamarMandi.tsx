@@ -1,3 +1,4 @@
+import { Info } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { PilihanPil } from "./Pilihan";
 import { konten } from "../domain/content";
@@ -116,7 +117,16 @@ function NomorBadge({
         }}
       >
         <circle cx={x} cy={y} r={9} className={latar} stroke="currentColor" strokeWidth={1.5} />
-        <text x={x} y={y + 0.5} textAnchor="middle" dominantBaseline="central" fontSize={10} fontWeight={400} fill="currentColor" stroke="none">
+        <text
+          x={x}
+          y={y + 0.5}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize={10}
+          fontWeight={400}
+          fill="currentColor"
+          stroke="none"
+        >
           {nomor}
         </text>
       </g>
@@ -387,14 +397,11 @@ function AreaMandi({
   // Badge nomor area mandi diletakkan di ujung zona yang dekat pintu (bukan dekat dinding belakang), supaya tidak
   // menumpuk dengan badge pegangan — kloset (dan pegangannya) biasanya ada di ujung zona yang dekat dinding belakang.
   const sudutAreaMandi =
-    dinding === "kiri" || dinding === "kanan"
-      ? { x: tengahZona.x, y: zona.y + zona.h - 18 }
-      : { x: zona.x + zona.w - 18, y: tengahZona.y };
+    dinding === "kiri" || dinding === "kanan" ? { x: tengahZona.x, y: zona.y + zona.h - 18 } : { x: zona.x + zona.w - 18, y: tengahZona.y };
   // Gambar kepala shower digeser ke tempat badge "jangkauan" dulu berada (bukan tengah zona) — badge sendiri
   // dipindah ke tengah zona (lihat di bawah) supaya keduanya tertukar posisi sesuai permintaan.
   // Sisi zona yang menempel dinding sungguhan (dipakai supaya ujung pipa pas di garis dinding, tidak kelebihan/kurang).
-  const sisiDinding =
-    dinding === "kiri" ? zona.x : dinding === "kanan" ? zona.x + zona.w : dinding === "depan" ? zona.y + zona.h : zona.y;
+  const sisiDinding = dinding === "kiri" ? zona.x : dinding === "kanan" ? zona.x + zona.w : dinding === "depan" ? zona.y + zona.h : zona.y;
   const JARI_SHOWER = 10;
   const PANJANG_PIPA = 8;
   const JARAK_PUSAT_SHOWER = JARI_SHOWER + PANJANG_PIPA; // jarak pusat kepala shower dari dinding
@@ -524,14 +531,6 @@ export function DenahKamarMandi({
   const [terbukaId, setTerbukaId] = useState<string | null>(null);
   const onToggleId = (id: string) => setTerbukaId((t) => (t === id ? null : id));
 
-  // Toggle "tampilkan nama benda": dulu memaksa semua popover tampil sekaligus di atas denah, tapi itu justru yang
-  // bertabrakan saat banyak badge aktif — diganti daftar nama di bawah toggle (lihat `daftarNama`), yang tetap
-  // menampilkan korelasi nomor-nama tapi sebagai teks biasa yang tidak mungkin saling menimpa.
-  const [tampilkanLabel, setTampilkanLabel] = useState(false);
-  const daftarNama = ID_ITEM.filter((id) => nomor(id) !== undefined)
-    .map((id) => ({ id, nomor: nomor(id)!, nama: NAMA_ITEM[id] ?? "" }))
-    .sort((a, b) => a.nomor - b.nomor);
-
   return (
     // Tanpa kontainer kartu (border/bg/shadow) atau margin luar: dipakai satu-satunya di layar hasil Pindai, yang
     // mengatur jarak antar-bagian lewat `gap-bagian` pada kontainer pemanggil (lihat PindaiFoto.tsx).
@@ -560,165 +559,143 @@ export function DenahKamarMandi({
           di atas tetap di luar, langsung di latar halaman), dengan pembatas selebar kartu di antara keduanya. */}
       <div className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
         <svg viewBox={`0 0 ${W} ${H}`} className="mx-auto w-full max-w-[220px] text-garisKontrol" aria-hidden="true" focusable="false">
-        <rect x={PAD / 2} y={PAD / 2} width={W - PAD} height={H - PAD} rx={6} className="fill-permukaan" stroke="currentColor" strokeWidth={1.5} />
-        {/* Area lantai ditandai garis putus-putus (sama seperti lingkaran "ruang gerak" dan zona "area mandi") —
+          <rect
+            x={PAD / 2}
+            y={PAD / 2}
+            width={W - PAD}
+            height={H - PAD}
+            rx={6}
+            className="fill-permukaan"
+            stroke="currentColor"
+            strokeWidth={1.5}
+          />
+          {/* Area lantai ditandai garis putus-putus (sama seperti lingkaran "ruang gerak" dan zona "area mandi") —
             bukan benda fisik yang kelihatan garis batasnya di foto asli, jadi cuma digambar saat pil status "lantai"
             diklik (`nomorLantai !== undefined`), sama seperti overlay lain; tekstur titik-titik di bawah ini tetap
             selalu tampil (representasi lantai itu sendiri yang memang selalu ada wujudnya). */}
-        {nomorLantai !== undefined && (
-          <rect
-            x={PAD + 4}
-            y={PAD + 4}
-            width={W - 2 * PAD - 8}
-            height={H - 2 * PAD - 8}
-            rx={4}
-            fill="none"
-            className={warna("lantai")}
-            stroke="currentColor"
-            strokeWidth={1.5}
-            strokeDasharray="5 5"
-            opacity={0.6}
-          />
-        )}
-        {Array.from({ length: 10 }, (_, baris) =>
-          Array.from({ length: 7 }, (_, kolom) => (
-            <circle
-              key={`${baris}-${kolom}`}
-              cx={PAD + 14 + kolom * 26}
-              cy={PAD + 14 + baris * 28}
-              r={1.3}
+          {nomorLantai !== undefined && (
+            <rect
+              x={PAD + 4}
+              y={PAD + 4}
+              width={W - 2 * PAD - 8}
+              height={H - 2 * PAD - 8}
+              rx={4}
+              fill="none"
               className={warna("lantai")}
-              fill="currentColor"
-              opacity={0.45}
+              stroke="currentColor"
+              strokeWidth={1.5}
+              strokeDasharray="5 5"
+              opacity={0.6}
             />
-          )),
-        )}
-        {/* Ruang putar kursi roda bukan benda fisik yang kelihatan bentuknya di foto asli (beda dari pintu/wastafel
+          )}
+          {Array.from({ length: 10 }, (_, baris) =>
+            Array.from({ length: 7 }, (_, kolom) => (
+              <circle
+                key={`${baris}-${kolom}`}
+                cx={PAD + 14 + kolom * 26}
+                cy={PAD + 14 + baris * 28}
+                r={1.3}
+                className={warna("lantai")}
+                fill="currentColor"
+                opacity={0.45}
+              />
+            )),
+          )}
+          {/* Ruang putar kursi roda bukan benda fisik yang kelihatan bentuknya di foto asli (beda dari pintu/wastafel
             yang memang ada wujudnya) — jadi lingkarannya cuma digambar saat pil status "ruang" diklik, sama seperti
             badge-nya (`nomorRuang !== undefined`), bukan selalu tampil netral. */}
-        {nomorRuang !== undefined && (
-          <circle
-            cx={W / 2}
-            cy={H / 2}
-            r={68}
-            fill="none"
-            className={warna("ruang")}
-            stroke="currentColor"
-            strokeWidth={1.5}
-            strokeDasharray="5 5"
-            opacity={0.6}
-          />
-        )}
-        {/* "Lantai" mewakili seluruh ruangan (teksturnya tetap fisik, terlihat di foto apa pun), jadi tetap selalu
+          {nomorRuang !== undefined && (
+            <circle
+              cx={W / 2}
+              cy={H / 2}
+              r={68}
+              fill="none"
+              className={warna("ruang")}
+              stroke="currentColor"
+              strokeWidth={1.5}
+              strokeDasharray="5 5"
+              opacity={0.6}
+            />
+          )}
+          {/* "Lantai" mewakili seluruh ruangan (teksturnya tetap fisik, terlihat di foto apa pun), jadi tetap selalu
             tergambar; badge nomornya saja yang cuma muncul kalau status-nya cocok filter. */}
-        {nomorRuang !== undefined && (
-          <NomorBadge
-            x={W / 2}
-            y={H / 2}
-            nomor={nomorRuang}
-            warna={warna("ruang")}
-            latar={latar("ruang")}
-            id="ruang"
-            terbuka={terbukaId === "ruang"}
-            onToggle={() => onToggleId("ruang")}
-          />
-        )}
-        {nomorLantai !== undefined && (
-          // Digeser sedikit ke atas dari tengah persis (bukan W/2,H/2) supaya tidak menumpuk badge "ruang" kalau
-          // keduanya kebetulan tampil bersamaan (status sama, cocok filter yang sama) — jaraknya (45) lebih jauh
-          // dari jumlah radius kedua badge, jadi selalu terpisah jelas.
-          <NomorBadge
-            x={W / 2}
-            y={H / 2 - 45}
-            nomor={nomorLantai}
-            warna={warna("lantai")}
-            latar={latar("lantai")}
-            id="lantai"
-            terbuka={terbukaId === "lantai"}
-            onToggle={() => onToggleId("lantai")}
-          />
-        )}
+          {nomorRuang !== undefined && (
+            <NomorBadge
+              x={W / 2}
+              y={H / 2}
+              nomor={nomorRuang}
+              warna={warna("ruang")}
+              latar={latar("ruang")}
+              id="ruang"
+              terbuka={terbukaId === "ruang"}
+              onToggle={() => onToggleId("ruang")}
+            />
+          )}
+          {nomorLantai !== undefined && (
+            // Digeser sedikit ke atas dari tengah persis (bukan W/2,H/2) supaya tidak menumpuk badge "ruang" kalau
+            // keduanya kebetulan tampil bersamaan (status sama, cocok filter yang sama) — jaraknya (45) lebih jauh
+            // dari jumlah radius kedua badge, jadi selalu terpisah jelas.
+            <NomorBadge
+              x={W / 2}
+              y={H / 2 - 45}
+              nomor={nomorLantai}
+              warna={warna("lantai")}
+              latar={latar("lantai")}
+              id="lantai"
+              terbuka={terbukaId === "lantai"}
+              onToggle={() => onToggleId("lantai")}
+            />
+          )}
 
-        <Pintu
-          letak={letak("pintu")}
-          warna={warna("pintu")}
-          latar={latar("pintu")}
-          nomor={nomor("pintu")}
-          terbukaId={terbukaId}
-          onToggleId={onToggleId}
-        />
-        <Kloset
-          letak={letak("kloset")}
-          warnaPegangan={warna("pegangan")}
-          latarPegangan={latar("pegangan")}
-          nomorPegangan={nomor("pegangan")}
-          terbukaId={terbukaId}
-          onToggleId={onToggleId}
-        />
-        <Wastafel
-          letak={letak("wastafel")}
-          warna={warna("wastafel")}
-          latar={latar("wastafel")}
-          nomor={nomor("wastafel")}
-          terbukaId={terbukaId}
-          onToggleId={onToggleId}
-        />
-        <AreaMandi
-          letak={letak("area_mandi")}
-          warna={warna("area_mandi")}
-          latarAreaMandi={latar("area_mandi")}
-          warnaJangkauan={warna("jangkauan")}
-          latarJangkauan={latar("jangkauan")}
-          nomorAreaMandi={nomor("area_mandi")}
-          nomorJangkauan={nomor("jangkauan")}
-          terbukaId={terbukaId}
-          onToggleId={onToggleId}
-        />
+          <Pintu
+            letak={letak("pintu")}
+            warna={warna("pintu")}
+            latar={latar("pintu")}
+            nomor={nomor("pintu")}
+            terbukaId={terbukaId}
+            onToggleId={onToggleId}
+          />
+          <Kloset
+            letak={letak("kloset")}
+            warnaPegangan={warna("pegangan")}
+            latarPegangan={latar("pegangan")}
+            nomorPegangan={nomor("pegangan")}
+            terbukaId={terbukaId}
+            onToggleId={onToggleId}
+          />
+          <Wastafel
+            letak={letak("wastafel")}
+            warna={warna("wastafel")}
+            latar={latar("wastafel")}
+            nomor={nomor("wastafel")}
+            terbukaId={terbukaId}
+            onToggleId={onToggleId}
+          />
+          <AreaMandi
+            letak={letak("area_mandi")}
+            warna={warna("area_mandi")}
+            latarAreaMandi={latar("area_mandi")}
+            warnaJangkauan={warna("jangkauan")}
+            latarJangkauan={latar("jangkauan")}
+            nomorAreaMandi={nomor("area_mandi")}
+            nomorJangkauan={nomor("jangkauan")}
+            terbukaId={terbukaId}
+            onToggleId={onToggleId}
+          />
         </svg>
 
-        {/* Catatan ini tentang gambar denah di atasnya (bukan tentang toggle "tampilkan nama benda" di bawah),
-            jadi ditaruh langsung di bawah svg-nya, masih dalam segmen denah yang sama. */}
+        {/* Catatan ini tentang gambar denah di atasnya, jadi ditaruh langsung di bawah svg-nya, masih dalam segmen
+            denah yang sama. */}
         <figcaption className="mt-2 text-kecil text-redup">{t.denahCatatan}</figcaption>
 
-        {/* Pembatas selebar kartu (-mx-4 menegasikan padding kartu) antara gambar denah dan segmen "tampilkan nama benda". */}
-        <div className="-mx-4 my-3 border-t border-garis" />
-
-        <button
-          type="button"
-          role="switch"
-          aria-checked={tampilkanLabel}
-          onClick={() => setTampilkanLabel((v) => !v)}
-          className="flex min-h-sentuh w-full items-center justify-between gap-3 rounded-tombol text-kecil text-redup"
-        >
-          <span>{t.denahLabelToggle}</span>
-          <span
-            aria-hidden="true"
-            className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${tampilkanLabel ? "bg-utama" : "bg-garis"}`}
-          >
-            <span
-              className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${tampilkanLabel ? "translate-x-5" : "translate-x-0"}`}
-            />
-          </span>
-        </button>
-
-        {tampilkanLabel && daftarNama.length > 0 && (
-          // Daftar nama sebagai teks biasa (bukan popover di atas denah) — jumlah badge per tab bisa sampai 7 kalau
-          // user sudah mengoreksi semuanya ke status yang sama, dan popover yang ditumpuk di ruang SVG sekecil itu
-          // gampang saling menimpa; daftar yang membungkus ke bawah seperti ini tidak punya risiko itu sama sekali.
-          <ul className="mt-3 flex flex-col gap-1.5 text-kecil">
-            {daftarNama.map(({ id, nomor: n, nama }) => (
-              <li key={id} className="flex items-center gap-2">
-                <span
-                  aria-hidden="true"
-                  className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_BADGE[status(id)]}`}
-                >
-                  {n}
-                </span>
-                {nama}
-              </li>
-            ))}
-          </ul>
-        )}
+        {/* Badge info (bukan toggle): dulu ada tombol "tampilkan semua nama" yang gampang bikin popovernya
+            bertabrakan kalau banyak badge aktif sekaligus (lihat `terbukaId` di atas - cuma satu yang boleh
+            terbuka). Diganti petunjuk singkat ini, supaya user tahu tiap nomor bisa diketuk satu-satu tanpa risiko
+            tabrakan itu lagi. */}
+        <div role="note" className="mt-3 flex items-start gap-2 rounded-tombol bg-permukaan p-3 text-kecil text-redup">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+          <p>{t.denahPetunjukNomor}</p>
+        </div>
 
         {children && (
           <>

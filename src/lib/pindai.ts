@@ -70,9 +70,10 @@ const STATUS_TIRUAN: Partial<Record<string, StatusItem>> = {
 function hasilTiruan(idItem: string[]): Promise<HasilModel> {
   // Hal yang belum ada di STATUS_TIRUAN (mis. ditambahkan ke konten tapi belum dinilai di sini) tetap diberi status
   // berganti-ganti supaya tiap tab tetap kebagian isi, bukan dibiarkan "tidak_jelas" semua.
-  const temuan = Object.fromEntries(
-    idItem.map((id, i) => [id, STATUS_TIRUAN[id] ?? STATUS_ITEM[i % STATUS_ITEM.length]]),
-  ) as Record<string, StatusItem>;
+  const temuan = Object.fromEntries(idItem.map((id, i) => [id, STATUS_TIRUAN[id] ?? STATUS_ITEM[i % STATUS_ITEM.length]])) as Record<
+    string,
+    StatusItem
+  >;
   return new Promise((selesai) => setTimeout(() => selesai({ kamarMandi: true, temuan, objek: POSISI_BAWAAN }), 1200));
 }
 

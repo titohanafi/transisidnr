@@ -478,7 +478,7 @@
     "denahJudul": "Perkiraan denah kamar mandi Anda",
     "denahCatatan": "Posisi benda adalah perkiraan arah dari foto (bukan ukuran sebenarnya).",
     "denahFilterLabel": "Tampilkan hal dengan status",
-    "denahLabelToggle": "Tampilkan nama benda",
+    "denahPetunjukNomor": "Ketuk nomor pada denah untuk melihat nama indikatornya.",
     "status": {
       "ramah": "Mendukung",
       "perhatian": "Perhatian",

@@ -60,8 +60,7 @@ export function PindaiFoto() {
     try {
       // Mode dev: abaikan berkas yang sungguhan dipilih, selalu pakai satu foto contoh supaya hasil (termasuk
       // perkiraan posisi denah) bisa dibandingkan dari foto yang sama setiap kali dicoba.
-      const sumber =
-        import.meta.env.VITE_PINDAI_MOCK === "true" ? await (await fetch("/__mock/foto-pindai.jpg")).blob() : berkas;
+      const sumber = import.meta.env.VITE_PINDAI_MOCK === "true" ? await (await fetch("/__mock/foto-pindai.jpg")).blob() : berkas;
       setFoto(await kecilkanFoto(sumber));
       setTahap({ nama: "siap" });
     } catch {
@@ -220,7 +219,9 @@ export function PindaiFoto() {
               {tahap.pesan}
             </p>
             <div className="flex flex-col gap-3">
-              {(tahap.pesan === t.gagalPindai || tahap.pesan === t.terlaluSering) && <Tombol onClick={() => void pindai()}>{t.coba}</Tombol>}
+              {(tahap.pesan === t.gagalPindai || tahap.pesan === t.terlaluSering) && (
+                <Tombol onClick={() => void pindai()}>{t.coba}</Tombol>
+              )}
               <Tombol gayaTombol="sekunder" onClick={() => setTahap({ nama: "ceklis", jawaban: {} })}>
                 {t.nilaiSendiri}
               </Tombol>
@@ -295,7 +296,10 @@ function Hasil({
   const butirFilter = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === filter);
   return (
     <>
-      <section aria-labelledby="judul-hasil" className="relative -mt-16 overflow-hidden rounded-kartu bg-utama p-5 text-white shadow-angkat">
+      <section
+        aria-labelledby="judul-hasil"
+        className="relative -mt-16 overflow-hidden rounded-kartu bg-utama p-5 text-white shadow-angkat"
+      >
         <HiasanLingkaran />
         <div className="relative">
           <p className="text-kecil font-semibold text-white">{t.hasilJudul}</p>

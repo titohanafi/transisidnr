@@ -451,7 +451,7 @@ export const uiSchema = z
       denahJudul: teks,
       denahCatatan: teks,
       denahFilterLabel: teks,
-      denahLabelToggle: teks,
+      denahPetunjukNomor: teks,
       status: z.object({ ramah: teks, perhatian: teks, tidak_jelas: teks }),
       lihatPanduan: teks,
       ulang: teks,
