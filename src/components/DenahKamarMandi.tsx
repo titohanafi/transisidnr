@@ -74,51 +74,91 @@ function isoLingkaran(x: number, y: number, r: number, z = 0): string {
   }).join(" ");
 }
 
-/**
- * Tiga sisi balok isometrik yang kelihatan dari sudut kamera denah ini (selalu dari arah depan-kiri, lihat
- * `ISO_OX`/`ISO_OY`): atas, depan (menghadap +y/ke arah "depan"), dan kiri (menghadap -x/ke arah "kiri") — sisi
- * belakang dan kanan tidak pernah terlihat jadi tidak digambar. Dipakai supaya benda (kloset, wastafel, pintu)
- * kelihatan benar-benar 3D, bukan jejak datar seperti zona (area mandi/ruang gerak) yang memang bukan benda fisik.
- */
-function isoBalokSisi(x: number, y: number, rx: number, ry: number, tinggi: number, z = 0): { atas: string; depan: string; kiri: string } {
-  const titik = (px: number, py: number, pz: number) => iso(px, py, pz);
-  const ke = (titikSudut: { x: number; y: number }[]) => titikSudut.map((p) => `${p.x},${p.y}`).join(" ");
-  return {
-    atas: ke([
-      titik(x - rx, y - ry, z + tinggi),
-      titik(x + rx, y - ry, z + tinggi),
-      titik(x + rx, y + ry, z + tinggi),
-      titik(x - rx, y + ry, z + tinggi),
-    ]),
-    depan: ke([titik(x - rx, y + ry, z), titik(x + rx, y + ry, z), titik(x + rx, y + ry, z + tinggi), titik(x - rx, y + ry, z + tinggi)]),
-    kiri: ke([titik(x - rx, y - ry, z), titik(x - rx, y + ry, z), titik(x - rx, y + ry, z + tinggi), titik(x - rx, y - ry, z + tinggi)]),
-  };
+type TitikDatar = { x: number; y: number };
+
+/** Jejak persegi panjang tampak-atas berpusat (x,y), setengah-lebar rx dan setengah-dalam ry. */
+function footprintPersegi(x: number, y: number, rx: number, ry: number): TitikDatar[] {
+  return [
+    { x: x - rx, y: y - ry },
+    { x: x + rx, y: y - ry },
+    { x: x + rx, y: y + ry },
+    { x: x - rx, y: y + ry },
+  ];
 }
 
-/** Balok isometrik berwarna status, 3 sisi diberi opasitas beda (atas paling terang, kiri paling gelap) supaya terasa punya kedalaman. */
-function ObjekIso({
-  x,
-  y,
-  rx,
-  ry,
-  tinggi,
-  z = 0,
-  kelas,
-}: {
-  x: number;
-  y: number;
-  rx: number;
-  ry: number;
-  tinggi: number;
-  z?: number;
-  kelas: string;
-}) {
-  const sisi = isoBalokSisi(x, y, rx, ry, tinggi, z);
+/** Segi delapan (persegi bersudut dipotong) — perkiraan murah untuk kesan "membulat" tanpa kurva asli. */
+function footprintPotong(x: number, y: number, rx: number, ry: number, potong: number): TitikDatar[] {
+  const px = Math.min(potong, rx * 0.9);
+  const py = Math.min(potong, ry * 0.9);
+  return [
+    { x: x - rx + px, y: y - ry },
+    { x: x + rx - px, y: y - ry },
+    { x: x + rx, y: y - ry + py },
+    { x: x + rx, y: y + ry - py },
+    { x: x + rx - px, y: y + ry },
+    { x: x - rx + px, y: y + ry },
+    { x: x - rx, y: y + ry - py },
+    { x: x - rx, y: y - ry + py },
+  ];
+}
+
+/** Jejak elips tampak-atas sebagai poligon n-titik — dipakai untuk mangkuk kloset dan wastafel yang bentuknya bundar, bukan kotak. */
+function footprintElips(x: number, y: number, rx: number, ry: number, n = 20): TitikDatar[] {
+  return Array.from({ length: n }, (_, i) => {
+    const a = (i / n) * Math.PI * 2;
+    return { x: x + rx * Math.cos(a), y: y + ry * Math.sin(a) };
+  });
+}
+
+/** Garis elips isometrik datar (tanpa ekstrusi) — dipakai untuk aksen seperti lingkar dudukan kloset atau cekungan wastafel. */
+function isoElipsDatar(x: number, y: number, rx: number, ry: number, z = 0, n = 24): string {
+  return Array.from({ length: n }, (_, i) => {
+    const a = (i / n) * Math.PI * 2;
+    const p = iso(x + rx * Math.cos(a), y + ry * Math.sin(a), z);
+    return `${p.x},${p.y}`;
+  }).join(" ");
+}
+
+/**
+ * Benda 3D isometrik dari jejak tampak-atas BEBAS BENTUK (bukan cuma kotak — lihat `footprintElips`/`footprintPotong`
+ * di atas), diekstrusi setinggi `tinggi`. Sisi atas selalu digambar; sisi tegaknya cuma yang menghadap kamera (yang
+ * membelakangi kamera, tetap tidak pernah terlihat dari sudut tetap denah ini, jadi tidak digambar) — kameranya
+ * selalu dari arah depan-kiri (lihat `ISO_OX`/`ISO_OY`), jadi sisi "menghadap kamera" adalah yang arah normalnya
+ * condong ke +y (depan) atau -x (kiri): sisi dengan normal (nx,ny) kelihatan kalau ny>nx.
+ */
+function BentukIso({ footprint, tinggi, z = 0, kelas }: { footprint: TitikDatar[]; tinggi: number; z?: number; kelas: string }) {
+  const pusat = {
+    x: footprint.reduce((s, p) => s + p.x, 0) / footprint.length,
+    y: footprint.reduce((s, p) => s + p.y, 0) / footprint.length,
+  };
+  const sisiTampak: { a: TitikDatar; b: TitikDatar; opasitas: number }[] = [];
+  for (let i = 0; i < footprint.length; i++) {
+    const a = footprint[i];
+    const b = footprint[(i + 1) % footprint.length];
+    const tengah = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    let nx = b.y - a.y;
+    let ny = -(b.x - a.x);
+    const keLuar = { x: tengah.x - pusat.x, y: tengah.y - pusat.y };
+    if (nx * keLuar.x + ny * keLuar.y < 0) {
+      nx = -nx;
+      ny = -ny;
+    }
+    // Dua tingkat gelap/terang (bukan satu warna rata) supaya tiap benda tetap kelihatan ada sudutnya walau
+    // jejaknya melengkung dan sisi tampaknya jadi banyak, bukan cuma dua seperti kotak sederhana.
+    if (ny > nx) sisiTampak.push({ a, b, opasitas: nx < 0 ? 0.42 : 0.28 });
+  }
+  const ke = (titik: TitikDatar, tz: number) => iso(titik.x, titik.y, tz);
+  const titikKe = (titik: { x: number; y: number }) => `${titik.x},${titik.y}`;
   return (
-    <g className={kelas} stroke="currentColor" strokeWidth={1.3} strokeLinejoin="round" fill="currentColor">
-      <polygon points={sisi.kiri} fillOpacity={0.45} />
-      <polygon points={sisi.depan} fillOpacity={0.3} />
-      <polygon points={sisi.atas} fillOpacity={0.12} />
+    <g className={kelas} stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" fill="currentColor">
+      {sisiTampak.map(({ a, b, opasitas }, i) => (
+        <polygon
+          key={i}
+          points={[ke(a, z), ke(b, z), ke(b, z + tinggi), ke(a, z + tinggi)].map(titikKe).join(" ")}
+          fillOpacity={opasitas}
+        />
+      ))}
+      <polygon points={footprint.map((p) => titikKe(ke(p, z + tinggi))).join(" ")} fillOpacity={0.13} />
     </g>
   );
 }
@@ -799,6 +839,9 @@ export function DenahKamarMandi({
     // dindingnya sendiri.
     const pintuDiDinding = keDinding(pintu.x, pintu.y, pintu.dinding);
     const pintuPanel = dorongKeDalam(pintuDiDinding.x, pintuDiDinding.y, pintu.dinding, 3);
+    // Tangki kloset dan keran wastafel digeser sedikit ke arah dinding (jarak negatif) dari badan utamanya.
+    const klosetTangki = dorongKeDalam(kloset.x, kloset.y, kloset.dinding, -8);
+    const wastafelKeran = dorongKeDalam(wastafel.x, wastafel.y, wastafel.dinding, -4);
 
     const badgeIso = (titik: { x: number; y: number }, id: string, nomorId: number | undefined, warnaId: string, latarId: string) =>
       nomorId !== undefined && (
@@ -849,53 +892,60 @@ export function DenahKamarMandi({
             strokeLinejoin="round"
           />
         )}
-        {/* Tiga benda fisik (pintu, kloset, wastafel) digambar sebagai balok 3D sungguhan (lihat `ObjekIso`) —
+        {/* Tiga benda fisik (pintu, kloset, wastafel) digambar sebagai bentuk 3D sungguhan (lihat `BentukIso`) —
             beda dari area mandi/ruang gerak di atas, yang jejaknya datar karena memang bukan benda fisik yang
             kelihatan wujudnya di foto (sama seperti perlakuannya di tampak atas). */}
-        <ObjekIso
-          x={pintuPanel.x}
-          y={pintuPanel.y}
-          rx={sejajar(pintu.dinding) ? 2.5 : 15}
-          ry={sejajar(pintu.dinding) ? 15 : 2.5}
+        <BentukIso
+          footprint={footprintPersegi(pintuPanel.x, pintuPanel.y, sejajar(pintu.dinding) ? 2.5 : 15, sejajar(pintu.dinding) ? 15 : 2.5)}
           tinggi={70}
           kelas={warna("pintu")}
         />
-        {/* Kloset digambar dua balok (bukan satu kotak polos) supaya kelihatan seperti kloset sungguhan, bukan
-            kotak abstrak: mangkuk (rendah, menjorok ke ruangan) + tangki (lebih sempit tapi lebih tinggi, menempel
-            ke arah dinding) — sama seperti tampak atas yang juga membedakan `tangki` dari `mangkuk`. */}
-        <ObjekIso
-          x={kloset.x}
-          y={kloset.y}
-          rx={sejajar(kloset.dinding) ? 17 : 13}
-          ry={sejajar(kloset.dinding) ? 13 : 17}
-          tinggi={24}
+        {/* Kloset digambar dua bentuk (bukan satu kotak polos) supaya kelihatan seperti kloset sungguhan: mangkuk
+            bundar (elips, lebih rendah, menjorok ke ruangan) + tangki bersudut membulat (lebih sempit tapi lebih
+            tinggi, menempel ke arah dinding) — sama seperti tampak atas yang juga membedakan `tangki` dari
+            `mangkuk`, cuma di sini mangkuknya benar-benar melengkung, bukan kotak. */}
+        <BentukIso
+          footprint={footprintElips(kloset.x, kloset.y, sejajar(kloset.dinding) ? 17 : 13, sejajar(kloset.dinding) ? 13 : 17)}
+          tinggi={22}
           kelas="text-garisKontrol"
         />
-        <ObjekIso
-          {...dorongKeDalam(kloset.x, kloset.y, kloset.dinding, -8)}
-          rx={sejajar(kloset.dinding) ? 11 : 6}
-          ry={sejajar(kloset.dinding) ? 6 : 11}
+        {/* Lingkar dudukan: aksen datar di atas mangkuk, bukan benda terpisah — supaya siluetnya langsung terbaca
+            sebagai kloset walau dari kejauhan, bukan cuma gundukan bundar polos. */}
+        <polygon
+          points={isoElipsDatar(
+            kloset.x,
+            kloset.y,
+            (sejajar(kloset.dinding) ? 17 : 13) * 0.72,
+            (sejajar(kloset.dinding) ? 13 : 17) * 0.72,
+            22,
+          )}
+          className="text-garisKontrol"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1}
+          opacity={0.6}
+        />
+        <BentukIso
+          footprint={footprintPotong(klosetTangki.x, klosetTangki.y, sejajar(kloset.dinding) ? 11 : 6, sejajar(kloset.dinding) ? 6 : 11, 3)}
           tinggi={44}
           kelas="text-garisKontrol"
         />
-        {/* Wastafel: konter (lebar, rendah) + keran kecil menonjol di atasnya dekat dinding — satu kotak polos
-            sendirian terlihat terlalu pipih untuk terbaca sebagai benda 3D, keran ini memberi aksen tinggi. */}
-        <ObjekIso
-          x={wastafel.x}
-          y={wastafel.y}
-          rx={sejajar(wastafel.dinding) ? 8 : 16}
-          ry={sejajar(wastafel.dinding) ? 16 : 8}
-          tinggi={26}
+        {/* Wastafel: konter bersudut membulat (lebar, rendah) + cekungan elips di atasnya + keran kecil menonjol
+            dekat dinding — satu kotak polos sendirian terlihat terlalu pipih untuk terbaca sebagai benda 3D. */}
+        <BentukIso
+          footprint={footprintPotong(wastafel.x, wastafel.y, sejajar(wastafel.dinding) ? 8 : 16, sejajar(wastafel.dinding) ? 16 : 8, 4)}
+          tinggi={24}
           kelas={warna("wastafel")}
         />
-        <ObjekIso
-          {...dorongKeDalam(wastafel.x, wastafel.y, wastafel.dinding, -4)}
-          rx={3}
-          ry={3}
-          tinggi={12}
-          z={26}
-          kelas={warna("wastafel")}
+        <polygon
+          points={isoElipsDatar(wastafel.x, wastafel.y, sejajar(wastafel.dinding) ? 4.5 : 9, sejajar(wastafel.dinding) ? 9 : 4.5, 24)}
+          className={warna("wastafel")}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1}
+          opacity={0.6}
         />
+        <BentukIso footprint={footprintPotong(wastafelKeran.x, wastafelKeran.y, 3, 3, 1)} tinggi={12} z={24} kelas={warna("wastafel")} />
         {badgeIso({ x: W / 2, y: H / 2 }, "ruang", nomorRuang, warna("ruang"), latar("ruang"))}
         {badgeIso({ x: W / 2, y: H / 2 - 45 }, "lantai", nomorLantai, warna("lantai"), latar("lantai"))}
         {badgeIso(pintuBadge, "pintu", nomor("pintu"), warna("pintu"), latar("pintu"))}
