@@ -45,9 +45,12 @@ const JARAK_DINDING = 35;
 const ISO_SUDUT = (30 * Math.PI) / 180;
 const ISO_COS = Math.cos(ISO_SUDUT);
 const ISO_SIN = Math.sin(ISO_SUDUT);
-// Dinding dibuat jauh lebih tinggi (dulu 85) supaya terasa "berdiri di dalam ruangan" seperti acuan gambar
-// isometrik, bukan kotak gepeng — kloset/wastafel tetap kecil relatif terhadap dinding, sama seperti acuan.
-const ISO_TINGGI_DINDING = 150;
+// Dicek ulang lewat acuan gambar isometrik yang dirender langsung (bukan cuma dibaca koordinatnya): di acuan,
+// DINDING mendominasi gambar (lantai cuma kelihatan sebagai jalur tipis di depan pintu) — tingginya di layar
+// malah LEBIH BESAR dari kedalaman lantai, kebalikan dari sebelumnya di sini. Dinaikkan jauh lebih tinggi lagi
+// (dulu 150) supaya rasionya mendekati acuan; kloset/wastafel jadi kelihatan kecil terhadap dinding, tapi itu
+// juga yang terjadi di acuan (tokonya memang tidak sampai dekat langit-langit).
+const ISO_TINGGI_DINDING = 270;
 // Ruangan tampak atas aslinya 200×300 (memanjang, lihat W/H). Dulu kedalaman (H) dipadatkan sampai 0.62 supaya
 // kedua dinding sama panjang ("persegi") — tapi acuan gambar justru TIDAK persegi, satu dinding jelas lebih
 // panjang dari yang lain. Kompresi dikurangi (0.82, bukan dihapus total) supaya asimetrinya kelihatan tanpa
@@ -56,9 +59,9 @@ const ISO_KOMPRESI_Y = 0.82;
 // viewBox dan pergeseran dipilih manual supaya ruangan (W×H di atas, diproyeksikan lewat sudut 30° dan tinggi
 // dinding baru) memenuhi kanvas dengan jarak tipis ke tepi.
 const ISO_VW = 440;
-const ISO_VH = 430;
+const ISO_VH = 550;
 const ISO_OX = 240;
-const ISO_OY = 179;
+const ISO_OY = 299;
 
 /** Fungsi murni: titik (x,y) tampak-atas + ketinggian opsional -> titik 2D isometrik di viewBox ISO_VW×ISO_VH. */
 function iso(x: number, y: number, z = 0): { x: number; y: number } {
@@ -888,6 +891,12 @@ export function DenahKamarMandi({
       iso(W, -TEBAL_DINDING, ISO_TINGGI_DINDING),
       iso(W + TEBAL_DINDING, 0, ISO_TINGGI_DINDING),
     ]);
+    // Pita ubin dekoratif di bagian bawah kedua dinding (selalu tampil, tidak terkait status apa pun) — di acuan
+    // gambar isometrik, dinding punya ubin setinggi dada (bukan polos kosong), terutama penting sekarang dinding
+    // jauh lebih tinggi dari sebelumnya dan akan terlihat kosong tanpa ini.
+    const TINGGI_UBIN = ISO_TINGGI_DINDING * 0.45;
+    const ubinBelakang = ke([iso(0, 0, 0), iso(W, 0, 0), iso(W, 0, TINGGI_UBIN), iso(0, 0, TINGGI_UBIN)]);
+    const ubinKanan = ke([iso(W, 0, 0), iso(W, H, 0), iso(W, H, TINGGI_UBIN), iso(W, 0, TINGGI_UBIN)]);
 
     // Titik asli (sebelum digeser `dorongKeDalam`) dipakai untuk jejak benda di lantai; titik yang sudah digeser ke
     // arah ruangan dipakai untuk badge-nya — persis seperti pembagian x/y di tampak atas (lihat `Pintu`/`Kloset`/dst).
@@ -962,6 +971,15 @@ export function DenahKamarMandi({
       <svg viewBox={`0 0 ${ISO_VW} ${ISO_VH}`} className={`mx-auto text-tinta ${ukuran}`} aria-hidden="true" focusable="false">
         <polygon points={dindingBelakang} className="fill-white" stroke="currentColor" strokeWidth={2.2} strokeLinejoin="round" />
         <polygon points={dindingKanan} className="fill-permukaan" stroke="currentColor" strokeWidth={2.2} strokeLinejoin="round" />
+        <defs>
+          <pattern id="iso-ubin" width="7" height="7" patternUnits="userSpaceOnUse">
+            <rect width={7} height={7} className="fill-permukaan" />
+            <circle cx={2} cy={2} r={0.7} className="fill-garisKontrol" />
+            <circle cx={5.5} cy={5} r={0.5} className="fill-garisKontrol" />
+          </pattern>
+        </defs>
+        <polygon points={ubinBelakang} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
+        <polygon points={ubinKanan} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
         {/* Bibir dinding (lihat `TEBAL_DINDING` di atas): sedikit lebih gelap dari badan dindingnya supaya terbaca
             sebagai permukaan atas yang kena cahaya beda arah, bukan cuma garis hias. */}
         <polygon points={bibirBelakang} className="fill-permukaan" stroke="currentColor" strokeWidth={1.6} strokeLinejoin="round" />
@@ -998,15 +1016,35 @@ export function DenahKamarMandi({
             strokeLinejoin="round"
           />
         )}
-        {/* Cermin di dinding belakang: dekorasi tetap (bukan ikut status, tidak interaktif) — cuma supaya ruangan
-            tidak kelihatan kosong melompong, sama seperti acuan yang juga punya elemen pengisi di dinding. */}
+        {/* Cermin berbingkai di dinding belakang: dekorasi tetap (bukan ikut status, tidak interaktif) — cuma
+            supaya ruangan tidak kelihatan kosong melompong, sama seperti acuan. Diposisikan proporsional
+            terhadap tinggi dinding (0,48–0,76 × ISO_TINGGI_DINDING, bukan angka tetap) supaya tetap di tengah-atas
+            dinding walau dindingnya sekarang jauh lebih tinggi — bukan menempel rendah dekat lantai. Dua lapis
+            poligon (bingkai + kaca) meniru bingkai cermin sungguhan, bukan kotak polos satu warna. */}
         <polygon
-          points={[iso(W * 0.72, 0, 42), iso(W * 0.72 + 22, 0, 42), iso(W * 0.72 + 22, 0, 66), iso(W * 0.72, 0, 66)]
+          points={[
+            iso(W * 0.7, 0, 0.48 * ISO_TINGGI_DINDING),
+            iso(W * 0.7 + 26, 0, 0.48 * ISO_TINGGI_DINDING),
+            iso(W * 0.7 + 26, 0, 0.76 * ISO_TINGGI_DINDING),
+            iso(W * 0.7, 0, 0.76 * ISO_TINGGI_DINDING),
+          ]
             .map((p) => `${p.x},${p.y}`)
             .join(" ")}
-          className="fill-permukaan text-garisKontrol"
+          className="fill-garis text-garisKontrol"
           stroke="currentColor"
           strokeWidth={1.6}
+        />
+        <polygon
+          points={[
+            iso(W * 0.7 + 3, 0, 0.48 * ISO_TINGGI_DINDING + 3),
+            iso(W * 0.7 + 23, 0, 0.48 * ISO_TINGGI_DINDING + 3),
+            iso(W * 0.7 + 23, 0, 0.76 * ISO_TINGGI_DINDING - 3),
+            iso(W * 0.7 + 3, 0, 0.76 * ISO_TINGGI_DINDING - 3),
+          ]
+            .map((p) => `${p.x},${p.y}`)
+            .join(" ")}
+          className="fill-permukaan"
+          stroke="none"
         />
         {/* Lintasan ayun pintu (lihat `busurPintu` di atas) — putus-putus, tanpa isian, sama seperti di tampak
             atas, supaya arah bukanya kelihatan jelas sebelum mata sampai ke daun pintunya sendiri. */}
