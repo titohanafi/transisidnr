@@ -30,9 +30,31 @@ import {
 import { UKURAN_AREA_MANDI, UKURAN_KLOSET, UKURAN_PINTU, UKURAN_WASTAFEL } from "../domain/objekUkuran";
 import { PratinjauIsoTiga } from "./PratinjauIsoTiga";
 
-// Prototipe Milestone 3 (lihat DECISIONS.md): kalau aktif, tab Isometrik menampilkan model 3D kloset (Three.js)
-// alih-alih SVG tangan, KHUSUS untuk dibandingkan visual — bukan jalur produksi. Benda lain tetap versi SVG lama.
+// Prototipe Milestone 3 (lihat DECISIONS.md): kalau aktif, tab Isometrik menampilkan model 3D (Three.js) alih-alih
+// SVG tangan, KHUSUS untuk dibandingkan visual — bukan jalur produksi, belum ada posisi/rotasi/status sungguhan.
 const MODE_ISO_3D = import.meta.env.VITE_ISO_3D === "true";
+
+// Galeri 4 benda berdampingan (bukan satu per satu) supaya keselarasan gaya antar sumber (Quaternius untuk
+// kloset/wastafel/pintu, Kenney untuk shower — Quaternius tidak punya model shower, lihat DECISIONS.md) bisa
+// dinilai langsung, bukan ditebak dari pratinjau terpisah di poly.pizza.
+function GaleriIso3D({ kelas = "" }: { kelas?: string }) {
+  const benda = [
+    { nama: "Pintu", src: "/model/pintu/quaternius-pintu.glb" },
+    { nama: "Kloset", src: "/model/toilet-quaternius/quaternius-toilet.glb" },
+    { nama: "Wastafel", src: "/model/wastafel/quaternius-wastafel.glb" },
+    { nama: "Shower", src: "/model/shower/kenney-shower.glb" },
+  ];
+  return (
+    <div className={`grid grid-cols-2 gap-2 ${kelas}`}>
+      {benda.map((b) => (
+        <div key={b.nama} className="flex flex-col items-center rounded-kartu border border-garis/70 bg-white p-1">
+          <PratinjauIsoTiga src={b.src} kelas="h-32 w-full" />
+          <span className="pb-1 text-kecil text-redup">{b.nama}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 import {
   footprintDindingBelakang,
   footprintDindingSamping,
@@ -1272,7 +1294,7 @@ export function DenahKamarMandi({
         {tampilan === "atas" ? (
           denahSvg("w-full max-w-[220px]")
         ) : MODE_ISO_3D ? (
-          <PratinjauIsoTiga kelas="h-64 w-full max-w-[280px]" />
+          <GaleriIso3D kelas="w-full max-w-[280px]" />
         ) : (
           denahSvgIso("w-full max-w-[280px]")
         )}
@@ -1346,7 +1368,7 @@ export function DenahKamarMandi({
             {tampilan === "atas" ? (
               denahSvg("w-full max-w-none")
             ) : MODE_ISO_3D ? (
-              <PratinjauIsoTiga kelas="h-[70vh] w-full" />
+              <GaleriIso3D kelas="h-[70vh] w-full" />
             ) : (
               denahSvgIso("w-full max-w-none")
             )}

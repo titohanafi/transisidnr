@@ -3,17 +3,17 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 /**
- * Pratinjau 3D kloset lewat Three.js — prototipe Milestone 3 (lihat DECISIONS.md: "Pengecualian aturan 'tanpa
- * pustaka berat'"), dibandingkan langsung dengan versi SVG lewat flag dev `VITE_ISO_3D`. BUKAN pengganti produksi —
- * cuma menampilkan satu model kloset dari sudut isometrik, belum terintegrasi ke posisi/rotasi/status denah
- * sungguhan (lihat scope Milestone 3 di plan).
+ * Pratinjau 3D satu benda (kloset/wastafel/shower/pintu) lewat Three.js — prototipe Milestone 3 (lihat
+ * DECISIONS.md: "Pengecualian aturan 'tanpa pustaka berat'"), dibandingkan langsung dengan versi SVG lewat flag
+ * dev `VITE_ISO_3D`. BUKAN pengganti produksi — cuma menampilkan satu model dari sudut isometrik berdiri sendiri,
+ * belum terintegrasi ke posisi/rotasi/status denah sungguhan (lihat scope Milestone 3 di plan).
  *
  * Kamera orthographic diposisikan untuk sudut pandang isometrik SEJATI (elevasi atan(1/√2) ≈ 35.264°, azimuth 45°
  * — konvensi "sudut pandang pojok" baku di grafis 3D), beda dari trik 2D `iso()` yang dipakai versi SVG (itu
  * proyeksi 30°/30° tanpa kompresi sumbu) — keduanya sama-sama disebut "isometrik" tapi rumusnya beda; di sini
  * dipakai konvensi 3D baku karena modelnya memang objek 3D sungguhan, bukan diturunkan dari `iso()`.
  */
-export function PratinjauIsoTiga({ kelas = "h-80 w-full" }: { kelas?: string }) {
+export function PratinjauIsoTiga({ src, kelas = "h-80 w-full" }: { src: string; kelas?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function PratinjauIsoTiga({ kelas = "h-80 w-full" }: { kelas?: string }) 
     let batal = false;
     const loader = new GLTFLoader();
     loader.load(
-      "/model/toilet-quaternius/quaternius-toilet.glb",
+      src,
       (gltf) => {
         if (batal) return;
         const model = gltf.scene;
@@ -95,7 +95,7 @@ export function PratinjauIsoTiga({ kelas = "h-80 w-full" }: { kelas?: string }) 
       cancelAnimationFrame(frameId);
       renderer.dispose();
     };
-  }, []);
+  }, [src]);
 
   return <canvas ref={canvasRef} className={kelas} aria-hidden="true" />;
 }
