@@ -472,7 +472,8 @@
         "isi": "Dari foto, sebagian besar hal tampak sudah mendukung. Tetap periksa langsung di ruangan."
       }
     },
-    "temuanJudul": "Rincian per hal",
+    "temuanJudul": "Rincian per indikator",
+    "temuanPenjelasan": "Pilihan awal dinilai AI dari foto. Ganti jawabannya sesuai kondisi ruangan yang sebenarnya Anda rasakan.",
     "temuanKosong": "Tidak ada hal dengan status ini.",
     "denahJudul": "Perkiraan denah kamar mandi Anda",
     "denahCatatan": "Posisi benda adalah perkiraan arah dari foto (bukan ukuran sebenarnya).",

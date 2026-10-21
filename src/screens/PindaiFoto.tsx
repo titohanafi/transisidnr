@@ -22,7 +22,14 @@ type Tahap =
   | { nama: "memindai" }
   | { nama: "galat"; pesan: string }
   | { nama: "ceklis"; jawaban: Record<string, StatusItem> }
-  | { nama: "hasil"; temuan: Record<string, StatusItem>; objek: Record<ObjekDenah, PosisiObjek> };
+  | {
+      nama: "hasil";
+      /** Dipakai untuk menentukan penjelasan di "Rincian per indikator": kalimat "dinilai AI" hanya masuk akal
+       *  kalau datang dari foto - dari ceklis manual, user sendiri yang mengisi semuanya dari awal. */
+      sumber: "pindai" | "ceklis";
+      temuan: Record<string, StatusItem>;
+      objek: Record<ObjekDenah, PosisiObjek>;
+    };
 
 const GAYA_STATUS: Record<StatusItem, string> = {
   ramah: "border-utama bg-utama-muda text-utama-gelap",
@@ -68,7 +75,7 @@ export function PindaiFoto() {
     try {
       const hasil = await pindaiFoto(foto, ID_ITEM);
       if (!hasil.kamarMandi) setTahap({ nama: "galat", pesan: t.bukanKamarMandi });
-      else setTahap({ nama: "hasil", temuan: hasil.temuan, objek: hasil.objek });
+      else setTahap({ nama: "hasil", sumber: "pindai", temuan: hasil.temuan, objek: hasil.objek });
     } catch (e) {
       const kode = e instanceof GalatPindai ? e.kode : null;
       setTahap({
@@ -249,23 +256,28 @@ export function PindaiFoto() {
                 </fieldset>
               ))}
             </div>
-            <Tombol className="mt-4 w-full" onClick={() => setTahap({ nama: "hasil", temuan: tahap.jawaban, objek: POSISI_BAWAAN })}>
+            <Tombol
+              className="mt-4 w-full"
+              onClick={() => setTahap({ nama: "hasil", sumber: "ceklis", temuan: tahap.jawaban, objek: POSISI_BAWAAN })}
+            >
               {t.lihatHasil}
             </Tombol>
           </section>
         )}
 
-        {tahap.nama === "hasil" && <Hasil temuan={tahap.temuan} objek={tahap.objek} onUlang={ulang} />}
+        {tahap.nama === "hasil" && <Hasil sumber={tahap.sumber} temuan={tahap.temuan} objek={tahap.objek} onUlang={ulang} />}
       </div>
     </Halaman>
   );
 }
 
 function Hasil({
+  sumber,
   temuan: temuanAwal,
   objek,
   onUlang,
 }: {
+  sumber: "pindai" | "ceklis";
   temuan: Record<string, StatusItem>;
   objek: Record<ObjekDenah, PosisiObjek>;
   onUlang: () => void;
@@ -314,9 +326,12 @@ function Hasil({
           (bukan section terpisah di bawahnya) - supaya isi tab status yang aktif terlihat sebagai satu kesatuan. */}
       <DenahKamarMandi temuan={temuan} objek={objek} filter={filter} onUbahFilter={setFilter}>
         <section aria-labelledby="judul-temuan">
-          <h2 id="judul-temuan" className="mb-isi text-judulKartu">
-            {t.temuanJudul}
-          </h2>
+          <div className="mb-isi">
+            <h2 id="judul-temuan" className="text-judulKartu">
+              {t.temuanJudul}
+            </h2>
+            {sumber === "pindai" && <p className="mt-1 text-kecil text-redup">{t.temuanPenjelasan}</p>}
+          </div>
           {butirFilter.length > 0 ? (
             <ul className="flex flex-col gap-3">
               {butirFilter.map((it) => (
