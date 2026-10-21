@@ -1,4 +1,5 @@
-export const STATUS_ITEM = ["ramah", "perhatian", "tidak_jelas"] as const;
+// Urutan tab di layar hasil: perhatian dulu (paling actionable), lalu mendukung ("ramah"), lalu tidak jelas.
+export const STATUS_ITEM = ["perhatian", "ramah", "tidak_jelas"] as const;
 export type StatusItem = (typeof STATUS_ITEM)[number];
 export type TingkatRamah = "belum_cukup" | "banyak" | "sebagian" | "cukup";
 
@@ -137,10 +138,11 @@ export function selesaikanTabrakanDenah(objek: Record<ObjekDenah, PosisiObjek>):
   return hasil;
 }
 
-// Urutan tampilan "Rincian per hal": perlu perhatian dulu (paling actionable), lalu tidak jelas, lalu tampak
-// mendukung terakhir. Dipakai juga untuk penomoran supaya nomor di denah dan di daftar sama-sama berurut 1..n
-// mengikuti urutan baca di layar, bukan urutan konten yang sudah tidak terlihat setelah dikelompokkan per status.
-export const URUTAN_STATUS_HASIL: readonly StatusItem[] = ["perhatian", "tidak_jelas", "ramah"];
+// Urutan tampilan "Rincian per hal": sama dengan urutan tab status (lihat STATUS_ITEM) - perhatian dulu (paling
+// actionable), lalu mendukung, lalu tidak jelas. Dipakai juga untuk penomoran supaya nomor di denah dan di daftar
+// sama-sama berurut 1..n mengikuti urutan baca di layar, bukan urutan konten yang sudah tidak terlihat setelah
+// dikelompokkan per status.
+export const URUTAN_STATUS_HASIL: readonly StatusItem[] = ["perhatian", "ramah", "tidak_jelas"];
 
 /**
  * Fungsi murni: nomor urut untuk tiap hal, mengikuti urutan tampil di "Rincian per hal" (dikelompokkan per status,

@@ -127,7 +127,7 @@ describe("posisi denah", () => {
     expect(Object.values(nomor)).toEqual(ids.map((_, i) => i + 1));
   });
 
-  it("nomorItemHasil: mengikuti urutan tampil per status (perhatian, lalu tidak_jelas, lalu ramah), bukan urutan konten", () => {
+  it("nomorItemHasil: mengikuti urutan tampil per status (perhatian, lalu ramah, lalu tidak_jelas), bukan urutan konten", () => {
     // ids: lantai, pegangan, area_mandi, pintu, ruang, wastafel, jangkauan
     const temuan: Record<string, StatusItem> = {
       lantai: "ramah",
@@ -142,13 +142,13 @@ describe("posisi denah", () => {
     // perhatian dulu (urutan konten di antara sesama perhatian: pegangan sebelum ruang)
     expect(nomor.pegangan).toBe(1);
     expect(nomor.ruang).toBe(2);
-    // lalu tidak_jelas (area_mandi sebelum wastafel)
-    expect(nomor.area_mandi).toBe(3);
-    expect(nomor.wastafel).toBe(4);
     // lalu ramah (lantai, pintu, jangkauan)
-    expect(nomor.lantai).toBe(5);
-    expect(nomor.pintu).toBe(6);
-    expect(nomor.jangkauan).toBe(7);
+    expect(nomor.lantai).toBe(3);
+    expect(nomor.pintu).toBe(4);
+    expect(nomor.jangkauan).toBe(5);
+    // lalu tidak_jelas (area_mandi sebelum wastafel)
+    expect(nomor.area_mandi).toBe(6);
+    expect(nomor.wastafel).toBe(7);
   });
 });
 
