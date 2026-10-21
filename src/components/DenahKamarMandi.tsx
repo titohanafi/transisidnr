@@ -944,11 +944,18 @@ export function DenahKamarMandi({
         { x: engselPintu.x + arahDalamPintu.x * DALAM_ZONA_PINTU, y: engselPintu.y + arahDalamPintu.y * DALAM_ZONA_PINTU },
       ].map((p) => iso(p.x, p.y, 2)),
     );
-    // Tangki kloset dan keran wastafel digeser ke arah dinding (jarak negatif) dari badan utamanya — jaraknya
-    // dihitung dari jumlah "setengah lebar" kedua bentuk (bowl+tank, counter+keran) dikurangi sedikit supaya pas
-    // bersentuhan di satu sisi, BUKAN tumpang tindih di tengah seperti sebelumnya (itu yang bikin garisnya kusut).
-    const klosetTangki = dorongKeDalam(kloset.x, kloset.y, kloset.dinding, -(24 + 15 - 5));
-    const wastafelKeran = dorongKeDalam(wastafel.x, wastafel.y, wastafel.dinding, -(22 + 3 - 2));
+    // Keran wastafel digeser ke arah dinding dari badan utamanya — jaraknya PERSIS jumlah "setengah lebar" kedua
+    // bentuk (counter+keran), supaya cuma bersentuhan di satu sisi (selisih nol), bukan tumpang tindih. Keran
+    // ada di ketinggian BEDA dari konter (lihat `z={26}` di JSX-nya) jadi aman tumpang tindih sedikit di denah.
+    const wastafelKeran = dorongKeDalam(wastafel.x, wastafel.y, wastafel.dinding, -(22 + 3));
+    // Tangki kloset: digeser ke arah dinding LEBIH DEKAT dari "pas bersentuhan" (28, bukan 24+15=39) DAN z-nya
+    // sengaja tumpang tindih sedikit dengan mangkuk (mulai di 14, bukan tepat di KLOSET_TINGGI_MANGKUK=26) —
+    // dites langsung di browser: kalau cuma "pas bersentuhan" di satu titik (tanpa tumpang tindih sama sekali),
+    // dua kotak keliatan seperti dua benda terpisah yang melayang berdekatan (ada celah semu akibat lebar garis),
+    // bukan satu kloset yang menyatu. Tumpang tindih kecil ini menyatukan siluetnya jadi kelihatan satu benda.
+    const klosetTangki = dorongKeDalam(kloset.x, kloset.y, kloset.dinding, -28);
+    // Tinggi mangkuk kloset — dipakai untuk badan mangkuk; tangki MULAI lebih rendah dari ini (lihat di atas).
+    const KLOSET_TINGGI_MANGKUK = 26;
 
     const badgeIso = (titik: { x: number; y: number }, id: string, nomorId: number | undefined, warnaId: string, latarId: string) =>
       nomorId !== undefined && (
@@ -1084,16 +1091,24 @@ export function DenahKamarMandi({
           strokeWidth={1.4}
           strokeDasharray="4 4"
         />
-        {/* Kloset digambar dua kotak polos (tangki + mangkuk, sama seperti acuan) — elips/segi-delapan pernah
-            dicoba supaya kelihatan "membulat" tapi malah lebih sulit dikenali bentuknya; kotak lebih jelas. */}
+        {/* Kloset digambar dua kotak polos (mangkuk + tangki, sama seperti acuan) — elips/segi-delapan pernah
+            dicoba supaya kelihatan "membulat" tapi malah lebih sulit dikenali bentuknya; kotak lebih jelas.
+            Tangki DITUMPUK DI ATAS mangkuk (bukan disandingkan rata lantai seperti percobaan sebelumnya): dua
+            kotak terpisah yang bersentuhan di SATU SISI PENUH rata lantai saling "bocor" — tiap kotak digambar
+            sendiri-sendiri tanpa tahu ada tetangganya, jadi sisi yang seharusnya tertutup tetangga tetap ikut
+            tergambar dan menembus siluet tetangganya, kelihatan silang-menyilang kusut. Dengan ditumpuk (z dan
+            posisi tangki SENGAJA tumpang tindih sedikit dengan mangkuk — dites di browser, "pas bersentuhan"
+            tanpa tumpang tindih sama sekali malah kelihatan seperti dua benda terpisah melayang berdekatan,
+            bukan satu benda menyatu), siluet gabungannya terbaca sebagai satu kloset, sama seperti acuan. */}
         <BentukIso
           footprint={footprintPersegi(kloset.x, kloset.y, sejajar(kloset.dinding) ? 24 : 17, sejajar(kloset.dinding) ? 17 : 24)}
-          tinggi={26}
+          tinggi={KLOSET_TINGGI_MANGKUK}
           kelas="text-tinta"
         />
         <BentukIso
           footprint={footprintPersegi(klosetTangki.x, klosetTangki.y, sejajar(kloset.dinding) ? 15 : 9, sejajar(kloset.dinding) ? 9 : 15)}
-          tinggi={48}
+          tinggi={36}
+          z={14}
           kelas="text-tinta"
         />
         {/* Wastafel: kotak konter polos + kotak keran kecil menonjol dekat dinding — sama seperti acuan (bukan
