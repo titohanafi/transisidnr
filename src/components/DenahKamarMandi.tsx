@@ -31,6 +31,7 @@ import { UKURAN_AREA_MANDI, UKURAN_KLOSET, UKURAN_PINTU, UKURAN_WASTAFEL } from 
 import {
   footprintDindingBelakang,
   footprintDindingSamping,
+  footprintOval,
   footprintTiangSudut,
   KLOSET_TINGGI_MANGKUK,
   TANGKI_PUSH_IN,
@@ -1074,28 +1075,43 @@ export function DenahKamarMandi({
           strokeDasharray="4 4"
         />
         {/* Kloset digambar dua kotak polos (mangkuk + tangki) — SUDAH DICOBA ULANG pakai footprintOval (mangkuk
-            berbentuk oval lewat BentukIso, dengan bayangan per-sisi) dan dicek visual, tapi hasilnya mereplikasi
-            persis temuan percobaan lama: gabungan oval+kotak jadi kelihatan seperti "ember dengan kotak di
-            atasnya", bukan lebih mirip kloset. Dikembalikan ke kotak. Kalau mau coba lagi, `footprintOval` masih
-            ada di `../domain/denahIsoGeometri.ts` — tapi pertimbangkan pendekatan lain (ikon custom, bukan cuma
-            ubah footprint) sebelum mencoba oval lagi, supaya tidak mengulang percobaan yang sama.
-            Tangki DITUMPUK DI ATAS mangkuk (bukan disandingkan rata lantai): dua kotak terpisah yang bersentuhan di
-            SATU SISI PENUH rata lantai saling "bocor" — tiap kotak digambar sendiri-sendiri tanpa tahu ada
-            tetangganya, jadi sisi yang seharusnya tertutup tetangga tetap ikut tergambar dan menembus siluet
-            tetangganya, kelihatan silang-menyilang kusut. Dengan ditumpuk (z dan posisi tangki SENGAJA tumpang
-            tindih sedikit dengan mangkuk — dites di browser, "pas bersentuhan" tanpa tumpang tindih sama sekali
-            malah kelihatan seperti dua benda terpisah melayang berdekatan, bukan satu benda menyatu), siluet
-            gabungannya terbaca sebagai satu kloset. */}
+            berbentuk oval lewat BentukIso polos) dan dicek visual, tapi hasilnya mereplikasi persis temuan
+            percobaan lama: gabungan oval+kotak jadi kelihatan seperti "ember dengan kotak di atasnya". Iterasi
+            KEDUA: oval dipakai lagi TAPI ditambah dua detail pembeda yang biasa dipakai ikon kloset — garis dudukan
+            (seat ring, lingkaran datar di atas mangkuk, pola sama seperti cekungan wastafel yang sudah terbukti
+            berhasil) dan garis pemisah tutup di tangki (lid line). WAJIB dicek visual sebelum dianggap selesai. */}
         <BentukIso
-          footprint={footprintPersegi(kloset.x, kloset.y, sejajar(kloset.dinding) ? 24 : 17, sejajar(kloset.dinding) ? 17 : 24)}
+          footprint={footprintOval(kloset.x, kloset.y, sejajar(kloset.dinding) ? 24 : 17, sejajar(kloset.dinding) ? 17 : 24)}
           tinggi={KLOSET_TINGGI_MANGKUK}
           kelas="text-tinta"
+        />
+        <polygon
+          points={isoLingkaran(kloset.x, kloset.y, sejajar(kloset.dinding) ? 20 : 14, KLOSET_TINGGI_MANGKUK)}
+          className="text-tinta"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1}
+          pointerEvents="none"
         />
         <BentukIso
           footprint={footprintPersegi(klosetTangki.x, klosetTangki.y, sejajar(kloset.dinding) ? 15 : 9, sejajar(kloset.dinding) ? 9 : 15)}
           tinggi={TANGKI_TINGGI}
           z={TANGKI_Z_MULAI}
           kelas="text-tinta"
+        />
+        <polygon
+          points={isoPersegi(
+            klosetTangki.x,
+            klosetTangki.y,
+            sejajar(kloset.dinding) ? 15 : 9,
+            sejajar(kloset.dinding) ? 9 : 15,
+            TANGKI_Z_MULAI + TANGKI_TINGGI * 0.78,
+          )}
+          className="text-tinta"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1}
+          pointerEvents="none"
         />
         {/* Wastafel: kotak konter + kotak keran kecil menonjol dekat dinding, DITAMBAH garis cekungan oval di atas
             konter (bukan diekstrusi 3D — cuma garis datar di permukaan atas, lihat `isoLingkaran`) supaya terbaca
