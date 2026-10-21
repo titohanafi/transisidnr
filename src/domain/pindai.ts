@@ -68,17 +68,19 @@ export const OBJEK_DENAH = ["pintu", "kloset", "wastafel", "area_mandi"] as cons
 export type ObjekDenah = (typeof OBJEK_DENAH)[number];
 
 // Pintu di dinding depan; wastafel dan kloset sama-sama di dinding belakang, berdampingan (kloset di sisi kanan,
-// wastafel di sisi kirinya); area mandi di dinding KIRI (bukan kanan) pada kedalaman tengah, supaya tidak
-// menumpuk dengan kloset/wastafel. Dinding "kiri" dipilih (bukan "kanan") karena tampilan isometrik
-// (`DenahKamarMandi.tsx`) cuma menggambar dinding solid di sisi "belakang" dan "kiri" — benda yang diberi
-// dinding "kanan" tidak punya dinding solid untuk ditempeli di gambar itu, jadi kelihatan melayang di tengah
-// ruangan tanpa konteks dinding sama sekali (ditemukan lewat pengecekan koordinat layar, bukan tebakan visual).
+// wastafel di sisi kirinya); area mandi di dinding kanan (dinding yang beda dari kloset, walau sama-sama "di
+// pojok kanan belakang" kalau dilihat sebagai zona) pada kedalaman tengah, supaya tidak menumpuk dengan kloset.
+// (Dulu sempat dipindah ke "kiri" karena tampilan isometrik cuma pernah menggambar 2 dinding tetap — tapi itu
+// salah arah, posisinya jadi tidak sesuai foto asli. Perbaikan sebenarnya ada di DenahKamarMandi.tsx: tampilan
+// isometrik sekarang MEMILIH SENDIRI sepasang dinding mana yang digambar solid berdasarkan data benda yang ada,
+// jadi posisi bawaan di sini bisa kembali ke yang paling masuk akal menurut tata letak foto, bukan menurut
+// dinding mana yang kebetulan digambar.)
 /** Posisi bawaan dipakai bila AI tidak melihat objeknya (atau saat "nilai sendiri dari foto", tanpa posisi dari AI). */
 export const POSISI_BAWAAN: Record<ObjekDenah, LetakDenah> = {
   pintu: { dinding: "depan", posisi: "kiri" },
   wastafel: { dinding: "belakang", posisi: "kiri" },
   kloset: { dinding: "belakang", posisi: "kanan" },
-  area_mandi: { dinding: "kiri", posisi: "tengah" },
+  area_mandi: { dinding: "kanan", posisi: "tengah" },
 };
 
 // Jarak "kiri"/"kanan" (atau "depan"/"belakang") ke tengah sengaja tidak dibuat mepet pojok: dua benda yang sama-sama

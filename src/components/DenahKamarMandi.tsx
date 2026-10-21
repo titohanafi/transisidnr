@@ -1,9 +1,10 @@
-import { Info, X, ZoomIn } from "lucide-react";
+import { Info, RotateCcw, RotateCw, X, ZoomIn } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { PilihanPil } from "./Pilihan";
 import { konten } from "../domain/content";
 import {
   nomorItemHasil,
+  OBJEK_DENAH,
   POSISI_BAWAAN,
   posisiPersenDenah,
   STATUS_ITEM,
@@ -38,6 +39,50 @@ const H = 300;
 const PAD = 10;
 // Seberapa jauh benda digambar dari garis dinding (supaya terlihat "menempel" tanpa menimpa garisnya).
 const JARAK_DINDING = 35;
+
+// Tampilan isometrik cuma pernah bisa menggambar DUA dinding solid sekaligus (supaya isi ruangan tetap kelihatan
+// — dinding ketiga/keempat akan menghalangi kamera). Dulu dua dinding itu tetap ("belakang"+"kiri"), jadi benda
+// apa pun yang posisinya di dinding "depan"/"kanan" selalu melayang tanpa dinding, apa pun fotonya. Sekarang
+// sepasang dinding solid DIPILIH per hasil pindai (lihat `pilihSudutTerbaik`), dan pengguna bisa memutar manual
+// lewat tombol (lihat `SUDUT_URUTAN`) untuk melihat sisi lain — bukan ditentukan sekali untuk selamanya di kode.
+type SudutPandang = { y: "belakang" | "depan"; x: "kiri" | "kanan" };
+// Cuma TIGA dari empat kombinasi (bukan empat) yang dipakai — dites langsung di browser, bukan diasumsikan:
+// kombinasi "depan"+"kanan" membuat TIDAK ADA dinding solid yang menyentuh sudut (0,0), yang karena rumus
+// proyeksi (`iso()`) selalu jadi titik TERTINGGI gambar apa pun kombinasinya. Kombinasi lain selalu punya
+// SALAH SATU dinding (belakang atau kiri) yang membentang sampai ke titik itu, jadi puncaknya tetap tersambung
+// ke salah satu dinding. Untuk "depan"+"kanan", titik tertinggi itu jadi sudut kosong di tengah-tengah gambar —
+// dan tiang sudut (lihat di bawah) yang seharusnya cuma penanda halus di pojok malah nongol melayang persis di
+// titik paling mencolok, bukan di pojok yang tidak diperhatikan seperti maksudnya. Daripada mematchkan geometri
+// tambahan cuma untuk satu kombinasi, kombinasi itu dilewati saja — tiga sisanya sudah cukup untuk menjangkau
+// keempat nama dinding ("kiri" dan "belakang" muncul di dua kombinasi, "kanan" di `bn`, "depan" di `dk`).
+const SUDUT_URUTAN: SudutPandang[] = [
+  { y: "belakang", x: "kiri" },
+  { y: "belakang", x: "kanan" },
+  { y: "depan", x: "kiri" },
+];
+/** Fungsi murni: berapa banyak benda (pintu/kloset/wastafel/area_mandi) yang akan menempel dinding SOLID kalau
+ *  sudut pandang ini dipakai — dipakai untuk memilih sudut bawaan yang paling banyak "benar" tanpa perlu
+ *  pengguna memutar manual dulu. */
+function skorSudut(sudut: SudutPandang, letak: (id: ObjekDenah) => LetakDenah): number {
+  return OBJEK_DENAH.reduce((skor, id) => {
+    const dinding = letak(id).dinding;
+    return skor + (dinding === sudut.y || dinding === sudut.x ? 1 : 0);
+  }, 0);
+}
+/** Fungsi murni: sudut dengan skor tertinggi (dasi dipecahkan dengan urutan di SUDUT_URUTAN, supaya bawaan tetap
+ *  stabil/dapat diprediksi, bukan berubah-ubah kalau skornya seri). */
+function pilihSudutTerbaik(letak: (id: ObjekDenah) => LetakDenah): SudutPandang {
+  let terbaik = SUDUT_URUTAN[0];
+  let skorTerbaik = -1;
+  for (const sudut of SUDUT_URUTAN) {
+    const skor = skorSudut(sudut, letak);
+    if (skor > skorTerbaik) {
+      terbaik = sudut;
+      skorTerbaik = skor;
+    }
+  }
+  return terbaik;
+}
 
 // Proyeksi isometrik (opsi gaya tampilan kedua, lihat `tampilan` di DenahKamarMandi): koordinat benda yang sama
 // persis dengan tampak atas (dari `letak`/`titikDinding`, tidak dihitung ulang) cuma diproyeksikan lewat `iso()`
@@ -691,6 +736,27 @@ export function DenahKamarMandi({
   const [tampilan, setTampilan] = useState<"atas" | "isometrik">("atas");
   const batasIso = { kiri: 8, kanan: ISO_VW - 8, atas: 8 };
 
+  // Sudut pandang isometrik (dinding mana yang digambar solid, lihat `SudutPandang` di atas): bawaan dipilih
+  // otomatis dari data (`pilihSudutTerbaik`), supaya langsung benar untuk foto manapun tanpa pengguna harus
+  // memutar dulu. `sudutManual` null berarti "masih ikut pilihan otomatis"; begitu pengguna menekan tombol putar,
+  // pilihannya sendiri menang sampai direset (foto baru = `objek` berganti referensi). Direset LEWAT RENDER
+  // (pola "adjusting state when a prop changes" React), bukan useEffect — supaya resetnya langsung kepakai di
+  // render yang sama, tidak nunggu satu putaran render ekstra yang bisa kelihatan "kedap-kedip" sesaat.
+  const [objekSebelumnya, setObjekSebelumnya] = useState(objek);
+  const [sudutManual, setSudutManual] = useState<SudutPandang | null>(null);
+  if (objek !== objekSebelumnya) {
+    setObjekSebelumnya(objek);
+    setSudutManual(null);
+  }
+  const sudutOtomatis = pilihSudutTerbaik(letak);
+  const sudutAktif = sudutManual ?? sudutOtomatis;
+  const putarSudut = (arah: 1 | -1) => {
+    const sekarang = sudutManual ?? sudutOtomatis;
+    const i = SUDUT_URUTAN.findIndex((s) => s.y === sekarang.y && s.x === sekarang.x);
+    const berikutnya = SUDUT_URUTAN[(i + arah + SUDUT_URUTAN.length) % SUDUT_URUTAN.length];
+    setSudutManual(berikutnya);
+  };
+
   // Dipakai dua kali dengan ukuran berbeda (inline di kartu, dan lebih besar di popup "perbesar denah") — isinya
   // sama persis, cuma lebar maksimumnya yang beda, supaya tidak ada dua salinan markup yang bisa tidak sinkron.
   const denahSvg = (ukuran: string) => (
@@ -834,42 +900,53 @@ export function DenahKamarMandi({
     // Sisi tegak, sisi ujung (ketebalan kelihatan), dan tutup atas semuanya otomatis tergambar rapi dan konsisten
     // dengan bayangan per-sisi yang sama seperti benda lain — tidak perlu kode/angka tambahan khusus dinding lagi.
     const TEBAL_DINDING = 11;
-    const footprintDindingBelakang: TitikDatar[] = [
-      { x: 0, y: 0 },
-      { x: W, y: 0 },
-      { x: W, y: -TEBAL_DINDING },
-      { x: 0, y: -TEBAL_DINDING },
+    // Dua dinding solid DIPILIH per sudutAktif (lihat definisi SudutPandang/pilihSudutTerbaik di atas), bukan
+    // selalu "belakang"+"kiri" seperti sebelumnya — supaya apa pun dinding yang dipakai AI/pengguna untuk suatu
+    // benda, ada kemungkinan nyata dinding itu digambar solid, bukan selalu melayang kalau kebetulan jatuh di
+    // dinding "depan"/"kanan". ySisi/xSisi = bidang dunia tempat tiap dinding solid berada (0 atau W/H);
+    // yKeluar/xKeluar = arah ketebalannya menjauhi ruangan (negatif di sisi 0, positif di sisi W/H).
+    const ySisi = sudutAktif.y === "belakang" ? 0 : H;
+    const yKeluar = sudutAktif.y === "belakang" ? -TEBAL_DINDING : TEBAL_DINDING;
+    const xSisi = sudutAktif.x === "kiri" ? 0 : W;
+    const xKeluar = sudutAktif.x === "kiri" ? -TEBAL_DINDING : TEBAL_DINDING;
+    const footprintDindingY: TitikDatar[] = [
+      { x: 0, y: ySisi },
+      { x: W, y: ySisi },
+      { x: W, y: ySisi + yKeluar },
+      { x: 0, y: ySisi + yKeluar },
     ];
-    // Dinding kedua dipasang di bidang x=0 (BUKAN x=W seperti sebelumnya) — dibandingkan ulang secara presisi
-    // dengan skrip Python acuan: proyeksinya identik (sudut 30°, tanpa kompresi), dan di acuan kedua dinding
-    // bertemu di sudut (0,0), yang SELALU jadi titik tertinggi komposisi (screen_y=(x+y)*sin+OY minimal di situ
-    // karena x,y>=0). Dulu dinding kedua ada di x=W, jadi keduanya bertemu di (W,0) — bukan titik tertinggi —
-    // sambungan nyata kedua dinding jadi tidak pernah persis di puncak gambar seperti acuan, walau sekilas masih
-    // kelihatan "ada puncak" (cuma karena ujung dindingBelakang sendiri kebetulan sampai ke sana).
-    const footprintDindingKiri: TitikDatar[] = [
-      { x: 0, y: 0 },
-      { x: 0, y: H },
-      { x: -TEBAL_DINDING, y: H },
-      { x: -TEBAL_DINDING, y: 0 },
+    // Dibandingkan ulang secara presisi dengan skrip Python acuan: proyeksinya identik (sudut 30°, tanpa
+    // kompresi), dan di acuan kedua dinding solid bertemu di satu sudut ruangan, yang SELALU jadi titik
+    // tertinggi komposisi dari sudut pandang itu (screen_y=(x+y)*sin+OY minimal di situ karena x,y>=0 relatif
+    // terhadap sudut itu). Makanya dua dinding di bawah ini SELALU dibangun supaya bertemu persis di satu
+    // sudut ruangan (xSisi,ySisi) — bukan ditempel di dua sisi sembarang yang mungkin tidak bertemu di puncak.
+    const footprintDindingX: TitikDatar[] = [
+      { x: xSisi, y: 0 },
+      { x: xSisi, y: H },
+      { x: xSisi + xKeluar, y: H },
+      { x: xSisi + xKeluar, y: 0 },
     ];
-    // Tiang sudut tipis di pojok depan-kanan (satu-satunya pojok ruangan yang TIDAK ditempeli dinding solid
-    // ataupun dilewati pintu) — dua sisi ruangan ini sengaja dibiarkan terbuka (sisi kamera) supaya isi
+    // Tiang sudut tipis di pojok yang TIDAK ditempeli dinding solid manapun (sudut diagonal dari sudut tempat
+    // dua dinding solid bertemu) — dua sisi ruangan ini sengaja dibiarkan terbuka (sisi kamera) supaya isi
     // ruangan kelihatan, tapi itu bisa kerasa seperti ruangan "terpotong"/tidak utuh. Tiang tipis ini (bukan
     // dinding penuh, biar tidak menghalangi pandangan) cuma memberi isyarat bahwa batas ruangan tetap ada di
-    // situ, sama seperti tiang pintu di gambar acuan. (Pojoknya PINDAH ke (W,H) mengikuti pindahnya dinding
-    // kedua di atas — (0,H) sekarang sudah tersentuh dinding kiri yang baru, jadi tidak lagi "polos".)
+    // situ, sama seperti tiang pintu di gambar acuan.
+    const xSudutTerbuka = xSisi === 0 ? W : 0;
+    const xSudutTerbukaKeluar = xSudutTerbuka === 0 ? -TEBAL_DINDING : TEBAL_DINDING;
+    const ySudutTerbuka = ySisi === 0 ? H : 0;
+    const ySudutTerbukaKeluar = ySudutTerbuka === 0 ? -TEBAL_DINDING : TEBAL_DINDING;
     const footprintTiangSudut: TitikDatar[] = [
-      { x: W, y: H },
-      { x: W + TEBAL_DINDING, y: H },
-      { x: W + TEBAL_DINDING, y: H + TEBAL_DINDING },
-      { x: W, y: H + TEBAL_DINDING },
+      { x: xSudutTerbuka, y: ySudutTerbuka },
+      { x: xSudutTerbuka + xSudutTerbukaKeluar, y: ySudutTerbuka },
+      { x: xSudutTerbuka + xSudutTerbukaKeluar, y: ySudutTerbuka + ySudutTerbukaKeluar },
+      { x: xSudutTerbuka, y: ySudutTerbuka + ySudutTerbukaKeluar },
     ];
     // Pita ubin dekoratif di bagian bawah kedua dinding (selalu tampil, tidak terkait status apa pun) — di acuan
     // gambar isometrik, dinding punya ubin setinggi dada (bukan polos kosong), terutama penting sekarang dinding
     // jauh lebih tinggi dari sebelumnya dan akan terlihat kosong tanpa ini.
     const TINGGI_UBIN = ISO_TINGGI_DINDING * 0.45;
-    const ubinBelakang = ke([iso(0, 0, 0), iso(W, 0, 0), iso(W, 0, TINGGI_UBIN), iso(0, 0, TINGGI_UBIN)]);
-    const ubinKiri = ke([iso(0, 0, 0), iso(0, H, 0), iso(0, H, TINGGI_UBIN), iso(0, 0, TINGGI_UBIN)]);
+    const ubinY = ke([iso(0, ySisi, 0), iso(W, ySisi, 0), iso(W, ySisi, TINGGI_UBIN), iso(0, ySisi, TINGGI_UBIN)]);
+    const ubinX = ke([iso(xSisi, 0, 0), iso(xSisi, H, 0), iso(xSisi, H, TINGGI_UBIN), iso(xSisi, 0, TINGGI_UBIN)]);
 
     // Titik asli (sebelum digeser `dorongKeDalam`) dipakai untuk jejak benda di lantai; titik yang sudah digeser ke
     // arah ruangan dipakai untuk badge-nya — persis seperti pembagian x/y di tampak atas (lihat `Pintu`/`Kloset`/dst).
@@ -999,11 +1076,11 @@ export function DenahKamarMandi({
     // yang memang pakai garis hitam pekat di semua benda netral (dinding, lantai, kloset).
     return (
       <svg viewBox={`0 0 ${ISO_VW} ${ISO_VH}`} className={`mx-auto text-tinta ${ukuran}`} aria-hidden="true" focusable="false">
-        {/* Dinding sebagai kotak 3D sungguhan (lihat `footprintDindingBelakang`/`footprintDindingKiri` dan
-            komentar `TEBAL_DINDING` di atas) — sisi tegak, sisi ujung (ketebalan), dan tutup atas semuanya
+        {/* Dinding sebagai kotak 3D sungguhan (lihat `footprintDindingY`/`footprintDindingX` dan komentar
+            `TEBAL_DINDING`/`sudutAktif` di atas) — sisi tegak, sisi ujung (ketebalan), dan tutup atas semuanya
             otomatis tergambar lewat `BentukIso` yang sama dipakai benda lain, lengkap dengan bayangan per-sisi. */}
-        <BentukIso footprint={footprintDindingBelakang} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
-        <BentukIso footprint={footprintDindingKiri} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-permukaan" />
+        <BentukIso footprint={footprintDindingY} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
+        <BentukIso footprint={footprintDindingX} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-permukaan" />
         <BentukIso footprint={footprintTiangSudut} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
         <defs>
           <pattern id="iso-ubin" width="7" height="7" patternUnits="userSpaceOnUse">
@@ -1012,8 +1089,8 @@ export function DenahKamarMandi({
             <circle cx={5.5} cy={5} r={0.5} className="fill-garisKontrol" />
           </pattern>
         </defs>
-        <polygon points={ubinBelakang} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
-        <polygon points={ubinKiri} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
+        <polygon points={ubinY} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
+        <polygon points={ubinX} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
         <polygon points={lantai} fill="white" stroke="currentColor" strokeWidth={2.2} strokeLinejoin="round" />
         {Array.from({ length: 10 }, (_, baris) =>
           Array.from({ length: 7 }, (_, kolom) => {
@@ -1045,17 +1122,18 @@ export function DenahKamarMandi({
             strokeLinejoin="round"
           />
         )}
-        {/* Cermin berbingkai di dinding belakang: dekorasi tetap (bukan ikut status, tidak interaktif) — cuma
-            supaya ruangan tidak kelihatan kosong melompong, sama seperti acuan. Diposisikan proporsional
-            terhadap tinggi dinding (0,48–0,76 × ISO_TINGGI_DINDING, bukan angka tetap) supaya tetap di tengah-atas
-            dinding walau dindingnya sekarang jauh lebih tinggi — bukan menempel rendah dekat lantai. Dua lapis
-            poligon (bingkai + kaca) meniru bingkai cermin sungguhan, bukan kotak polos satu warna. */}
+        {/* Cermin berbingkai di dinding solid Y (belakang atau depan, ikut sudutAktif — lihat `ySisi` di atas):
+            dekorasi tetap (bukan ikut status, tidak interaktif) — cuma supaya ruangan tidak kelihatan kosong
+            melompong, sama seperti acuan. Diposisikan proporsional terhadap tinggi dinding (0,48–0,76 ×
+            ISO_TINGGI_DINDING, bukan angka tetap) supaya tetap di tengah-atas dinding walau dindingnya sekarang
+            jauh lebih tinggi — bukan menempel rendah dekat lantai. Dua lapis poligon (bingkai + kaca) meniru
+            bingkai cermin sungguhan, bukan kotak polos satu warna. */}
         <polygon
           points={[
-            iso(W * 0.7, 0, 0.48 * ISO_TINGGI_DINDING),
-            iso(W * 0.7 + 26, 0, 0.48 * ISO_TINGGI_DINDING),
-            iso(W * 0.7 + 26, 0, 0.76 * ISO_TINGGI_DINDING),
-            iso(W * 0.7, 0, 0.76 * ISO_TINGGI_DINDING),
+            iso(W * 0.7, ySisi, 0.48 * ISO_TINGGI_DINDING),
+            iso(W * 0.7 + 26, ySisi, 0.48 * ISO_TINGGI_DINDING),
+            iso(W * 0.7 + 26, ySisi, 0.76 * ISO_TINGGI_DINDING),
+            iso(W * 0.7, ySisi, 0.76 * ISO_TINGGI_DINDING),
           ]
             .map((p) => `${p.x},${p.y}`)
             .join(" ")}
@@ -1065,10 +1143,10 @@ export function DenahKamarMandi({
         />
         <polygon
           points={[
-            iso(W * 0.7 + 3, 0, 0.48 * ISO_TINGGI_DINDING + 3),
-            iso(W * 0.7 + 23, 0, 0.48 * ISO_TINGGI_DINDING + 3),
-            iso(W * 0.7 + 23, 0, 0.76 * ISO_TINGGI_DINDING - 3),
-            iso(W * 0.7 + 3, 0, 0.76 * ISO_TINGGI_DINDING - 3),
+            iso(W * 0.7 + 3, ySisi, 0.48 * ISO_TINGGI_DINDING + 3),
+            iso(W * 0.7 + 23, ySisi, 0.48 * ISO_TINGGI_DINDING + 3),
+            iso(W * 0.7 + 23, ySisi, 0.76 * ISO_TINGGI_DINDING - 3),
+            iso(W * 0.7 + 3, ySisi, 0.76 * ISO_TINGGI_DINDING - 3),
           ]
             .map((p) => `${p.x},${p.y}`)
             .join(" ")}
@@ -1234,6 +1312,31 @@ export function DenahKamarMandi({
           <ZoomIn className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
         </button>
 
+        {/* Tombol putar: pojok KIRI atas kartu (bukan kanan, supaya tidak berdesakan dengan tombol perbesar) —
+            cuma ada di tampilan isometrik, karena tampak-atas tidak punya "sisi dinding mana yang solid" untuk
+            diputar. Sengaja dua tombol terpisah (bukan satu tombol gilir) supaya arah putarannya jelas tanpa
+            perlu dibaca dulu, dan tetap 44×44px walau berdampingan. */}
+        {tampilan === "isometrik" && (
+          <div className="absolute left-3 top-3 flex gap-1">
+            <button
+              type="button"
+              onClick={() => putarSudut(-1)}
+              aria-label={t.denahPutarKiri}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup shadow-kartu"
+            >
+              <RotateCcw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+            </button>
+            <button
+              type="button"
+              onClick={() => putarSudut(1)}
+              aria-label={t.denahPutarKanan}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup shadow-kartu"
+            >
+              <RotateCw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+            </button>
+          </div>
+        )}
+
         {tampilan === "atas" ? denahSvg("w-full max-w-[220px]") : denahSvgIso("w-full max-w-[280px]")}
 
         {/* Catatan posisi/skala dan petunjuk ketuk nomor digabung satu badge info (bukan teks polos terpisah) —
@@ -1280,6 +1383,28 @@ export function DenahKamarMandi({
             >
               <X className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
             </button>
+            {/* Tombol putar juga ada di popup (bukan cuma kartu kecil) — sama persis, cuma di sini perlu
+                pointerEvents eksplisit karena berada di dalam kartu yang menghentikan klik menembus ke backdrop. */}
+            {tampilan === "isometrik" && (
+              <div className="absolute left-3 top-3 flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => putarSudut(-1)}
+                  aria-label={t.denahPutarKiri}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup"
+                >
+                  <RotateCcw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => putarSudut(1)}
+                  aria-label={t.denahPutarKanan}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup"
+                >
+                  <RotateCw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+                </button>
+              </div>
+            )}
             {tampilan === "atas" ? denahSvg("w-full max-w-none") : denahSvgIso("w-full max-w-none")}
           </div>
         </div>
