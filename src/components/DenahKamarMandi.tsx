@@ -46,16 +46,21 @@ const ISO_SUDUT = (30 * Math.PI) / 180;
 const ISO_COS = Math.cos(ISO_SUDUT);
 const ISO_SIN = Math.sin(ISO_SUDUT);
 const ISO_TINGGI_DINDING = 85;
+// Ruangan tampak atas aslinya 200×300 (memanjang, lihat W/H) — terlalu lonjong untuk isometrik, jadi kedalamannya
+// (H) dipadatkan di sini SAAT DIPROYEKSIKAN SAJA (bukan di titikDinding/zona dkk, yang tetap pakai W/H asli apa
+// adanya) supaya ruangannya terlihat lebih persegi dan bendanya tidak kelihatan kecil-kecil berjauhan.
+const ISO_KOMPRESI_Y = 0.62;
 // viewBox dan pergeseran dipilih manual supaya ruangan (W×H di atas, diproyeksikan lewat sudut 30°) pas di tengah
 // dengan sedikit jarak ke tepi, termasuk ruang di atas untuk dinding yang menjulang.
-const ISO_VW = 454;
-const ISO_VH = 356;
-const ISO_OX = 270;
-const ISO_OY = 95;
+const ISO_VW = 360;
+const ISO_VH = 308;
+const ISO_OX = 174;
+const ISO_OY = 100;
 
 /** Fungsi murni: titik (x,y) tampak-atas + ketinggian opsional -> titik 2D isometrik di viewBox ISO_VW×ISO_VH. */
 function iso(x: number, y: number, z = 0): { x: number; y: number } {
-  return { x: (x - y) * ISO_COS + ISO_OX, y: (x + y) * ISO_SIN - z + ISO_OY };
+  const yp = y * ISO_KOMPRESI_Y;
+  return { x: (x - yp) * ISO_COS + ISO_OX, y: (x + yp) * ISO_SIN - z + ISO_OY };
 }
 
 /** Jajaran genjang isometrik dari persegi panjang tampak-atas berpusat (x,y), setengah-lebar rx dan setengah-tinggi ry. */
@@ -126,12 +131,28 @@ function isoElipsDatar(x: number, y: number, rx: number, ry: number, z = 0, n = 
  * selalu dari arah depan-kiri (lihat `ISO_OX`/`ISO_OY`), jadi sisi "menghadap kamera" adalah yang arah normalnya
  * condong ke +y (depan) atau -x (kiri): sisi dengan normal (nx,ny) kelihatan kalau ny>nx.
  */
-function BentukIso({ footprint, tinggi, z = 0, kelas }: { footprint: TitikDatar[]; tinggi: number; z?: number; kelas: string }) {
+function BentukIso({
+  footprint,
+  tinggi,
+  z = 0,
+  kelas,
+  isi = "fill-white",
+}: {
+  footprint: TitikDatar[];
+  tinggi: number;
+  z?: number;
+  kelas: string;
+  /** Kelas Tailwind untuk isian tiap sisi (mis. "fill-aksen-muda") — baku putih, SELALU isian rata/pekat, bukan
+   *  currentColor tembus pandang seperti sebelumnya. Isian tembus pandang bikin dua bentuk yang berdekatan atau
+   *  bersentuhan (mis. tangki+mangkuk kloset) kelihatan belepotan di titik tumpang tindihnya — isian rata (gaya
+   *  "line art" ala acuan: putih/terang + garis tebal) tetap bersih sebagai siluet terpisah. */
+  isi?: string;
+}) {
   const pusat = {
     x: footprint.reduce((s, p) => s + p.x, 0) / footprint.length,
     y: footprint.reduce((s, p) => s + p.y, 0) / footprint.length,
   };
-  const sisiTampak: { a: TitikDatar; b: TitikDatar; opasitas: number }[] = [];
+  const sisiTampak: TitikDatar[][] = [];
   for (let i = 0; i < footprint.length; i++) {
     const a = footprint[i];
     const b = footprint[(i + 1) % footprint.length];
@@ -143,22 +164,18 @@ function BentukIso({ footprint, tinggi, z = 0, kelas }: { footprint: TitikDatar[
       nx = -nx;
       ny = -ny;
     }
-    // Dua tingkat gelap/terang (bukan satu warna rata) supaya tiap benda tetap kelihatan ada sudutnya walau
-    // jejaknya melengkung dan sisi tampaknya jadi banyak, bukan cuma dua seperti kotak sederhana.
-    if (ny > nx) sisiTampak.push({ a, b, opasitas: nx < 0 ? 0.42 : 0.28 });
+    if (ny > nx) sisiTampak.push([a, b]);
   }
   const ke = (titik: TitikDatar, tz: number) => iso(titik.x, titik.y, tz);
   const titikKe = (titik: { x: number; y: number }) => `${titik.x},${titik.y}`;
+  // `isi` (fill-*) dan `kelas` (text-*, sumber warna garis lewat stroke="currentColor") dua namespace kelas Tailwind
+  // yang beda, jadi aman digabung di satu elemen: isiannya rata/pekat sesuai `isi`, garisnya ikut warna status.
   return (
-    <g className={kelas} stroke="currentColor" strokeWidth={1.8} strokeLinejoin="round" fill="currentColor">
-      {sisiTampak.map(({ a, b, opasitas }, i) => (
-        <polygon
-          key={i}
-          points={[ke(a, z), ke(b, z), ke(b, z + tinggi), ke(a, z + tinggi)].map(titikKe).join(" ")}
-          fillOpacity={opasitas}
-        />
+    <g className={`${isi} ${kelas}`} stroke="currentColor" strokeWidth={2} strokeLinejoin="round">
+      {sisiTampak.map(([a, b], i) => (
+        <polygon key={i} points={[ke(a, z), ke(b, z), ke(b, z + tinggi), ke(a, z + tinggi)].map(titikKe).join(" ")} />
       ))}
-      <polygon points={footprint.map((p) => titikKe(ke(p, z + tinggi))).join(" ")} fillOpacity={0.13} />
+      <polygon points={footprint.map((p) => titikKe(ke(p, z + tinggi))).join(" ")} />
     </g>
   );
 }
@@ -851,9 +868,11 @@ export function DenahKamarMandi({
     // dindingnya sendiri.
     const pintuDiDinding = keDinding(pintu.x, pintu.y, pintu.dinding);
     const pintuPanel = dorongKeDalam(pintuDiDinding.x, pintuDiDinding.y, pintu.dinding, 3);
-    // Tangki kloset dan keran wastafel digeser sedikit ke arah dinding (jarak negatif) dari badan utamanya.
-    const klosetTangki = dorongKeDalam(kloset.x, kloset.y, kloset.dinding, -8);
-    const wastafelKeran = dorongKeDalam(wastafel.x, wastafel.y, wastafel.dinding, -4);
+    // Tangki kloset dan keran wastafel digeser ke arah dinding (jarak negatif) dari badan utamanya — jaraknya
+    // dihitung dari jumlah "setengah lebar" kedua bentuk (bowl+tank, counter+keran) dikurangi sedikit supaya pas
+    // bersentuhan di satu sisi, BUKAN tumpang tindih di tengah seperti sebelumnya (itu yang bikin garisnya kusut).
+    const klosetTangki = dorongKeDalam(kloset.x, kloset.y, kloset.dinding, -(24 + 15 - 5));
+    const wastafelKeran = dorongKeDalam(wastafel.x, wastafel.y, wastafel.dinding, -(22 + 3 - 2));
 
     const badgeIso = (titik: { x: number; y: number }, id: string, nomorId: number | undefined, warnaId: string, latarId: string) =>
       nomorId !== undefined && (
@@ -911,21 +930,32 @@ export function DenahKamarMandi({
             strokeLinejoin="round"
           />
         )}
+        {/* Cermin di dinding belakang: dekorasi tetap (bukan ikut status, tidak interaktif) — cuma supaya ruangan
+            tidak kelihatan kosong melompong, sama seperti acuan yang juga punya elemen pengisi di dinding. */}
+        <polygon
+          points={[iso(W * 0.72, 0, 42), iso(W * 0.72 + 22, 0, 42), iso(W * 0.72 + 22, 0, 66), iso(W * 0.72, 0, 66)]
+            .map((p) => `${p.x},${p.y}`)
+            .join(" ")}
+          className="fill-permukaan text-garisKontrol"
+          stroke="currentColor"
+          strokeWidth={1.6}
+        />
         {/* Tiga benda fisik (pintu, kloset, wastafel) digambar sebagai bentuk 3D sungguhan (lihat `BentukIso`) —
             beda dari area mandi/ruang gerak di atas, yang jejaknya datar karena memang bukan benda fisik yang
             kelihatan wujudnya di foto (sama seperti perlakuannya di tampak atas). */}
         <BentukIso
-          footprint={footprintPersegi(pintuPanel.x, pintuPanel.y, sejajar(pintu.dinding) ? 2.5 : 15, sejajar(pintu.dinding) ? 15 : 2.5)}
-          tinggi={70}
+          footprint={footprintPersegi(pintuPanel.x, pintuPanel.y, sejajar(pintu.dinding) ? 4 : 22, sejajar(pintu.dinding) ? 22 : 4)}
+          tinggi={78}
           kelas={warna("pintu")}
+          isi={latar("pintu")}
         />
         {/* Kloset digambar dua bentuk (bukan satu kotak polos) supaya kelihatan seperti kloset sungguhan: mangkuk
             bundar (elips, lebih rendah, menjorok ke ruangan) + tangki bersudut membulat (lebih sempit tapi lebih
-            tinggi, menempel ke arah dinding) — sama seperti tampak atas yang juga membedakan `tangki` dari
-            `mangkuk`, cuma di sini mangkuknya benar-benar melengkung, bukan kotak. */}
+            tinggi, menempel ke arah dinding) — jaraknya dihitung supaya cuma bersentuhan di satu sisi, tidak
+            tumpang tindih (lihat `klosetTangki` di atas). */}
         <BentukIso
-          footprint={footprintElips(kloset.x, kloset.y, sejajar(kloset.dinding) ? 17 : 13, sejajar(kloset.dinding) ? 13 : 17)}
-          tinggi={22}
+          footprint={footprintElips(kloset.x, kloset.y, sejajar(kloset.dinding) ? 24 : 17, sejajar(kloset.dinding) ? 17 : 24)}
+          tinggi={26}
           kelas="text-tinta"
         />
         {/* Lingkar dudukan: aksen datar di atas mangkuk, bukan benda terpisah — supaya siluetnya langsung terbaca
@@ -934,37 +964,44 @@ export function DenahKamarMandi({
           points={isoElipsDatar(
             kloset.x,
             kloset.y,
-            (sejajar(kloset.dinding) ? 17 : 13) * 0.72,
-            (sejajar(kloset.dinding) ? 13 : 17) * 0.72,
-            22,
+            (sejajar(kloset.dinding) ? 24 : 17) * 0.72,
+            (sejajar(kloset.dinding) ? 17 : 24) * 0.72,
+            26,
           )}
           className="text-tinta"
           fill="none"
           stroke="currentColor"
-          strokeWidth={1.4}
+          strokeWidth={1.6}
           opacity={0.8}
         />
         <BentukIso
-          footprint={footprintPotong(klosetTangki.x, klosetTangki.y, sejajar(kloset.dinding) ? 11 : 6, sejajar(kloset.dinding) ? 6 : 11, 3)}
-          tinggi={44}
+          footprint={footprintPotong(klosetTangki.x, klosetTangki.y, sejajar(kloset.dinding) ? 15 : 9, sejajar(kloset.dinding) ? 9 : 15, 4)}
+          tinggi={48}
           kelas="text-tinta"
         />
         {/* Wastafel: konter bersudut membulat (lebar, rendah) + cekungan elips di atasnya + keran kecil menonjol
-            dekat dinding — satu kotak polos sendirian terlihat terlalu pipih untuk terbaca sebagai benda 3D. */}
+            dekat dinding, jaraknya dihitung sama seperti kloset supaya tidak tumpang tindih. */}
         <BentukIso
-          footprint={footprintPotong(wastafel.x, wastafel.y, sejajar(wastafel.dinding) ? 8 : 16, sejajar(wastafel.dinding) ? 16 : 8, 4)}
-          tinggi={24}
+          footprint={footprintPotong(wastafel.x, wastafel.y, sejajar(wastafel.dinding) ? 11 : 22, sejajar(wastafel.dinding) ? 22 : 11, 5)}
+          tinggi={26}
           kelas={warna("wastafel")}
+          isi={latar("wastafel")}
         />
         <polygon
-          points={isoElipsDatar(wastafel.x, wastafel.y, sejajar(wastafel.dinding) ? 4.5 : 9, sejajar(wastafel.dinding) ? 9 : 4.5, 24)}
+          points={isoElipsDatar(wastafel.x, wastafel.y, sejajar(wastafel.dinding) ? 5.5 : 11, sejajar(wastafel.dinding) ? 11 : 5.5, 26)}
           className={warna("wastafel")}
           fill="none"
           stroke="currentColor"
-          strokeWidth={1.4}
+          strokeWidth={1.6}
           opacity={0.8}
         />
-        <BentukIso footprint={footprintPotong(wastafelKeran.x, wastafelKeran.y, 3, 3, 1)} tinggi={12} z={24} kelas={warna("wastafel")} />
+        <BentukIso
+          footprint={footprintPotong(wastafelKeran.x, wastafelKeran.y, 3, 3, 1)}
+          tinggi={14}
+          z={26}
+          kelas={warna("wastafel")}
+          isi={latar("wastafel")}
+        />
         {badgeIso({ x: W / 2, y: H / 2 }, "ruang", nomorRuang, warna("ruang"), latar("ruang"))}
         {badgeIso({ x: W / 2, y: H / 2 - 45 }, "lantai", nomorLantai, warna("lantai"), latar("lantai"))}
         {badgeIso(pintuBadge, "pintu", nomor("pintu"), warna("pintu"), latar("pintu"))}
