@@ -594,6 +594,10 @@ export function DenahKamarMandi({
         />
         </svg>
 
+        {/* Catatan ini tentang gambar denah di atasnya (bukan tentang toggle "tampilkan nama benda" di bawah),
+            jadi ditaruh langsung di bawah svg-nya, masih dalam segmen denah yang sama. */}
+        <figcaption className="mt-2 text-kecil text-redup">{t.denahCatatan}</figcaption>
+
         {/* Pembatas selebar kartu (-mx-4 menegasikan padding kartu) antara gambar denah dan segmen "tampilkan nama benda". */}
         <div className="-mx-4 my-3 border-t border-garis" />
 
@@ -614,8 +618,6 @@ export function DenahKamarMandi({
             />
           </span>
         </button>
-
-        <figcaption className="mt-2 text-kecil text-redup">{t.denahCatatan}</figcaption>
 
         {children && (
           <>
