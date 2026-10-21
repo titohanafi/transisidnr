@@ -45,12 +45,12 @@ const JARAK_DINDING = 35;
 const ISO_SUDUT = (30 * Math.PI) / 180;
 const ISO_COS = Math.cos(ISO_SUDUT);
 const ISO_SIN = Math.sin(ISO_SUDUT);
-// Dicek ulang lewat acuan gambar isometrik yang dirender langsung (bukan cuma dibaca koordinatnya): di acuan,
-// DINDING mendominasi gambar (lantai cuma kelihatan sebagai jalur tipis di depan pintu) — tingginya di layar
-// malah LEBIH BESAR dari kedalaman lantai, kebalikan dari sebelumnya di sini. Dinaikkan jauh lebih tinggi lagi
-// (dulu 150) supaya rasionya mendekati acuan; kloset/wastafel jadi kelihatan kecil terhadap dinding, tapi itu
-// juga yang terjadi di acuan (tokonya memang tidak sampai dekat langit-langit).
-const ISO_TINGGI_DINDING = 270;
+// 270 (percobaan sebelumnya) ternyata TERLALU tinggi: di foto sungguhan, benda (pintu/kloset/wastafel) bisa ada
+// di dinding "depan"/"kiri" yang TIDAK digambar solid (sisi terbuka diorama, lihat `dindingBelakang`/`dindingKanan`
+// di bawah) — pintu jadi kelihatan seperti papan melayang tanpa konteks dinding kalau terlalu tinggi/besar, bukan
+// makin mirip acuan. Diturunkan ke titik tengah (190): tetap jauh lebih tinggi dari awal (85) supaya terasa "di
+// dalam ruangan", tapi tidak membuat benda yang jatuh di sisi terbuka jadi aneh.
+const ISO_TINGGI_DINDING = 190;
 // Ruangan tampak atas aslinya 200×300 (memanjang, lihat W/H). Dulu kedalaman (H) dipadatkan sampai 0.62 supaya
 // kedua dinding sama panjang ("persegi") — tapi acuan gambar justru TIDAK persegi, satu dinding jelas lebih
 // panjang dari yang lain. Kompresi dikurangi (0.82, bukan dihapus total) supaya asimetrinya kelihatan tanpa
@@ -59,9 +59,9 @@ const ISO_KOMPRESI_Y = 0.82;
 // viewBox dan pergeseran dipilih manual supaya ruangan (W×H di atas, diproyeksikan lewat sudut 30° dan tinggi
 // dinding baru) memenuhi kanvas dengan jarak tipis ke tepi.
 const ISO_VW = 440;
-const ISO_VH = 550;
+const ISO_VH = 470;
 const ISO_OX = 240;
-const ISO_OY = 299;
+const ISO_OY = 219;
 
 /** Fungsi murni: titik (x,y) tampak-atas + ketinggian opsional -> titik 2D isometrik di viewBox ISO_VW×ISO_VH. */
 function iso(x: number, y: number, z = 0): { x: number; y: number } {
@@ -957,19 +957,17 @@ export function DenahKamarMandi({
           : pintu.dinding === "depan"
             ? { x: 0, y: -1 }
             : { x: 0, y: 1 };
-    // Sudut buka dan ukuran pintu dibesarkan jauh (dulu 60°/lebar 32) — dibandingkan ulang ke acuan, pintu di
-    // sana jadi salah satu elemen PALING besar di gambar (daun pintu dibuka hampir menghadap kamera, bukan
-    // menyamping tipis), bukan sekadar garis tipis kecil di pojok seperti sebelumnya.
-    const SUDUT_BUKA_PINTU = (100 * Math.PI) / 180;
+    // Dulu dibesarkan jauh (lebar 100, sudut 100°) meniru satu foto acuan tertentu — ternyata pintu BISA jatuh di
+    // dinding "depan"/"kiri", yang di sini memang sengaja TIDAK digambar solid (sisi terbuka diorama, supaya
+    // isinya kelihatan — lihat `dindingBelakang`/`dindingKanan`). Pintu sebesar itu di sisi tanpa dinding solid
+    // jadi kelihatan seperti papan melayang tak jelas, bukan makin mirip acuan. Dikembalikan ke ukuran sedang
+    // (dulu 60°/32, sekarang 75°/42) — lebih besar dari awal, tapi tidak berlebihan di sisi manapun ia jatuh.
+    const SUDUT_BUKA_PINTU = (75 * Math.PI) / 180;
     const arahBukaPintu = {
       x: arahSejajarPintu.x * Math.cos(SUDUT_BUKA_PINTU) + arahDalamPintu.x * Math.sin(SUDUT_BUKA_PINTU),
       y: arahSejajarPintu.y * Math.cos(SUDUT_BUKA_PINTU) + arahDalamPintu.y * Math.sin(SUDUT_BUKA_PINTU),
     };
-    // Dicek lagi lewat screenshot sungguhan (bukan cuma baca angka): 56 ternyata MASIH kelihatan seperti garis
-    // tipis dibanding kanvas yang sekarang jauh lebih besar/tinggi — di acuan, pintu makan sekitar sepertiga
-    // lebar gambar. Dibesarkan lagi jauh (ke 100) sampai proporsinya sebanding, walau jadi lebih besar dari
-    // "wajar" dibanding dinding (sama seperti acuan, yang juga tidak digambar skala sebenarnya).
-    const LEBAR_PINTU = 100;
+    const LEBAR_PINTU = 42;
     const engselPintu = {
       x: pintuDiDinding.x - arahSejajarPintu.x * (LEBAR_PINTU / 2),
       y: pintuDiDinding.y - arahSejajarPintu.y * (LEBAR_PINTU / 2),
@@ -1055,14 +1053,15 @@ export function DenahKamarMandi({
         )}
         {/* Kepala shower digambar MENEMPEL DINDING (kotak + pipa naik ke dekat langit-langit), bukan lingkaran
             semprot melayang di tengah lantai seperti sebelumnya — acuan gambar isometrik menggambarnya persis
-            begitu: kotak kecil di dinding dengan pipa pendek ke kotak lebih kecil dekat langit-langit. */}
-        {nomor("jangkauan") !== undefined && (
-          <g className={warna("jangkauan")} stroke="currentColor" fill="white" strokeWidth={1.6} pointerEvents="none">
-            <line x1={showerPipaAtas.x} y1={showerPipaAtas.y} x2={showerPipaBawah.x} y2={showerPipaBawah.y} strokeWidth={3} strokeLinecap="round" />
-            <polygon points={showerKotakAtas} strokeLinejoin="round" />
-            <polygon points={showerKotak} strokeLinejoin="round" />
-          </g>
-        )}
+            begitu: kotak kecil di dinding dengan pipa pendek ke kotak lebih kecil dekat langit-langit.
+            SELALU digambar (tidak dikondisikan nomor("jangkauan")) — beda dari zona area mandi/lingkaran ruang
+            gerak yang memang abstrak, kepala shower ini benda fisik sungguhan (sama seperti kloset/wastafel/
+            pintu yang juga selalu digambar netral lebih dulu, baru warnanya ikut status kalau cocok filter). */}
+        <g className={warna("jangkauan")} stroke="currentColor" fill="white" strokeWidth={1.6} pointerEvents="none">
+          <line x1={showerPipaAtas.x} y1={showerPipaAtas.y} x2={showerPipaBawah.x} y2={showerPipaBawah.y} strokeWidth={3} strokeLinecap="round" />
+          <polygon points={showerKotakAtas} strokeLinejoin="round" />
+          <polygon points={showerKotak} strokeLinejoin="round" />
+        </g>
         {/* Cermin berbingkai di dinding belakang: dekorasi tetap (bukan ikut status, tidak interaktif) — cuma
             supaya ruangan tidak kelihatan kosong melompong, sama seperti acuan. Diposisikan proporsional
             terhadap tinggi dinding (0,48–0,76 × ISO_TINGGI_DINDING, bukan angka tetap) supaya tetap di tengah-atas
@@ -1109,7 +1108,7 @@ export function DenahKamarMandi({
             `footprintPintuTerbuka`), bukan rata menempel dinding, supaya bentuknya sendiri langsung terbaca. */}
         <BentukIso
           footprint={footprintPintuTerbuka(engselPintu.x, engselPintu.y, LEBAR_PINTU, 5, arahBukaPintu)}
-          tinggi={0.85 * ISO_TINGGI_DINDING}
+          tinggi={100}
           kelas={warna("pintu")}
           isi={latar("pintu")}
         />
