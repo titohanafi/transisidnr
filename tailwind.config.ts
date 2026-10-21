@@ -49,7 +49,7 @@ export default {
         // Dipakai saat satu hal di "Rincian per indikator" dikoreksi ke status lain: kartunya tidak langsung hilang
         // dari tab (yang bikin terasa seperti "tidak ada perubahan" karena kartu berikutnya langsung naik), tapi
         // menunjukkan konfirmasi sesaat (lihat PindaiFoto.tsx) lalu memudar keluar baru benar-benar dilepas dari tab.
-        pudar: { "0%": { opacity: "1", transform: "scale(1)" }, "100%": { opacity: "0", transform: "scale(0.97)" } },
+        pudar: { "0%": { opacity: "1" }, "100%": { opacity: "0" } },
       },
       animation: {
         muncul: "muncul 250ms ease-out",
