@@ -25,11 +25,19 @@ const TEBAL_DINDING = 0.03;
 // di sini benda-benda berdiri BERSAMA dalam satu ruangan, jadi proporsi relatif antar benda DAN terhadap
 // ruangan penting. Angka-angka ini perkiraan kasar (bukan ukuran nyata — dilarang mengarang ukuran kamar mandi
 // pengguna, lihat CLAUDE.md), cuma supaya siluetnya masuk akal berdampingan dan terhadap ruangan.
+//
+// Rasio kloset sebelumnya (0.2) dicek ulang: dicocokkan ke pecahan tinggi pintu (acuan tinggi manusia yang jelas)
+// bukan ditebak langsung dari tinggi dinding — kloset sungguhan (sampai tangki) biasanya ~35-40% tinggi pintu
+// standar, bukan 20%. Setelah dicek, benda terlihat jelas tapi kloset & area_mandi masih kalah mencolok —
+// dilaporkan user via screenshot ("kloset terlalu kecil, overall objeknya semua masih terlihat kecil"). Dinaikkan
+// lagi sedikit di atas rasio dunia nyata murni (terutama area_mandi, yang aslinya cuma fixture kecil menempel
+// dinding) karena ini denah SKEMATIK untuk dibaca sekilas dengan kuota rendah, bukan render presisi — legibility
+// diutamakan di atas akurasi skala literal (sudah ditandai "tidak seukuran aslinya" di UI).
 const TINGGI_TARGET: Record<ObjekDenah, number> = {
   pintu: TINGGI_DINDING * 0.85, // nyaris setinggi dinding, sisakan sedikit ambang di atas
-  wastafel: TINGGI_DINDING * 0.35,
-  kloset: TINGGI_DINDING * 0.2,
-  area_mandi: TINGGI_DINDING * 0.12,
+  wastafel: TINGGI_DINDING * 0.4,
+  kloset: TINGGI_DINDING * 0.38,
+  area_mandi: TINGGI_DINDING * 0.22,
 };
 
 // Dasar vertikal (y) tempat benda "berdiri" — kebanyakan di lantai (y=0), KECUALI kepala shower yang menempel
@@ -39,7 +47,9 @@ const DASAR_Y: Record<ObjekDenah, number> = {
   pintu: 0,
   kloset: 0,
   wastafel: 0,
-  area_mandi: TINGGI_DINDING * 0.78,
+  // Diturunkan dari 0.78 ke 0.65 supaya ujung atas kepala shower (yang sekarang lebih tinggi, lihat TINGGI_TARGET)
+  // tidak mepet/terpotong di puncak dinding.
+  area_mandi: TINGGI_DINDING * 0.65,
 };
 
 // Rotasi tambahan PER JENIS BENDA (radian, ditambahkan ke rotasi dasar dari `posisiTiga`) — model GLB diekspor
