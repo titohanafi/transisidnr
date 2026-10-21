@@ -2,7 +2,7 @@
 // lihat DECISIONS.md). Mengonversi posisi 2D yang sudah dipakai tampak-atas/isometrik SVG (`titikDinding` di
 // `denahGeometri.ts`) ke koordinat 3D Three.js, supaya satu sumber posisi dipakai di ketiga tampilan (bukan
 // turunan baru yang bisa diam-diam beda).
-import { H, keDinding, titikDinding, W } from "./denahGeometri";
+import { H, titikDinding, W } from "./denahGeometri";
 import type { DindingDenah, LetakDenah } from "./pindai";
 
 // Ruangan 200x300 (W x H, satuan dunia SVG) dikonversi ke satuan Three.js lewat SKALA_TIGA. Nilai sebelumnya
@@ -49,20 +49,32 @@ export function posisiTiga(letak: LetakDenah): PosisiTiga {
   };
 }
 
-/** Sama seperti `posisiTiga`, tapi koordinat tegak lurus dinding dipaksa RATA ke garis dinding (lewat `keDinding`,
- *  bukan digeser JARAK_DINDING seperti `titikDinding`) — dipakai untuk benda yang SUNGGUHAN menempel ke dinding
- *  (mis. kepala shower), beda dari benda berdiri bebas (kloset/wastafel) yang memang wajar punya jarak dari
- *  dinding. Tanpa ini, benda "menempel dinding" malah mengambang di tengah ruangan (lihat DECISIONS.md). */
-export function posisiTigaMenempel(letak: LetakDenah): PosisiTiga {
-  const titik = titikDinding(letak);
-  const rata = keDinding(titik.x, titik.y, titik.dinding);
-  return {
-    x: (rata.x - W / 2) * SKALA_TIGA,
-    z: (rata.y - H / 2) * SKALA_TIGA,
-    rotasiY: rotasiMenghadapDalam(titik.dinding),
-  };
-}
-
 /** Lebar/dalam lantai ruangan dalam satuan Three.js (dipakai untuk PlaneGeometry acuan). */
 export const LANTAI_LEBAR = W * SKALA_TIGA;
 export const LANTAI_DALAM = H * SKALA_TIGA;
+
+/** Sama seperti `posisiTiga`, tapi koordinat tegak lurus dinding dipaksa RATA ke garis dinding SUNGGUHAN di
+ *  satuan Three.js (±LANTAI_LEBAR/2 atau ±LANTAI_DALAM/2) — dipakai untuk benda yang SUNGGUHAN menempel/tertanam
+ *  di dinding (kepala shower, daun pintu), beda dari benda berdiri bebas (kloset/wastafel) yang memang wajar
+ *  punya jarak dari dinding.
+ *
+ *  SEBELUMNYA fungsi ini memakai `keDinding` (satuan SVG, ikut PAD=10 dari denahGeometri.ts) lalu dikonversi
+ *  lewat SKALA_TIGA — itu salah: PAD dipilih untuk skala SVG yang lama (W=200), begitu SKALA_TIGA diperkecil
+ *  (lihat komentar di atas) celah dari PAD itu jadi PROPORSIONAL LEBIH BESAR terhadap ruangan yang mengecil,
+ *  hasilnya benda makin terlihat TIDAK menempel dinding padahal maksudnya sebaliknya. Sekarang koordinat tegak
+ *  lurusnya dihitung LANGSUNG dari ukuran lantai 3D (tidak lewat satuan SVG sama sekali), jadi selalu rata ke
+ *  dinding berapa pun SKALA_TIGA-nya. */
+export function posisiTigaMenempel(letak: LetakDenah): PosisiTiga {
+  const titik = titikDinding(letak);
+  const x = (titik.x - W / 2) * SKALA_TIGA;
+  const z = (titik.y - H / 2) * SKALA_TIGA;
+  const rata =
+    titik.dinding === "kiri"
+      ? { x: -LANTAI_LEBAR / 2, z }
+      : titik.dinding === "kanan"
+        ? { x: LANTAI_LEBAR / 2, z }
+        : titik.dinding === "depan"
+          ? { x, z: LANTAI_DALAM / 2 }
+          : { x, z: -LANTAI_DALAM / 2 };
+  return { ...rata, rotasiY: rotasiMenghadapDalam(titik.dinding) };
+}

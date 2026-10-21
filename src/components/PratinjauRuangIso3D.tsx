@@ -30,14 +30,14 @@ const TEBAL_DINDING = 0.03;
 // bukan ditebak langsung dari tinggi dinding — kloset sungguhan (sampai tangki) biasanya ~35-40% tinggi pintu
 // standar, bukan 20%. Setelah dicek, benda terlihat jelas tapi kloset & area_mandi masih kalah mencolok —
 // dilaporkan user via screenshot ("kloset terlalu kecil, overall objeknya semua masih terlihat kecil"). Dinaikkan
-// lagi sedikit di atas rasio dunia nyata murni (terutama area_mandi, yang aslinya cuma fixture kecil menempel
-// dinding) karena ini denah SKEMATIK untuk dibaca sekilas dengan kuota rendah, bukan render presisi — legibility
-// diutamakan di atas akurasi skala literal (sudah ditandai "tidak seukuran aslinya" di UI).
+// lagi sedikit di atas rasio dunia nyata murni untuk area_mandi (0.22), TAPI user lalu melapor itu jadi kebesaran
+// dibanding benda lain & shower sungguhan — diturunkan lagi ke 0.15, lebih dekat ke ukuran kepala shower asli
+// (fixture-nya sendiri, tanpa lengan panjang, biasanya ~12-15% tinggi dinding), bukan dibesar-besarkan lagi.
 const TINGGI_TARGET: Record<ObjekDenah, number> = {
   pintu: TINGGI_DINDING * 0.85, // nyaris setinggi dinding, sisakan sedikit ambang di atas
   wastafel: TINGGI_DINDING * 0.4,
   kloset: TINGGI_DINDING * 0.38,
-  area_mandi: TINGGI_DINDING * 0.22,
+  area_mandi: TINGGI_DINDING * 0.15,
 };
 
 // Dasar vertikal (y) tempat benda "berdiri" — kebanyakan di lantai (y=0), KECUALI kepala shower yang menempel
@@ -62,6 +62,15 @@ const ROTASI_KALIBRASI: Record<ObjekDenah, number> = {
   wastafel: 0,
   area_mandi: 0,
 };
+
+// Kemiringan TAMBAHAN (radian, sumbu-X LOKAL benda — lihat `rotation.order = "YXZ"` di bawah) khusus area_mandi:
+// rotasi Y saja (ROTASI_KALIBRASI) cuma memutar benda MENDATAR (menentukan dinding mana yang dihadapi), tidak
+// bisa membuat lingkaran kepala shower MENUNDUK ke lantai/area mandi — itu perlu kemiringan di sumbu lain. User
+// melapor lingkaran air mengarah ke kloset (horizontal), bukan ke lantai, karena model diekspor dengan kepala
+// menghadap LURUS ke depan (sejajar lengan), bukan sudah menunduk. Nilai negatif = ujung kepala menunduk (sumbu-X
+// lokal, diterapkan SEBELUM rotasi Y lewat urutan Euler "YXZ" supaya arah "turun" konsisten di dinding manapun) —
+// dipilih lewat cek visual, bukan angka baku (tidak ada spesifikasi sudut pancuran dari pengguna).
+const KEMIRINGAN_AREA_MANDI = -0.55;
 
 const ELEVASI_KAMERA = Math.atan(1 / Math.sqrt(2));
 const JARAK_KAMERA = 12;
@@ -168,15 +177,18 @@ export function PratinjauRuangIso3D({
     for (const id of OBJEK_DENAH) {
       // `letak(id)` (closure dari DenahKamarMandi.tsx) sudah menjatuhkan ke POSISI_BAWAAN kalau dindingnya
       // "tidak_terlihat" — selalu mengembalikan LetakDenah yang valid (4 dinding, tidak pernah "tidak_terlihat").
-      // `area_mandi` (kepala shower) pakai `posisiTigaMenempel` (rata ke garis dinding) karena itu benda yang
-      // sungguhan menempel dinding — beda dari kloset/wastafel yang wajar berjarak dari dinding (lihat komentar
-      // di isoTigaGeometri.ts). Tanpa ini shower terlihat mengambang di tengah ruangan, bukan menempel dinding.
+      // `area_mandi` (kepala shower) & `pintu` (daun pintu) pakai `posisiTigaMenempel` (rata ke garis dinding
+      // sungguhan di satuan 3D) karena keduanya SUNGGUHAN menempel/tertanam di dinding — beda dari kloset/
+      // wastafel yang wajar berdiri berjarak dari dinding (lihat komentar di isoTigaGeometri.ts). Tanpa ini,
+      // shower terlihat mengambang di tengah ruangan dan pintu menyisakan sejumput lantai di belakangnya yang
+      // seharusnya sudah jadi bagian dinding.
       const letakId = letak(id);
-      const posisi = id === "area_mandi" ? posisiTigaMenempel(letakId) : posisiTiga(letakId);
-      // Dorong sedikit ke dalam ruangan (menjauhi garis tengah dinding) supaya mesh shower tidak z-fighting /
-      // menembus dinding — kecil saja (separuh tebal dinding + sedikit), cukup supaya kelihatan menempel tanpa
-      // tenggelam di dalam geometri dinding.
-      if (id === "area_mandi") {
+      const menempel = id === "area_mandi" || id === "pintu";
+      const posisi = menempel ? posisiTigaMenempel(letakId) : posisiTiga(letakId);
+      // Dorong sedikit ke dalam ruangan (menjauhi garis dinding) supaya mesh tidak z-fighting / menembus dinding
+      // — kecil saja (separuh tebal dinding + sedikit), cukup supaya kelihatan menempel tanpa tenggelam di dalam
+      // geometri dinding.
+      if (menempel) {
         const dorong = TEBAL_DINDING / 2 + 0.02;
         if (letakId.dinding === "kiri") posisi.x += dorong;
         else if (letakId.dinding === "kanan") posisi.x -= dorong;
@@ -199,6 +211,10 @@ export function PratinjauRuangIso3D({
           // Pusatkan x/z benda ke titik jangkarnya sendiri (0,0,0) dulu, baru digeser ke posisi dunia — supaya
           // titik jangkar konsisten di tengah-bawah model, lepas dari titik tumpu aslinya di file GLB.
           model.position.set(-pusat.x, -kotakSetelahSkala.min.y, -pusat.z);
+          // Kemiringan kepala shower diterapkan di ROTASI LOKAL model (bukan pembungkus) — supaya "menunduk"-nya
+          // selalu relatif ke benda itu sendiri, lepas dari rotasi Y pembungkus yang menentukan dinding mana yang
+          // dihadapi (dua rotasi di dua node berbeda, tidak perlu mengatur urutan Euler).
+          if (id === "area_mandi") model.rotation.x = KEMIRINGAN_AREA_MANDI;
           const pembungkus = new THREE.Group();
           pembungkus.add(model);
           pembungkus.position.set(posisi.x, DASAR_Y[id], posisi.z);
