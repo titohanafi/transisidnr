@@ -29,6 +29,7 @@ import {
 } from "../domain/denahGeometri";
 import { UKURAN_AREA_MANDI, UKURAN_KLOSET, UKURAN_PINTU, UKURAN_WASTAFEL } from "../domain/objekUkuran";
 import { PratinjauIsoTiga } from "./PratinjauIsoTiga";
+import { PratinjauRuangIso3D } from "./PratinjauRuangIso3D";
 
 // Prototipe Milestone 3 (lihat DECISIONS.md): kalau aktif, tab Isometrik menampilkan model 3D (Three.js) alih-alih
 // SVG tangan, KHUSUS untuk dibandingkan visual — bukan jalur produksi, belum ada posisi/rotasi/status sungguhan.
@@ -37,7 +38,9 @@ const MODE_ISO_3D = import.meta.env.VITE_ISO_3D === "true";
 // Galeri 4 benda berdampingan (bukan satu per satu) supaya keselarasan gaya antar sumber (Quaternius untuk
 // kloset/wastafel/pintu, Kenney untuk shower — Quaternius tidak punya model shower, lihat DECISIONS.md) bisa
 // dinilai langsung, bukan ditebak dari pratinjau terpisah di poly.pizza.
-function GaleriIso3D({ kelas = "" }: { kelas?: string }) {
+// Diekspor (bukan dipakai di file ini lagi sejak Milestone 4) supaya tetap bisa dipakai untuk cek kualitas
+// bentuk satu-satu per benda di masa depan — lihat PratinjauRuangIso3D untuk tampilan utama tab Isometrik 3D.
+export function GaleriIso3D({ kelas = "" }: { kelas?: string }) {
   const benda = [
     { nama: "Pintu", src: "/model/pintu/quaternius-pintu.glb" },
     { nama: "Kloset", src: "/model/toilet-quaternius/quaternius-toilet.glb" },
@@ -1294,7 +1297,7 @@ export function DenahKamarMandi({
         {tampilan === "atas" ? (
           denahSvg("w-full max-w-[220px]")
         ) : MODE_ISO_3D ? (
-          <GaleriIso3D kelas="w-full max-w-[280px]" />
+          <PratinjauRuangIso3D letak={letak} kelas="h-64 w-full max-w-[280px]" />
         ) : (
           denahSvgIso("w-full max-w-[280px]")
         )}
@@ -1368,7 +1371,7 @@ export function DenahKamarMandi({
             {tampilan === "atas" ? (
               denahSvg("w-full max-w-none")
             ) : MODE_ISO_3D ? (
-              <GaleriIso3D kelas="h-[70vh] w-full" />
+              <PratinjauRuangIso3D letak={letak} kelas="h-[70vh] w-full" />
             ) : (
               denahSvgIso("w-full max-w-none")
             )}
