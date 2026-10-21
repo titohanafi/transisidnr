@@ -911,6 +911,36 @@ export function DenahKamarMandi({
     const jangkauanBadge = dorongKeDalam(areaMandi.x, areaMandi.y, areaMandi.dinding, 20);
     // Jejak area mandi memanjang sepanjang dindingnya (bukan kotak persegi), sama seperti zona di tampak atas.
     const sepanjangDinding = areaMandi.dinding === "kiri" || areaMandi.dinding === "kanan";
+    // Titik PERSIS di garis dinding (z bebas) — dipakai untuk menggambar kepala shower menempel dinding, bukan
+    // melayang di tengah lantai seperti sebelumnya (acuan gambar isometrik menggambarnya sebagai kotak kecil +
+    // pipa yang menempel dinding, bukan lingkaran semprot di lantai).
+    const titikDiDinding = (dinding: DindingDenah, sepanjang: number, z: number): { x: number; y: number } =>
+      dinding === "kiri"
+        ? iso(PAD, sepanjang, z)
+        : dinding === "kanan"
+          ? iso(W - PAD, sepanjang, z)
+          : dinding === "depan"
+            ? iso(sepanjang, H - PAD, z)
+            : iso(sepanjang, PAD, z);
+    // Kotak kecil rata dinding (dipakai untuk badan kepala shower) — generalisasi dari pita ubin/bibir dinding di
+    // atas, cuma untuk persegi kecil di satu titik sepanjang dinding, bukan selebar dinding.
+    const kotakDiDinding = (dinding: DindingDenah, sepanjang: number, z: number, setengahSepanjang: number, setengahZ: number): string => {
+      const a = sepanjang - setengahSepanjang;
+      const b = sepanjang + setengahSepanjang;
+      return ke([
+        titikDiDinding(dinding, a, z - setengahZ),
+        titikDiDinding(dinding, b, z - setengahZ),
+        titikDiDinding(dinding, b, z + setengahZ),
+        titikDiDinding(dinding, a, z + setengahZ),
+      ]);
+    };
+    const showerSepanjang = sepanjangDinding ? areaMandi.y : areaMandi.x;
+    const SHOWER_Z_BAWAH = ISO_TINGGI_DINDING * 0.58;
+    const SHOWER_Z_ATAS = ISO_TINGGI_DINDING * 0.94;
+    const showerKotak = kotakDiDinding(areaMandi.dinding, showerSepanjang, SHOWER_Z_BAWAH, 7, 6);
+    const showerPipaAtas = titikDiDinding(areaMandi.dinding, showerSepanjang, SHOWER_Z_ATAS);
+    const showerPipaBawah = titikDiDinding(areaMandi.dinding, showerSepanjang, SHOWER_Z_BAWAH + 6);
+    const showerKotakAtas = kotakDiDinding(areaMandi.dinding, showerSepanjang, SHOWER_Z_ATAS, 4, 4);
     // Dipakai untuk menentukan orientasi balok 3D tiap benda (lebih panjang sepanjang dinding atau menjorok ke
     // ruangan) — dicek per benda sendiri-sendiri karena bisa saja berbeda dinding satu sama lain.
     const sejajar = (d: DindingDenah) => d === "kiri" || d === "kanan";
@@ -927,12 +957,19 @@ export function DenahKamarMandi({
           : pintu.dinding === "depan"
             ? { x: 0, y: -1 }
             : { x: 0, y: 1 };
-    const SUDUT_BUKA_PINTU = (60 * Math.PI) / 180;
+    // Sudut buka dan ukuran pintu dibesarkan jauh (dulu 60°/lebar 32) — dibandingkan ulang ke acuan, pintu di
+    // sana jadi salah satu elemen PALING besar di gambar (daun pintu dibuka hampir menghadap kamera, bukan
+    // menyamping tipis), bukan sekadar garis tipis kecil di pojok seperti sebelumnya.
+    const SUDUT_BUKA_PINTU = (100 * Math.PI) / 180;
     const arahBukaPintu = {
       x: arahSejajarPintu.x * Math.cos(SUDUT_BUKA_PINTU) + arahDalamPintu.x * Math.sin(SUDUT_BUKA_PINTU),
       y: arahSejajarPintu.y * Math.cos(SUDUT_BUKA_PINTU) + arahDalamPintu.y * Math.sin(SUDUT_BUKA_PINTU),
     };
-    const LEBAR_PINTU = 32;
+    // Dicek lagi lewat screenshot sungguhan (bukan cuma baca angka): 56 ternyata MASIH kelihatan seperti garis
+    // tipis dibanding kanvas yang sekarang jauh lebih besar/tinggi — di acuan, pintu makan sekitar sepertiga
+    // lebar gambar. Dibesarkan lagi jauh (ke 100) sampai proporsinya sebanding, walau jadi lebih besar dari
+    // "wajar" dibanding dinding (sama seperti acuan, yang juga tidak digambar skala sebenarnya).
+    const LEBAR_PINTU = 100;
     const engselPintu = {
       x: pintuDiDinding.x - arahSejajarPintu.x * (LEBAR_PINTU / 2),
       y: pintuDiDinding.y - arahSejajarPintu.y * (LEBAR_PINTU / 2),
@@ -1016,6 +1053,16 @@ export function DenahKamarMandi({
             strokeLinejoin="round"
           />
         )}
+        {/* Kepala shower digambar MENEMPEL DINDING (kotak + pipa naik ke dekat langit-langit), bukan lingkaran
+            semprot melayang di tengah lantai seperti sebelumnya — acuan gambar isometrik menggambarnya persis
+            begitu: kotak kecil di dinding dengan pipa pendek ke kotak lebih kecil dekat langit-langit. */}
+        {nomor("jangkauan") !== undefined && (
+          <g className={warna("jangkauan")} stroke="currentColor" fill="white" strokeWidth={1.6} pointerEvents="none">
+            <line x1={showerPipaAtas.x} y1={showerPipaAtas.y} x2={showerPipaBawah.x} y2={showerPipaBawah.y} strokeWidth={3} strokeLinecap="round" />
+            <polygon points={showerKotakAtas} strokeLinejoin="round" />
+            <polygon points={showerKotak} strokeLinejoin="round" />
+          </g>
+        )}
         {/* Cermin berbingkai di dinding belakang: dekorasi tetap (bukan ikut status, tidak interaktif) — cuma
             supaya ruangan tidak kelihatan kosong melompong, sama seperti acuan. Diposisikan proporsional
             terhadap tinggi dinding (0,48–0,76 × ISO_TINGGI_DINDING, bukan angka tetap) supaya tetap di tengah-atas
@@ -1061,8 +1108,8 @@ export function DenahKamarMandi({
             kelihatan wujudnya di foto (sama seperti perlakuannya di tampak atas). Pintu digambar TERBUKA (lihat
             `footprintPintuTerbuka`), bukan rata menempel dinding, supaya bentuknya sendiri langsung terbaca. */}
         <BentukIso
-          footprint={footprintPintuTerbuka(engselPintu.x, engselPintu.y, LEBAR_PINTU, 4, arahBukaPintu)}
-          tinggi={78}
+          footprint={footprintPintuTerbuka(engselPintu.x, engselPintu.y, LEBAR_PINTU, 5, arahBukaPintu)}
+          tinggi={0.85 * ISO_TINGGI_DINDING}
           kelas={warna("pintu")}
           isi={latar("pintu")}
         />
