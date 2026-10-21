@@ -913,7 +913,9 @@ export function DenahKamarMandi({
       x: arahSejajarPintu.x * Math.cos(SUDUT_BUKA_PINTU) + arahDalamPintu.x * Math.sin(SUDUT_BUKA_PINTU),
       y: arahSejajarPintu.y * Math.cos(SUDUT_BUKA_PINTU) + arahDalamPintu.y * Math.sin(SUDUT_BUKA_PINTU),
     };
-    const LEBAR_PINTU = 55;
+    // Disamakan dengan lebar pintu tampak atas (UKURAN_PINTU.panjang) — sebelumnya 55, beda sendiri tanpa alasan
+    // (tidak seperti tuning lain di file ini yang punya komentar "dites di browser"), kemungkinan besar drift.
+    const LEBAR_PINTU = UKURAN_PINTU.panjang;
     const engselPintu = {
       x: pintuDiDinding.x - arahSejajarPintu.x * (LEBAR_PINTU / 2),
       y: pintuDiDinding.y - arahSejajarPintu.y * (LEBAR_PINTU / 2),
