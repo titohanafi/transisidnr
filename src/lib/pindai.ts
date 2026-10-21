@@ -45,6 +45,22 @@ export function bacaRespons(x: unknown, idItem: string[]): HasilModel | null {
   return { kamarMandi: x.kamar_mandi, temuan, objek: selesaikanTabrakanDenah(objekMentahSah) };
 }
 
+// Status tiap hal untuk foto contoh `dev/mock-foto.jpg`, dinilai dari yang tampak di foto itu sendiri (bukan
+// ditebak asal) — supaya hasil mock masuk akal dibandingkan foto yang ditampilkan, bukan sekadar pola berulang.
+// Lihat foto: tidak ada pegangan sama sekali ("perhatian"), area mandi menyatu dengan lantai tanpa bibir/undakan
+// ("ramah"), wastafel ada tempat sampah+botol menumpuk di bawahnya jadi ruang kaki tidak terlihat bebas
+// ("perhatian"), ruang gerak sempit karena kloset dan area mandi berdekatan ("perhatian"); lantai, pintu, dan
+// jangkauan keran/shower tidak bisa dipastikan dari sudut foto ini ("tidak_jelas").
+const STATUS_TIRUAN: Partial<Record<string, StatusItem>> = {
+  lantai: "tidak_jelas",
+  pegangan: "perhatian",
+  area_mandi: "ramah",
+  pintu: "tidak_jelas",
+  ruang: "perhatian",
+  wastafel: "perhatian",
+  jangkauan: "tidak_jelas",
+};
+
 /**
  * Hasil tiruan untuk `VITE_PINDAI_MOCK=true`: supaya alur pindai bisa dicoba tanpa memanggil api/pindai.ts (tanpa kunci
  * Gemini, tanpa kuota). Posisi memakai `POSISI_BAWAAN` (bukan tebakan AI sungguhan) — kebetulan juga kira-kira cocok
@@ -52,7 +68,11 @@ export function bacaRespons(x: unknown, idItem: string[]): HasilModel | null {
  * belakang dengan kloset di sudut kanan, area mandi menyambung di dinding kanan pada kedalaman tengah).
  */
 function hasilTiruan(idItem: string[]): Promise<HasilModel> {
-  const temuan = Object.fromEntries(idItem.map((id, i) => [id, STATUS_ITEM[i % STATUS_ITEM.length]])) as Record<string, StatusItem>;
+  // Hal yang belum ada di STATUS_TIRUAN (mis. ditambahkan ke konten tapi belum dinilai di sini) tetap diberi status
+  // berganti-ganti supaya tiap tab tetap kebagian isi, bukan dibiarkan "tidak_jelas" semua.
+  const temuan = Object.fromEntries(
+    idItem.map((id, i) => [id, STATUS_TIRUAN[id] ?? STATUS_ITEM[i % STATUS_ITEM.length]]),
+  ) as Record<string, StatusItem>;
   return new Promise((selesai) => setTimeout(() => selesai({ kamarMandi: true, temuan, objek: POSISI_BAWAAN }), 1200));
 }
 
