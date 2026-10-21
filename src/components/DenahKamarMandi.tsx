@@ -65,11 +65,6 @@ function isoPersegi(x: number, y: number, rx: number, ry: number, z = 0): string
     .join(" ");
 }
 
-/** Jajaran genjang isometrik dari kotak tampak-atas (sisi sama) berpusat (x,y) dengan jari-jari r, dipakai sebagai "jejak" benda di lantai. */
-function isoKotak(x: number, y: number, r: number, z = 0): string {
-  return isoPersegi(x, y, r, r, z);
-}
-
 /** Elips isometrik dari lingkaran tampak-atas berpusat (x,y) berjari-jari r — dipakai untuk lingkaran "ruang gerak". */
 function isoLingkaran(x: number, y: number, r: number, z = 0): string {
   return Array.from({ length: 32 }, (_, i) => {
@@ -77,6 +72,55 @@ function isoLingkaran(x: number, y: number, r: number, z = 0): string {
     const p = iso(x + r * Math.cos(a), y + r * Math.sin(a), z);
     return `${p.x},${p.y}`;
   }).join(" ");
+}
+
+/**
+ * Tiga sisi balok isometrik yang kelihatan dari sudut kamera denah ini (selalu dari arah depan-kiri, lihat
+ * `ISO_OX`/`ISO_OY`): atas, depan (menghadap +y/ke arah "depan"), dan kiri (menghadap -x/ke arah "kiri") — sisi
+ * belakang dan kanan tidak pernah terlihat jadi tidak digambar. Dipakai supaya benda (kloset, wastafel, pintu)
+ * kelihatan benar-benar 3D, bukan jejak datar seperti zona (area mandi/ruang gerak) yang memang bukan benda fisik.
+ */
+function isoBalokSisi(x: number, y: number, rx: number, ry: number, tinggi: number, z = 0): { atas: string; depan: string; kiri: string } {
+  const titik = (px: number, py: number, pz: number) => iso(px, py, pz);
+  const ke = (titikSudut: { x: number; y: number }[]) => titikSudut.map((p) => `${p.x},${p.y}`).join(" ");
+  return {
+    atas: ke([
+      titik(x - rx, y - ry, z + tinggi),
+      titik(x + rx, y - ry, z + tinggi),
+      titik(x + rx, y + ry, z + tinggi),
+      titik(x - rx, y + ry, z + tinggi),
+    ]),
+    depan: ke([titik(x - rx, y + ry, z), titik(x + rx, y + ry, z), titik(x + rx, y + ry, z + tinggi), titik(x - rx, y + ry, z + tinggi)]),
+    kiri: ke([titik(x - rx, y - ry, z), titik(x - rx, y + ry, z), titik(x - rx, y + ry, z + tinggi), titik(x - rx, y - ry, z + tinggi)]),
+  };
+}
+
+/** Balok isometrik berwarna status, 3 sisi diberi opasitas beda (atas paling terang, kiri paling gelap) supaya terasa punya kedalaman. */
+function ObjekIso({
+  x,
+  y,
+  rx,
+  ry,
+  tinggi,
+  z = 0,
+  kelas,
+}: {
+  x: number;
+  y: number;
+  rx: number;
+  ry: number;
+  tinggi: number;
+  z?: number;
+  kelas: string;
+}) {
+  const sisi = isoBalokSisi(x, y, rx, ry, tinggi, z);
+  return (
+    <g className={kelas} stroke="currentColor" strokeWidth={1.3} strokeLinejoin="round" fill="currentColor">
+      <polygon points={sisi.kiri} fillOpacity={0.45} />
+      <polygon points={sisi.depan} fillOpacity={0.3} />
+      <polygon points={sisi.atas} fillOpacity={0.12} />
+    </g>
+  );
 }
 
 /**
@@ -199,6 +243,15 @@ function dorongKeDalam(x: number, y: number, dinding: DindingDenah, jarak: numbe
   if (dinding === "kanan") return { x: x - jarak, y };
   if (dinding === "depan") return { x, y: y - jarak };
   return { x, y: y + jarak };
+}
+
+/** Fungsi murni: paksa koordinat tegak lurus ke garis dinding persis (bukan digeser JARAK_DINDING seperti titikDinding) —
+ *  dipakai di tampilan isometrik untuk daun pintu, yang digambar menempel rata dinding, bukan menjorok ke ruangan. */
+function keDinding(x: number, y: number, dinding: DindingDenah): { x: number; y: number } {
+  if (dinding === "kiri") return { x: PAD, y };
+  if (dinding === "kanan") return { x: W - PAD, y };
+  if (dinding === "depan") return { x, y: H - PAD };
+  return { x, y: PAD };
 }
 
 /** Fungsi murni: pintu digambar menempel dinding sebagai celah + daun pintu terbuka + lintasan ayun putus-putus. */
@@ -738,6 +791,14 @@ export function DenahKamarMandi({
     const jangkauanBadge = dorongKeDalam(areaMandi.x, areaMandi.y, areaMandi.dinding, 20);
     // Jejak area mandi memanjang sepanjang dindingnya (bukan kotak persegi), sama seperti zona di tampak atas.
     const sepanjangDinding = areaMandi.dinding === "kiri" || areaMandi.dinding === "kanan";
+    // Dipakai untuk menentukan orientasi balok 3D tiap benda (lebih panjang sepanjang dinding atau menjorok ke
+    // ruangan) — dicek per benda sendiri-sendiri karena bisa saja berbeda dinding satu sama lain.
+    const sejajar = (d: DindingDenah) => d === "kiri" || d === "kanan";
+    // Daun pintu digambar rata dinding (bukan menjorok seperti jejak benda lain) — `keDinding` memaksa koordinat
+    // tegak lurusnya persis di garis dinding, lalu didorong sedikit ke ruangan supaya tidak menyatu dengan gambar
+    // dindingnya sendiri.
+    const pintuDiDinding = keDinding(pintu.x, pintu.y, pintu.dinding);
+    const pintuPanel = dorongKeDalam(pintuDiDinding.x, pintuDiDinding.y, pintu.dinding, 3);
 
     const badgeIso = (titik: { x: number; y: number }, id: string, nomorId: number | undefined, warnaId: string, latarId: string) =>
       nomorId !== undefined && (
@@ -788,20 +849,32 @@ export function DenahKamarMandi({
             strokeLinejoin="round"
           />
         )}
-        <polygon points={isoKotak(pintu.x, pintu.y, 10)} className={warna("pintu")} fill="white" stroke="currentColor" strokeWidth={1.5} />
-        <polygon
-          points={isoKotak(kloset.x, kloset.y, 14)}
-          className="text-garisKontrol"
-          fill="white"
-          stroke="currentColor"
-          strokeWidth={1.5}
+        {/* Tiga benda fisik (pintu, kloset, wastafel) digambar sebagai balok 3D sungguhan (lihat `ObjekIso`) —
+            beda dari area mandi/ruang gerak di atas, yang jejaknya datar karena memang bukan benda fisik yang
+            kelihatan wujudnya di foto (sama seperti perlakuannya di tampak atas). */}
+        <ObjekIso
+          x={pintuPanel.x}
+          y={pintuPanel.y}
+          rx={sejajar(pintu.dinding) ? 2.5 : 15}
+          ry={sejajar(pintu.dinding) ? 15 : 2.5}
+          tinggi={70}
+          kelas={warna("pintu")}
         />
-        <polygon
-          points={isoKotak(wastafel.x, wastafel.y, 13)}
-          className={warna("wastafel")}
-          fill="white"
-          stroke="currentColor"
-          strokeWidth={1.5}
+        <ObjekIso
+          x={kloset.x}
+          y={kloset.y}
+          rx={sejajar(kloset.dinding) ? 18 : 14}
+          ry={sejajar(kloset.dinding) ? 14 : 18}
+          tinggi={26}
+          kelas="text-garisKontrol"
+        />
+        <ObjekIso
+          x={wastafel.x}
+          y={wastafel.y}
+          rx={sejajar(wastafel.dinding) ? 8 : 16}
+          ry={sejajar(wastafel.dinding) ? 16 : 8}
+          tinggi={20}
+          kelas={warna("wastafel")}
         />
         {badgeIso({ x: W / 2, y: H / 2 }, "ruang", nomorRuang, warna("ruang"), latar("ruang"))}
         {badgeIso({ x: W / 2, y: H / 2 - 45 }, "lantai", nomorLantai, warna("lantai"), latar("lantai"))}
