@@ -6,7 +6,6 @@ import {
   nomorItemHasil,
   OBJEK_DENAH,
   POSISI_BAWAAN,
-  posisiPersenDenah,
   STATUS_ITEM,
   type DindingDenah,
   type LetakDenah,
@@ -14,6 +13,21 @@ import {
   type PosisiObjek,
   type StatusItem,
 } from "../domain/pindai";
+import {
+  dorongKeDalam,
+  footprintPersegi,
+  H,
+  iso,
+  isoBusurDatar,
+  isoLingkaran,
+  isoPersegi,
+  keDinding,
+  PAD,
+  titikDinding,
+  W,
+  type TitikDatar,
+} from "../domain/denahGeometri";
+import { UKURAN_AREA_MANDI, UKURAN_KLOSET, UKURAN_PINTU, UKURAN_WASTAFEL } from "../domain/objekUkuran";
 
 const t = konten.ui.pindai;
 const ID_ITEM = t.item.map((i) => i.id);
@@ -32,13 +46,6 @@ const WARNA_GARIS: Record<StatusItem, string> = { ramah: "text-utama-gelap", per
 // "ramah" pakai "utama-redup" (bukan "utama-muda" yang dipakai badge pil lain): "utama-muda" terlalu pucat untuk
 // lingkaran sekecil ini, nyaris menyatu dengan latar denah — jadi tidak cukup membedakan dari latar putih netral.
 const LATAR_BADGE: Record<StatusItem, string> = { ramah: "fill-utama-redup", perhatian: "fill-aksen-muda", tidak_jelas: "fill-white" };
-
-// Ukuran denah (viewBox): ruangan memanjang (bukan persegi), meniru proporsi kamar mandi pada umumnya.
-const W = 200;
-const H = 300;
-const PAD = 10;
-// Seberapa jauh benda digambar dari garis dinding (supaya terlihat "menempel" tanpa menimpa garisnya).
-const JARAK_DINDING = 35;
 
 // Tampilan isometrik cuma pernah bisa menggambar DUA dinding solid sekaligus (supaya isi ruangan tetap kelihatan
 // — dinding lain akan menghalangi kamera). Hanya DUA sudut pandang yang dipakai (bukan empat/tiga seperti
@@ -78,67 +85,16 @@ function pilihSudutTerbaik(letak: (id: ObjekDenah) => LetakDenah): SudutPandang 
 
 // Proyeksi isometrik (opsi gaya tampilan kedua, lihat `tampilan` di DenahKamarMandi): koordinat benda yang sama
 // persis dengan tampak atas (dari `letak`/`titikDinding`, tidak dihitung ulang) cuma diproyeksikan lewat `iso()`
-// supaya posisi, status, dan koreksi user tetap satu sumber data — yang beda cuma cara menggambarnya.
-const ISO_SUDUT = (30 * Math.PI) / 180;
-const ISO_COS = Math.cos(ISO_SUDUT);
-const ISO_SIN = Math.sin(ISO_SUDUT);
+// (lihat `../domain/denahGeometri.ts`) supaya posisi, status, dan koreksi user tetap satu sumber data — yang beda
+// cuma cara menggambarnya.
 // Dinding dibuat tinggi (dulu 85) supaya terasa "berdiri di dalam ruangan", tapi tidak sampai ekstrem (270 pernah
 // dicoba dan kebablasan — pintu yang jatuh di dinding "depan"/"kiri", yang memang tidak digambar solid di sini,
 // jadi kelihatan seperti papan melayang tanpa konteks). 190 adalah titik tengah yang sudah dites di beberapa posisi.
 const ISO_TINGGI_DINDING = 190;
-// viewBox dan pergeseran dipilih manual supaya ruangan (W×H di atas, diproyeksikan lewat sudut 30°, TANPA
-// kompresi sumbu — lihat `iso()`) memenuhi kanvas dengan jarak tipis ke tepi.
+// viewBox dipilih manual supaya ruangan (W×H, diproyeksikan lewat sudut 30° lewat `iso()` dari `denahGeometri.ts`,
+// TANPA kompresi sumbu) memenuhi kanvas dengan jarak tipis ke tepi.
 const ISO_VW = 480;
 const ISO_VH = 490;
-const ISO_OX = 283;
-const ISO_OY = 215;
-
-/** Fungsi murni: titik (x,y) tampak-atas + ketinggian opsional -> titik 2D isometrik di viewBox ISO_VW×ISO_VH.
- *  Proyeksi isometrik PENUH (bukan dipadatkan di salah satu sumbu seperti percobaan sebelumnya) — ruangan 200×300
- *  (lihat W/H) yang memang tidak persegi otomatis tergambar asimetris apa adanya, tanpa perlu angka kompresi
- *  buatan untuk memaksanya terlihat persegi atau proporsional. */
-function iso(x: number, y: number, z = 0): { x: number; y: number } {
-  return { x: (x - y) * ISO_COS + ISO_OX, y: (x + y) * ISO_SIN - z + ISO_OY };
-}
-
-/** Jajaran genjang isometrik dari persegi panjang tampak-atas berpusat (x,y), setengah-lebar rx dan setengah-tinggi ry. */
-function isoPersegi(x: number, y: number, rx: number, ry: number, z = 0): string {
-  return [iso(x - rx, y - ry, z), iso(x + rx, y - ry, z), iso(x + rx, y + ry, z), iso(x - rx, y + ry, z)]
-    .map((p) => `${p.x},${p.y}`)
-    .join(" ");
-}
-
-/** Elips isometrik dari lingkaran tampak-atas berpusat (x,y) berjari-jari r — dipakai untuk lingkaran "ruang gerak". */
-function isoLingkaran(x: number, y: number, r: number, z = 0): string {
-  return Array.from({ length: 32 }, (_, i) => {
-    const a = (i / 32) * Math.PI * 2;
-    const p = iso(x + r * Math.cos(a), y + r * Math.sin(a), z);
-    return `${p.x},${p.y}`;
-  }).join(" ");
-}
-
-type TitikDatar = { x: number; y: number };
-
-/** Jejak persegi panjang tampak-atas berpusat (x,y) — dipakai untuk tiap benda isometrik (dinding, kloset,
- *  wastafel, dst). Elips/segi-delapan pernah dicoba di sini untuk kesan "membulat" tapi malah bikin kloset/
- *  wastafel sulit dikenali bentuknya; kotak polos (sama seperti acuan gambar isometrik) lebih jelas terbaca. */
-function footprintPersegi(x: number, y: number, rx: number, ry: number): TitikDatar[] {
-  return [
-    { x: x - rx, y: y - ry },
-    { x: x + rx, y: y - ry },
-    { x: x + rx, y: y + ry },
-    { x: x - rx, y: y + ry },
-  ];
-}
-
-/** Garis lengkung (bukan lingkaran penuh) dari sudut `dari` ke `ke` (radian) — dipakai untuk lintasan ayun pintu. */
-function isoBusurDatar(x: number, y: number, r: number, dari: number, ke: number, n = 10): string {
-  return Array.from({ length: n + 1 }, (_, i) => {
-    const a = dari + ((ke - dari) * i) / n;
-    const p = iso(x + r * Math.cos(a), y + r * Math.sin(a), 0);
-    return `${p.x},${p.y}`;
-  }).join(" ");
-}
 
 /**
  * Benda 3D isometrik dari jejak tampak-atas BEBAS BENTUK (poligon apa pun — dipakai untuk dinding dan tiap
@@ -215,24 +171,6 @@ function BentukIso({
       <polygon points={footprint.map((p) => titikKe(ke(p, z + tinggi))).join(" ")} />
     </g>
   );
-}
-
-/**
- * Titik tempel benda ke dinding: koordinat sepanjang dinding dari posisi AI, koordinat tegak lurus dipaksa dekat
- * dinding. Dindingnya sendiri sudah pasti dari AI (bukan ditebak dari grid), jadi tidak ada ambiguitas pojok lagi.
- */
-function titikDinding({ dinding, posisi }: LetakDenah): {
-  x: number;
-  y: number;
-  dinding: DindingDenah;
-} {
-  const { kiri, atas } = posisiPersenDenah({ dinding, posisi });
-  const x = PAD + (kiri / 100) * (W - 2 * PAD);
-  const y = PAD + (atas / 100) * (H - 2 * PAD);
-  if (dinding === "kiri") return { x: PAD + JARAK_DINDING, y, dinding };
-  if (dinding === "kanan") return { x: W - PAD - JARAK_DINDING, y, dinding };
-  if (dinding === "depan") return { x, y: H - PAD - JARAK_DINDING, dinding };
-  return { x, y: PAD + JARAK_DINDING, dinding };
 }
 
 type Letak = LetakDenah;
@@ -331,23 +269,6 @@ function NomorBadge({
   );
 }
 
-/** Fungsi murni: geser titik (x,y) ke arah ruangan (menjauhi dinding yang ditempel) sejauh `jarak`. */
-function dorongKeDalam(x: number, y: number, dinding: DindingDenah, jarak: number): { x: number; y: number } {
-  if (dinding === "kiri") return { x: x + jarak, y };
-  if (dinding === "kanan") return { x: x - jarak, y };
-  if (dinding === "depan") return { x, y: y - jarak };
-  return { x, y: y + jarak };
-}
-
-/** Fungsi murni: paksa koordinat tegak lurus ke garis dinding persis (bukan digeser JARAK_DINDING seperti titikDinding) —
- *  dipakai di tampilan isometrik untuk daun pintu, yang digambar menempel rata dinding, bukan menjorok ke ruangan. */
-function keDinding(x: number, y: number, dinding: DindingDenah): { x: number; y: number } {
-  if (dinding === "kiri") return { x: PAD, y };
-  if (dinding === "kanan") return { x: W - PAD, y };
-  if (dinding === "depan") return { x, y: H - PAD };
-  return { x, y: PAD };
-}
-
 /** Fungsi murni: pintu digambar menempel dinding sebagai celah + daun pintu terbuka + lintasan ayun putus-putus. */
 function Pintu({
   letak,
@@ -365,7 +286,7 @@ function Pintu({
   onToggleId: (id: string) => void;
 }) {
   const { x, y, dinding } = titikDinding(letak);
-  const panjang = 68;
+  const { panjang } = UKURAN_PINTU;
   if (dinding === "kiri" || dinding === "kanan") {
     const sisi = dinding === "kiri" ? -1 : 1;
     const xDinding = dinding === "kiri" ? PAD : W - PAD;
@@ -438,14 +359,16 @@ function Kloset({
   onToggleId: (id: string) => void;
 }) {
   const { x, y, dinding } = titikDinding(letak);
+  const { w: tangkiW, h: tangkiH } = UKURAN_KLOSET.tangki;
+  const { rx: mangkukRx, ry: mangkukRy } = UKURAN_KLOSET.mangkuk;
   const tangki =
     dinding === "kiri"
-      ? { x: x - 32, y: y - 17, w: 20, h: 34 }
+      ? { x: x - 32, y: y - tangkiH / 2, w: tangkiW, h: tangkiH }
       : dinding === "kanan"
-        ? { x: x + 12, y: y - 17, w: 20, h: 34 }
+        ? { x: x + 12, y: y - tangkiH / 2, w: tangkiW, h: tangkiH }
         : dinding === "depan"
-          ? { x: x - 17, y: y + 12, w: 34, h: 20 }
-          : { x: x - 17, y: y - 32, w: 34, h: 20 };
+          ? { x: x - tangkiH / 2, y: y + 12, w: tangkiH, h: tangkiW }
+          : { x: x - tangkiH / 2, y: y - 32, w: tangkiH, h: tangkiW };
   // Garis pegangan digambar di sisi mangkuk yang menghadap ruangan (berlawanan arah tangki).
   const garis =
     dinding === "kiri"
@@ -461,7 +384,7 @@ function Kloset({
           berdekatan dengan zona area mandi); tanpa ini klik di atasnya akan tertangkap di sini, bukan di badge. */}
       <g className="text-garisKontrol" stroke="currentColor" fill="white" strokeWidth={1.5} pointerEvents="none">
         <rect x={tangki.x} y={tangki.y} width={tangki.w} height={tangki.h} rx={2} />
-        <ellipse cx={x} cy={y} rx={22} ry={27} />
+        <ellipse cx={x} cy={y} rx={mangkukRx} ry={mangkukRy} />
       </g>
       {/* Pegangan (dan area mandi/ruang gerak di bawah) bukan benda fisik yang kelihatan bentuknya di foto asli —
           beda dari pintu/kloset/wastafel yang memang ada wujudnya — jadi cuma ditampilkan saat pil status yang
@@ -501,14 +424,15 @@ function Wastafel({
   onToggleId: (id: string) => void;
 }) {
   const { x, y, dinding } = titikDinding(letak);
+  const { w: kotakW, h: kotakH } = UKURAN_WASTAFEL.kotak;
   const kotak =
     dinding === "kiri"
-      ? { x: x - 33, y: y - 25, w: 36, h: 50 }
+      ? { x: x - 33, y: y - kotakH / 2, w: kotakW, h: kotakH }
       : dinding === "kanan"
-        ? { x: x - 3, y: y - 25, w: 36, h: 50 }
+        ? { x: x - 3, y: y - kotakH / 2, w: kotakW, h: kotakH }
         : dinding === "depan"
-          ? { x: x - 25, y: y - 3, w: 50, h: 36 }
-          : { x: x - 25, y: y - 33, w: 50, h: 36 };
+          ? { x: x - kotakH / 2, y: y - 3, w: kotakH, h: kotakW }
+          : { x: x - kotakH / 2, y: y - 33, w: kotakH, h: kotakW };
   return (
     <g>
       <g className={warna} stroke="currentColor" fill="white" strokeWidth={1.5} pointerEvents="none">
@@ -559,12 +483,9 @@ function AreaMandi({
   onToggleId: (id: string) => void;
 }) {
   const { x, y, dinding } = titikDinding(letak);
-  const panjangZona = 150;
-  const tebalZona = 72;
+  const { panjangZona, tebalZona, jarakPojokBelakang: JARAK_POJOK_BELAKANG, jarakPojokDepan: JARAK_POJOK_DEPAN } = UKURAN_AREA_MANDI;
   // Jarak aman dari dua ujung dinding: benda lain (kloset/wastafel di dinding belakang, pintu di dinding depan) bisa
   // ada di pojok seberang dinding ini, jadi zona tidak boleh digambar sampai mepet pojok — nanti malah menabraknya.
-  const JARAK_POJOK_BELAKANG = 65;
-  const JARAK_POJOK_DEPAN = 35;
   const zona =
     dinding === "kiri"
       ? {
@@ -593,8 +514,7 @@ function AreaMandi({
   // dipindah ke tengah zona (lihat di bawah) supaya keduanya tertukar posisi sesuai permintaan.
   // Sisi zona yang menempel dinding sungguhan (dipakai supaya ujung pipa pas di garis dinding, tidak kelebihan/kurang).
   const sisiDinding = dinding === "kiri" ? zona.x : dinding === "kanan" ? zona.x + zona.w : dinding === "depan" ? zona.y + zona.h : zona.y;
-  const JARI_SHOWER = 10;
-  const PANJANG_PIPA = 8;
+  const { jariShower: JARI_SHOWER, panjangPipa: PANJANG_PIPA } = UKURAN_AREA_MANDI;
   const JARAK_PUSAT_SHOWER = JARI_SHOWER + PANJANG_PIPA; // jarak pusat kepala shower dari dinding
   const letakShower =
     dinding === "kiri"
