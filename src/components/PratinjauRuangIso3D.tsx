@@ -45,30 +45,61 @@ const ROTASI_KALIBRASI: Record<ObjekDenah, number> = {
   area_mandi: 0,
 };
 
+// Tinggi dinding (satuan Three.js) — konstan wajar berdampingan dengan tinggi pintu (TINGGI_TARGET.pintu).
+const TINGGI_DINDING = 1.4;
+const TEBAL_DINDING = 0.03;
+
+const ELEVASI_KAMERA = Math.atan(1 / Math.sqrt(2));
+const JARAK_KAMERA = 12;
+
+/** Azimuth kamera (radian) supaya dinding yang solid SELALU di sisi jauh dari kamera (tidak menghalangi benda) —
+ *  lihat penjelasan perhitungan di plan Milestone 5: kamera di (+X,+Z) (azimuth 45°) membuat sisi kiri+belakang
+ *  jadi "jauh" (aman solid); kamera di (-X,+Z) (azimuth 135°) membuat sisi kanan+belakang yang jauh. Ini rotasi
+ *  KAMERA sungguhan (bukan trik tukar dinding seperti versi SVG) — menjawab keluhan awal proyek ini. */
+function azimuthDariSudut(sisiSamping: "kiri" | "kanan"): number {
+  return sisiSamping === "kanan" ? (3 * Math.PI) / 4 : Math.PI / 4;
+}
+
+function posisiKamera(azimuth: number): THREE.Vector3 {
+  return new THREE.Vector3(
+    JARAK_KAMERA * Math.cos(ELEVASI_KAMERA) * Math.cos(azimuth),
+    JARAK_KAMERA * Math.sin(ELEVASI_KAMERA),
+    JARAK_KAMERA * Math.cos(ELEVASI_KAMERA) * Math.sin(azimuth),
+  );
+}
+
 /**
- * Scene Three.js tingkat-ruangan — Milestone 4 (lihat DECISIONS.md), prototipe di belakang flag `VITE_ISO_3D`.
+ * Scene Three.js tingkat-ruangan — Milestone 4+5 (lihat DECISIONS.md), prototipe di belakang flag `VITE_ISO_3D`.
  * Menampilkan ke-4 benda (pintu/kloset/wastafel/shower) diposisikan+dirotasi sesuai `letak(id)` yang sama persis
- * dipakai tampak-atas/isometrik SVG (lewat `posisiTiga`, turunan dari `titikDinding`) — supaya tata letaknya bisa
- * dinilai sesuai data sungguhan, bukan sekadar galeri benda berdiri sendiri (lihat `PratinjauIsoTiga.tsx`/
- * `GaleriIso3D` untuk itu). BELUM ada dinding 3D, sinkron rotasi kamera, warna status, atau badge — lihat scope
+ * dipakai tampak-atas/isometrik SVG (lewat `posisiTiga`, turunan dari `titikDinding`), ditambah dinding (belakang
+ * selalu, satu sisi samping tergantung `sudutAktif.x`) dan kamera yang BENAR-BENAR berputar saat tombol putar
+ * diklik (bukan trik tukar dinding solid seperti versi SVG). BELUM ada warna status atau badge — lihat scope
  * milestone di plan.
  */
 export function PratinjauRuangIso3D({
   letak,
+  sudutAktif,
   kelas = "h-96 w-full",
 }: {
   letak: (id: ObjekDenah) => LetakDenah;
+  sudutAktif: { x: "kiri" | "kanan" };
   kelas?: string;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const kameraRef = useRef<THREE.OrthographicCamera | null>(null);
+  const dindingKiriRef = useRef<THREE.Object3D | null>(null);
+  const dindingKananRef = useRef<THREE.Object3D | null>(null);
 
+  // Efek pemasangan: bangun scene SEKALI (lantai, dinding, model, loop render) — supaya klik tombol putar (efek
+  // kedua di bawah) tidak memuat ulang model GLB dari jaringan tiap kali, cukup pindahkan kamera + ganti dinding
+  // mana yang terlihat lewat ref, jauh lebih ringan untuk pengguna kuota rendah.
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const scene = new THREE.Scene();
 
-    // Lantai acuan: datar, netral, cukup untuk konteks spasial tanpa kompleksitas dinding 3D (lihat scope plan).
+    // Lantai acuan: datar, netral.
     const lantai = new THREE.Mesh(
       new THREE.PlaneGeometry(LANTAI_LEBAR, LANTAI_DALAM),
       new THREE.MeshStandardMaterial({ color: 0xe5e7eb, side: THREE.DoubleSide }),
@@ -76,18 +107,34 @@ export function PratinjauRuangIso3D({
     lantai.rotation.x = -Math.PI / 2;
     scene.add(lantai);
 
+    // Dinding belakang: selalu ada, di sisi z rendah (dinding "belakang" = y rendah di titikDinding -> z rendah
+    // lewat posisiTiga). Dinding "depan" (sisi kamera/pintu) tidak pernah digambar — konsisten dengan versi SVG.
+    const materialDinding = new THREE.MeshStandardMaterial({ color: 0xf3f4f6, side: THREE.DoubleSide });
+    const dindingBelakang = new THREE.Mesh(new THREE.BoxGeometry(LANTAI_LEBAR, TINGGI_DINDING, TEBAL_DINDING), materialDinding);
+    dindingBelakang.position.set(0, TINGGI_DINDING / 2, -LANTAI_DALAM / 2);
+    scene.add(dindingBelakang);
+
+    const dindingKiri = new THREE.Mesh(new THREE.BoxGeometry(TEBAL_DINDING, TINGGI_DINDING, LANTAI_DALAM), materialDinding);
+    dindingKiri.position.set(-LANTAI_LEBAR / 2, TINGGI_DINDING / 2, 0);
+    scene.add(dindingKiri);
+    dindingKiriRef.current = dindingKiri;
+
+    const dindingKanan = new THREE.Mesh(new THREE.BoxGeometry(TEBAL_DINDING, TINGGI_DINDING, LANTAI_DALAM), materialDinding);
+    dindingKanan.position.set(LANTAI_LEBAR / 2, TINGGI_DINDING / 2, 0);
+    scene.add(dindingKanan);
+    dindingKananRef.current = dindingKanan;
+
     const ukuranDiagonal = Math.hypot(LANTAI_LEBAR, LANTAI_DALAM) / 2;
     const ukuranFrustum = ukuranDiagonal * 1.15;
     const camera = new THREE.OrthographicCamera(-ukuranFrustum, ukuranFrustum, ukuranFrustum, -ukuranFrustum, 0.1, 30);
-    const elevasi = Math.atan(1 / Math.sqrt(2));
-    const azimuth = Math.PI / 4;
-    const jarakKamera = 12;
-    camera.position.set(
-      jarakKamera * Math.cos(elevasi) * Math.cos(azimuth),
-      jarakKamera * Math.sin(elevasi),
-      jarakKamera * Math.cos(elevasi) * Math.sin(azimuth),
-    );
+    camera.position.copy(posisiKamera(azimuthDariSudut(sudutAktif.x)));
     camera.lookAt(0, 0.3, 0);
+    kameraRef.current = camera;
+
+    // Dinding samping yang solid: sesuai `sudutAktif.x` saat dipasang — efek kedua di bawah yang mengurus
+    // perubahan berikutnya (klik tombol putar), tanpa membangun ulang scene ini.
+    dindingKiri.visible = sudutAktif.x === "kiri";
+    dindingKanan.visible = sudutAktif.x === "kanan";
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -153,11 +200,28 @@ export function PratinjauRuangIso3D({
       batal = true;
       cancelAnimationFrame(frameId);
       renderer.dispose();
+      kameraRef.current = null;
+      dindingKiriRef.current = null;
+      dindingKananRef.current = null;
     };
     // `letak` adalah closure baru tiap render dari pemanggil; scene cukup dibangun ulang saat komponen dipasang,
-    // bukan tiap kali closure-nya berganti identitas.
+    // bukan tiap kali closure-nya berganti identitas. `sudutAktif` cuma dibaca untuk nilai AWAL kamera/dinding —
+    // perubahan berikutnya ditangani efek kedua di bawah (`kameraRef`/`dindingKiriRef`/`dindingKananRef`) supaya
+    // klik tombol putar tidak memuat ulang model GLB dari jaringan.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Efek kedua: HANYA respons klik tombol putar — pindahkan kamera + ganti dinding mana yang terlihat lewat ref
+  // yang sudah dibangun efek pertama, TANPA memuat ulang model (ringan untuk pengguna kuota rendah). Ini yang
+  // membuat rotasi di scene 3D ini SUNGGUHAN memutar sudut pandang, bukan trik tukar dinding solid seperti SVG.
+  useEffect(() => {
+    const camera = kameraRef.current;
+    if (!camera) return;
+    camera.position.copy(posisiKamera(azimuthDariSudut(sudutAktif.x)));
+    camera.lookAt(0, 0.3, 0);
+    if (dindingKiriRef.current) dindingKiriRef.current.visible = sudutAktif.x === "kiri";
+    if (dindingKananRef.current) dindingKananRef.current.visible = sudutAktif.x === "kanan";
+  }, [sudutAktif.x]);
 
   return <canvas ref={canvasRef} className={kelas} aria-hidden="true" />;
 }

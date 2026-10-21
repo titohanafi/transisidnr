@@ -1297,7 +1297,7 @@ export function DenahKamarMandi({
         {tampilan === "atas" ? (
           denahSvg("w-full max-w-[220px]")
         ) : MODE_ISO_3D ? (
-          <PratinjauRuangIso3D letak={letak} kelas="h-64 w-full max-w-[280px]" />
+          <PratinjauRuangIso3D letak={letak} sudutAktif={sudutAktif} kelas="h-64 w-full max-w-[280px]" />
         ) : (
           denahSvgIso("w-full max-w-[280px]")
         )}
@@ -1371,7 +1371,7 @@ export function DenahKamarMandi({
             {tampilan === "atas" ? (
               denahSvg("w-full max-w-none")
             ) : MODE_ISO_3D ? (
-              <PratinjauRuangIso3D letak={letak} kelas="h-[70vh] w-full" />
+              <PratinjauRuangIso3D letak={letak} sudutAktif={sudutAktif} kelas="h-[70vh] w-full" />
             ) : (
               denahSvgIso("w-full max-w-none")
             )}
