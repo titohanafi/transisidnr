@@ -62,19 +62,33 @@ export function PindaiFoto() {
   const [tahap, setTahap] = useState<Tahap>({ nama: "pilih" });
   const [galatBaca, setGalatBaca] = useState<string | null>(null);
 
+  const modeMock = import.meta.env.VITE_PINDAI_MOCK === "true";
+
   const pilih = async (berkas: File | undefined) => {
-    if (!berkas) return;
+    // Di mode mock, berkas boleh kosong (dipanggil otomatis saat layar dibuka, lihat useEffect di bawah) karena
+    // sumbernya selalu foto contoh, bukan berkas yang sungguhan dipilih user.
+    if (!berkas && !modeMock) return;
     setGalatBaca(null);
     try {
       // Mode dev: abaikan berkas yang sungguhan dipilih, selalu pakai satu foto contoh supaya hasil (termasuk
       // perkiraan posisi denah) bisa dibandingkan dari foto yang sama setiap kali dicoba.
-      const sumber = import.meta.env.VITE_PINDAI_MOCK === "true" ? await (await fetch("/__mock/foto-pindai.jpg")).blob() : berkas;
+      const sumber = modeMock ? await (await fetch("/__mock/foto-pindai.jpg")).blob() : (berkas as File);
       setFoto(await kecilkanFoto(sumber));
       setTahap({ nama: "siap" });
     } catch {
       setGalatBaca(t.gagalBaca);
     }
   };
+
+  // Mode dev: langsung isi foto contoh begitu layar dibuka, supaya tidak perlu memilih berkas manual tiap kali coba
+  // alur Pindai lewat `VITE_PINDAI_MOCK=true npm run dev`. Dibungkus microtask (bukan panggil `pilih` langsung di
+  // badan efek) supaya setState di dalamnya tidak terjadi sinkron di render yang sama (lihat aturan lint
+  // react-hooks/set-state-in-effect).
+  useEffect(() => {
+    if (!modeMock) return;
+    void Promise.resolve().then(() => pilih(undefined));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- cuma sekali saat layar dibuka, bukan tiap render
+  }, []);
 
   const pindai = async () => {
     if (!foto) return;
