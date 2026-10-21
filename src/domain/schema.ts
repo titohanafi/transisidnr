@@ -446,6 +446,7 @@ export const uiSchema = z
         cukup: z.object({ judul: teks, isi: teks }),
       }),
       temuanJudul: teks,
+      temuanKosong: teks,
       denahJudul: teks,
       denahCatatan: teks,
       denahFilterLabel: teks,

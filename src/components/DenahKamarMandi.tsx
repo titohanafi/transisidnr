@@ -440,9 +440,15 @@ function AreaMandi({
 export function DenahKamarMandi({
   temuan,
   objek,
+  filter,
+  onUbahFilter,
 }: {
   temuan: Record<string, StatusItem>;
   objek: Record<ObjekDenah, PosisiObjek>;
+  /** Status yang sedang aktif di tab filter — dikendalikan dari pemanggil (bukan state lokal) supaya "Rincian per
+   *  hal" di PindaiFoto.tsx bisa ikut berganti isi mengikuti tab yang sama, bukan tab terpisah yang tidak nyambung. */
+  filter: StatusItem;
+  onUbahFilter: (s: StatusItem) => void;
 }) {
   const status = (id: string) => temuan[id] ?? "tidak_jelas";
   const NOMOR_ITEM = nomorItemHasil(ID_ITEM, temuan);
@@ -453,7 +459,6 @@ export function DenahKamarMandi({
 
   // Denah difilter per status (pil di atas): hanya hal yang cocok status-nya yang diberi warna+nomor; sisanya
   // digambar redup tanpa nomor, supaya tiap tab fokus ke satu kategori tanpa kehilangan konteks letak ruangan.
-  const [filter, setFilter] = useState<StatusItem>("perhatian");
   const cocok = (id: string) => status(id) === filter;
   // Objek yang tidak cocok filter tetap digambar jelas (warna netral), bukan diredupkan nyaris transparan — supaya
   // tetap terlihat bentuk dan letak ruangan sepenuhnya di tiap tab, hanya warna status+nomor yang berubah mengikuti filter.
@@ -479,7 +484,7 @@ export function DenahKamarMandi({
             key={s}
             nama="denah-filter"
             aktif={filter === s}
-            onUbah={() => setFilter(s)}
+            onUbah={() => onUbahFilter(s)}
             gaya="tab"
             label={
               <span className="flex items-center gap-1.5">
@@ -491,7 +496,10 @@ export function DenahKamarMandi({
         ))}
       </div>
 
-      <svg viewBox={`0 0 ${W} ${H}`} className="mx-auto w-full max-w-[220px] text-garisKontrol" aria-hidden="true" focusable="false">
+      {/* Gambar denah dan segmen "tampilkan nama benda" disimpan dalam satu kontainer kartu (judul dan tab filter
+          di atas tetap di luar, langsung di latar halaman), dengan pembatas selebar kartu di antara keduanya. */}
+      <div className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
+        <svg viewBox={`0 0 ${W} ${H}`} className="mx-auto w-full max-w-[220px] text-garisKontrol" aria-hidden="true" focusable="false">
         <rect x={PAD / 2} y={PAD / 2} width={W - PAD} height={H - PAD} rx={6} className="fill-permukaan" stroke="currentColor" strokeWidth={1.5} />
         {/* Area lantai ditandai garis putus-putus (sama seperti lingkaran "ruang gerak" dan zona "area mandi") —
             bukan benda fisik yang kelihatan garis batasnya di foto asli, jadi cuma digambar saat pil status "lantai"
@@ -580,27 +588,31 @@ export function DenahKamarMandi({
           nomorJangkauan={nomor("jangkauan")}
           paksaTampil={tampilkanLabel}
         />
-      </svg>
+        </svg>
 
-      <button
-        type="button"
-        role="switch"
-        aria-checked={tampilkanLabel}
-        onClick={() => setTampilkanLabel((v) => !v)}
-        className="mt-3 flex min-h-sentuh w-full items-center justify-between gap-3 rounded-tombol text-kecil text-redup"
-      >
-        <span>{t.denahLabelToggle}</span>
-        <span
-          aria-hidden="true"
-          className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${tampilkanLabel ? "bg-utama" : "bg-garis"}`}
+        {/* Pembatas selebar kartu (-mx-4 menegasikan padding kartu) antara gambar denah dan segmen "tampilkan nama benda". */}
+        <div className="-mx-4 my-3 border-t border-garis" />
+
+        <button
+          type="button"
+          role="switch"
+          aria-checked={tampilkanLabel}
+          onClick={() => setTampilkanLabel((v) => !v)}
+          className="flex min-h-sentuh w-full items-center justify-between gap-3 rounded-tombol text-kecil text-redup"
         >
+          <span>{t.denahLabelToggle}</span>
           <span
-            className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${tampilkanLabel ? "translate-x-5" : "translate-x-0"}`}
-          />
-        </span>
-      </button>
+            aria-hidden="true"
+            className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${tampilkanLabel ? "bg-utama" : "bg-garis"}`}
+          >
+            <span
+              className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${tampilkanLabel ? "translate-x-5" : "translate-x-0"}`}
+            />
+          </span>
+        </button>
 
-      <figcaption className="mt-2 text-kecil text-redup">{t.denahCatatan}</figcaption>
+        <figcaption className="mt-2 text-kecil text-redup">{t.denahCatatan}</figcaption>
+      </div>
     </figure>
   );
 }

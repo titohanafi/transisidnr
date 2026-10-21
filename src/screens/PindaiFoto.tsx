@@ -24,7 +24,6 @@ type Tahap =
   | { nama: "ceklis"; jawaban: Record<string, StatusItem> }
   | { nama: "hasil"; temuan: Record<string, StatusItem>; objek: Record<ObjekDenah, PosisiObjek> };
 
-const LABEL_STATUS: Record<StatusItem, string> = t.status;
 const GAYA_STATUS: Record<StatusItem, string> = {
   ramah: "border-utama bg-utama-muda text-utama-gelap",
   perhatian: "border-aksen bg-aksen-muda text-aksen",
@@ -271,6 +270,10 @@ function Hasil({
   const skor = hitungSkor(temuan, ID_ITEM);
   const tingkat = t.tingkat[skor.tingkat];
   const NOMOR_ITEM = nomorItemHasil(ID_ITEM, temuan);
+  // Status tab dikendalikan dari sini (bukan di dalam DenahKamarMandi) supaya "Rincian per hal" di bawah ikut
+  // berganti isi mengikuti tab yang sama persis dengan yang mengatur sorotan di denah - satu tab, dua tampilan.
+  const [filter, setFilter] = useState<StatusItem>("perhatian");
+  const butirFilter = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === filter);
   return (
     <>
       <section aria-labelledby="judul-hasil" className="relative -mt-16 overflow-hidden rounded-kartu bg-utama p-5 text-white shadow-angkat">
@@ -300,53 +303,44 @@ function Hasil({
         </div>
       </section>
 
-      <DenahKamarMandi temuan={temuan} objek={objek} />
+      <DenahKamarMandi temuan={temuan} objek={objek} filter={filter} onUbahFilter={setFilter} />
 
+      {/* Isinya mengikuti tab status yang sama dengan di denah (bukan menampilkan semua kelompok sekaligus seperti
+          sebelumnya) - "Rincian per hal" jadi bagian dari isi tab itu, bukan bagian terpisah dengan kelompoknya sendiri. */}
       <section aria-labelledby="judul-temuan">
         <h2 id="judul-temuan" className="mb-isi text-judulKartu">
           {t.temuanJudul}
         </h2>
-        <div className="flex flex-col gap-isi">
-          {/* Dikelompokkan per status (perlu perhatian dulu, paling actionable) bukan urutan konten, supaya hal yang
-              perlu ditindaklanjuti terlihat lebih dulu. Kelompok kosong (mis. tidak ada yang "tidak jelas") dilewati. */}
-          {(["perhatian", "tidak_jelas", "ramah"] as const).map((s) => {
-            const butir = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === s);
-            if (butir.length === 0) return null;
-            return (
-              <div key={s}>
-                <h3 className={`mb-2 inline-flex items-center rounded-full border px-3 py-1 text-kecil font-semibold ${GAYA_STATUS[s]}`}>
-                  {LABEL_STATUS[s]} ({butir.length})
-                </h3>
-                <ul className="flex flex-col gap-3">
-                  {butir.map((it) => (
-                    <li key={it.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
-                      <p className="flex items-center gap-2 font-semibold">
-                        {NOMOR_ITEM[it.id] !== undefined && (
-                          <span
-                            aria-hidden="true"
-                            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_STATUS[s]}`}
-                          >
-                            {NOMOR_ITEM[it.id]}
-                          </span>
-                        )}
-                        {it.nama}
-                      </p>
-                      <p className="mt-1 text-kecil text-redup">{it.cek}</p>
-                      {s === "perhatian" && (
-                        <Link
-                          to={`/kartu/${it.kartu}`}
-                          className="mt-2 inline-flex min-h-sentuh items-center font-semibold text-utama underline"
-                        >
-                          {t.lihatPanduan}
-                        </Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
-        </div>
+        {butirFilter.length > 0 ? (
+          <ul className="flex flex-col gap-3">
+            {butirFilter.map((it) => (
+              <li key={it.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
+                <p className="flex items-center gap-2 font-semibold">
+                  {NOMOR_ITEM[it.id] !== undefined && (
+                    <span
+                      aria-hidden="true"
+                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_STATUS[filter]}`}
+                    >
+                      {NOMOR_ITEM[it.id]}
+                    </span>
+                  )}
+                  {it.nama}
+                </p>
+                <p className="mt-1 text-kecil text-redup">{it.cek}</p>
+                {filter === "perhatian" && (
+                  <Link
+                    to={`/kartu/${it.kartu}`}
+                    className="mt-2 inline-flex min-h-sentuh items-center font-semibold text-utama underline"
+                  >
+                    {t.lihatPanduan}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-kecil text-redup">{t.temuanKosong}</p>
+        )}
       </section>
 
       <PeringatanNonMedis />
