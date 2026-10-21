@@ -65,7 +65,7 @@ export default {
         muncul: "muncul 250ms ease-out",
         pindai: "pindai 2.4s cubic-bezier(0.65,0,0.35,1) infinite",
         pudar: "pudar 900ms ease-in forwards",
-        kedip: "kedip 450ms ease-out 2",
+        kedip: "kedip 450ms ease-out 1",
       },
     },
   },

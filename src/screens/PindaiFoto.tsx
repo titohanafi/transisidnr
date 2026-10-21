@@ -328,8 +328,8 @@ function Hasil({
       return;
     }
     setFase((prev) => ({ ...prev, [id]: "terisi" }));
-    // 900ms: cocok dengan durasi animasi "kedip" (2x450ms) supaya pil yang diketuk sempat berkedip penuh dulu,
-    // baru ganti jadi konfirmasi — bukan angka sembarang, diselaraskan dengan animasinya sendiri.
+    // 900ms: pil yang diketuk berkedip sekali (450ms, lihat animasi "kedip"), lalu tetap terisi diam sebentar
+    // supaya jawabannya sempat terbaca jelas, baru ganti jadi konfirmasi.
     jadwalkan(id, 900, () => {
       setFase((prev) => ({ ...prev, [id]: "konfirmasi" }));
       // 900ms: cocok dengan durasi animasi "pudar" (tertahan sampai 55%, baru memudar) supaya kartu baru dilepas
