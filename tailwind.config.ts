@@ -48,13 +48,15 @@ export default {
         pindai: { "0%, 100%": { top: "-10%" }, "50%": { top: "100%" } },
         // Dipakai saat satu hal di "Rincian per indikator" dikoreksi ke status lain: kartunya tidak langsung hilang
         // dari tab (yang bikin terasa seperti "tidak ada perubahan" karena kartu berikutnya langsung naik), tapi
-        // menunjukkan konfirmasi sesaat (lihat PindaiFoto.tsx) lalu memudar keluar baru benar-benar dilepas dari tab.
+        // melewati fase "terisi" (pilnya sempat terlihat terisi dulu) lalu "konfirmasi" (teks "Dipindahkan ke ..."
+        // muncul sambil memudar keluar) - jeda antar-fase diatur lewat setTimeout di PindaiFoto.tsx, bukan di sini,
+        // jadi animasi ini cuma pudarnya saja (dipasang tepat saat fase "konfirmasi" dimulai).
         pudar: { "0%": { opacity: "1" }, "100%": { opacity: "0" } },
       },
       animation: {
         muncul: "muncul 250ms ease-out",
         pindai: "pindai 2.4s cubic-bezier(0.65,0,0.35,1) infinite",
-        pudar: "pudar 250ms ease-in 300ms forwards",
+        pudar: "pudar 300ms ease-in forwards",
       },
     },
   },

@@ -303,30 +303,40 @@ function Hasil({
   const [filter, setFilter] = useState<StatusItem>("perhatian");
 
   // Begitu jawaban diganti ke status lain, kartunya langsung hilang dari tab (filter-nya tidak cocok lagi) — tanpa
-  // ini terasa seperti "tidak ada yang terjadi" karena kartu berikutnya langsung naik menggantikan. `keluar` menahan
-  // kartu itu tetap tampil sebentar dengan konfirmasi "Dipindahkan ke ..." sebelum benar-benar dilepas dari tab,
-  // memakai animasi "pudar" (lihat tailwind.config.ts) supaya perubahannya terlihat jelas, bukan mendadak.
-  const [keluar, setKeluar] = useState<Record<string, boolean>>({});
-  const timer = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
-  useEffect(() => () => Object.values(timer.current).forEach(clearTimeout), []);
+  // ini terasa seperti "tidak ada yang terjadi" karena kartu berikutnya langsung naik menggantikan. `fase` menahan
+  // kartu itu tetap tampil melewati tiga tahap: "terisi" (pil yang diketuk sempat terlihat terisi/aktif dulu, sama
+  // seperti kartu lain yang masih di tab ini), lalu "konfirmasi" (pilnya diganti teks "Dipindahkan ke ..." sambil
+  // memudar keluar - lihat animasi "pudar" di tailwind.config.ts), baru benar-benar dilepas dari daftar.
+  const [fase, setFase] = useState<Record<string, "terisi" | "konfirmasi">>({});
+  const timer = useRef<Record<string, ReturnType<typeof setTimeout>[]>>({});
+  const jadwalkan = (id: string, tunda: number, jalankan: () => void) => {
+    (timer.current[id] ??= []).push(setTimeout(jalankan, tunda));
+  };
+  const batalkanJadwal = (id: string) => {
+    (timer.current[id] ?? []).forEach(clearTimeout);
+    timer.current[id] = [];
+  };
+  useEffect(() => () => Object.values(timer.current).forEach((daftar) => daftar.forEach(clearTimeout)), []);
   const ubahJawaban = (id: string, nilai: StatusItem) => {
     const sebelumnya = temuan[id] ?? "tidak_jelas";
     setTemuan((prev) => ({ ...prev, [id]: nilai }));
-    clearTimeout(timer.current[id]);
+    batalkanJadwal(id);
     if (nilai === filter || sebelumnya !== filter) {
       // Kembali cocok tab aktif (user berubah pikiran sebelum animasi selesai), atau memang sudah tidak cocok tab
       // aktif dari awal (kartu ini sedang dilihat dari tab lain) — keduanya tidak perlu animasi keluar.
-      setKeluar((prev) => (prev[id] ? tanpaId(prev, id) : prev));
+      setFase((prev) => (prev[id] ? tanpaId(prev, id) : prev));
       return;
     }
-    setKeluar((prev) => ({ ...prev, [id]: true }));
-    // 550ms: cocok dengan total durasi animasi "pudar" (jeda 300ms + 250ms) supaya kartu baru dilepas dari daftar
-    // setelah benar-benar tidak terlihat, bukan menghilang mendadak di tengah animasi.
-    timer.current[id] = setTimeout(() => {
-      setKeluar((prev) => tanpaId(prev, id));
-    }, 550);
+    setFase((prev) => ({ ...prev, [id]: "terisi" }));
+    // 220ms: cukup lama untuk pil yang baru diketuk sempat terlihat terisi dulu, sebelum ganti jadi konfirmasi.
+    jadwalkan(id, 220, () => {
+      setFase((prev) => ({ ...prev, [id]: "konfirmasi" }));
+      // 300ms: cocok dengan durasi animasi "pudar" supaya kartu baru dilepas dari daftar setelah benar-benar
+      // tidak terlihat, bukan menghilang mendadak di tengah animasi.
+      jadwalkan(id, 300, () => setFase((prev) => tanpaId(prev, id)));
+    });
   };
-  const butirFilter = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === filter || keluar[it.id]);
+  const butirFilter = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === filter || fase[it.id]);
   return (
     <>
       <section
@@ -373,17 +383,18 @@ function Hasil({
             <ul className="flex flex-col gap-3">
               {butirFilter.map((it) => {
                 const statusKini = temuan[it.id] ?? "tidak_jelas";
-                const sedangKeluar = !!keluar[it.id];
+                const faseIni = fase[it.id];
+                const konfirmasi = faseIni === "konfirmasi";
                 return (
                   <li
                     key={it.id}
-                    className={`rounded-tombol border border-garis/70 p-3 ${sedangKeluar ? "pointer-events-none animate-pudar" : ""}`}
+                    className={`rounded-tombol border border-garis/70 p-3 ${konfirmasi ? "pointer-events-none animate-pudar" : ""}`}
                   >
                     <p className="flex items-center gap-2 font-semibold">
                       {NOMOR_ITEM[it.id] !== undefined && (
                         <span
                           aria-hidden="true"
-                          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_STATUS[sedangKeluar ? statusKini : filter]}`}
+                          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_STATUS[konfirmasi ? statusKini : filter]}`}
                         >
                           {NOMOR_ITEM[it.id]}
                         </span>
@@ -391,9 +402,11 @@ function Hasil({
                       {it.nama}
                     </p>
                     <p className="mt-1 text-kecil text-redup">{it.cek}</p>
-                    {sedangKeluar ? (
-                      // Konfirmasi sesaat (lihat komentar `keluar` di atas) — ganti tempat pil Ya/Tidak/Tidak yakin
+                    {konfirmasi ? (
+                      // Konfirmasi sesaat (lihat komentar `fase` di atas) — ganti tempat pil Ya/Tidak/Tidak yakin
                       // supaya user tahu jawabannya tersimpan dan ke mana kartu ini pindah, bukan cuma hilang.
+                      // Baru muncul SETELAH pil yang diketuk sempat terlihat terisi (fase "terisi"), bukan langsung
+                      // menggantikan pil itu di saat yang sama dengan ketukannya.
                       <p className={`mt-3 flex items-center gap-2 font-semibold ${TEKS_STATUS[statusKini]}`}>
                         <CircleCheck className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
                         {isi(t.temuanDipindah, { status: t.status[statusKini] })}
