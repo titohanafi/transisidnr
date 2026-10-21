@@ -1,4 +1,4 @@
-import { Camera, CircleCheck, Image as IkonGaleri, Info, Loader2, ScanLine } from "lucide-react";
+import { Camera, CircleCheck, Image as IkonGaleri, Inbox, Info, Loader2, ScanLine } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { DenahKamarMandi } from "../components/DenahKamarMandi";
@@ -328,12 +328,13 @@ function Hasil({
       return;
     }
     setFase((prev) => ({ ...prev, [id]: "terisi" }));
-    // 220ms: cukup lama untuk pil yang baru diketuk sempat terlihat terisi dulu, sebelum ganti jadi konfirmasi.
-    jadwalkan(id, 220, () => {
+    // 700ms: beri waktu cukup untuk pil yang baru diketuk benar-benar terbaca terisi dulu (sebelumnya 220ms terasa
+    // buru-buru), baru ganti jadi konfirmasi.
+    jadwalkan(id, 700, () => {
       setFase((prev) => ({ ...prev, [id]: "konfirmasi" }));
-      // 300ms: cocok dengan durasi animasi "pudar" supaya kartu baru dilepas dari daftar setelah benar-benar
+      // 500ms: cocok dengan durasi animasi "pudar" supaya kartu baru dilepas dari daftar setelah benar-benar
       // tidak terlihat, bukan menghilang mendadak di tengah animasi.
-      jadwalkan(id, 300, () => setFase((prev) => tanpaId(prev, id)));
+      jadwalkan(id, 500, () => setFase((prev) => tanpaId(prev, id)));
     });
   };
   const butirFilter = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === filter || fase[it.id]);
@@ -439,7 +440,13 @@ function Hasil({
               })}
             </ul>
           ) : (
-            <p className="text-kecil text-redup">{t.temuanKosong}</p>
+            // Blok kosong (bukan cuma teks polos) — supaya beda jelas dari paragraf penjelasan di atasnya
+            // (`temuanPenjelasan`), yang juga teks kecil redup dan gampang tertukar tanpa pembeda visual.
+            <div className="flex flex-col items-center gap-1 rounded-tombol border border-dashed border-garis bg-permukaan p-5 text-center">
+              <Inbox className="mb-1 h-6 w-6 text-garisKontrol" strokeWidth={1.75} aria-hidden="true" focusable="false" />
+              <p className="font-semibold text-tinta">{t.temuanKosongJudul}</p>
+              <p className="text-kecil text-redup">{t.temuanKosongDeskripsi}</p>
+            </div>
           )}
         </section>
       </DenahKamarMandi>
