@@ -840,29 +840,36 @@ export function DenahKamarMandi({
       { x: W, y: -TEBAL_DINDING },
       { x: 0, y: -TEBAL_DINDING },
     ];
-    const footprintDindingKanan: TitikDatar[] = [
-      { x: W, y: 0 },
-      { x: W, y: H },
-      { x: W + TEBAL_DINDING, y: H },
-      { x: W + TEBAL_DINDING, y: 0 },
+    // Dinding kedua dipasang di bidang x=0 (BUKAN x=W seperti sebelumnya) — dibandingkan ulang secara presisi
+    // dengan skrip Python acuan: proyeksinya identik (sudut 30°, tanpa kompresi), dan di acuan kedua dinding
+    // bertemu di sudut (0,0), yang SELALU jadi titik tertinggi komposisi (screen_y=(x+y)*sin+OY minimal di situ
+    // karena x,y>=0). Dulu dinding kedua ada di x=W, jadi keduanya bertemu di (W,0) — bukan titik tertinggi —
+    // sambungan nyata kedua dinding jadi tidak pernah persis di puncak gambar seperti acuan, walau sekilas masih
+    // kelihatan "ada puncak" (cuma karena ujung dindingBelakang sendiri kebetulan sampai ke sana).
+    const footprintDindingKiri: TitikDatar[] = [
+      { x: 0, y: 0 },
+      { x: 0, y: H },
+      { x: -TEBAL_DINDING, y: H },
+      { x: -TEBAL_DINDING, y: 0 },
     ];
-    // Tiang sudut tipis di pojok depan-kiri (satu-satunya pojok ruangan yang TIDAK ditempeli dinding solid
+    // Tiang sudut tipis di pojok depan-kanan (satu-satunya pojok ruangan yang TIDAK ditempeli dinding solid
     // ataupun dilewati pintu) — dua sisi ruangan ini sengaja dibiarkan terbuka (sisi kamera) supaya isi
     // ruangan kelihatan, tapi itu bisa kerasa seperti ruangan "terpotong"/tidak utuh. Tiang tipis ini (bukan
     // dinding penuh, biar tidak menghalangi pandangan) cuma memberi isyarat bahwa batas ruangan tetap ada di
-    // situ, sama seperti tiang pintu di gambar acuan.
+    // situ, sama seperti tiang pintu di gambar acuan. (Pojoknya PINDAH ke (W,H) mengikuti pindahnya dinding
+    // kedua di atas — (0,H) sekarang sudah tersentuh dinding kiri yang baru, jadi tidak lagi "polos".)
     const footprintTiangSudut: TitikDatar[] = [
-      { x: -TEBAL_DINDING, y: H },
-      { x: 0, y: H },
-      { x: 0, y: H + TEBAL_DINDING },
-      { x: -TEBAL_DINDING, y: H + TEBAL_DINDING },
+      { x: W, y: H },
+      { x: W + TEBAL_DINDING, y: H },
+      { x: W + TEBAL_DINDING, y: H + TEBAL_DINDING },
+      { x: W, y: H + TEBAL_DINDING },
     ];
     // Pita ubin dekoratif di bagian bawah kedua dinding (selalu tampil, tidak terkait status apa pun) — di acuan
     // gambar isometrik, dinding punya ubin setinggi dada (bukan polos kosong), terutama penting sekarang dinding
     // jauh lebih tinggi dari sebelumnya dan akan terlihat kosong tanpa ini.
     const TINGGI_UBIN = ISO_TINGGI_DINDING * 0.45;
     const ubinBelakang = ke([iso(0, 0, 0), iso(W, 0, 0), iso(W, 0, TINGGI_UBIN), iso(0, 0, TINGGI_UBIN)]);
-    const ubinKanan = ke([iso(W, 0, 0), iso(W, H, 0), iso(W, H, TINGGI_UBIN), iso(W, 0, TINGGI_UBIN)]);
+    const ubinKiri = ke([iso(0, 0, 0), iso(0, H, 0), iso(0, H, TINGGI_UBIN), iso(0, 0, TINGGI_UBIN)]);
 
     // Titik asli (sebelum digeser `dorongKeDalam`) dipakai untuk jejak benda di lantai; titik yang sudah digeser ke
     // arah ruangan dipakai untuk badge-nya — persis seperti pembagian x/y di tampak atas (lihat `Pintu`/`Kloset`/dst).
@@ -992,11 +999,11 @@ export function DenahKamarMandi({
     // yang memang pakai garis hitam pekat di semua benda netral (dinding, lantai, kloset).
     return (
       <svg viewBox={`0 0 ${ISO_VW} ${ISO_VH}`} className={`mx-auto text-tinta ${ukuran}`} aria-hidden="true" focusable="false">
-        {/* Dinding sebagai kotak 3D sungguhan (lihat `footprintDindingBelakang`/`footprintDindingKanan` dan
+        {/* Dinding sebagai kotak 3D sungguhan (lihat `footprintDindingBelakang`/`footprintDindingKiri` dan
             komentar `TEBAL_DINDING` di atas) — sisi tegak, sisi ujung (ketebalan), dan tutup atas semuanya
             otomatis tergambar lewat `BentukIso` yang sama dipakai benda lain, lengkap dengan bayangan per-sisi. */}
         <BentukIso footprint={footprintDindingBelakang} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
-        <BentukIso footprint={footprintDindingKanan} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-permukaan" />
+        <BentukIso footprint={footprintDindingKiri} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-permukaan" />
         <BentukIso footprint={footprintTiangSudut} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
         <defs>
           <pattern id="iso-ubin" width="7" height="7" patternUnits="userSpaceOnUse">
@@ -1006,7 +1013,7 @@ export function DenahKamarMandi({
           </pattern>
         </defs>
         <polygon points={ubinBelakang} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
-        <polygon points={ubinKanan} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
+        <polygon points={ubinKiri} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
         <polygon points={lantai} fill="white" stroke="currentColor" strokeWidth={2.2} strokeLinejoin="round" />
         {Array.from({ length: 10 }, (_, baris) =>
           Array.from({ length: 7 }, (_, kolom) => {
