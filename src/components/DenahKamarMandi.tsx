@@ -714,9 +714,11 @@ export function DenahKamarMandi({
         {denahSvg("w-full max-w-[220px]")}
 
         {/* Catatan posisi/skala dan petunjuk ketuk nomor digabung satu badge info (bukan teks polos terpisah) —
-            keduanya sama-sama konteks tambahan tentang cara membaca denah, bukan bagian dari kontennya sendiri. */}
-        <div role="note" className="mt-3 flex items-start gap-2 rounded-tombol bg-permukaan p-3 text-kecil text-redup">
-          <Info className="mt-0.5 h-4 w-4 shrink-0 text-utama" strokeWidth={2} aria-hidden="true" focusable="false" />
+            keduanya sama-sama konteks tambahan tentang cara membaca denah, bukan bagian dari kontennya sendiri.
+            Warna "info" (biru) dipakai, bukan "permukaan" (abu-teal) yang warnanya terlalu mirip latar lantai di
+            denah tepat di atasnya — biru membuat badge ini jelas beda, bukan seperti sambungan dari gambar denah. */}
+        <div role="note" className="mt-3 flex items-start gap-2 rounded-tombol bg-info-muda p-3 text-kecil text-info">
+          <Info className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
           <div className="flex flex-col gap-1">
             <p>{t.denahCatatan}</p>
             <p>{t.denahPetunjukNomor}</p>

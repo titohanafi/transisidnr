@@ -46,10 +46,15 @@ export default {
       keyframes: {
         muncul: { from: { opacity: "0", transform: "translateY(6px)" }, to: { opacity: "1", transform: "none" } },
         pindai: { "0%, 100%": { top: "-10%" }, "50%": { top: "100%" } },
+        // Dipakai saat satu hal di "Rincian per indikator" dikoreksi ke status lain: kartunya tidak langsung hilang
+        // dari tab (yang bikin terasa seperti "tidak ada perubahan" karena kartu berikutnya langsung naik), tapi
+        // menunjukkan konfirmasi sesaat (lihat PindaiFoto.tsx) lalu memudar keluar baru benar-benar dilepas dari tab.
+        pudar: { "0%": { opacity: "1", transform: "scale(1)" }, "100%": { opacity: "0", transform: "scale(0.97)" } },
       },
       animation: {
         muncul: "muncul 250ms ease-out",
         pindai: "pindai 2.4s cubic-bezier(0.65,0,0.35,1) infinite",
+        pudar: "pudar 550ms ease-in 650ms forwards",
       },
     },
   },

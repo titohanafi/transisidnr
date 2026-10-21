@@ -1,5 +1,5 @@
 import { Camera, CircleCheck, Image as IkonGaleri, Info, Loader2, ScanLine } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { DenahKamarMandi } from "../components/DenahKamarMandi";
 import { Halaman } from "../components/Halaman";
@@ -36,6 +36,14 @@ const GAYA_STATUS: Record<StatusItem, string> = {
   perhatian: "border-aksen bg-aksen-muda text-aksen",
   tidak_jelas: "border-garis bg-white text-redup",
 };
+
+// Dipakai untuk warna teks konfirmasi "Dipindahkan ke ..." saat kartu meninggalkan tab (lihat `keluar` di `Hasil`).
+const TEKS_STATUS: Record<StatusItem, string> = { ramah: "text-utama-gelap", perhatian: "text-aksen", tidak_jelas: "text-redup" };
+
+/** Salinan objek tanpa satu kunci — dipakai untuk melepas satu id dari `keluar` tanpa variabel sisa yang tidak dipakai. */
+function tanpaId<T>(obj: Record<string, T>, id: string): Record<string, T> {
+  return Object.fromEntries(Object.entries(obj).filter(([k]) => k !== id));
+}
 
 // Dipakai di dua tempat dengan pertanyaan yang sama persis (`it.cek`): ceklis manual (tanpa foto) dan "Rincian per
 // hal" di hasil Pindai (mengoreksi jawaban Gemini) - supaya keduanya terasa sebagai satu alur yang sama, bukan dua
@@ -293,7 +301,32 @@ function Hasil({
   // Status tab dikendalikan dari sini (bukan di dalam DenahKamarMandi) supaya "Rincian per hal" di bawah ikut
   // berganti isi mengikuti tab yang sama persis dengan yang mengatur sorotan di denah - satu tab, dua tampilan.
   const [filter, setFilter] = useState<StatusItem>("perhatian");
-  const butirFilter = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === filter);
+
+  // Begitu jawaban diganti ke status lain, kartunya langsung hilang dari tab (filter-nya tidak cocok lagi) — tanpa
+  // ini terasa seperti "tidak ada yang terjadi" karena kartu berikutnya langsung naik menggantikan. `keluar` menahan
+  // kartu itu tetap tampil sebentar dengan konfirmasi "Dipindahkan ke ..." sebelum benar-benar dilepas dari tab,
+  // memakai animasi "pudar" (lihat tailwind.config.ts) supaya perubahannya terlihat jelas, bukan mendadak.
+  const [keluar, setKeluar] = useState<Record<string, boolean>>({});
+  const timer = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+  useEffect(() => () => Object.values(timer.current).forEach(clearTimeout), []);
+  const ubahJawaban = (id: string, nilai: StatusItem) => {
+    const sebelumnya = temuan[id] ?? "tidak_jelas";
+    setTemuan((prev) => ({ ...prev, [id]: nilai }));
+    clearTimeout(timer.current[id]);
+    if (nilai === filter || sebelumnya !== filter) {
+      // Kembali cocok tab aktif (user berubah pikiran sebelum animasi selesai), atau memang sudah tidak cocok tab
+      // aktif dari awal (kartu ini sedang dilihat dari tab lain) — keduanya tidak perlu animasi keluar.
+      setKeluar((prev) => (prev[id] ? tanpaId(prev, id) : prev));
+      return;
+    }
+    setKeluar((prev) => ({ ...prev, [id]: true }));
+    // 1200ms: cocok dengan total durasi animasi "pudar" (delay 650ms + 550ms) supaya kartu baru dilepas dari daftar
+    // setelah benar-benar tidak terlihat, bukan menghilang mendadak di tengah animasi.
+    timer.current[id] = setTimeout(() => {
+      setKeluar((prev) => tanpaId(prev, id));
+    }, 1200);
+  };
+  const butirFilter = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === filter || keluar[it.id]);
   return (
     <>
       <section
@@ -338,41 +371,59 @@ function Hasil({
           </div>
           {butirFilter.length > 0 ? (
             <ul className="flex flex-col gap-3">
-              {butirFilter.map((it) => (
-                <li key={it.id} className="rounded-tombol border border-garis/70 p-3">
-                  <p className="flex items-center gap-2 font-semibold">
-                    {NOMOR_ITEM[it.id] !== undefined && (
-                      <span
-                        aria-hidden="true"
-                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_STATUS[filter]}`}
-                      >
-                        {NOMOR_ITEM[it.id]}
-                      </span>
+              {butirFilter.map((it) => {
+                const statusKini = temuan[it.id] ?? "tidak_jelas";
+                const sedangKeluar = !!keluar[it.id];
+                return (
+                  <li
+                    key={it.id}
+                    className={`rounded-tombol border border-garis/70 p-3 ${sedangKeluar ? "pointer-events-none animate-pudar" : ""}`}
+                  >
+                    <p className="flex items-center gap-2 font-semibold">
+                      {NOMOR_ITEM[it.id] !== undefined && (
+                        <span
+                          aria-hidden="true"
+                          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_STATUS[sedangKeluar ? statusKini : filter]}`}
+                        >
+                          {NOMOR_ITEM[it.id]}
+                        </span>
+                      )}
+                      {it.nama}
+                    </p>
+                    <p className="mt-1 text-kecil text-redup">{it.cek}</p>
+                    {sedangKeluar ? (
+                      // Konfirmasi sesaat (lihat komentar `keluar` di atas) — ganti tempat pil Ya/Tidak/Tidak yakin
+                      // supaya user tahu jawabannya tersimpan dan ke mana kartu ini pindah, bukan cuma hilang.
+                      <p className={`mt-3 flex items-center gap-2 font-semibold ${TEKS_STATUS[statusKini]}`}>
+                        <CircleCheck className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" focusable="false" />
+                        {isi(t.temuanDipindah, { status: t.status[statusKini] })}
+                      </p>
+                    ) : (
+                      <>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {PILIHAN_STATUS.map(([nilai, label]) => (
+                            <PilihanPil
+                              key={nilai}
+                              nama={`temuan-${it.id}`}
+                              label={label}
+                              aktif={statusKini === nilai}
+                              onUbah={() => ubahJawaban(it.id, nilai)}
+                            />
+                          ))}
+                        </div>
+                        {filter === "perhatian" && (
+                          <Link
+                            to={`/kartu/${it.kartu}`}
+                            className="mt-2 inline-flex min-h-sentuh items-center font-semibold text-utama underline"
+                          >
+                            {t.lihatPanduan}
+                          </Link>
+                        )}
+                      </>
                     )}
-                    {it.nama}
-                  </p>
-                  <p className="mt-1 text-kecil text-redup">{it.cek}</p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {PILIHAN_STATUS.map(([nilai, label]) => (
-                      <PilihanPil
-                        key={nilai}
-                        nama={`temuan-${it.id}`}
-                        label={label}
-                        aktif={(temuan[it.id] ?? "tidak_jelas") === nilai}
-                        onUbah={() => setTemuan((prev) => ({ ...prev, [it.id]: nilai }))}
-                      />
-                    ))}
-                  </div>
-                  {filter === "perhatian" && (
-                    <Link
-                      to={`/kartu/${it.kartu}`}
-                      className="mt-2 inline-flex min-h-sentuh items-center font-semibold text-utama underline"
-                    >
-                      {t.lihatPanduan}
-                    </Link>
-                  )}
-                </li>
-              ))}
+                  </li>
+                );
+              })}
             </ul>
           ) : (
             <p className="text-kecil text-redup">{t.temuanKosong}</p>

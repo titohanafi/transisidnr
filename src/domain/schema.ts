@@ -448,6 +448,7 @@ export const uiSchema = z
       temuanJudul: teks,
       temuanPenjelasan: teks,
       temuanKosong: teks,
+      temuanDipindah: teks,
       denahJudul: teks,
       denahCatatan: teks,
       denahFilterLabel: teks,
