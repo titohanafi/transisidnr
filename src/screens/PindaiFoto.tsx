@@ -320,11 +320,11 @@ function Hasil({
       return;
     }
     setKeluar((prev) => ({ ...prev, [id]: true }));
-    // 1200ms: cocok dengan total durasi animasi "pudar" (delay 650ms + 550ms) supaya kartu baru dilepas dari daftar
+    // 550ms: cocok dengan total durasi animasi "pudar" (jeda 300ms + 250ms) supaya kartu baru dilepas dari daftar
     // setelah benar-benar tidak terlihat, bukan menghilang mendadak di tengah animasi.
     timer.current[id] = setTimeout(() => {
       setKeluar((prev) => tanpaId(prev, id));
-    }, 1200);
+    }, 550);
   };
   const butirFilter = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === filter || keluar[it.id]);
   return (

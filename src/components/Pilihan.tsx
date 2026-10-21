@@ -72,8 +72,11 @@ export function PilihanPil({
   return (
     <label className="relative inline-flex">
       <input type="radio" name={nama} checked={aktif} onChange={onUbah} className="peer sr-only" />
+      {/* motion-safe:transition / active:scale-95: umpan balik sesaat waktu diketuk (warnanya pindah halus, pilnya
+          sedikit mengecil saat ditekan) - supaya terasa ada reaksi LANGSUNG dari ketukan itu sendiri, bukan cuma
+          dari akibatnya nanti (kartu di "Rincian per indikator" berpindah tab setelah animasi "pudar"). */}
       <span
-        className={`inline-flex min-h-sentuh w-full cursor-pointer items-center justify-center rounded-full border px-4 py-2 text-base peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-utama ${
+        className={`inline-flex min-h-sentuh w-full scale-100 cursor-pointer items-center justify-center rounded-full border px-4 py-2 text-base motion-safe:transition-[color,background-color,border-color,transform] motion-safe:duration-150 peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-utama peer-active:scale-95 ${
           aktif ? "border-utama bg-utama font-semibold text-white" : "border-garisKontrol bg-white text-tinta"
         }`}
       >

@@ -54,7 +54,7 @@ export default {
       animation: {
         muncul: "muncul 250ms ease-out",
         pindai: "pindai 2.4s cubic-bezier(0.65,0,0.35,1) infinite",
-        pudar: "pudar 550ms ease-in 650ms forwards",
+        pudar: "pudar 250ms ease-in 300ms forwards",
       },
     },
   },
