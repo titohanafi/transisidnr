@@ -150,7 +150,7 @@ function BentukIso({ footprint, tinggi, z = 0, kelas }: { footprint: TitikDatar[
   const ke = (titik: TitikDatar, tz: number) => iso(titik.x, titik.y, tz);
   const titikKe = (titik: { x: number; y: number }) => `${titik.x},${titik.y}`;
   return (
-    <g className={kelas} stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" fill="currentColor">
+    <g className={kelas} stroke="currentColor" strokeWidth={1.8} strokeLinejoin="round" fill="currentColor">
       {sisiTampak.map(({ a, b, opasitas }, i) => (
         <polygon
           key={i}
@@ -810,13 +810,25 @@ export function DenahKamarMandi({
   // mudah dirawat, sementara semua interaksi (badge bisa diketuk, ikut tab status, posisi ikut koreksi user) tetap
   // identik dengan tampak atas karena sumber datanya (`letak`, `warna`, `latar`, `nomor`, `terbukaId`) sama persis.
   const denahSvgIso = (ukuran: string) => {
-    const lantai = [iso(0, 0), iso(W, 0), iso(W, H), iso(0, H)].map((p) => `${p.x},${p.y}`).join(" ");
-    const dindingBelakang = [iso(0, 0, 0), iso(W, 0, 0), iso(W, 0, ISO_TINGGI_DINDING), iso(0, 0, ISO_TINGGI_DINDING)]
-      .map((p) => `${p.x},${p.y}`)
-      .join(" ");
-    const dindingKanan = [iso(W, 0, 0), iso(W, H, 0), iso(W, H, ISO_TINGGI_DINDING), iso(W, 0, ISO_TINGGI_DINDING)]
-      .map((p) => `${p.x},${p.y}`)
-      .join(" ");
+    const ke = (titik: { x: number; y: number }[]) => titik.map((p) => `${p.x},${p.y}`).join(" ");
+    const lantai = ke([iso(0, 0), iso(W, 0), iso(W, H), iso(0, H)]);
+    const dindingBelakang = ke([iso(0, 0, 0), iso(W, 0, 0), iso(W, 0, ISO_TINGGI_DINDING), iso(0, 0, ISO_TINGGI_DINDING)]);
+    const dindingKanan = ke([iso(W, 0, 0), iso(W, H, 0), iso(W, H, ISO_TINGGI_DINDING), iso(W, 0, ISO_TINGGI_DINDING)]);
+    // Bibir tipis di ujung atas tiap dinding (digeser sedikit ke arah LUAR ruangan, bukan dalam) — memberi kesan
+    // dinding punya ketebalan sungguhan, bukan sekadar lembaran datar setipis kertas seperti sebelumnya.
+    const TEBAL_DINDING = 7;
+    const bibirBelakang = ke([
+      iso(0, 0, ISO_TINGGI_DINDING),
+      iso(W, 0, ISO_TINGGI_DINDING),
+      iso(W, -TEBAL_DINDING, ISO_TINGGI_DINDING),
+      iso(0, -TEBAL_DINDING, ISO_TINGGI_DINDING),
+    ]);
+    const bibirKanan = ke([
+      iso(W, 0, ISO_TINGGI_DINDING),
+      iso(W, H, ISO_TINGGI_DINDING),
+      iso(W + TEBAL_DINDING, H, ISO_TINGGI_DINDING),
+      iso(W + TEBAL_DINDING, 0, ISO_TINGGI_DINDING),
+    ]);
 
     // Titik asli (sebelum digeser `dorongKeDalam`) dipakai untuk jejak benda di lantai; titik yang sudah digeser ke
     // arah ruangan dipakai untuk badge-nya — persis seperti pembagian x/y di tampak atas (lihat `Pintu`/`Kloset`/dst).
@@ -857,11 +869,18 @@ export function DenahKamarMandi({
         />
       );
 
+    // Garis lebih tebal dan gelap (text-tinta, bukan text-garisKontrol yang lembut) dipakai di sini saja (bukan di
+    // tampak atas) — supaya kontras dan kesan "digambar tangan"-nya lebih dekat ke gaya ilustrasi isometrik acuan,
+    // yang memang pakai garis hitam pekat di semua benda netral (dinding, lantai, kloset).
     return (
-      <svg viewBox={`0 0 ${ISO_VW} ${ISO_VH}`} className={`mx-auto text-garisKontrol ${ukuran}`} aria-hidden="true" focusable="false">
-        <polygon points={dindingBelakang} className="fill-white" stroke="currentColor" strokeWidth={1.5} strokeLinejoin="round" />
-        <polygon points={dindingKanan} className="fill-permukaan" stroke="currentColor" strokeWidth={1.5} strokeLinejoin="round" />
-        <polygon points={lantai} fill="white" stroke="currentColor" strokeWidth={1.5} strokeLinejoin="round" />
+      <svg viewBox={`0 0 ${ISO_VW} ${ISO_VH}`} className={`mx-auto text-tinta ${ukuran}`} aria-hidden="true" focusable="false">
+        <polygon points={dindingBelakang} className="fill-white" stroke="currentColor" strokeWidth={2.2} strokeLinejoin="round" />
+        <polygon points={dindingKanan} className="fill-permukaan" stroke="currentColor" strokeWidth={2.2} strokeLinejoin="round" />
+        {/* Bibir dinding (lihat `TEBAL_DINDING` di atas): sedikit lebih gelap dari badan dindingnya supaya terbaca
+            sebagai permukaan atas yang kena cahaya beda arah, bukan cuma garis hias. */}
+        <polygon points={bibirBelakang} className="fill-permukaan" stroke="currentColor" strokeWidth={1.6} strokeLinejoin="round" />
+        <polygon points={bibirKanan} className="fill-garis" stroke="currentColor" strokeWidth={1.6} strokeLinejoin="round" />
+        <polygon points={lantai} fill="white" stroke="currentColor" strokeWidth={2.2} strokeLinejoin="round" />
         {Array.from({ length: 10 }, (_, baris) =>
           Array.from({ length: 7 }, (_, kolom) => {
             const p = iso(PAD + 14 + kolom * 26, PAD + 14 + baris * 28);
@@ -907,7 +926,7 @@ export function DenahKamarMandi({
         <BentukIso
           footprint={footprintElips(kloset.x, kloset.y, sejajar(kloset.dinding) ? 17 : 13, sejajar(kloset.dinding) ? 13 : 17)}
           tinggi={22}
-          kelas="text-garisKontrol"
+          kelas="text-tinta"
         />
         {/* Lingkar dudukan: aksen datar di atas mangkuk, bukan benda terpisah — supaya siluetnya langsung terbaca
             sebagai kloset walau dari kejauhan, bukan cuma gundukan bundar polos. */}
@@ -919,16 +938,16 @@ export function DenahKamarMandi({
             (sejajar(kloset.dinding) ? 13 : 17) * 0.72,
             22,
           )}
-          className="text-garisKontrol"
+          className="text-tinta"
           fill="none"
           stroke="currentColor"
-          strokeWidth={1}
-          opacity={0.6}
+          strokeWidth={1.4}
+          opacity={0.8}
         />
         <BentukIso
           footprint={footprintPotong(klosetTangki.x, klosetTangki.y, sejajar(kloset.dinding) ? 11 : 6, sejajar(kloset.dinding) ? 6 : 11, 3)}
           tinggi={44}
-          kelas="text-garisKontrol"
+          kelas="text-tinta"
         />
         {/* Wastafel: konter bersudut membulat (lebar, rendah) + cekungan elips di atasnya + keran kecil menonjol
             dekat dinding — satu kotak polos sendirian terlihat terlalu pipih untuk terbaca sebagai benda 3D. */}
@@ -942,8 +961,8 @@ export function DenahKamarMandi({
           className={warna("wastafel")}
           fill="none"
           stroke="currentColor"
-          strokeWidth={1}
-          opacity={0.6}
+          strokeWidth={1.4}
+          opacity={0.8}
         />
         <BentukIso footprint={footprintPotong(wastafelKeran.x, wastafelKeran.y, 3, 3, 1)} tinggi={12} z={24} kelas={warna("wastafel")} />
         {badgeIso({ x: W / 2, y: H / 2 }, "ruang", nomorRuang, warna("ruang"), latar("ruang"))}
