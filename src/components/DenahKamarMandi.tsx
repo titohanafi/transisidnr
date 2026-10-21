@@ -41,32 +41,23 @@ const PAD = 10;
 const JARAK_DINDING = 35;
 
 // Tampilan isometrik cuma pernah bisa menggambar DUA dinding solid sekaligus (supaya isi ruangan tetap kelihatan
-// — dinding ketiga/keempat akan menghalangi kamera). Dulu dua dinding itu tetap ("belakang"+"kiri"), jadi benda
-// apa pun yang posisinya di dinding "depan"/"kanan" selalu melayang tanpa dinding, apa pun fotonya. Sekarang
-// sepasang dinding solid DIPILIH per hasil pindai (lihat `pilihSudutTerbaik`), dan pengguna bisa memutar manual
-// lewat tombol (lihat `SUDUT_URUTAN`) untuk melihat sisi lain — bukan ditentukan sekali untuk selamanya di kode.
-type SudutPandang = { y: "belakang" | "depan"; x: "kiri" | "kanan" };
-// Cuma TIGA dari empat kombinasi (bukan empat) yang dipakai — dites langsung di browser, bukan diasumsikan:
-// kombinasi "depan"+"kanan" membuat TIDAK ADA dinding solid yang menyentuh sudut (0,0), yang karena rumus
-// proyeksi (`iso()`) selalu jadi titik TERTINGGI gambar apa pun kombinasinya. Kombinasi lain selalu punya
-// SALAH SATU dinding (belakang atau kiri) yang membentang sampai ke titik itu, jadi puncaknya tetap tersambung
-// ke salah satu dinding. Untuk "depan"+"kanan", titik tertinggi itu jadi sudut kosong di tengah-tengah gambar —
-// dan tiang sudut (lihat di bawah) yang seharusnya cuma penanda halus di pojok malah nongol melayang persis di
-// titik paling mencolok, bukan di pojok yang tidak diperhatikan seperti maksudnya. Daripada mematchkan geometri
-// tambahan cuma untuk satu kombinasi, kombinasi itu dilewati saja — tiga sisanya sudah cukup untuk menjangkau
-// keempat nama dinding ("kiri" dan "belakang" muncul di dua kombinasi, "kanan" di `bn`, "depan" di `dk`).
-const SUDUT_URUTAN: SudutPandang[] = [
-  { y: "belakang", x: "kiri" },
-  { y: "belakang", x: "kanan" },
-  { y: "depan", x: "kiri" },
-];
+// — dinding lain akan menghalangi kamera). Hanya DUA sudut pandang yang dipakai (bukan empat/tiga seperti
+// percobaan sebelumnya), meniru persis dua foto acuan yang diberikan pemilik produk: dinding "belakang" SELALU
+// solid (itu dinding yang menghadap pengguna saat masuk — pintu ada di dinding "depan", yang karena itu selalu
+// jadi sisi terbuka tempat kamera berada), dan dinding "kiri" ATAU "kanan" (tidak pernah keduanya) jadi dinding
+// kedua yang solid, tergantung pengguna "berdiri" di sisi mana: pengguna di kiri menghadap kanan -> dinding kanan
+// yang solid (benda di dinding kanan, mis. shower, tergambar menempel); pengguna di kanan menghadap kiri ->
+// dinding kiri yang solid. Posisi benda (dari `letak`) TIDAK pernah berubah oleh sudut pandang ini — cuma dinding
+// mana yang solid, dan lewat `putar` (lihat `denahSvgIso`) seluruh gambar ikut berputar sebagai satu kesatuan.
+type SudutPandang = { x: "kiri" | "kanan" };
+const SUDUT_URUTAN: SudutPandang[] = [{ x: "kanan" }, { x: "kiri" }];
 /** Fungsi murni: berapa banyak benda (pintu/kloset/wastafel/area_mandi) yang akan menempel dinding SOLID kalau
- *  sudut pandang ini dipakai — dipakai untuk memilih sudut bawaan yang paling banyak "benar" tanpa perlu
- *  pengguna memutar manual dulu. */
+ *  sudut pandang ini dipakai (dinding "belakang" selalu dihitung solid, lihat komentar di atas) — dipakai untuk
+ *  memilih sudut bawaan yang paling banyak "benar" tanpa perlu pengguna memutar manual dulu. */
 function skorSudut(sudut: SudutPandang, letak: (id: ObjekDenah) => LetakDenah): number {
   return OBJEK_DENAH.reduce((skor, id) => {
     const dinding = letak(id).dinding;
-    return skor + (dinding === sudut.y || dinding === sudut.x ? 1 : 0);
+    return skor + (dinding === "belakang" || dinding === sudut.x ? 1 : 0);
   }, 0);
 }
 /** Fungsi murni: sudut dengan skor tertinggi (dasi dipecahkan dengan urutan di SUDUT_URUTAN, supaya bawaan tetap
@@ -757,7 +748,7 @@ export function DenahKamarMandi({
   const sudutAktif = sudutManual ?? sudutOtomatis;
   const putarSudut = (arah: 1 | -1) => {
     const sekarang = sudutManual ?? sudutOtomatis;
-    const i = SUDUT_URUTAN.findIndex((s) => s.y === sekarang.y && s.x === sekarang.x);
+    const i = SUDUT_URUTAN.findIndex((s) => s.x === sekarang.x);
     const berikutnya = SUDUT_URUTAN[(i + arah + SUDUT_URUTAN.length) % SUDUT_URUTAN.length];
     setSudutManual(berikutnya);
   };
@@ -900,14 +891,15 @@ export function DenahKamarMandi({
   const denahSvgIso = (ukuran: string) => {
     // SELURUH ruangan (dinding, lantai, benda) digambar dengan koordinat dunia yang TETAP (dinding selalu di
     // bidang x=0/y=0, sama seperti sebelum ada sudut pandang) — yang berubah per `sudutAktif` cuma `putar`, yang
-    // membalik sumbu x dan/atau y SEBELUM diproyeksikan ke layar lewat `iso()`. Ini beda dari percobaan
+    // membalik sumbu x SEBELUM diproyeksikan ke layar lewat `iso()` (sumbu y tidak pernah dibalik: dinding
+    // "belakang" selalu solid di kedua sudut pandang, lihat komentar di `SudutPandang`). Ini beda dari percobaan
     // sebelumnya (memilih dinding mana yang digambar solid, tapi lantai/kamera tetap sama persis) — itu
     // membuat perspektifnya terasa tidak berubah, cuma dindingnya "lompat" ke sisi lain. Dengan membalik
     // koordinat SEBELUM proyeksi, seluruh ruangan (termasuk bentuk lantainya di layar) ikut berputar sebagai
     // satu kesatuan, persis seperti melihat dari sudut lain sungguhan — bukan cuma dindingnya yang pindah.
     const putar = (p: { x: number; y: number }): { x: number; y: number } => ({
       x: sudutAktif.x === "kanan" ? W - p.x : p.x,
-      y: sudutAktif.y === "depan" ? H - p.y : p.y,
+      y: p.y,
     });
     const putarSemua = (fp: TitikDatar[]): TitikDatar[] => fp.map(putar);
     const isoPutar = (x: number, y: number, z = 0): { x: number; y: number } => {
@@ -953,15 +945,35 @@ export function DenahKamarMandi({
     const ubinBelakang = ke([isoPutar(0, 0, 0), isoPutar(W, 0, 0), isoPutar(W, 0, TINGGI_UBIN), isoPutar(0, 0, TINGGI_UBIN)]);
     const ubinKiri = ke([isoPutar(0, 0, 0), isoPutar(0, H, 0), isoPutar(0, H, TINGGI_UBIN), isoPutar(0, 0, TINGGI_UBIN)]);
 
+    // `titikDinding` (dan turunannya: `dorongKeDalam`, `keDinding`, `titikDiDinding`) menghitung koordinat MENTAH
+    // (sebelum `putar`) dengan asumsi dinding "kiri" yang solid — sama seperti footprint dinding di atas. Benda
+    // yang sebenarnya ada di dinding "kanan" baru akan menempel ke dinding solid yang BENAR (setelah `putar`
+    // membalik sumbu x) kalau koordinat mentahnya JUGA dihitung seolah-olah dinding "kiri" (lalu `putar` membalik
+    // SEMUANYA bersama, dinding maupun benda, jadi keduanya tetap sejajar). Tanpa penukaran ini, benda di dinding
+    // "kanan" akan dibalik ke sisi yang salah (jauh dari dinding solid, kelihatan melayang) karena koordinat
+    // aslinya sudah "benar" (dekat dinding kanan) sebelum dibalik — dites langsung di browser, bukan diasumsikan
+    // (shower yang melayang jauh dari dinding adalah gejala persis bug ini). Dinding depan/belakang tidak pernah
+    // ditukar (sumbu y tidak pernah dibalik `putar`, lihat definisi `putar` di atas).
+    const dindingUntukIso = (d: DindingDenah): DindingDenah => {
+      if (sudutAktif.x !== "kanan") return d;
+      if (d === "kiri") return "kanan";
+      if (d === "kanan") return "kiri";
+      return d;
+    };
+    const letakIso = (id: ObjekDenah): LetakDenah => {
+      const l = letak(id);
+      return { dinding: dindingUntukIso(l.dinding), posisi: l.posisi };
+    };
+
     // Titik asli (sebelum digeser `dorongKeDalam`) dipakai untuk jejak benda di lantai; titik yang sudah digeser ke
     // arah ruangan dipakai untuk badge-nya — persis seperti pembagian x/y di tampak atas (lihat `Pintu`/`Kloset`/dst).
-    const pintu = titikDinding(letak("pintu"));
+    const pintu = titikDinding(letakIso("pintu"));
     const pintuBadge = dorongKeDalam(pintu.x, pintu.y, pintu.dinding, 34);
-    const kloset = titikDinding(letak("kloset"));
+    const kloset = titikDinding(letakIso("kloset"));
     const peganganBadge = dorongKeDalam(kloset.x, kloset.y, kloset.dinding, 43);
-    const wastafel = titikDinding(letak("wastafel"));
+    const wastafel = titikDinding(letakIso("wastafel"));
     const wastafelBadge = dorongKeDalam(wastafel.x, wastafel.y, wastafel.dinding, 24);
-    const areaMandi = titikDinding(letak("area_mandi"));
+    const areaMandi = titikDinding(letakIso("area_mandi"));
     const areaMandiBadge = dorongKeDalam(areaMandi.x, areaMandi.y, areaMandi.dinding, 45);
     const jangkauanBadge = dorongKeDalam(areaMandi.x, areaMandi.y, areaMandi.dinding, 20);
     // Jejak area mandi memanjang sepanjang dindingnya (bukan kotak persegi), sama seperti zona di tampak atas.
