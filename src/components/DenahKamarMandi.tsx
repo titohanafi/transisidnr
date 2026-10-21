@@ -28,6 +28,11 @@ import {
   type TitikDatar,
 } from "../domain/denahGeometri";
 import { UKURAN_AREA_MANDI, UKURAN_KLOSET, UKURAN_PINTU, UKURAN_WASTAFEL } from "../domain/objekUkuran";
+import { PratinjauIsoTiga } from "./PratinjauIsoTiga";
+
+// Prototipe Milestone 3 (lihat DECISIONS.md): kalau aktif, tab Isometrik menampilkan model 3D kloset (Three.js)
+// alih-alih SVG tangan, KHUSUS untuk dibandingkan visual — bukan jalur produksi. Benda lain tetap versi SVG lama.
+const MODE_ISO_3D = import.meta.env.VITE_ISO_3D === "true";
 import {
   footprintDindingBelakang,
   footprintDindingSamping,
@@ -1264,7 +1269,13 @@ export function DenahKamarMandi({
           </div>
         )}
 
-        {tampilan === "atas" ? denahSvg("w-full max-w-[220px]") : denahSvgIso("w-full max-w-[280px]")}
+        {tampilan === "atas" ? (
+          denahSvg("w-full max-w-[220px]")
+        ) : MODE_ISO_3D ? (
+          <PratinjauIsoTiga kelas="h-64 w-full max-w-[280px]" />
+        ) : (
+          denahSvgIso("w-full max-w-[280px]")
+        )}
 
         {/* Catatan posisi/skala dan petunjuk ketuk nomor digabung satu badge info (bukan teks polos terpisah) —
             keduanya sama-sama konteks tambahan tentang cara membaca denah, bukan bagian dari kontennya sendiri.
@@ -1332,7 +1343,13 @@ export function DenahKamarMandi({
                 </button>
               </div>
             )}
-            {tampilan === "atas" ? denahSvg("w-full max-w-none") : denahSvgIso("w-full max-w-none")}
+            {tampilan === "atas" ? (
+              denahSvg("w-full max-w-none")
+            ) : MODE_ISO_3D ? (
+              <PratinjauIsoTiga kelas="h-[70vh] w-full" />
+            ) : (
+              denahSvgIso("w-full max-w-none")
+            )}
           </div>
         </div>
       )}
