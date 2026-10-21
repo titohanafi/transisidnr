@@ -28,6 +28,16 @@ import {
   type TitikDatar,
 } from "../domain/denahGeometri";
 import { UKURAN_AREA_MANDI, UKURAN_KLOSET, UKURAN_PINTU, UKURAN_WASTAFEL } from "../domain/objekUkuran";
+import {
+  footprintDindingBelakang,
+  footprintDindingSamping,
+  footprintTiangSudut,
+  KLOSET_TINGGI_MANGKUK,
+  TANGKI_PUSH_IN,
+  TANGKI_TINGGI,
+  TANGKI_Z_MULAI,
+  WASTAFEL_KERAN_PUSH_IN,
+} from "../domain/denahIsoGeometri";
 
 const t = konten.ui.pindai;
 const ID_ITEM = t.item.map((i) => i.id);
@@ -822,48 +832,11 @@ export function DenahKamarMandi({
     // tipis setebal TEBAL_DINDING, bukan lembaran datar + "bibir"/"sudut" tempelan terpisah seperti sebelumnya.
     // Sisi tegak, sisi ujung (ketebalan kelihatan), dan tutup atas semuanya otomatis tergambar rapi dan konsisten
     // dengan bayangan per-sisi yang sama seperti benda lain — tidak perlu kode/angka tambahan khusus dinding lagi.
-    const TEBAL_DINDING = 11;
-    const footprintDindingBelakang: TitikDatar[] = [
-      { x: 0, y: 0 },
-      { x: W, y: 0 },
-      { x: W, y: -TEBAL_DINDING },
-      { x: 0, y: -TEBAL_DINDING },
-    ];
-    const footprintDindingKiri: TitikDatar[] = [
-      { x: 0, y: 0 },
-      { x: 0, y: H },
-      { x: -TEBAL_DINDING, y: H },
-      { x: -TEBAL_DINDING, y: 0 },
-    ];
-    // Dinding kanan: bayangan cermin `footprintDindingKiri` terhadap x=W — dipakai gantian dengan dinding kiri
-    // (TIDAK PERNAH keduanya sekaligus, lihat `SudutPandang`), sesuai `sudutAktif.x`.
-    const footprintDindingKanan: TitikDatar[] = [
-      { x: W, y: 0 },
-      { x: W, y: H },
-      { x: W + TEBAL_DINDING, y: H },
-      { x: W + TEBAL_DINDING, y: 0 },
-    ];
-    const footprintDindingSamping = sudutAktif.x === "kanan" ? footprintDindingKanan : footprintDindingKiri;
-    // Tiang sudut tipis di pojok yang TIDAK ditempeli dinding solid ataupun dilewati pintu (dua sisi ruangan ini
-    // sengaja dibiarkan terbuka — sisi kamera — supaya isi ruangan kelihatan, tapi itu bisa kerasa seperti
-    // ruangan "terpotong"/tidak utuh). Tiang tipis ini (bukan dinding penuh, biar tidak menghalangi pandangan)
-    // cuma memberi isyarat bahwa batas ruangan tetap ada di situ, sama seperti tiang pintu di gambar acuan. Pojok
-    // yang kosong itu pindah sesuai dinding samping mana yang solid: (0,H) kalau dinding kanan yang solid
-    // (sisi kiri+depan terbuka), (W,H) kalau dinding kiri yang solid (sisi kanan+depan terbuka).
-    const footprintTiangSudut: TitikDatar[] =
-      sudutAktif.x === "kanan"
-        ? [
-            { x: 0, y: H },
-            { x: -TEBAL_DINDING, y: H },
-            { x: -TEBAL_DINDING, y: H + TEBAL_DINDING },
-            { x: 0, y: H + TEBAL_DINDING },
-          ]
-        : [
-            { x: W, y: H },
-            { x: W + TEBAL_DINDING, y: H },
-            { x: W + TEBAL_DINDING, y: H + TEBAL_DINDING },
-            { x: W, y: H + TEBAL_DINDING },
-          ];
+    // Dinding belakang selalu digambar; dinding samping (kiri/kanan) dan tiang sudut berlawanannya dipilih dari
+    // `sudutAktif.x` lewat fungsi murni di `../domain/denahIsoGeometri.ts` (dites di tests/denahIsoGeometri.test.ts).
+    const footprintBelakangIni = footprintDindingBelakang();
+    const footprintSampingIni = footprintDindingSamping(sudutAktif.x);
+    const footprintTiangIni = footprintTiangSudut(sudutAktif.x);
     // Pita ubin dekoratif di bagian bawah kedua dinding solid (selalu tampil, tidak terkait status apa pun) — di
     // acuan gambar isometrik, dinding punya ubin setinggi dada (bukan polos kosong), terutama penting sekarang
     // dinding jauh lebih tinggi dari sebelumnya dan akan terlihat kosong tanpa ini.
@@ -971,18 +944,11 @@ export function DenahKamarMandi({
         { x: engselPintu.x + arahDalamPintu.x * DALAM_ZONA_PINTU, y: engselPintu.y + arahDalamPintu.y * DALAM_ZONA_PINTU },
       ].map((p) => iso(p.x, p.y, 2)),
     );
-    // Keran wastafel digeser ke arah dinding dari badan utamanya — jaraknya PERSIS jumlah "setengah lebar" kedua
-    // bentuk (counter+keran), supaya cuma bersentuhan di satu sisi (selisih nol), bukan tumpang tindih. Keran
-    // ada di ketinggian BEDA dari konter (lihat `z={26}` di JSX-nya) jadi aman tumpang tindih sedikit di denah.
-    const wastafelKeran = dorongKeDalam(wastafel.x, wastafel.y, wastafel.dinding, -(22 + 3));
-    // Tangki kloset: digeser ke arah dinding LEBIH DEKAT dari "pas bersentuhan" (28, bukan 24+15=39) DAN z-nya
-    // sengaja tumpang tindih sedikit dengan mangkuk (mulai di 14, bukan tepat di KLOSET_TINGGI_MANGKUK=26) —
-    // dites langsung di browser: kalau cuma "pas bersentuhan" di satu titik (tanpa tumpang tindih sama sekali),
-    // dua kotak keliatan seperti dua benda terpisah yang melayang berdekatan (ada celah semu akibat lebar garis),
-    // bukan satu kloset yang menyatu. Tumpang tindih kecil ini menyatukan siluetnya jadi kelihatan satu benda.
-    const klosetTangki = dorongKeDalam(kloset.x, kloset.y, kloset.dinding, -28);
-    // Tinggi mangkuk kloset — dipakai untuk badan mangkuk; tangki MULAI lebih rendah dari ini (lihat di atas).
-    const KLOSET_TINGGI_MANGKUK = 26;
+    // Keran wastafel dan tangki kloset: offset-nya dites/ditala manual lewat browser (lihat komentar di
+    // `../domain/denahIsoGeometri.ts`, sumber `WASTAFEL_KERAN_PUSH_IN`/`TANGKI_PUSH_IN`/`TANGKI_Z_MULAI`) — nilai
+    // akhirnya dipertahankan persis sama seperti sebelum refactor ini, cuma diberi nama supaya tertelusur.
+    const wastafelKeran = dorongKeDalam(wastafel.x, wastafel.y, wastafel.dinding, WASTAFEL_KERAN_PUSH_IN);
+    const klosetTangki = dorongKeDalam(kloset.x, kloset.y, kloset.dinding, TANGKI_PUSH_IN);
 
     const badgeIso = (titik: { x: number; y: number }, id: string, nomorId: number | undefined, warnaId: string, latarId: string) =>
       nomorId !== undefined && (
@@ -1008,9 +974,9 @@ export function DenahKamarMandi({
             otomatis tergambar lewat `BentukIso` yang sama dipakai benda lain, lengkap dengan bayangan per-sisi.
             Dinding "belakang" selalu digambar; dinding "samping" gantian kiri/kanan sesuai `sudutAktif.x`, TANPA
             ada koordinat yang dibalik — cuma footprint-nya sendiri yang beda (lihat definisinya di atas). */}
-        <BentukIso footprint={footprintDindingBelakang} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
-        <BentukIso footprint={footprintDindingSamping} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-permukaan" />
-        <BentukIso footprint={footprintTiangSudut} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
+        <BentukIso footprint={footprintBelakangIni} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
+        <BentukIso footprint={footprintSampingIni} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-permukaan" />
+        <BentukIso footprint={footprintTiangIni} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
         <defs>
           <pattern id="iso-ubin" width="7" height="7" patternUnits="userSpaceOnUse">
             <rect width={7} height={7} className="fill-permukaan" />
@@ -1121,8 +1087,8 @@ export function DenahKamarMandi({
         />
         <BentukIso
           footprint={footprintPersegi(klosetTangki.x, klosetTangki.y, sejajar(kloset.dinding) ? 15 : 9, sejajar(kloset.dinding) ? 9 : 15)}
-          tinggi={36}
-          z={14}
+          tinggi={TANGKI_TINGGI}
+          z={TANGKI_Z_MULAI}
           kelas="text-tinta"
         />
         {/* Wastafel: kotak konter polos + kotak keran kecil menonjol dekat dinding — sama seperti acuan (bukan
