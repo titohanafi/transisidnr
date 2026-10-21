@@ -35,7 +35,7 @@ MVP hanya mencakup: kamar mandi, pengguna kursi roda (kruk dan walker bila ada w
 - Tidak ada data yang dikirim keluar perangkat. Jangan menaruh data pribadi di URL atau query string.
 - Mobile-first (lebar 360px), area sentuh minimal 44x44px, aman dipakai satu tangan.
 - Aksesibilitas WCAG 2.2 AA: kontras, fokus terlihat, label formulir, tidak mengandalkan warna saja, bisa dipakai dengan screen reader.
-- Ringan untuk kuota rendah: tanpa gambar besar, tanpa pustaka berat, satu font atau font sistem.
+- Ringan untuk kuota rendah: tanpa gambar besar, tanpa pustaka berat, satu font atau font sistem. **Pengecualian disetujui**: `three` (Three.js) untuk rendering 3D denah isometrik Pindai (gambar oleh kode SVG tangan terbukti gagal untuk benda kompleks seperti kloset setelah 3+ percobaan — lihat DECISIONS.md). Pengecualian ini TIDAK berlaku untuk bagian lain aplikasi; aturan "tanpa pustaka berat" tetap berlaku di luar rendering isometrik 3D ini.
 - Design token (warna, font, radius, spasi) dipusatkan di `tailwind.config` agar desainer bisa menggantinya. Nada visual: tenang, klinis tapi hangat, kontras tinggi.
 - Logika rekomendasi adalah fungsi murni di `src/domain/engine.ts` dengan tes unit.
 
