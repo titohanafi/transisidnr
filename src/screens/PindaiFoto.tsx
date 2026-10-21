@@ -30,6 +30,15 @@ const GAYA_STATUS: Record<StatusItem, string> = {
   tidak_jelas: "border-garis bg-white text-redup",
 };
 
+// Dipakai di dua tempat dengan pertanyaan yang sama persis (`it.cek`): ceklis manual (tanpa foto) dan "Rincian per
+// hal" di hasil Pindai (mengoreksi jawaban Gemini) - supaya keduanya terasa sebagai satu alur yang sama, bukan dua
+// cara menjawab yang berbeda.
+const PILIHAN_STATUS: readonly [StatusItem, string][] = [
+  ["ramah", t.ya],
+  ["perhatian", t.tidak],
+  ["tidak_jelas", t.tidakYakin],
+];
+
 // Foto hanya ada di memori layar ini (tidak disimpan); hasil dihitung aplikasi dari temuan per hal.
 export function PindaiFoto() {
   const kamera = useRef<HTMLInputElement>(null);
@@ -227,13 +236,7 @@ export function PindaiFoto() {
                   <legend className="px-1 font-semibold">{it.nama}</legend>
                   <p className="mb-3">{it.cek}</p>
                   <div className="flex flex-wrap gap-2">
-                    {(
-                      [
-                        ["ramah", t.ya],
-                        ["perhatian", t.tidak],
-                        ["tidak_jelas", t.tidakYakin],
-                      ] as const
-                    ).map(([nilai, label]) => (
+                    {PILIHAN_STATUS.map(([nilai, label]) => (
                       <PilihanPil
                         key={nilai}
                         nama={`cek-${it.id}`}
@@ -259,7 +262,7 @@ export function PindaiFoto() {
 }
 
 function Hasil({
-  temuan,
+  temuan: temuanAwal,
   objek,
   onUlang,
 }: {
@@ -267,6 +270,10 @@ function Hasil({
   objek: Record<ObjekDenah, PosisiObjek>;
   onUlang: () => void;
 }) {
+  // Jawaban Gemini (atau ceklis manual) cuma titik awal: tiap hal di "Rincian per hal" bisa dikoreksi user sendiri
+  // (lihat pil Ya/Tidak/Tidak yakin di bawah), karena penyandang disabilitas/caregiver yang paling tahu kondisi
+  // ruangnya sendiri, bukan tebakan dari foto. Perubahan ikut mengubah denah, ringkasan, dan tab - satu sumber data.
+  const [temuan, setTemuan] = useState(temuanAwal);
   const skor = hitungSkor(temuan, ID_ITEM);
   const tingkat = t.tingkat[skor.tingkat];
   const NOMOR_ITEM = nomorItemHasil(ID_ITEM, temuan);
@@ -326,6 +333,17 @@ function Hasil({
                     {it.nama}
                   </p>
                   <p className="mt-1 text-kecil text-redup">{it.cek}</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {PILIHAN_STATUS.map(([nilai, label]) => (
+                      <PilihanPil
+                        key={nilai}
+                        nama={`temuan-${it.id}`}
+                        label={label}
+                        aktif={(temuan[it.id] ?? "tidak_jelas") === nilai}
+                        onUbah={() => setTemuan((prev) => ({ ...prev, [it.id]: nilai }))}
+                      />
+                    ))}
+                  </div>
                   {filter === "perhatian" && (
                     <Link
                       to={`/kartu/${it.kartu}`}
