@@ -39,6 +39,46 @@ const PAD = 10;
 // Seberapa jauh benda digambar dari garis dinding (supaya terlihat "menempel" tanpa menimpa garisnya).
 const JARAK_DINDING = 35;
 
+// Proyeksi isometrik (opsi gaya tampilan kedua, lihat `tampilan` di DenahKamarMandi): koordinat benda yang sama
+// persis dengan tampak atas (dari `letak`/`titikDinding`, tidak dihitung ulang) cuma diproyeksikan lewat `iso()`
+// supaya posisi, status, dan koreksi user tetap satu sumber data — yang beda cuma cara menggambarnya.
+const ISO_SUDUT = (30 * Math.PI) / 180;
+const ISO_COS = Math.cos(ISO_SUDUT);
+const ISO_SIN = Math.sin(ISO_SUDUT);
+const ISO_TINGGI_DINDING = 85;
+// viewBox dan pergeseran dipilih manual supaya ruangan (W×H di atas, diproyeksikan lewat sudut 30°) pas di tengah
+// dengan sedikit jarak ke tepi, termasuk ruang di atas untuk dinding yang menjulang.
+const ISO_VW = 454;
+const ISO_VH = 356;
+const ISO_OX = 270;
+const ISO_OY = 95;
+
+/** Fungsi murni: titik (x,y) tampak-atas + ketinggian opsional -> titik 2D isometrik di viewBox ISO_VW×ISO_VH. */
+function iso(x: number, y: number, z = 0): { x: number; y: number } {
+  return { x: (x - y) * ISO_COS + ISO_OX, y: (x + y) * ISO_SIN - z + ISO_OY };
+}
+
+/** Jajaran genjang isometrik dari persegi panjang tampak-atas berpusat (x,y), setengah-lebar rx dan setengah-tinggi ry. */
+function isoPersegi(x: number, y: number, rx: number, ry: number, z = 0): string {
+  return [iso(x - rx, y - ry, z), iso(x + rx, y - ry, z), iso(x + rx, y + ry, z), iso(x - rx, y + ry, z)]
+    .map((p) => `${p.x},${p.y}`)
+    .join(" ");
+}
+
+/** Jajaran genjang isometrik dari kotak tampak-atas (sisi sama) berpusat (x,y) dengan jari-jari r, dipakai sebagai "jejak" benda di lantai. */
+function isoKotak(x: number, y: number, r: number, z = 0): string {
+  return isoPersegi(x, y, r, r, z);
+}
+
+/** Elips isometrik dari lingkaran tampak-atas berpusat (x,y) berjari-jari r — dipakai untuk lingkaran "ruang gerak". */
+function isoLingkaran(x: number, y: number, r: number, z = 0): string {
+  return Array.from({ length: 32 }, (_, i) => {
+    const a = (i / 32) * Math.PI * 2;
+    const p = iso(x + r * Math.cos(a), y + r * Math.sin(a), z);
+    return `${p.x},${p.y}`;
+  }).join(" ");
+}
+
 /**
  * Titik tempel benda ke dinding: koordinat sepanjang dinding dari posisi AI, koordinat tegak lurus dipaksa dekat
  * dinding. Dindingnya sendiri sudah pasti dari AI (bukan ditebak dari grid), jadi tidak ada ambiguitas pojok lagi.
@@ -73,6 +113,7 @@ function NomorBadge({
   id,
   terbuka,
   onToggle,
+  batas = { kiri: PAD, kanan: W - PAD, atas: PAD },
 }: {
   x: number;
   y: number;
@@ -88,13 +129,16 @@ function NomorBadge({
    *  semua popover sekaligus, untuk alasan yang sama). */
   terbuka: boolean;
   onToggle: () => void;
+  /** Batas tepi tempat popover dijepit — baku untuk denah tampak atas (W×H); tampilan isometrik punya viewBox
+   *  sendiri yang jauh lebih lebar, jadi mengirim batasnya sendiri di sini (lihat `denahSvgIso`). */
+  batas?: { kiri: number; kanan: number; atas: number };
 }) {
   const tampilkanPopover = terbuka;
   const nama = NAMA_ITEM[id] ?? "";
   const lebar = Math.max(44, nama.length * 5.6 + 16);
-  const diAtas = y - 28 >= PAD; // kalau badge terlalu dekat dinding atas, popover ditaruh di bawah badge saja
+  const diAtas = y - 28 >= batas.atas; // kalau badge terlalu dekat dinding atas, popover ditaruh di bawah badge saja
   const pusatPopoverY = diAtas ? y - 27 : y + 27;
-  const xPopover = Math.max(PAD, Math.min(W - PAD - lebar, x - lebar / 2));
+  const xPopover = Math.max(batas.kiri, Math.min(batas.kanan - lebar, x - lebar / 2));
   // Segitiga penunjuk dari popover ke badge nomornya: basisnya digeser sejajar x badge (dijepit ke dalam lebar
   // popover) supaya tetap menunjuk ke nomor yang benar walau kotak popovernya sendiri bergeser karena mepet tepi denah.
   const xSegitiga = Math.max(xPopover + 6, Math.min(xPopover + lebar - 6, x));
@@ -531,6 +575,12 @@ export function DenahKamarMandi({
   const [terbukaId, setTerbukaId] = useState<string | null>(null);
   const onToggleId = (id: string) => setTerbukaId((t) => (t === id ? null : id));
 
+  // Gaya tampilan denah: "atas" (bawaan) atau "isometrik" — keduanya menggambar temuan/posisi yang sama persis
+  // (lihat `denahSvgIso`, yang memproyeksikan titik yang sama dari `letak`/`titikDinding`), cuma bentuk gambarnya
+  // yang beda. Dipilih sekali per sesi (bukan disimpan), konsisten dengan fitur Pindai lain yang tidak menyimpan state.
+  const [tampilan, setTampilan] = useState<"atas" | "isometrik">("atas");
+  const batasIso = { kiri: 8, kanan: ISO_VW - 8, atas: 8 };
+
   // Dipakai dua kali dengan ukuran berbeda (inline di kartu, dan lebih besar di popup "perbesar denah") — isinya
   // sama persis, cuma lebar maksimumnya yang beda, supaya tidak ada dua salinan markup yang bisa tidak sinkron.
   const denahSvg = (ukuran: string) => (
@@ -661,6 +711,109 @@ export function DenahKamarMandi({
     </svg>
   );
 
+  // Gaya isometrik: proyeksi 3D sederhana (lihat `iso`/`isoKotak`/`isoLingkaran`) dari koordinat tampak-atas yang
+  // sama persis — jejak tiap benda digambar sebagai kotak/jajaran genjang rata lantai, bukan bentuk detail seperti
+  // di tampak atas (kloset/wastafel bukan digambar presisi) - penyederhanaan ini sengaja, supaya tetap ringan dan
+  // mudah dirawat, sementara semua interaksi (badge bisa diketuk, ikut tab status, posisi ikut koreksi user) tetap
+  // identik dengan tampak atas karena sumber datanya (`letak`, `warna`, `latar`, `nomor`, `terbukaId`) sama persis.
+  const denahSvgIso = (ukuran: string) => {
+    const lantai = [iso(0, 0), iso(W, 0), iso(W, H), iso(0, H)].map((p) => `${p.x},${p.y}`).join(" ");
+    const dindingBelakang = [iso(0, 0, 0), iso(W, 0, 0), iso(W, 0, ISO_TINGGI_DINDING), iso(0, 0, ISO_TINGGI_DINDING)]
+      .map((p) => `${p.x},${p.y}`)
+      .join(" ");
+    const dindingKanan = [iso(W, 0, 0), iso(W, H, 0), iso(W, H, ISO_TINGGI_DINDING), iso(W, 0, ISO_TINGGI_DINDING)]
+      .map((p) => `${p.x},${p.y}`)
+      .join(" ");
+
+    // Titik asli (sebelum digeser `dorongKeDalam`) dipakai untuk jejak benda di lantai; titik yang sudah digeser ke
+    // arah ruangan dipakai untuk badge-nya — persis seperti pembagian x/y di tampak atas (lihat `Pintu`/`Kloset`/dst).
+    const pintu = titikDinding(letak("pintu"));
+    const pintuBadge = dorongKeDalam(pintu.x, pintu.y, pintu.dinding, 34);
+    const kloset = titikDinding(letak("kloset"));
+    const peganganBadge = dorongKeDalam(kloset.x, kloset.y, kloset.dinding, 43);
+    const wastafel = titikDinding(letak("wastafel"));
+    const wastafelBadge = dorongKeDalam(wastafel.x, wastafel.y, wastafel.dinding, 24);
+    const areaMandi = titikDinding(letak("area_mandi"));
+    const areaMandiBadge = dorongKeDalam(areaMandi.x, areaMandi.y, areaMandi.dinding, 45);
+    const jangkauanBadge = dorongKeDalam(areaMandi.x, areaMandi.y, areaMandi.dinding, 20);
+    // Jejak area mandi memanjang sepanjang dindingnya (bukan kotak persegi), sama seperti zona di tampak atas.
+    const sepanjangDinding = areaMandi.dinding === "kiri" || areaMandi.dinding === "kanan";
+
+    const badgeIso = (titik: { x: number; y: number }, id: string, nomorId: number | undefined, warnaId: string, latarId: string) =>
+      nomorId !== undefined && (
+        <NomorBadge
+          {...iso(titik.x, titik.y, 2)}
+          nomor={nomorId}
+          warna={warnaId}
+          latar={latarId}
+          id={id}
+          terbuka={terbukaId === id}
+          onToggle={() => onToggleId(id)}
+          batas={batasIso}
+        />
+      );
+
+    return (
+      <svg viewBox={`0 0 ${ISO_VW} ${ISO_VH}`} className={`mx-auto text-garisKontrol ${ukuran}`} aria-hidden="true" focusable="false">
+        <polygon points={dindingBelakang} className="fill-white" stroke="currentColor" strokeWidth={1.5} strokeLinejoin="round" />
+        <polygon points={dindingKanan} className="fill-permukaan" stroke="currentColor" strokeWidth={1.5} strokeLinejoin="round" />
+        <polygon points={lantai} fill="white" stroke="currentColor" strokeWidth={1.5} strokeLinejoin="round" />
+        {Array.from({ length: 10 }, (_, baris) =>
+          Array.from({ length: 7 }, (_, kolom) => {
+            const p = iso(PAD + 14 + kolom * 26, PAD + 14 + baris * 28);
+            return (
+              <circle key={`${baris}-${kolom}`} cx={p.x} cy={p.y} r={1.3} className={warna("lantai")} fill="currentColor" opacity={0.45} />
+            );
+          }),
+        )}
+        {nomorRuang !== undefined && (
+          <polygon
+            points={isoLingkaran(W / 2, H / 2, 68)}
+            fill="none"
+            className={warna("ruang")}
+            stroke="currentColor"
+            strokeWidth={1.5}
+            strokeDasharray="5 5"
+            opacity={0.6}
+          />
+        )}
+        {nomor("area_mandi") !== undefined && (
+          <polygon
+            points={sepanjangDinding ? isoPersegi(areaMandi.x, areaMandi.y, 24, 55, 1) : isoPersegi(areaMandi.x, areaMandi.y, 55, 24, 1)}
+            className={warna("area_mandi")}
+            fill="currentColor"
+            fillOpacity={0.12}
+            stroke="currentColor"
+            strokeWidth={1.5}
+            strokeLinejoin="round"
+          />
+        )}
+        <polygon points={isoKotak(pintu.x, pintu.y, 10)} className={warna("pintu")} fill="white" stroke="currentColor" strokeWidth={1.5} />
+        <polygon
+          points={isoKotak(kloset.x, kloset.y, 14)}
+          className="text-garisKontrol"
+          fill="white"
+          stroke="currentColor"
+          strokeWidth={1.5}
+        />
+        <polygon
+          points={isoKotak(wastafel.x, wastafel.y, 13)}
+          className={warna("wastafel")}
+          fill="white"
+          stroke="currentColor"
+          strokeWidth={1.5}
+        />
+        {badgeIso({ x: W / 2, y: H / 2 }, "ruang", nomorRuang, warna("ruang"), latar("ruang"))}
+        {badgeIso({ x: W / 2, y: H / 2 - 45 }, "lantai", nomorLantai, warna("lantai"), latar("lantai"))}
+        {badgeIso(pintuBadge, "pintu", nomor("pintu"), warna("pintu"), latar("pintu"))}
+        {badgeIso(peganganBadge, "pegangan", nomor("pegangan"), warna("pegangan"), latar("pegangan"))}
+        {badgeIso(wastafelBadge, "wastafel", nomor("wastafel"), warna("wastafel"), latar("wastafel"))}
+        {badgeIso(areaMandiBadge, "area_mandi", nomor("area_mandi"), warna("area_mandi"), latar("area_mandi"))}
+        {badgeIso(jangkauanBadge, "jangkauan", nomor("jangkauan"), warna("jangkauan"), latar("jangkauan"))}
+      </svg>
+    );
+  };
+
   // Popup "perbesar denah": gambar yang sama persis ditampilkan lebih besar, untuk yang kesulitan melihat denah
   // kecil di dalam kartu (mis. layar sempit atau kebutuhan aksesibilitas visual) — bukan gambar lain, cuma skala.
   const [perbesar, setPerbesar] = useState(false);
@@ -697,6 +850,25 @@ export function DenahKamarMandi({
         ))}
       </div>
 
+      {/* Gaya tampilan (atas/isometrik): pil terpisah dari tab status di atas — keduanya sama-sama mengatur denah
+          tapi tidak saling terkait (status menentukan APA yang disorot, gaya menentukan cara gambarnya). */}
+      <div role="radiogroup" aria-label={t.denahTampilLabel} className="mb-3 flex gap-1 rounded-kartu bg-permukaan p-1">
+        <PilihanPil
+          nama="denah-tampilan"
+          aktif={tampilan === "atas"}
+          onUbah={() => setTampilan("atas")}
+          gaya="tab"
+          label={t.denahTampilAtas}
+        />
+        <PilihanPil
+          nama="denah-tampilan"
+          aktif={tampilan === "isometrik"}
+          onUbah={() => setTampilan("isometrik")}
+          gaya="tab"
+          label={t.denahTampilIsometrik}
+        />
+      </div>
+
       {/* Gambar denah dan segmen di bawahnya disimpan dalam satu kontainer kartu (judul dan tab filter di atas
           tetap di luar, langsung di latar halaman), dengan pembatas selebar kartu di antara keduanya. */}
       <div className="relative rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
@@ -711,7 +883,7 @@ export function DenahKamarMandi({
           <ZoomIn className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
         </button>
 
-        {denahSvg("w-full max-w-[220px]")}
+        {tampilan === "atas" ? denahSvg("w-full max-w-[220px]") : denahSvgIso("w-full max-w-[280px]")}
 
         {/* Catatan posisi/skala dan petunjuk ketuk nomor digabung satu badge info (bukan teks polos terpisah) —
             keduanya sama-sama konteks tambahan tentang cara membaca denah, bukan bagian dari kontennya sendiri.
@@ -757,7 +929,7 @@ export function DenahKamarMandi({
             >
               <X className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
             </button>
-            {denahSvg("w-full max-w-none")}
+            {tampilan === "atas" ? denahSvg("w-full max-w-none") : denahSvgIso("w-full max-w-none")}
           </div>
         </div>
       )}
