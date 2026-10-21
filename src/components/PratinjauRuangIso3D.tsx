@@ -56,20 +56,35 @@ const DASAR_Y: Record<ObjekDenah, number> = {
 // dengan arah "depan" bawaan yang tidak diketahui pasti (tidak ada konvensi universal), jadi mungkin perlu offset
 // kalibrasi supaya benda benar-benar menghadap ke dalam ruangan, bukan ke dinding. Mulai dari 0 (asumsikan model
 // sudah menghadap +Z) — DITENTUKAN/DIPERBAIKI lewat cek visual langsung di browser, lihat commit kalibrasi.
+//
+// area_mandi (Math.PI, bukan 0): dicek pakai THREE.AxesHelper sementara di model shower, ternyata lengan+kepala
+// modelnya mengarah ke -Z, BUKAN +Z seperti asumsi dasar di atas — jadi tanpa offset ini kepala shower menghadap
+// ke ARAH DINDING (ke dalam tembok), bukan ke ruangan. 180° memutar baliknya. PENTING: koreksi ini diverifikasi
+// visual di SEMUA 4 dinding (kiri/kanan/depan/belakang, lewat POSISI_BAWAAN sementara saat debug), bukan cuma
+// dinding default — karena rotasi Y murni (seperti dipakai di sini) secara matematis BERLAKU SAMA di dinding
+// manapun (lihat alasan sama di bawah untuk KEMIRINGAN_AREA_MANDI), jadi kalau terbukti benar di satu dinding dan
+// salah di dinding lain, itu tanda ada bug lain (bukan cuma kalibrasi kurang pas) — tapi ternyata konsisten benar
+// di keempatnya setelah 180° ini, jadi aman digeneralisasi.
 const ROTASI_KALIBRASI: Record<ObjekDenah, number> = {
   pintu: 0,
   kloset: 0,
   wastafel: 0,
-  area_mandi: 0,
+  area_mandi: Math.PI,
 };
 
-// Kemiringan TAMBAHAN (radian, sumbu-X LOKAL benda — lihat `rotation.order = "YXZ"` di bawah) khusus area_mandi:
-// rotasi Y saja (ROTASI_KALIBRASI) cuma memutar benda MENDATAR (menentukan dinding mana yang dihadapi), tidak
-// bisa membuat lingkaran kepala shower MENUNDUK ke lantai/area mandi — itu perlu kemiringan di sumbu lain. User
-// melapor lingkaran air mengarah ke kloset (horizontal), bukan ke lantai, karena model diekspor dengan kepala
-// menghadap LURUS ke depan (sejajar lengan), bukan sudah menunduk. Nilai negatif = ujung kepala menunduk (sumbu-X
-// lokal, diterapkan SEBELUM rotasi Y lewat urutan Euler "YXZ" supaya arah "turun" konsisten di dinding manapun) —
-// dipilih lewat cek visual, bukan angka baku (tidak ada spesifikasi sudut pancuran dari pengguna).
+// Kemiringan TAMBAHAN (radian, sumbu-X LOKAL model, diterapkan ke `model` BUKAN `pembungkus` — lihat di bawah)
+// khusus area_mandi: rotasi Y pembungkus (ROTASI_KALIBRASI) cuma memutar benda MENDATAR (menentukan dinding mana
+// yang dihadapi), tidak bisa membuat lingkaran kepala shower MENUNDUK ke lantai/area mandi — itu perlu kemiringan
+// di sumbu lain. User melapor lingkaran air mengarah ke kloset (horizontal), bukan ke lantai, karena model
+// diekspor dengan kepala menghadap lurus sejajar lengan, bukan sudah menunduk.
+//
+// Kenapa ini otomatis konsisten di 4 dinding TANPA perlu 4 nilai berbeda: tilt diterapkan di rotasi LOKAL model
+// (child), rotasi dinding (Y) diterapkan di pembungkus (parent) — jadi rotasi dunia = Ry(dinding) * Rx(tilt).
+// Secara matematis, rotasi sumbu-Y TIDAK PERNAH mengubah komponen-Y sebuah arah (cuma mencampur X/Z) — jadi
+// seberapa "turun" kepala shower di ruang dunia selalu sama berapa pun nilai rotasi dinding-nya. Diverifikasi
+// visual di 4 dinding (lihat catatan di ROTASI_KALIBRASI) untuk memastikan teori ini benar-benar berlaku di
+// renderer, bukan cuma dipercaya dari rumus. Nilai -0.55 sendiri dipilih lewat cek visual (tidak ada spesifikasi
+// sudut pancuran dari pengguna).
 const KEMIRINGAN_AREA_MANDI = -0.55;
 
 const ELEVASI_KAMERA = Math.atan(1 / Math.sqrt(2));
