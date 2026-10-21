@@ -59,9 +59,9 @@ function titikDinding({ dinding, posisi }: LetakDenah): {
 type Letak = LetakDenah;
 
 /**
- * Badge bulat bernomor, supaya denah bisa dikorelasikan dengan baris yang cocok di "Rincian per hal". Bisa diketuk
+ * Badge bulat bernomor, supaya denah bisa dikorelasikan dengan baris yang cocok di "Rincian per indikator". Bisa diketuk
  * untuk menampilkan nama bendanya langsung di denah — cuma kemudahan visual (denah tetap `aria-hidden`; nama dan
- * statusnya tetap tertulis lengkap di "Rincian per hal" untuk pembaca layar).
+ * statusnya tetap tertulis lengkap di "Rincian per indikator" untuk pembaca layar).
  */
 function NomorBadge({
   x,
@@ -70,7 +70,8 @@ function NomorBadge({
   warna,
   latar,
   id,
-  paksaTampil,
+  terbuka,
+  onToggle,
 }: {
   x: number;
   y: number;
@@ -80,11 +81,14 @@ function NomorBadge({
    *  disorot filter jelas beda dari yang tidak, tidak cuma mengandalkan warna garis tipis yang bisa mirip-mirip gelapnya. */
   latar: string;
   id: string;
-  /** Saat true (toggle "Tampilkan nama benda" aktif), popover tampil terus tanpa perlu diketuk. */
-  paksaTampil: boolean;
+  /** Status "terbuka" dikendalikan dari DenahKamarMandi (bukan state lokal di sini) supaya cuma satu popover yang
+   *  bisa terbuka dalam satu waktu di seluruh denah — dua popover yang dibuka bersamaan gampang bertabrakan di ruang
+   *  sekecil ini begitu makin banyak hal berstatus sama (lihat juga daftar nama di bawah toggle, bukan tampilkan
+   *  semua popover sekaligus, untuk alasan yang sama). */
+  terbuka: boolean;
+  onToggle: () => void;
 }) {
-  const [terbuka, setTerbuka] = useState(false);
-  const tampilkanPopover = paksaTampil || terbuka;
+  const tampilkanPopover = terbuka;
   const nama = NAMA_ITEM[id] ?? "";
   const lebar = Math.max(44, nama.length * 5.6 + 16);
   const diAtas = y - 28 >= PAD; // kalau badge terlalu dekat dinding atas, popover ditaruh di bawah badge saja
@@ -108,7 +112,7 @@ function NomorBadge({
         pointerEvents="auto"
         onClick={(e) => {
           e.stopPropagation();
-          setTerbuka((v) => !v);
+          onToggle();
         }}
       >
         <circle cx={x} cy={y} r={9} className={latar} stroke="currentColor" strokeWidth={1.5} />
@@ -149,13 +153,15 @@ function Pintu({
   warna,
   latar,
   nomor,
-  paksaTampil,
+  terbukaId,
+  onToggleId,
 }: {
   letak: Letak;
   warna: string;
   latar: string;
   nomor?: number;
-  paksaTampil: boolean;
+  terbukaId: string | null;
+  onToggleId: (id: string) => void;
 }) {
   const { x, y, dinding } = titikDinding(letak);
   const panjang = 68;
@@ -174,7 +180,15 @@ function Pintu({
         />
         {/* Badge digeser lebih jauh ke ruangan (bukan persis di ujung ayunan), supaya tidak menumpuk garis daun+lintasan pintu yang bertemu di satu titik — tapi tidak sejauh 46 (dulu), yang membuatnya terlihat terlalu jauh dari gambar pintunya. */}
         {nomor !== undefined && (
-          <NomorBadge {...dorongKeDalam(x, y, dinding, 34)} nomor={nomor} warna={warna} latar={latar} id="pintu" paksaTampil={paksaTampil} />
+          <NomorBadge
+            {...dorongKeDalam(x, y, dinding, 34)}
+            nomor={nomor}
+            warna={warna}
+            latar={latar}
+            id="pintu"
+            terbuka={terbukaId === "pintu"}
+            onToggle={() => onToggleId("pintu")}
+          />
         )}
       </g>
     );
@@ -192,7 +206,15 @@ function Pintu({
         opacity={0.6}
       />
       {nomor !== undefined && (
-        <NomorBadge {...dorongKeDalam(x, y, dinding, 34)} nomor={nomor} warna={warna} latar={latar} id="pintu" paksaTampil={paksaTampil} />
+        <NomorBadge
+          {...dorongKeDalam(x, y, dinding, 34)}
+          nomor={nomor}
+          warna={warna}
+          latar={latar}
+          id="pintu"
+          terbuka={terbukaId === "pintu"}
+          onToggle={() => onToggleId("pintu")}
+        />
       )}
     </g>
   );
@@ -204,13 +226,15 @@ function Kloset({
   warnaPegangan,
   latarPegangan,
   nomorPegangan,
-  paksaTampil,
+  terbukaId,
+  onToggleId,
 }: {
   letak: Letak;
   warnaPegangan: string;
   latarPegangan: string;
   nomorPegangan?: number;
-  paksaTampil: boolean;
+  terbukaId: string | null;
+  onToggleId: (id: string) => void;
 }) {
   const { x, y, dinding } = titikDinding(letak);
   const tangki =
@@ -251,7 +275,8 @@ function Kloset({
           warna={warnaPegangan}
           latar={latarPegangan}
           id="pegangan"
-          paksaTampil={paksaTampil}
+          terbuka={terbukaId === "pegangan"}
+          onToggle={() => onToggleId("pegangan")}
         />
       )}
     </g>
@@ -264,13 +289,15 @@ function Wastafel({
   warna,
   latar,
   nomor,
-  paksaTampil,
+  terbukaId,
+  onToggleId,
 }: {
   letak: Letak;
   warna: string;
   latar: string;
   nomor?: number;
-  paksaTampil: boolean;
+  terbukaId: string | null;
+  onToggleId: (id: string) => void;
 }) {
   const { x, y, dinding } = titikDinding(letak);
   const kotak =
@@ -294,7 +321,15 @@ function Wastafel({
         <circle cx={x} cy={y + 3} r={1.5} />
       </g>
       {nomor !== undefined && (
-        <NomorBadge {...dorongKeDalam(x, y, dinding, 24)} nomor={nomor} warna={warna} latar={latar} id="wastafel" paksaTampil={paksaTampil} />
+        <NomorBadge
+          {...dorongKeDalam(x, y, dinding, 24)}
+          nomor={nomor}
+          warna={warna}
+          latar={latar}
+          id="wastafel"
+          terbuka={terbukaId === "wastafel"}
+          onToggle={() => onToggleId("wastafel")}
+        />
       )}
     </g>
   );
@@ -309,7 +344,8 @@ function AreaMandi({
   latarJangkauan,
   nomorAreaMandi,
   nomorJangkauan,
-  paksaTampil,
+  terbukaId,
+  onToggleId,
 }: {
   letak: Letak;
   warna: string;
@@ -318,7 +354,8 @@ function AreaMandi({
   latarJangkauan: string;
   nomorAreaMandi?: number;
   nomorJangkauan?: number;
-  paksaTampil: boolean;
+  terbukaId: string | null;
+  onToggleId: (id: string) => void;
 }) {
   const { x, y, dinding } = titikDinding(letak);
   const panjangZona = 150;
@@ -418,7 +455,15 @@ function AreaMandi({
         </g>
       )}
       {nomorAreaMandi !== undefined && (
-        <NomorBadge {...sudutAreaMandi} nomor={nomorAreaMandi} warna={warna} latar={latarAreaMandi} id="area_mandi" paksaTampil={paksaTampil} />
+        <NomorBadge
+          {...sudutAreaMandi}
+          nomor={nomorAreaMandi}
+          warna={warna}
+          latar={latarAreaMandi}
+          id="area_mandi"
+          terbuka={terbukaId === "area_mandi"}
+          onToggle={() => onToggleId("area_mandi")}
+        />
       )}
       {nomorJangkauan !== undefined && (
         // Digeser lebih jauh ke ruangan (menjauhi dinding) dari tengah zona, supaya tidak mepet dengan gambar kepala
@@ -429,7 +474,8 @@ function AreaMandi({
           warna={warnaJangkauan}
           latar={latarJangkauan}
           id="jangkauan"
-          paksaTampil={paksaTampil}
+          terbuka={terbukaId === "jangkauan"}
+          onToggle={() => onToggleId("jangkauan")}
         />
       )}
     </g>
@@ -450,7 +496,7 @@ export function DenahKamarMandi({
    *  hal" di PindaiFoto.tsx bisa ikut berganti isi mengikuti tab yang sama, bukan tab terpisah yang tidak nyambung. */
   filter: StatusItem;
   onUbahFilter: (s: StatusItem) => void;
-  /** "Rincian per hal" dari PindaiFoto.tsx, dirender di dalam kontainer kartu yang sama dengan denah+toggle —
+  /** "Rincian per indikator" dari PindaiFoto.tsx, dirender di dalam kontainer kartu yang sama dengan denah+toggle —
    *  supaya isi tab (denah dan rinciannya) terlihat sebagai satu kesatuan, bukan dua kartu terpisah. */
   children?: ReactNode;
 }) {
@@ -472,9 +518,19 @@ export function DenahKamarMandi({
   const nomorRuang = nomor("ruang");
   const nomorLantai = nomor("lantai");
 
-  // Toggle "tampilkan nama benda": saat aktif, semua popover nama tampil sekaligus tanpa perlu diketuk satu-satu —
-  // berguna untuk melihat semua korelasi nomor-nama langsung, atau untuk yang belum sadar badge-nya bisa diketuk.
+  // Hanya satu badge yang popovernya boleh terbuka dalam satu waktu (diketuk langsung di denah) — dua popover yang
+  // terbuka bersamaan gampang bertabrakan di ruang SVG sekecil ini, apalagi sekarang user bisa mengoreksi banyak hal
+  // jadi berstatus sama lewat "Rincian per indikator" sehingga satu tab bisa berisi sampai 7 badge sekaligus.
+  const [terbukaId, setTerbukaId] = useState<string | null>(null);
+  const onToggleId = (id: string) => setTerbukaId((t) => (t === id ? null : id));
+
+  // Toggle "tampilkan nama benda": dulu memaksa semua popover tampil sekaligus di atas denah, tapi itu justru yang
+  // bertabrakan saat banyak badge aktif — diganti daftar nama di bawah toggle (lihat `daftarNama`), yang tetap
+  // menampilkan korelasi nomor-nama tapi sebagai teks biasa yang tidak mungkin saling menimpa.
   const [tampilkanLabel, setTampilkanLabel] = useState(false);
+  const daftarNama = ID_ITEM.filter((id) => nomor(id) !== undefined)
+    .map((id) => ({ id, nomor: nomor(id)!, nama: NAMA_ITEM[id] ?? "" }))
+    .sort((a, b) => a.nomor - b.nomor);
 
   return (
     // Tanpa kontainer kartu (border/bg/shadow) atau margin luar: dipakai satu-satunya di layar hasil Pindai, yang
@@ -556,7 +612,16 @@ export function DenahKamarMandi({
         {/* "Lantai" mewakili seluruh ruangan (teksturnya tetap fisik, terlihat di foto apa pun), jadi tetap selalu
             tergambar; badge nomornya saja yang cuma muncul kalau status-nya cocok filter. */}
         {nomorRuang !== undefined && (
-          <NomorBadge x={W / 2} y={H / 2} nomor={nomorRuang} warna={warna("ruang")} latar={latar("ruang")} id="ruang" paksaTampil={tampilkanLabel} />
+          <NomorBadge
+            x={W / 2}
+            y={H / 2}
+            nomor={nomorRuang}
+            warna={warna("ruang")}
+            latar={latar("ruang")}
+            id="ruang"
+            terbuka={terbukaId === "ruang"}
+            onToggle={() => onToggleId("ruang")}
+          />
         )}
         {nomorLantai !== undefined && (
           // Digeser sedikit ke atas dari tengah persis (bukan W/2,H/2) supaya tidak menumpuk badge "ruang" kalau
@@ -569,19 +634,35 @@ export function DenahKamarMandi({
             warna={warna("lantai")}
             latar={latar("lantai")}
             id="lantai"
-            paksaTampil={tampilkanLabel}
+            terbuka={terbukaId === "lantai"}
+            onToggle={() => onToggleId("lantai")}
           />
         )}
 
-        <Pintu letak={letak("pintu")} warna={warna("pintu")} latar={latar("pintu")} nomor={nomor("pintu")} paksaTampil={tampilkanLabel} />
+        <Pintu
+          letak={letak("pintu")}
+          warna={warna("pintu")}
+          latar={latar("pintu")}
+          nomor={nomor("pintu")}
+          terbukaId={terbukaId}
+          onToggleId={onToggleId}
+        />
         <Kloset
           letak={letak("kloset")}
           warnaPegangan={warna("pegangan")}
           latarPegangan={latar("pegangan")}
           nomorPegangan={nomor("pegangan")}
-          paksaTampil={tampilkanLabel}
+          terbukaId={terbukaId}
+          onToggleId={onToggleId}
         />
-        <Wastafel letak={letak("wastafel")} warna={warna("wastafel")} latar={latar("wastafel")} nomor={nomor("wastafel")} paksaTampil={tampilkanLabel} />
+        <Wastafel
+          letak={letak("wastafel")}
+          warna={warna("wastafel")}
+          latar={latar("wastafel")}
+          nomor={nomor("wastafel")}
+          terbukaId={terbukaId}
+          onToggleId={onToggleId}
+        />
         <AreaMandi
           letak={letak("area_mandi")}
           warna={warna("area_mandi")}
@@ -590,7 +671,8 @@ export function DenahKamarMandi({
           latarJangkauan={latar("jangkauan")}
           nomorAreaMandi={nomor("area_mandi")}
           nomorJangkauan={nomor("jangkauan")}
-          paksaTampil={tampilkanLabel}
+          terbukaId={terbukaId}
+          onToggleId={onToggleId}
         />
         </svg>
 
@@ -619,9 +701,28 @@ export function DenahKamarMandi({
           </span>
         </button>
 
+        {tampilkanLabel && daftarNama.length > 0 && (
+          // Daftar nama sebagai teks biasa (bukan popover di atas denah) — jumlah badge per tab bisa sampai 7 kalau
+          // user sudah mengoreksi semuanya ke status yang sama, dan popover yang ditumpuk di ruang SVG sekecil itu
+          // gampang saling menimpa; daftar yang membungkus ke bawah seperti ini tidak punya risiko itu sama sekali.
+          <ul className="mt-3 flex flex-col gap-1.5 text-kecil">
+            {daftarNama.map(({ id, nomor: n, nama }) => (
+              <li key={id} className="flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_BADGE[status(id)]}`}
+                >
+                  {n}
+                </span>
+                {nama}
+              </li>
+            ))}
+          </ul>
+        )}
+
         {children && (
           <>
-            {/* Pembatas selebar kartu yang sama seperti di atas, memisahkan denah dari "Rincian per hal" di
+            {/* Pembatas selebar kartu yang sama seperti di atas, memisahkan denah dari "Rincian per indikator" di
                 bawahnya — keduanya tetap satu kartu yang sama, mengikuti tab status yang aktif. */}
             <div className="-mx-4 my-3 border-t border-garis" />
             {children}
