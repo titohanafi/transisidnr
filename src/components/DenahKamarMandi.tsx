@@ -42,7 +42,7 @@ function GaleriIso3D({ kelas = "" }: { kelas?: string }) {
     { nama: "Pintu", src: "/model/pintu/quaternius-pintu.glb" },
     { nama: "Kloset", src: "/model/toilet-quaternius/quaternius-toilet.glb" },
     { nama: "Wastafel", src: "/model/wastafel/quaternius-wastafel.glb" },
-    { nama: "Shower", src: "/model/shower/kenney-shower.glb" },
+    { nama: "Shower", src: "/model/shower/poly-google-shower-head.glb" },
   ];
   return (
     <div className={`grid grid-cols-2 gap-2 ${kelas}`}>
