@@ -45,28 +45,23 @@ const JARAK_DINDING = 35;
 const ISO_SUDUT = (30 * Math.PI) / 180;
 const ISO_COS = Math.cos(ISO_SUDUT);
 const ISO_SIN = Math.sin(ISO_SUDUT);
-// 270 (percobaan sebelumnya) ternyata TERLALU tinggi: di foto sungguhan, benda (pintu/kloset/wastafel) bisa ada
-// di dinding "depan"/"kiri" yang TIDAK digambar solid (sisi terbuka diorama, lihat `dindingBelakang`/`dindingKanan`
-// di bawah) — pintu jadi kelihatan seperti papan melayang tanpa konteks dinding kalau terlalu tinggi/besar, bukan
-// makin mirip acuan. Diturunkan ke titik tengah (190): tetap jauh lebih tinggi dari awal (85) supaya terasa "di
-// dalam ruangan", tapi tidak membuat benda yang jatuh di sisi terbuka jadi aneh.
+// Dinding dibuat tinggi (dulu 85) supaya terasa "berdiri di dalam ruangan", tapi tidak sampai ekstrem (270 pernah
+// dicoba dan kebablasan — pintu yang jatuh di dinding "depan"/"kiri", yang memang tidak digambar solid di sini,
+// jadi kelihatan seperti papan melayang tanpa konteks). 190 adalah titik tengah yang sudah dites di beberapa posisi.
 const ISO_TINGGI_DINDING = 190;
-// Ruangan tampak atas aslinya 200×300 (memanjang, lihat W/H). Dulu kedalaman (H) dipadatkan sampai 0.62 supaya
-// kedua dinding sama panjang ("persegi") — tapi acuan gambar justru TIDAK persegi, satu dinding jelas lebih
-// panjang dari yang lain. Kompresi dikurangi (0.82, bukan dihapus total) supaya asimetrinya kelihatan tanpa
-// bendanya jadi kecil-kecil berjauhan seperti kalau dipakai ukuran asli (1.0).
-const ISO_KOMPRESI_Y = 0.82;
-// viewBox dan pergeseran dipilih manual supaya ruangan (W×H di atas, diproyeksikan lewat sudut 30° dan tinggi
-// dinding baru) memenuhi kanvas dengan jarak tipis ke tepi.
-const ISO_VW = 440;
-const ISO_VH = 470;
-const ISO_OX = 240;
-const ISO_OY = 219;
+// viewBox dan pergeseran dipilih manual supaya ruangan (W×H di atas, diproyeksikan lewat sudut 30°, TANPA
+// kompresi sumbu — lihat `iso()`) memenuhi kanvas dengan jarak tipis ke tepi.
+const ISO_VW = 480;
+const ISO_VH = 490;
+const ISO_OX = 283;
+const ISO_OY = 215;
 
-/** Fungsi murni: titik (x,y) tampak-atas + ketinggian opsional -> titik 2D isometrik di viewBox ISO_VW×ISO_VH. */
+/** Fungsi murni: titik (x,y) tampak-atas + ketinggian opsional -> titik 2D isometrik di viewBox ISO_VW×ISO_VH.
+ *  Proyeksi isometrik PENUH (bukan dipadatkan di salah satu sumbu seperti percobaan sebelumnya) — ruangan 200×300
+ *  (lihat W/H) yang memang tidak persegi otomatis tergambar asimetris apa adanya, tanpa perlu angka kompresi
+ *  buatan untuk memaksanya terlihat persegi atau proporsional. */
 function iso(x: number, y: number, z = 0): { x: number; y: number } {
-  const yp = y * ISO_KOMPRESI_Y;
-  return { x: (x - yp) * ISO_COS + ISO_OX, y: (x + yp) * ISO_SIN - z + ISO_OY };
+  return { x: (x - y) * ISO_COS + ISO_OX, y: (x + y) * ISO_SIN - z + ISO_OY };
 }
 
 /** Jajaran genjang isometrik dari persegi panjang tampak-atas berpusat (x,y), setengah-lebar rx dan setengah-tinggi ry. */
@@ -87,53 +82,16 @@ function isoLingkaran(x: number, y: number, r: number, z = 0): string {
 
 type TitikDatar = { x: number; y: number };
 
-/** Segi delapan (persegi bersudut dipotong) — perkiraan murah untuk kesan "membulat" tanpa kurva asli. */
-function footprintPotong(x: number, y: number, rx: number, ry: number, potong: number): TitikDatar[] {
-  const px = Math.min(potong, rx * 0.9);
-  const py = Math.min(potong, ry * 0.9);
+/** Jejak persegi panjang tampak-atas berpusat (x,y) — dipakai untuk tiap benda isometrik (dinding, kloset,
+ *  wastafel, dst). Elips/segi-delapan pernah dicoba di sini untuk kesan "membulat" tapi malah bikin kloset/
+ *  wastafel sulit dikenali bentuknya; kotak polos (sama seperti acuan gambar isometrik) lebih jelas terbaca. */
+function footprintPersegi(x: number, y: number, rx: number, ry: number): TitikDatar[] {
   return [
-    { x: x - rx + px, y: y - ry },
-    { x: x + rx - px, y: y - ry },
-    { x: x + rx, y: y - ry + py },
-    { x: x + rx, y: y + ry - py },
-    { x: x + rx - px, y: y + ry },
-    { x: x - rx + px, y: y + ry },
-    { x: x - rx, y: y + ry - py },
-    { x: x - rx, y: y - ry + py },
+    { x: x - rx, y: y - ry },
+    { x: x + rx, y: y - ry },
+    { x: x + rx, y: y + ry },
+    { x: x - rx, y: y + ry },
   ];
-}
-
-/**
- * Jejak daun pintu TERBUKA: persegi panjang tipis yang diputar `sudut` radian dari engselnya (bukan sejajar
- * sumbu x/y seperti bentuk lain) — tanpa ini daun pintu rata menempel dinding, susah dikenali sebagai "pintu"
- * (beda dari tampak atas yang sudah jelas lewat lengkungan ayunannya) sampai badge-nya diketuk.
- */
-function footprintPintuTerbuka(hx: number, hy: number, panjang: number, tebal: number, arah: { x: number; y: number }): TitikDatar[] {
-  const tegakLurus = { x: -arah.y * (tebal / 2), y: arah.x * (tebal / 2) };
-  const ujung = { x: hx + arah.x * panjang, y: hy + arah.y * panjang };
-  return [
-    { x: hx - tegakLurus.x, y: hy - tegakLurus.y },
-    { x: hx + tegakLurus.x, y: hy + tegakLurus.y },
-    { x: ujung.x + tegakLurus.x, y: ujung.y + tegakLurus.y },
-    { x: ujung.x - tegakLurus.x, y: ujung.y - tegakLurus.y },
-  ];
-}
-
-/** Jejak elips tampak-atas sebagai poligon n-titik — dipakai untuk mangkuk kloset dan wastafel yang bentuknya bundar, bukan kotak. */
-function footprintElips(x: number, y: number, rx: number, ry: number, n = 20): TitikDatar[] {
-  return Array.from({ length: n }, (_, i) => {
-    const a = (i / n) * Math.PI * 2;
-    return { x: x + rx * Math.cos(a), y: y + ry * Math.sin(a) };
-  });
-}
-
-/** Garis elips isometrik datar (tanpa ekstrusi) — dipakai untuk aksen seperti lingkar dudukan kloset atau cekungan wastafel. */
-function isoElipsDatar(x: number, y: number, rx: number, ry: number, z = 0, n = 24): string {
-  return Array.from({ length: n }, (_, i) => {
-    const a = (i / n) * Math.PI * 2;
-    const p = iso(x + rx * Math.cos(a), y + ry * Math.sin(a), z);
-    return `${p.x},${p.y}`;
-  }).join(" ");
 }
 
 /** Garis lengkung (bukan lingkaran penuh) dari sudut `dari` ke `ke` (radian) — dipakai untuk lintasan ayun pintu. */
@@ -146,11 +104,13 @@ function isoBusurDatar(x: number, y: number, r: number, dari: number, ke: number
 }
 
 /**
- * Benda 3D isometrik dari jejak tampak-atas BEBAS BENTUK (bukan cuma kotak — lihat `footprintElips`/`footprintPotong`
- * di atas), diekstrusi setinggi `tinggi`. Sisi atas selalu digambar; sisi tegaknya cuma yang menghadap kamera (yang
- * membelakangi kamera, tetap tidak pernah terlihat dari sudut tetap denah ini, jadi tidak digambar) — kameranya
- * selalu dari arah depan-kiri (lihat `ISO_OX`/`ISO_OY`), jadi sisi "menghadap kamera" adalah yang arah normalnya
- * condong ke +y (depan) atau -x (kiri): sisi dengan normal (nx,ny) kelihatan kalau ny>nx.
+ * Benda 3D isometrik dari jejak tampak-atas BEBAS BENTUK (poligon apa pun — dipakai untuk dinding dan tiap
+ * benda, lihat `footprintPersegi` di atas), diekstrusi setinggi `tinggi`. Sisi atas selalu digambar; sisi
+ * tegaknya cuma yang menghadap kamera (yang membelakangi kamera, tetap tidak pernah terlihat dari sudut tetap
+ * denah ini, jadi tidak digambar) — kameranya selalu dari arah depan-kiri (lihat `ISO_OX`/`ISO_OY`), jadi sisi
+ * "menghadap kamera" adalah yang arah normalnya condong ke +y (depan) atau -x (kiri): sisi dengan normal
+ * (nx,ny) kelihatan kalau ny>nx. Dipakai juga untuk dinding (sebagai kotak tipis setebal `TEBAL_DINDING`,
+ * bukan lembaran datar + tutup/bibir terpisah seperti sebelumnya) — jadi tetap tertutup rapi otomatis.
  */
 function BentukIso({
   footprint,
@@ -866,31 +826,23 @@ export function DenahKamarMandi({
   const denahSvgIso = (ukuran: string) => {
     const ke = (titik: { x: number; y: number }[]) => titik.map((p) => `${p.x},${p.y}`).join(" ");
     const lantai = ke([iso(0, 0), iso(W, 0), iso(W, H), iso(0, H)]);
-    const dindingBelakang = ke([iso(0, 0, 0), iso(W, 0, 0), iso(W, 0, ISO_TINGGI_DINDING), iso(0, 0, ISO_TINGGI_DINDING)]);
-    const dindingKanan = ke([iso(W, 0, 0), iso(W, H, 0), iso(W, H, ISO_TINGGI_DINDING), iso(W, 0, ISO_TINGGI_DINDING)]);
-    // Bibir tipis di ujung atas tiap dinding (digeser sedikit ke arah LUAR ruangan, bukan dalam) — memberi kesan
-    // dinding punya ketebalan sungguhan, bukan sekadar lembaran datar setipis kertas seperti sebelumnya.
-    const TEBAL_DINDING = 7;
-    const bibirBelakang = ke([
-      iso(0, 0, ISO_TINGGI_DINDING),
-      iso(W, 0, ISO_TINGGI_DINDING),
-      iso(W, -TEBAL_DINDING, ISO_TINGGI_DINDING),
-      iso(0, -TEBAL_DINDING, ISO_TINGGI_DINDING),
-    ]);
-    const bibirKanan = ke([
-      iso(W, 0, ISO_TINGGI_DINDING),
-      iso(W, H, ISO_TINGGI_DINDING),
-      iso(W + TEBAL_DINDING, H, ISO_TINGGI_DINDING),
-      iso(W + TEBAL_DINDING, 0, ISO_TINGGI_DINDING),
-    ]);
-    // Segitiga penutup di sudut tempat dua bibir dinding bertemu — tanpa ini ada celah kecil tak tertutup persis
-    // di puncak (bibirBelakang dan bibirKanan menjauh ke arah berbeda dari titik yang sama), jadi ruangan terasa
-    // "terbuka"/patah di situ, bukan satu kotak utuh seperti acuan yang punggung atapnya menyambung rapi.
-    const sudutAtas = ke([
-      iso(W, 0, ISO_TINGGI_DINDING),
-      iso(W, -TEBAL_DINDING, ISO_TINGGI_DINDING),
-      iso(W + TEBAL_DINDING, 0, ISO_TINGGI_DINDING),
-    ]);
+    // Dinding digambar lewat `BentukIso` yang sama dipakai untuk benda lain (lihat JSX di bawah) — sebagai kotak
+    // tipis setebal TEBAL_DINDING, bukan lembaran datar + "bibir"/"sudut" tempelan terpisah seperti sebelumnya.
+    // Sisi tegak, sisi ujung (ketebalan kelihatan), dan tutup atas semuanya otomatis tergambar rapi dan konsisten
+    // dengan bayangan per-sisi yang sama seperti benda lain — tidak perlu kode/angka tambahan khusus dinding lagi.
+    const TEBAL_DINDING = 11;
+    const footprintDindingBelakang: TitikDatar[] = [
+      { x: 0, y: 0 },
+      { x: W, y: 0 },
+      { x: W, y: -TEBAL_DINDING },
+      { x: 0, y: -TEBAL_DINDING },
+    ];
+    const footprintDindingKanan: TitikDatar[] = [
+      { x: W, y: 0 },
+      { x: W, y: H },
+      { x: W + TEBAL_DINDING, y: H },
+      { x: W + TEBAL_DINDING, y: 0 },
+    ];
     // Pita ubin dekoratif di bagian bawah kedua dinding (selalu tampil, tidak terkait status apa pun) — di acuan
     // gambar isometrik, dinding punya ubin setinggi dada (bukan polos kosong), terutama penting sekarang dinding
     // jauh lebih tinggi dari sebelumnya dan akan terlihat kosong tanpa ini.
@@ -957,27 +909,40 @@ export function DenahKamarMandi({
           : pintu.dinding === "depan"
             ? { x: 0, y: -1 }
             : { x: 0, y: 1 };
-    // Dulu dibesarkan jauh (lebar 100, sudut 100°) meniru satu foto acuan tertentu — ternyata pintu BISA jatuh di
-    // dinding "depan"/"kiri", yang di sini memang sengaja TIDAK digambar solid (sisi terbuka diorama, supaya
-    // isinya kelihatan — lihat `dindingBelakang`/`dindingKanan`). Pintu sebesar itu di sisi tanpa dinding solid
-    // jadi kelihatan seperti papan melayang tak jelas, bukan makin mirip acuan. Dikembalikan ke ukuran sedang
-    // (dulu 60°/32, sekarang 75°/42) — lebih besar dari awal, tapi tidak berlebihan di sisi manapun ia jatuh.
-    const SUDUT_BUKA_PINTU = (75 * Math.PI) / 180;
+    const SUDUT_BUKA_PINTU = (85 * Math.PI) / 180;
     const arahBukaPintu = {
       x: arahSejajarPintu.x * Math.cos(SUDUT_BUKA_PINTU) + arahDalamPintu.x * Math.sin(SUDUT_BUKA_PINTU),
       y: arahSejajarPintu.y * Math.cos(SUDUT_BUKA_PINTU) + arahDalamPintu.y * Math.sin(SUDUT_BUKA_PINTU),
     };
-    const LEBAR_PINTU = 42;
+    const LEBAR_PINTU = 55;
     const engselPintu = {
       x: pintuDiDinding.x - arahSejajarPintu.x * (LEBAR_PINTU / 2),
       y: pintuDiDinding.y - arahSejajarPintu.y * (LEBAR_PINTU / 2),
     };
+    // Lintasan ayun pintu (lengkung putus-putus) tetap dipakai — menunjukkan arah bukanya tanpa risiko proporsi
+    // aneh. Daun pintu 3D (yang pernah dicoba) DIHAPUS: pintu bisa jatuh di dinding "depan"/"kiri" yang memang
+    // sengaja tidak digambar solid di sini (sisi terbuka diorama), jadi daun 3D di situ selalu kelihatan seperti
+    // papan melayang tanpa konteks apa pun ukurannya. Sebagai gantinya (lihat `pintuZonaLantai` di bawah): celah
+    // putus-putus rata lantai menandai LEBAR bukaan pintu — sama seperti acuan, yang juga tidak menggambar daun
+    // pintu 3D di dalam ruangan, cuma menandai lebar bukaannya di lantai.
     const busurPintu = isoBusurDatar(
       engselPintu.x,
       engselPintu.y,
       LEBAR_PINTU,
       Math.atan2(arahSejajarPintu.y, arahSejajarPintu.x),
       Math.atan2(arahBukaPintu.y, arahBukaPintu.x),
+    );
+    const DALAM_ZONA_PINTU = 14;
+    const pintuZonaLantai = ke(
+      [
+        { x: engselPintu.x, y: engselPintu.y },
+        { x: engselPintu.x + arahSejajarPintu.x * LEBAR_PINTU, y: engselPintu.y + arahSejajarPintu.y * LEBAR_PINTU },
+        {
+          x: engselPintu.x + arahSejajarPintu.x * LEBAR_PINTU + arahDalamPintu.x * DALAM_ZONA_PINTU,
+          y: engselPintu.y + arahSejajarPintu.y * LEBAR_PINTU + arahDalamPintu.y * DALAM_ZONA_PINTU,
+        },
+        { x: engselPintu.x + arahDalamPintu.x * DALAM_ZONA_PINTU, y: engselPintu.y + arahDalamPintu.y * DALAM_ZONA_PINTU },
+      ].map((p) => iso(p.x, p.y, 2)),
     );
     // Tangki kloset dan keran wastafel digeser ke arah dinding (jarak negatif) dari badan utamanya — jaraknya
     // dihitung dari jumlah "setengah lebar" kedua bentuk (bowl+tank, counter+keran) dikurangi sedikit supaya pas
@@ -1004,8 +969,11 @@ export function DenahKamarMandi({
     // yang memang pakai garis hitam pekat di semua benda netral (dinding, lantai, kloset).
     return (
       <svg viewBox={`0 0 ${ISO_VW} ${ISO_VH}`} className={`mx-auto text-tinta ${ukuran}`} aria-hidden="true" focusable="false">
-        <polygon points={dindingBelakang} className="fill-white" stroke="currentColor" strokeWidth={2.2} strokeLinejoin="round" />
-        <polygon points={dindingKanan} className="fill-permukaan" stroke="currentColor" strokeWidth={2.2} strokeLinejoin="round" />
+        {/* Dinding sebagai kotak 3D sungguhan (lihat `footprintDindingBelakang`/`footprintDindingKanan` dan
+            komentar `TEBAL_DINDING` di atas) — sisi tegak, sisi ujung (ketebalan), dan tutup atas semuanya
+            otomatis tergambar lewat `BentukIso` yang sama dipakai benda lain, lengkap dengan bayangan per-sisi. */}
+        <BentukIso footprint={footprintDindingBelakang} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
+        <BentukIso footprint={footprintDindingKanan} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-permukaan" />
         <defs>
           <pattern id="iso-ubin" width="7" height="7" patternUnits="userSpaceOnUse">
             <rect width={7} height={7} className="fill-permukaan" />
@@ -1015,11 +983,6 @@ export function DenahKamarMandi({
         </defs>
         <polygon points={ubinBelakang} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
         <polygon points={ubinKanan} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
-        {/* Bibir dinding (lihat `TEBAL_DINDING` di atas): sedikit lebih gelap dari badan dindingnya supaya terbaca
-            sebagai permukaan atas yang kena cahaya beda arah, bukan cuma garis hias. */}
-        <polygon points={bibirBelakang} className="fill-permukaan" stroke="currentColor" strokeWidth={1.6} strokeLinejoin="round" />
-        <polygon points={bibirKanan} className="fill-garis" stroke="currentColor" strokeWidth={1.6} strokeLinejoin="round" />
-        <polygon points={sudutAtas} className="fill-garis" stroke="currentColor" strokeWidth={1.6} strokeLinejoin="round" />
         <polygon points={lantai} fill="white" stroke="currentColor" strokeWidth={2.2} strokeLinejoin="round" />
         {Array.from({ length: 10 }, (_, baris) =>
           Array.from({ length: 7 }, (_, kolom) => {
@@ -1058,7 +1021,14 @@ export function DenahKamarMandi({
             gerak yang memang abstrak, kepala shower ini benda fisik sungguhan (sama seperti kloset/wastafel/
             pintu yang juga selalu digambar netral lebih dulu, baru warnanya ikut status kalau cocok filter). */}
         <g className={warna("jangkauan")} stroke="currentColor" fill="white" strokeWidth={1.6} pointerEvents="none">
-          <line x1={showerPipaAtas.x} y1={showerPipaAtas.y} x2={showerPipaBawah.x} y2={showerPipaBawah.y} strokeWidth={3} strokeLinecap="round" />
+          <line
+            x1={showerPipaAtas.x}
+            y1={showerPipaAtas.y}
+            x2={showerPipaBawah.x}
+            y2={showerPipaBawah.y}
+            strokeWidth={3}
+            strokeLinecap="round"
+          />
           <polygon points={showerKotakAtas} strokeLinejoin="round" />
           <polygon points={showerKotak} strokeLinejoin="round" />
         </g>
@@ -1102,64 +1072,40 @@ export function DenahKamarMandi({
           strokeDasharray="4 4"
           fill="none"
         />
-        {/* Tiga benda fisik (pintu, kloset, wastafel) digambar sebagai bentuk 3D sungguhan (lihat `BentukIso`) —
-            beda dari area mandi/ruang gerak di atas, yang jejaknya datar karena memang bukan benda fisik yang
-            kelihatan wujudnya di foto (sama seperti perlakuannya di tampak atas). Pintu digambar TERBUKA (lihat
-            `footprintPintuTerbuka`), bukan rata menempel dinding, supaya bentuknya sendiri langsung terbaca. */}
-        <BentukIso
-          footprint={footprintPintuTerbuka(engselPintu.x, engselPintu.y, LEBAR_PINTU, 5, arahBukaPintu)}
-          tinggi={100}
-          kelas={warna("pintu")}
-          isi={latar("pintu")}
+        {/* Bukaan pintu ditandai celah putus-putus rata lantai (lihat `pintuZonaLantai` di atas), BUKAN daun pintu
+            3D — sama seperti acuan, yang juga cuma menandai lebar bukaan di lantai, tidak menggambar daun pintu
+            berdiri di dalam ruangan. */}
+        <polygon
+          points={pintuZonaLantai}
+          className={warna("pintu")}
+          fill="currentColor"
+          fillOpacity={0.14}
+          stroke="currentColor"
+          strokeWidth={1.4}
+          strokeDasharray="4 4"
         />
-        {/* Kloset digambar dua bentuk (bukan satu kotak polos) supaya kelihatan seperti kloset sungguhan: mangkuk
-            bundar (elips, lebih rendah, menjorok ke ruangan) + tangki bersudut membulat (lebih sempit tapi lebih
-            tinggi, menempel ke arah dinding) — jaraknya dihitung supaya cuma bersentuhan di satu sisi, tidak
-            tumpang tindih (lihat `klosetTangki` di atas). */}
+        {/* Kloset digambar dua kotak polos (tangki + mangkuk, sama seperti acuan) — elips/segi-delapan pernah
+            dicoba supaya kelihatan "membulat" tapi malah lebih sulit dikenali bentuknya; kotak lebih jelas. */}
         <BentukIso
-          footprint={footprintElips(kloset.x, kloset.y, sejajar(kloset.dinding) ? 24 : 17, sejajar(kloset.dinding) ? 17 : 24)}
+          footprint={footprintPersegi(kloset.x, kloset.y, sejajar(kloset.dinding) ? 24 : 17, sejajar(kloset.dinding) ? 17 : 24)}
           tinggi={26}
           kelas="text-tinta"
         />
-        {/* Lingkar dudukan: aksen datar di atas mangkuk, bukan benda terpisah — supaya siluetnya langsung terbaca
-            sebagai kloset walau dari kejauhan, bukan cuma gundukan bundar polos. */}
-        <polygon
-          points={isoElipsDatar(
-            kloset.x,
-            kloset.y,
-            (sejajar(kloset.dinding) ? 24 : 17) * 0.72,
-            (sejajar(kloset.dinding) ? 17 : 24) * 0.72,
-            26,
-          )}
-          className="text-tinta"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.6}
-          opacity={0.8}
-        />
         <BentukIso
-          footprint={footprintPotong(klosetTangki.x, klosetTangki.y, sejajar(kloset.dinding) ? 15 : 9, sejajar(kloset.dinding) ? 9 : 15, 4)}
+          footprint={footprintPersegi(klosetTangki.x, klosetTangki.y, sejajar(kloset.dinding) ? 15 : 9, sejajar(kloset.dinding) ? 9 : 15)}
           tinggi={48}
           kelas="text-tinta"
         />
-        {/* Wastafel: konter bersudut membulat (lebar, rendah) + cekungan elips di atasnya + keran kecil menonjol
-            dekat dinding, jaraknya dihitung sama seperti kloset supaya tidak tumpang tindih. */}
+        {/* Wastafel: kotak konter polos + kotak keran kecil menonjol dekat dinding — sama seperti acuan (bukan
+            cekungan elips lagi, lihat komentar di kloset di atas). */}
         <BentukIso
-          footprint={footprintPotong(wastafel.x, wastafel.y, sejajar(wastafel.dinding) ? 11 : 22, sejajar(wastafel.dinding) ? 22 : 11, 5)}
+          footprint={footprintPersegi(wastafel.x, wastafel.y, sejajar(wastafel.dinding) ? 11 : 22, sejajar(wastafel.dinding) ? 22 : 11)}
           tinggi={26}
           kelas={warna("wastafel")}
           isi={latar("wastafel")}
         />
-        <polygon
-          points={isoElipsDatar(wastafel.x, wastafel.y, sejajar(wastafel.dinding) ? 5.5 : 11, sejajar(wastafel.dinding) ? 11 : 5.5, 26)}
-          className={warna("wastafel")}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.6}
-          opacity={0.8}
-        />
         <BentukIso
-          footprint={footprintPotong(wastafelKeran.x, wastafelKeran.y, 3, 3, 1)}
+          footprint={footprintPersegi(wastafelKeran.x, wastafelKeran.y, 3, 3)}
           tinggi={14}
           z={26}
           kelas={warna("wastafel")}
