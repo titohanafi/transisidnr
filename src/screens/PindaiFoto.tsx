@@ -304,9 +304,9 @@ function Hasil({
 
   // Begitu jawaban diganti ke status lain, kartunya langsung hilang dari tab (filter-nya tidak cocok lagi) — tanpa
   // ini terasa seperti "tidak ada yang terjadi" karena kartu berikutnya langsung naik menggantikan. `fase` menahan
-  // kartu itu tetap tampil melewati tiga tahap: "terisi" (pil yang diketuk sempat terlihat terisi/aktif dulu, sama
-  // seperti kartu lain yang masih di tab ini), lalu "konfirmasi" (pilnya diganti teks "Dipindahkan ke ..." sambil
-  // memudar keluar - lihat animasi "pudar" di tailwind.config.ts), baru benar-benar dilepas dari daftar.
+  // kartu itu tetap tampil melewati tiga tahap: "terisi" (pil yang diketuk berkedip - lihat animasi "kedip" di
+  // tailwind.config.ts - bukan cuma diam membeku), lalu "konfirmasi" (pilnya diganti teks "Dipindahkan ke ..."
+  // yang tertahan sesaat baru memudar keluar lewat animasi "pudar"), baru benar-benar dilepas dari daftar.
   const [fase, setFase] = useState<Record<string, "terisi" | "konfirmasi">>({});
   const timer = useRef<Record<string, ReturnType<typeof setTimeout>[]>>({});
   const jadwalkan = (id: string, tunda: number, jalankan: () => void) => {
@@ -328,13 +328,13 @@ function Hasil({
       return;
     }
     setFase((prev) => ({ ...prev, [id]: "terisi" }));
-    // 700ms: beri waktu cukup untuk pil yang baru diketuk benar-benar terbaca terisi dulu (sebelumnya 220ms terasa
-    // buru-buru), baru ganti jadi konfirmasi.
-    jadwalkan(id, 700, () => {
+    // 900ms: cocok dengan durasi animasi "kedip" (2x450ms) supaya pil yang diketuk sempat berkedip penuh dulu,
+    // baru ganti jadi konfirmasi — bukan angka sembarang, diselaraskan dengan animasinya sendiri.
+    jadwalkan(id, 900, () => {
       setFase((prev) => ({ ...prev, [id]: "konfirmasi" }));
-      // 500ms: cocok dengan durasi animasi "pudar" supaya kartu baru dilepas dari daftar setelah benar-benar
-      // tidak terlihat, bukan menghilang mendadak di tengah animasi.
-      jadwalkan(id, 500, () => setFase((prev) => tanpaId(prev, id)));
+      // 900ms: cocok dengan durasi animasi "pudar" (tertahan sampai 55%, baru memudar) supaya kartu baru dilepas
+      // dari daftar setelah benar-benar tidak terlihat, bukan menghilang mendadak di tengah animasi.
+      jadwalkan(id, 900, () => setFase((prev) => tanpaId(prev, id)));
     });
   };
   const butirFilter = t.item.filter((it) => (temuan[it.id] ?? "tidak_jelas") === filter || fase[it.id]);
@@ -422,6 +422,7 @@ function Hasil({
                               label={label}
                               aktif={statusKini === nilai}
                               onUbah={() => ubahJawaban(it.id, nilai)}
+                              berkedip={faseIni === "terisi" && statusKini === nilai}
                             />
                           ))}
                         </div>

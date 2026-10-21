@@ -43,6 +43,7 @@ export function PilihanPil({
   aktif,
   onUbah,
   gaya = "pil",
+  berkedip = false,
 }: {
   nama: string;
   /** Biasanya teks; boleh elemen (mis. titik warna + teks) untuk menandai kategori lewat warna juga, tidak cuma teks. */
@@ -52,6 +53,9 @@ export function PilihanPil({
   /** "tab": sama lebar, memenuhi satu baris penuh (mis. kelompok status yang selalu 3 pilihan) — dibedakan dari
    *  "pil" bawaan (lebar sesuai teks, boleh membungkus) yang dipakai saat jumlah/panjang pilihan tidak pasti. */
   gaya?: "pil" | "tab";
+  /** Cincin yang memancar beberapa kali dari pil ini (mis. sesaat setelah dipilih, menunggu efek lanjutannya) -
+   *  supaya jeda menunggu terasa hidup, bukan sekadar membeku. Cuma dipakai gaya "pil". */
+  berkedip?: boolean;
 }) {
   if (gaya === "tab") {
     // Gaya sama dengan tab "Pilihan solusi" di layar detail kartu: trek abu (pembungkus di pemanggil) + segmen putih
@@ -78,7 +82,7 @@ export function PilihanPil({
       <span
         className={`inline-flex min-h-sentuh w-full scale-100 cursor-pointer items-center justify-center rounded-full border px-4 py-2 text-base motion-safe:transition-[color,background-color,border-color,transform] motion-safe:duration-150 peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-utama peer-active:scale-95 ${
           aktif ? "border-utama bg-utama font-semibold text-white" : "border-garisKontrol bg-white text-tinta"
-        }`}
+        } ${berkedip ? "motion-safe:animate-kedip" : ""}`}
       >
         {label}
       </span>

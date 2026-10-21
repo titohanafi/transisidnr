@@ -48,15 +48,24 @@ export default {
         pindai: { "0%, 100%": { top: "-10%" }, "50%": { top: "100%" } },
         // Dipakai saat satu hal di "Rincian per indikator" dikoreksi ke status lain: kartunya tidak langsung hilang
         // dari tab (yang bikin terasa seperti "tidak ada perubahan" karena kartu berikutnya langsung naik), tapi
-        // melewati fase "terisi" (pilnya sempat terlihat terisi dulu) lalu "konfirmasi" (teks "Dipindahkan ke ..."
-        // muncul sambil memudar keluar) - jeda antar-fase diatur lewat setTimeout di PindaiFoto.tsx, bukan di sini,
-        // jadi animasi ini cuma pudarnya saja (dipasang tepat saat fase "konfirmasi" dimulai).
-        pudar: { "0%": { opacity: "1" }, "100%": { opacity: "0" } },
+        // melewati fase "terisi" (pil yang baru diketuk "berkedip" - lihat `kedip` - bukan cuma diam membeku) lalu
+        // "konfirmasi" (teks "Dipindahkan ke ..." tertahan sesaat baru memudar keluar) - jeda antar-fase diatur
+        // lewat setTimeout di PindaiFoto.tsx supaya cocok dengan lama animasi ini.
+        // Ditahan penuh sampai 55% durasi (bukan langsung memudar dari 0%) supaya konfirmasinya benar-benar sempat
+        // terbaca dulu, baru pelan-pelan hilang di sisa durasinya.
+        pudar: { "0%, 55%": { opacity: "1" }, "100%": { opacity: "0" } },
+        // Cincin yang beberapa kali memancar dari pil yang baru diketuk (mirip animasi konfirmasi pilihan di
+        // Typeform) - menggantikan "pil cuma diam membeku" selama menunggu kartu pindah tab.
+        kedip: {
+          "0%": { boxShadow: "0 0 0 0 rgba(15,94,99,0.45)" },
+          "70%, 100%": { boxShadow: "0 0 0 9px rgba(15,94,99,0)" },
+        },
       },
       animation: {
         muncul: "muncul 250ms ease-out",
         pindai: "pindai 2.4s cubic-bezier(0.65,0,0.35,1) infinite",
-        pudar: "pudar 500ms ease-in forwards",
+        pudar: "pudar 900ms ease-in forwards",
+        kedip: "kedip 450ms ease-out 2",
       },
     },
   },
