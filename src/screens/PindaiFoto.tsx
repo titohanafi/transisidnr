@@ -303,45 +303,45 @@ function Hasil({
         </div>
       </section>
 
-      <DenahKamarMandi temuan={temuan} objek={objek} filter={filter} onUbahFilter={setFilter} />
-
-      {/* Isinya mengikuti tab status yang sama dengan di denah (bukan menampilkan semua kelompok sekaligus seperti
-          sebelumnya) - "Rincian per hal" jadi bagian dari isi tab itu, bukan bagian terpisah dengan kelompoknya sendiri. */}
-      <section aria-labelledby="judul-temuan">
-        <h2 id="judul-temuan" className="mb-isi text-judulKartu">
-          {t.temuanJudul}
-        </h2>
-        {butirFilter.length > 0 ? (
-          <ul className="flex flex-col gap-3">
-            {butirFilter.map((it) => (
-              <li key={it.id} className="rounded-kartu border border-garis/70 bg-white p-4 shadow-kartu">
-                <p className="flex items-center gap-2 font-semibold">
-                  {NOMOR_ITEM[it.id] !== undefined && (
-                    <span
-                      aria-hidden="true"
-                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_STATUS[filter]}`}
+      {/* "Rincian per hal" dirender sebagai children DenahKamarMandi, di dalam kartu yang sama dengan denah+toggle
+          (bukan section terpisah di bawahnya) - supaya isi tab status yang aktif terlihat sebagai satu kesatuan. */}
+      <DenahKamarMandi temuan={temuan} objek={objek} filter={filter} onUbahFilter={setFilter}>
+        <section aria-labelledby="judul-temuan">
+          <h2 id="judul-temuan" className="mb-isi text-judulKartu">
+            {t.temuanJudul}
+          </h2>
+          {butirFilter.length > 0 ? (
+            <ul className="flex flex-col gap-3">
+              {butirFilter.map((it) => (
+                <li key={it.id} className="rounded-tombol border border-garis/70 p-3">
+                  <p className="flex items-center gap-2 font-semibold">
+                    {NOMOR_ITEM[it.id] !== undefined && (
+                      <span
+                        aria-hidden="true"
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-mikro font-bold ${GAYA_STATUS[filter]}`}
+                      >
+                        {NOMOR_ITEM[it.id]}
+                      </span>
+                    )}
+                    {it.nama}
+                  </p>
+                  <p className="mt-1 text-kecil text-redup">{it.cek}</p>
+                  {filter === "perhatian" && (
+                    <Link
+                      to={`/kartu/${it.kartu}`}
+                      className="mt-2 inline-flex min-h-sentuh items-center font-semibold text-utama underline"
                     >
-                      {NOMOR_ITEM[it.id]}
-                    </span>
+                      {t.lihatPanduan}
+                    </Link>
                   )}
-                  {it.nama}
-                </p>
-                <p className="mt-1 text-kecil text-redup">{it.cek}</p>
-                {filter === "perhatian" && (
-                  <Link
-                    to={`/kartu/${it.kartu}`}
-                    className="mt-2 inline-flex min-h-sentuh items-center font-semibold text-utama underline"
-                  >
-                    {t.lihatPanduan}
-                  </Link>
-                )}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-kecil text-redup">{t.temuanKosong}</p>
-        )}
-      </section>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-kecil text-redup">{t.temuanKosong}</p>
+          )}
+        </section>
+      </DenahKamarMandi>
 
       <PeringatanNonMedis />
       <div className="flex flex-col gap-3">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { PilihanPil } from "./Pilihan";
 import { konten } from "../domain/content";
 import {
@@ -442,6 +442,7 @@ export function DenahKamarMandi({
   objek,
   filter,
   onUbahFilter,
+  children,
 }: {
   temuan: Record<string, StatusItem>;
   objek: Record<ObjekDenah, PosisiObjek>;
@@ -449,6 +450,9 @@ export function DenahKamarMandi({
    *  hal" di PindaiFoto.tsx bisa ikut berganti isi mengikuti tab yang sama, bukan tab terpisah yang tidak nyambung. */
   filter: StatusItem;
   onUbahFilter: (s: StatusItem) => void;
+  /** "Rincian per hal" dari PindaiFoto.tsx, dirender di dalam kontainer kartu yang sama dengan denah+toggle —
+   *  supaya isi tab (denah dan rinciannya) terlihat sebagai satu kesatuan, bukan dua kartu terpisah. */
+  children?: ReactNode;
 }) {
   const status = (id: string) => temuan[id] ?? "tidak_jelas";
   const NOMOR_ITEM = nomorItemHasil(ID_ITEM, temuan);
@@ -612,6 +616,15 @@ export function DenahKamarMandi({
         </button>
 
         <figcaption className="mt-2 text-kecil text-redup">{t.denahCatatan}</figcaption>
+
+        {children && (
+          <>
+            {/* Pembatas selebar kartu yang sama seperti di atas, memisahkan denah dari "Rincian per hal" di
+                bawahnya — keduanya tetap satu kartu yang sama, mengikuti tab status yang aktif. */}
+            <div className="-mx-4 my-3 border-t border-garis" />
+            {children}
+          </>
+        )}
       </div>
     </figure>
   );
