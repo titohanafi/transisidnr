@@ -37,16 +37,22 @@ export function PratinjauIsoTiga({ kelas = "h-80 w-full" }: { kelas?: string }) 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-    const arahCahaya = new THREE.DirectionalLight(0xffffff, 0.9);
-    arahCahaya.position.set(2, 4, 3);
-    scene.add(arahCahaya);
+    // Model GLB memakai material PBR (MeshStandardMaterial) yang butuh cahaya lebih terang dari standar "scene
+    // kecil" supaya tidak tampak gelap/kusam tanpa environment map — ambient dinaikkan + dua directional light
+    // dari dua sisi (bukan satu) supaya tidak ada sisi yang jatuh terlalu gelap.
+    scene.add(new THREE.AmbientLight(0xffffff, 1.6));
+    const cahayaUtama = new THREE.DirectionalLight(0xffffff, 1.8);
+    cahayaUtama.position.set(2, 4, 3);
+    scene.add(cahayaUtama);
+    const cahayaPengisi = new THREE.DirectionalLight(0xffffff, 0.9);
+    cahayaPengisi.position.set(-2, 2, -3);
+    scene.add(cahayaPengisi);
 
     let frameId = 0;
     let batal = false;
     const loader = new GLTFLoader();
     loader.load(
-      "/model/toilet/kenney-toilet.glb",
+      "/model/toilet-quaternius/quaternius-toilet.glb",
       (gltf) => {
         if (batal) return;
         const model = gltf.scene;
