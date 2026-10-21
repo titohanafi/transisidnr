@@ -476,9 +476,11 @@
     "temuanPenjelasan": "Pilihan awal dinilai AI dari foto. Ganti jawabannya sesuai kondisi ruangan yang sebenarnya Anda rasakan.",
     "temuanKosong": "Tidak ada hal dengan status ini.",
     "denahJudul": "Perkiraan denah kamar mandi Anda",
-    "denahCatatan": "Posisi benda adalah perkiraan arah dari foto (bukan ukuran sebenarnya).",
+    "denahCatatan": "Posisi benda di denah ini hanya perkiraan arah dari foto, dan denahnya tidak digambar sesuai ukuran ruangan sebenarnya.",
     "denahFilterLabel": "Tampilkan hal dengan status",
     "denahPetunjukNomor": "Ketuk nomor pada denah untuk melihat nama indikatornya.",
+    "denahPerbesar": "Perbesar denah",
+    "denahTutupPerbesar": "Tutup tampilan denah",
     "status": {
       "ramah": "Mendukung",
       "perhatian": "Perhatian",
