@@ -860,20 +860,40 @@ export function DenahKamarMandi({
           tinggi={70}
           kelas={warna("pintu")}
         />
+        {/* Kloset digambar dua balok (bukan satu kotak polos) supaya kelihatan seperti kloset sungguhan, bukan
+            kotak abstrak: mangkuk (rendah, menjorok ke ruangan) + tangki (lebih sempit tapi lebih tinggi, menempel
+            ke arah dinding) — sama seperti tampak atas yang juga membedakan `tangki` dari `mangkuk`. */}
         <ObjekIso
           x={kloset.x}
           y={kloset.y}
-          rx={sejajar(kloset.dinding) ? 18 : 14}
-          ry={sejajar(kloset.dinding) ? 14 : 18}
-          tinggi={26}
+          rx={sejajar(kloset.dinding) ? 17 : 13}
+          ry={sejajar(kloset.dinding) ? 13 : 17}
+          tinggi={24}
           kelas="text-garisKontrol"
         />
+        <ObjekIso
+          {...dorongKeDalam(kloset.x, kloset.y, kloset.dinding, -8)}
+          rx={sejajar(kloset.dinding) ? 11 : 6}
+          ry={sejajar(kloset.dinding) ? 6 : 11}
+          tinggi={44}
+          kelas="text-garisKontrol"
+        />
+        {/* Wastafel: konter (lebar, rendah) + keran kecil menonjol di atasnya dekat dinding — satu kotak polos
+            sendirian terlihat terlalu pipih untuk terbaca sebagai benda 3D, keran ini memberi aksen tinggi. */}
         <ObjekIso
           x={wastafel.x}
           y={wastafel.y}
           rx={sejajar(wastafel.dinding) ? 8 : 16}
           ry={sejajar(wastafel.dinding) ? 16 : 8}
-          tinggi={20}
+          tinggi={26}
+          kelas={warna("wastafel")}
+        />
+        <ObjekIso
+          {...dorongKeDalam(wastafel.x, wastafel.y, wastafel.dinding, -4)}
+          rx={3}
+          ry={3}
+          tinggi={12}
+          z={26}
           kelas={warna("wastafel")}
         />
         {badgeIso({ x: W / 2, y: H / 2 }, "ruang", nomorRuang, warna("ruang"), latar("ruang"))}
