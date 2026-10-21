@@ -45,17 +45,20 @@ const JARAK_DINDING = 35;
 const ISO_SUDUT = (30 * Math.PI) / 180;
 const ISO_COS = Math.cos(ISO_SUDUT);
 const ISO_SIN = Math.sin(ISO_SUDUT);
-const ISO_TINGGI_DINDING = 85;
-// Ruangan tampak atas aslinya 200×300 (memanjang, lihat W/H) — terlalu lonjong untuk isometrik, jadi kedalamannya
-// (H) dipadatkan di sini SAAT DIPROYEKSIKAN SAJA (bukan di titikDinding/zona dkk, yang tetap pakai W/H asli apa
-// adanya) supaya ruangannya terlihat lebih persegi dan bendanya tidak kelihatan kecil-kecil berjauhan.
-const ISO_KOMPRESI_Y = 0.62;
-// viewBox dan pergeseran dipilih manual supaya ruangan (W×H di atas, diproyeksikan lewat sudut 30°) memenuhi
-// kanvas dengan jarak tipis ke tepi (bukan banyak ruang putih kosong di sekeliling seperti sebelumnya).
-const ISO_VW = 344;
-const ISO_VH = 288;
-const ISO_OX = 166;
-const ISO_OY = 90;
+// Dinding dibuat jauh lebih tinggi (dulu 85) supaya terasa "berdiri di dalam ruangan" seperti acuan gambar
+// isometrik, bukan kotak gepeng — kloset/wastafel tetap kecil relatif terhadap dinding, sama seperti acuan.
+const ISO_TINGGI_DINDING = 150;
+// Ruangan tampak atas aslinya 200×300 (memanjang, lihat W/H). Dulu kedalaman (H) dipadatkan sampai 0.62 supaya
+// kedua dinding sama panjang ("persegi") — tapi acuan gambar justru TIDAK persegi, satu dinding jelas lebih
+// panjang dari yang lain. Kompresi dikurangi (0.82, bukan dihapus total) supaya asimetrinya kelihatan tanpa
+// bendanya jadi kecil-kecil berjauhan seperti kalau dipakai ukuran asli (1.0).
+const ISO_KOMPRESI_Y = 0.82;
+// viewBox dan pergeseran dipilih manual supaya ruangan (W×H di atas, diproyeksikan lewat sudut 30° dan tinggi
+// dinding baru) memenuhi kanvas dengan jarak tipis ke tepi.
+const ISO_VW = 440;
+const ISO_VH = 430;
+const ISO_OX = 240;
+const ISO_OY = 179;
 
 /** Fungsi murni: titik (x,y) tampak-atas + ketinggian opsional -> titik 2D isometrik di viewBox ISO_VW×ISO_VH. */
 function iso(x: number, y: number, z = 0): { x: number; y: number } {
@@ -167,7 +170,9 @@ function BentukIso({
     x: footprint.reduce((s, p) => s + p.x, 0) / footprint.length,
     y: footprint.reduce((s, p) => s + p.y, 0) / footprint.length,
   };
-  const sisiTampak: TitikDatar[][] = [];
+  // Tiap sisi tampak menyimpan juga arah normalnya (dinormalkan, sebagai `gelap`) — dipakai di bawah untuk
+  // bayangan per sisi, bukan cuma untuk tes tampak/tidaknya seperti sebelumnya.
+  const sisiTampak: { a: TitikDatar; b: TitikDatar; gelap: number }[] = [];
   for (let i = 0; i < footprint.length; i++) {
     const a = footprint[i];
     const b = footprint[(i + 1) % footprint.length];
@@ -179,7 +184,13 @@ function BentukIso({
       nx = -nx;
       ny = -ny;
     }
-    if (ny > nx) sisiTampak.push([a, b]);
+    if (ny > nx) {
+      const panjang = Math.hypot(nx, ny) || 1;
+      // 0 = sisi menghadap "depan" (terang, serupa sisi atas), 1 = sisi menghadap "samping" (gelap) — acuan
+      // gambar isometrik membedakan tiap sisi balok dengan nada abu berbeda (bukan satu warna rata seperti
+      // sebelumnya) supaya kelihatan padat/3D, bukan garis kosong.
+      sisiTampak.push({ a, b, gelap: Math.max(0, Math.min(1, nx / panjang)) });
+    }
   }
   const ke = (titik: TitikDatar, tz: number) => iso(titik.x, titik.y, tz);
   const titikKe = (titik: { x: number; y: number }) => `${titik.x},${titik.y}`;
@@ -187,9 +198,17 @@ function BentukIso({
   // yang beda, jadi aman digabung di satu elemen: isiannya rata/pekat sesuai `isi`, garisnya ikut warna status.
   return (
     <g className={`${isi} ${kelas}`} stroke="currentColor" strokeWidth={2} strokeLinejoin="round">
-      {sisiTampak.map(([a, b], i) => (
-        <polygon key={i} points={[ke(a, z), ke(b, z), ke(b, z + tinggi), ke(a, z + tinggi)].map(titikKe).join(" ")} />
-      ))}
+      {sisiTampak.map(({ a, b, gelap }, i) => {
+        const titik = [ke(a, z), ke(b, z), ke(b, z + tinggi), ke(a, z + tinggi)].map(titikKe).join(" ");
+        return (
+          <g key={i}>
+            <polygon points={titik} />
+            {/* Lapisan gelap tipis di atas isian (bukan ganti warna isi): tetap ikut warna status/`isi` apa pun,
+                cuma diredupkan sedikit di sisi yang menghadap "samping" — meniru bayangan tiap sisi di acuan. */}
+            {gelap > 0.05 && <polygon points={titik} className="fill-tinta" fillOpacity={gelap * 0.22} pointerEvents="none" />}
+          </g>
+        );
+      })}
       <polygon points={footprint.map((p) => titikKe(ke(p, z + tinggi))).join(" ")} />
     </g>
   );
