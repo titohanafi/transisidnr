@@ -1,12 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { LANTAI_DALAM, LANTAI_LEBAR } from "../domain/isoTigaGeometri";
-import { OBJEK_DENAH, type LetakDenah, type ObjekDenah } from "../domain/pindai";
+import { titikDinding } from "../domain/denahGeometri";
+import { gambarShower, TINGGI_DINDING_PANEL, type Kerangka, type Titik } from "../domain/gambarShower";
+import { LANTAI_DALAM, LANTAI_LEBAR, posisiTigaMenempel } from "../domain/isoTigaGeometri";
+import { OBJEK_DENAH, type LetakDenah, type ObjekDenah, type VarianShower } from "../domain/pindai";
+import { LapisPrimitif } from "./GambarShower";
 import { bangunPembungkusObjek, MODEL_SRC, TEBAL_DINDING, TINGGI_DINDING } from "./iso3dKalibrasi";
 
 const ELEVASI_KAMERA = Math.atan(1 / Math.sqrt(2));
 const JARAK_KAMERA = 12;
+// Frustum harus cukup besar untuk memuat lantai DAN tinggi dinding (sebelumnya cuma dihitung dari diagonal
+// lantai, jadi kalau TINGGI_DINDING dinaikkan bagian atas dinding/pintu bisa terpotong) — dicek visual.
+const UKURAN_FRUSTUM = Math.max(Math.hypot(LANTAI_LEBAR, LANTAI_DALAM) / 2, TINGGI_DINDING * 1.1) * 1.2;
 
 /** Azimuth kamera (radian) supaya dinding yang solid SELALU di sisi jauh dari kamera (tidak menghalangi benda) —
  *  lihat penjelasan perhitungan di plan Milestone 5: kamera di (+X,+Z) (azimuth 45°) membuat sisi kiri+belakang
@@ -14,6 +20,25 @@ const JARAK_KAMERA = 12;
  *  KAMERA sungguhan (bukan trik tukar dinding seperti versi SVG) — menjawab keluhan awal proyek ini. */
 function azimuthDariSudut(sisiSamping: "kiri" | "kanan"): number {
   return sisiSamping === "kanan" ? (3 * Math.PI) / 4 : Math.PI / 4;
+}
+
+/**
+ * Proyeksi dari koordinat ruangan (x sepanjang lebar, y sepanjang kedalaman, z tinggi) ke piksel kanvas, memakai
+ * kamera ortografik yang parameternya SAMA dengan kamera di scene (azimuth, frustum, titik bidik), supaya gambar
+ * shower yang ditumpuk di atas kanvas pas dengan dinding 3D di titik mana pun dan di sudut pandang mana pun.
+ */
+function bangunProyeksi(azimuth: number, lebar: number, tinggi: number): (x: number, y: number, z: number) => Titik {
+  const aspek = lebar / tinggi;
+  const kamera = new THREE.OrthographicCamera(-UKURAN_FRUSTUM * aspek, UKURAN_FRUSTUM * aspek, UKURAN_FRUSTUM, -UKURAN_FRUSTUM, 0.1, 30);
+  kamera.position.copy(posisiKamera(azimuth));
+  kamera.lookAt(0, 0.3, 0);
+  kamera.updateMatrixWorld();
+  kamera.updateProjectionMatrix();
+  const v = new THREE.Vector3();
+  return (x, y, z) => {
+    v.set(x, z, y).project(kamera);
+    return [(v.x * 0.5 + 0.5) * lebar, (0.5 - v.y * 0.5) * tinggi];
+  };
 }
 
 function posisiKamera(azimuth: number): THREE.Vector3 {
@@ -31,16 +56,32 @@ function posisiKamera(azimuth: number): THREE.Vector3 {
  * selalu, satu sisi samping tergantung `sudutAktif.x`) dan kamera yang BENAR-BENAR berputar saat tombol putar
  * diklik (bukan trik tukar dinding solid seperti versi SVG). BELUM ada warna status atau badge — lihat scope
  * milestone di plan.
+ *
+ * Shower TIDAK lagi memakai model GLB: digambar dengan gaya manual perakitan (`../domain/gambarShower.ts`) sebagai
+ * lapisan SVG di atas kanvas, diproyeksikan lewat kamera yang sama, sesuai jenis shower yang terbaca/dipilih.
  */
 export function PratinjauRuangIso3D({
   letak,
   sudutAktif,
+  varianShower = "tidak_jelas",
   kelas = "h-96 w-full",
 }: {
   letak: (id: ObjekDenah) => LetakDenah;
   sudutAktif: { x: "kiri" | "kanan" };
+  varianShower?: VarianShower;
   kelas?: string;
 }) {
+  const pembungkusRef = useRef<HTMLDivElement>(null);
+  const [ukuran, setUkuran] = useState<{ lebar: number; tinggi: number } | null>(null);
+  useEffect(() => {
+    const el = pembungkusRef.current;
+    if (!el) return;
+    const ukur = () => setUkuran(el.clientWidth > 0 && el.clientHeight > 0 ? { lebar: el.clientWidth, tinggi: el.clientHeight } : null);
+    ukur();
+    const pengamat = new ResizeObserver(ukur);
+    pengamat.observe(el);
+    return () => pengamat.disconnect();
+  }, []);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const kameraRef = useRef<THREE.OrthographicCamera | null>(null);
   const dindingKiriRef = useRef<THREE.Object3D | null>(null);
@@ -80,10 +121,7 @@ export function PratinjauRuangIso3D({
     scene.add(dindingKanan);
     dindingKananRef.current = dindingKanan;
 
-    // Frustum harus cukup besar untuk memuat lantai DAN tinggi dinding (sebelumnya cuma dihitung dari diagonal
-    // lantai, jadi kalau TINGGI_DINDING dinaikkan bagian atas dinding/pintu bisa terpotong) — dicek visual.
-    const ukuranDiagonal = Math.hypot(LANTAI_LEBAR, LANTAI_DALAM) / 2;
-    const ukuranFrustum = Math.max(ukuranDiagonal, TINGGI_DINDING * 1.1) * 1.2;
+    const ukuranFrustum = UKURAN_FRUSTUM;
     const camera = new THREE.OrthographicCamera(-ukuranFrustum, ukuranFrustum, ukuranFrustum, -ukuranFrustum, 0.1, 30);
     camera.position.copy(posisiKamera(azimuthDariSudut(sudutAktif.x)));
     camera.lookAt(0, 0.3, 0);
@@ -108,6 +146,8 @@ export function PratinjauRuangIso3D({
     let batal = false;
     const loader = new GLTFLoader();
     for (const id of OBJEK_DENAH) {
+      // Shower digambar sebagai lapisan SVG (lihat bawah), bukan model GLB.
+      if (id === "area_mandi") continue;
       // `letak(id)` (closure dari DenahKamarMandi.tsx) sudah menjatuhkan ke POSISI_BAWAAN kalau dindingnya
       // "tidak_terlihat" — selalu mengembalikan LetakDenah yang valid (4 dinding, tidak pernah "tidak_terlihat").
       const letakId = letak(id);
@@ -167,5 +207,47 @@ export function PratinjauRuangIso3D({
     if (dindingKananRef.current) dindingKananRef.current.visible = sudutAktif.x === "kanan";
   }, [sudutAktif.x]);
 
-  return <canvas ref={canvasRef} className={kelas} aria-hidden="true" />;
+  const azimuth = azimuthDariSudut(sudutAktif.x);
+  let lapisShower = null;
+  if (ukuran) {
+    const letakShower = letak("area_mandi");
+    const dinding = titikDinding(letakShower).dinding;
+    const posisi = posisiTigaMenempel(letakShower);
+    // Permukaan dalam dinding (dinding digambar setebal TEBAL_DINDING, berpusat di garis lantai).
+    const bidang =
+      dinding === "belakang"
+        ? -LANTAI_DALAM / 2 + TEBAL_DINDING / 2
+        : dinding === "depan"
+          ? LANTAI_DALAM / 2 - TEBAL_DINDING / 2
+          : dinding === "kiri"
+            ? -LANTAI_LEBAR / 2 + TEBAL_DINDING / 2
+            : LANTAI_LEBAR / 2 - TEBAL_DINDING / 2;
+    const kerangka: Kerangka = {
+      dinding,
+      sepanjang: dinding === "belakang" || dinding === "depan" ? posisi.x : posisi.z,
+      bidang,
+      proyeksi: bangunProyeksi(azimuth, ukuran.lebar, ukuran.tinggi),
+      skala: TINGGI_DINDING / TINGGI_DINDING_PANEL,
+      lihat: { x: sudutAktif.x === "kanan" ? -1 : 1, y: 1 },
+    };
+    lapisShower = (
+      <svg
+        viewBox={`0 0 ${ukuran.lebar} ${ukuran.tinggi}`}
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <g strokeWidth={1.6} strokeLinejoin="round" strokeLinecap="round">
+          <LapisPrimitif daftar={gambarShower(varianShower, "kondisi", { kerangka })} tebal={0.75} />
+        </g>
+      </svg>
+    );
+  }
+
+  return (
+    <div ref={pembungkusRef} className={`relative mx-auto ${kelas}`}>
+      <canvas ref={canvasRef} className="h-full w-full" aria-hidden="true" />
+      {lapisShower}
+    </div>
+  );
 }

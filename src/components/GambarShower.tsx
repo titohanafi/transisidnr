@@ -89,7 +89,7 @@ function Bentuk({ s, penanda, m }: { s: Primitif; penanda: string; m: number }) 
       const muka = s.tingkat !== "belakang";
       const lubang = s.tingkat === "depan";
       return (
-        <g transform={`matrix(${s.sumbuA[0]} ${s.sumbuA[1]} 0 -1 ${s.cx} ${s.cy})`} className={GARIS[s.peran]}>
+        <g transform={`matrix(${s.sumbuA[0]} ${s.sumbuA[1]} ${s.sumbuU[0]} ${s.sumbuU[1]} ${s.cx} ${s.cy})`} className={GARIS[s.peran]}>
           <circle r={s.r} className={muka ? ISI_ATAS[s.peran] : ISI.netral.pita} vectorEffect="non-scaling-stroke" />
           {lubang && (
             <>

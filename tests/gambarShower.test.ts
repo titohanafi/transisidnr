@@ -257,6 +257,42 @@ describe("kerangka dinding di ruangan", () => {
   });
 });
 
+describe("sisi kotak yang terlihat dari kamera", () => {
+  const proyeksi = (x: number, y: number, z: number): Titik => [(x - y) * 0.866, (x + y) * 0.5 - z];
+  const buat = (lihat: { x: 1 | -1; y: 1 | -1 }) =>
+    gambarShower("tidak_jelas", "kondisi", { kerangka: { dinding: "belakang", sepanjang: 0, bidang: 0, proyeksi, skala: 1, lihat } });
+  const kotakHantu = (d: Primitif[]) => d.filter((p) => p.jenis === "poligon");
+
+  it("selalu tiga sisi: atas, satu terang, satu gelap", () => {
+    for (const x of [1, -1] as const) {
+      for (const y of [1, -1] as const) {
+        const muka = kotakHantu(buat({ x, y })).map((p) => (p.jenis === "poligon" ? p.muka : ""));
+        expect(muka.sort()).toEqual(["atas", "kanan", "kiri"]);
+      }
+    }
+  });
+
+  it("kamera dari sisi sebaliknya menggambar sisi tegak yang berbeda", () => {
+    const ambil = (d: Primitif[]) => JSON.stringify(kotakHantu(d).map((p) => (p.jenis === "poligon" ? p.titik : [])));
+    expect(ambil(buat({ x: 1, y: 1 }))).not.toBe(ambil(buat({ x: -1, y: 1 })));
+    expect(ambil(buat({ x: 1, y: 1 }))).not.toBe(ambil(buat({ x: 1, y: -1 })));
+  });
+
+  it("memakai skala layar proyeksi: lingkaran dan garis ikut membesar", () => {
+    const besar =
+      (m: number) =>
+      (x: number, y: number, z: number): Titik => [(x - y) * 0.866 * m, ((x + y) * 0.5 - z) * m];
+    const radius = (m: number) => {
+      const d = gambarShower("hand_shower_gantung", "kondisi", {
+        kerangka: { dinding: "belakang", sepanjang: 0, bidang: 0, proyeksi: besar(m), skala: 0.5 },
+      });
+      const c = d.find((p) => p.jenis === "cakram");
+      return c && c.jenis === "cakram" ? Math.hypot(...c.sumbuA) * c.r : 0;
+    };
+    expect(radius(60) / radius(1)).toBeCloseTo(60, 5);
+  });
+});
+
 describe("proyeksi", () => {
   it("naik satu satuan tinggi menggeser titik satu satuan ke atas layar", () => {
     const k = kerangkaPanel("kanan");
@@ -268,8 +304,9 @@ describe("proyeksi", () => {
   it("sudut singgung silinder cakram: garis siluet sejajar arah tebal", () => {
     const d: Titik = [-8.66, 5];
     const sumbu: Titik = [Math.sqrt(3) / 2, 0.5];
-    const th = sudutSinggung(sumbu, d);
-    const turunan: Titik = [-Math.sin(th) * sumbu[0], -Math.sin(th) * sumbu[1] - Math.cos(th)];
+    const naik: Titik = [0, -1];
+    const th = sudutSinggung(sumbu, naik, d);
+    const turunan: Titik = [-Math.sin(th) * sumbu[0] + Math.cos(th) * naik[0], -Math.sin(th) * sumbu[1] + Math.cos(th) * naik[1]];
     expect(turunan[0] * d[1] - turunan[1] * d[0]).toBeCloseTo(0);
   });
 });

@@ -20,7 +20,16 @@ export type Primitif =
   | { jenis: "poligon"; muka: Muka | "latar" | "zona" | "pita"; titik: Titik[]; peran: Peran }
   | { jenis: "elips"; cx: number; cy: number; rx: number; ry: number; tingkat: "atas" | "rongga" | "tutup"; peran: Peran }
   | { jenis: "badan"; cx: number; yAtas: number; yBawah: number; rx: number; ry: number; muka: "kanan" | "kiri"; peran: Peran }
-  | { jenis: "cakram"; cx: number; cy: number; r: number; sumbuA: Titik; tingkat: "belakang" | "depan" | "polos"; peran: Peran }
+  | {
+      jenis: "cakram";
+      cx: number;
+      cy: number;
+      r: number;
+      sumbuA: Titik;
+      sumbuU: Titik;
+      tingkat: "belakang" | "depan" | "polos";
+      peran: Peran;
+    }
   | { jenis: "garis"; dari: Titik; ke: Titik; gaya: "tegas" | "putus" | "air" | "silang" | "panah"; peran: Peran }
   | { jenis: "jalur"; titik: Titik[]; gaya: "selang" | "gagang" | "lengkung"; peran: Peran }
   | { jenis: "baut"; cx: number; cy: number; peran: Peran }
@@ -51,6 +60,11 @@ export interface Kerangka {
   bidang: number;
   proyeksi: (x: number, y: number, z: number) => Titik;
   skala: number;
+  /**
+   * Dari sisi mana kamera melihat ruangan: +1 berarti kamera berada di sisi koordinat positif sumbu itu, jadi sisi
+   * kotak yang menghadap +x (atau +y) yang terlihat. Bawaan {x: 1, y: 1}, yang dipakai panel dan denah SVG.
+   */
+  lihat?: { x: 1 | -1; y: 1 | -1 };
 }
 
 export function kerangkaPanel(sisi: SisiDinding): Kerangka {
@@ -76,11 +90,27 @@ export function titik(k: Kerangka, a: number, n: number, u: number): Titik {
   return k.proyeksi(x, y, u * k.skala);
 }
 
-/** Arah sumbu `a` di layar (vektor satuan): kanan-bawah atau kiri-bawah. */
+/** Vektor layar untuk satu satuan dunia sepanjang sumbu `a` (kanan-bawah atau kiri-bawah). */
 function sumbuA(k: Kerangka): Titik {
   const p = titik(k, 0, 0, 0);
   const q = titik(k, 1 / k.skala, 0, 0);
   return [q[0] - p[0], q[1] - p[1]];
+}
+
+/** Vektor layar untuk satu satuan dunia ke atas. */
+function sumbuU(k: Kerangka): Titik {
+  const p = titik(k, 0, 0, 0);
+  const q = titik(k, 0, 0, 1 / k.skala);
+  return [q[0] - p[0], q[1] - p[1]];
+}
+
+/**
+ * Piksel layar untuk satu satuan lokal gambar: skala benda dikali panjang satu satuan dunia di layar. Pada panel dan
+ * denah SVG satu satuan dunia = 1 piksel, jadi nilainya sama dengan `skala`; pada kamera 3D nilainya lebih besar.
+ */
+function pikselPerSatuan(k: Kerangka): number {
+  const [x, y] = sumbuA(k);
+  return k.skala * Math.hypot(x, y);
 }
 
 export interface UkuranShower {
@@ -105,7 +135,7 @@ const poligon = (muka: Muka | "latar" | "zona" | "pita", pts: Titik[], peran: Pe
   peran,
 });
 
-/** Kotak pada koordinat lokal: tiga sisi yang terlihat dari kamera (atas, sisi menghadap kanan-bawah, sisi menghadap kiri-bawah). */
+/** Kotak pada koordinat lokal: tiga sisi yang terlihat dari kamera (atas dan dua sisi tegak yang menghadap kamera). */
 function kotak(k: Kerangka, a0: number, a1: number, n0: number, n1: number, u0: number, u1: number, peran: Peran): Primitif[] {
   const [xa, ya] = keRuang(k, a0 * k.skala, n0 * k.skala);
   const [xb, yb] = keRuang(k, a1 * k.skala, n1 * k.skala);
@@ -113,21 +143,29 @@ function kotak(k: Kerangka, a0: number, a1: number, n0: number, n1: number, u0: 
   const [y0, y1] = [Math.min(ya, yb), Math.max(ya, yb)];
   const [z0, z1] = [u0 * k.skala, u1 * k.skala];
   const p = k.proyeksi;
+  const lihat = k.lihat ?? { x: 1, y: 1 };
+  const xf = lihat.x === 1 ? x1 : x0;
+  const yf = lihat.y === 1 ? y1 : y0;
+  // Nada sisi mengikuti letaknya di layar: sisi yang normalnya mengarah ke kanan layar terang, ke kiri layar gelap.
+  const o = p(0, 0, 0);
+  const layarX = (p(1, 0, 0)[0] - o[0]) * lihat.x;
+  const mukaX: Muka = layarX >= 0 ? "kanan" : "kiri";
+  const mukaY: Muka = mukaX === "kanan" ? "kiri" : "kanan";
   return [
     poligon("atas", [p(x0, y0, z1), p(x1, y0, z1), p(x1, y1, z1), p(x0, y1, z1)], peran),
-    poligon("kanan", [p(x1, y0, z1), p(x1, y1, z1), p(x1, y1, z0), p(x1, y0, z0)], peran),
-    poligon("kiri", [p(x0, y1, z1), p(x1, y1, z1), p(x1, y1, z0), p(x0, y1, z0)], peran),
+    poligon(mukaX, [p(xf, y0, z1), p(xf, y1, z1), p(xf, y1, z0), p(xf, y0, z0)], peran),
+    poligon(mukaY, [p(x0, yf, z1), p(x1, yf, z1), p(x1, yf, z0), p(x0, yf, z0)], peran),
   ];
 }
 
 /** Sudut parameter (radian) tempat tepi elips cakram sejajar arah tebal `d`; dipakai untuk garis siluet silinder. */
-export function sudutSinggung(sumbu: Titik, d: Titik): number {
-  return Math.atan2(d[0], sumbu[0] * d[1] - sumbu[1] * d[0]);
+export function sudutSinggung(sumbuA: Titik, sumbuU: Titik, d: Titik): number {
+  return Math.atan2(sumbuU[0] * d[1] - sumbuU[1] * d[0], sumbuA[0] * d[1] - sumbuA[1] * d[0]);
 }
 
-const pada = (c: Titik, r: number, sumbu: Titik, theta: number): Titik => [
-  c[0] + r * Math.cos(theta) * sumbu[0],
-  c[1] + r * (Math.cos(theta) * sumbu[1] - Math.sin(theta)),
+const pada = (c: Titik, r: number, sumbuA: Titik, sumbuU: Titik, theta: number): Titik => [
+  c[0] + r * (Math.cos(theta) * sumbuA[0] + Math.sin(theta) * sumbuU[0]),
+  c[1] + r * (Math.cos(theta) * sumbuA[1] + Math.sin(theta) * sumbuU[1]),
 ];
 
 /**
@@ -138,21 +176,22 @@ function silinderCakram(k: Kerangka, a: number, nMulai: number, tebal: number, u
   const c0 = titik(k, a, nMulai, u);
   const c1 = titik(k, a, nMulai + tebal, u);
   const d: Titik = [c1[0] - c0[0], c1[1] - c0[1]];
-  const sumbu = sumbuA(k);
+  const ea = sumbuA(k);
+  const eu = sumbuU(k);
   const rr = r * k.skala;
   const menghadapKamera = d[1] >= 0;
   const [jauh, dekat] = menghadapKamera ? [c0, c1] : [c1, c0];
-  const th = sudutSinggung(sumbu, d);
-  const b1 = pada(jauh, rr, sumbu, th);
-  const b2 = pada(jauh, rr, sumbu, th + Math.PI);
-  const d1 = pada(dekat, rr, sumbu, th);
-  const d2 = pada(dekat, rr, sumbu, th + Math.PI);
+  const th = sudutSinggung(ea, eu, d);
+  const b1 = pada(jauh, rr, ea, eu, th);
+  const b2 = pada(jauh, rr, ea, eu, th + Math.PI);
+  const d1 = pada(dekat, rr, ea, eu, th);
+  const d2 = pada(dekat, rr, ea, eu, th + Math.PI);
   return [
-    { jenis: "cakram", cx: jauh[0], cy: jauh[1], r: rr, sumbuA: sumbu, tingkat: "belakang", peran },
+    { jenis: "cakram", cx: jauh[0], cy: jauh[1], r: rr, sumbuA: ea, sumbuU: eu, tingkat: "belakang", peran },
     poligon("pita", [b1, d1, d2, b2], peran),
     { jenis: "garis", dari: b1, ke: d1, gaya: "tegas", peran },
     { jenis: "garis", dari: b2, ke: d2, gaya: "tegas", peran },
-    { jenis: "cakram", cx: dekat[0], cy: dekat[1], r: rr, sumbuA: sumbu, tingkat: menghadapKamera ? "depan" : "polos", peran },
+    { jenis: "cakram", cx: dekat[0], cy: dekat[1], r: rr, sumbuA: ea, sumbuU: eu, tingkat: menghadapKamera ? "depan" : "polos", peran },
   ];
 }
 
@@ -239,7 +278,7 @@ export function posisiKait(mode: ModeGambar, ukuran: UkuranShower = ukuranShower
 }
 
 function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi: boolean): Primitif[] {
-  const s = k.skala;
+  const s = pikselPerSatuan(k);
   const arah: 1 | -1 = sumbuA(k)[0] >= 0 ? 1 : -1;
   const { uAtas, aGeser } = posisiKait(mode, ukuran);
   const lama = posisiKait("kondisi", ukuran);
@@ -291,7 +330,7 @@ function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi
 }
 
 function showerTetap(k: Kerangka, ukuran: UkuranShower): Primitif[] {
-  const s = k.skala;
+  const s = pikselPerSatuan(k);
   const uP = ukuran.zonaAtas + 130;
   const [cx, cyAtas] = titik(k, 0, 50, uP - 11);
   return [
@@ -313,7 +352,7 @@ function showerTetap(k: Kerangka, ukuran: UkuranShower): Primitif[] {
 }
 
 function emberGayung(k: Kerangka): Primitif[] {
-  const s = k.skala;
+  const s = pikselPerSatuan(k);
   const arah = sumbuA(k)[0] >= 0 ? 1 : -1;
   const [ex, eyBawah] = titik(k, -30, 40, 0);
   const tinggiEmber = 55 * s;
@@ -356,7 +395,7 @@ function emberGayung(k: Kerangka): Primitif[] {
 
 function tidakJelas(k: Kerangka): Primitif[] {
   const [tx, ty] = titik(k, 0, 30, 170);
-  return [...kotak(k, -20, 20, 0, 30, 140, 200, "hantu"), { jenis: "tanda", x: tx, y: ty + 11 * k.skala, teks: "?" }];
+  return [...kotak(k, -20, 20, 0, 30, 140, 200, "hantu"), { jenis: "tanda", x: tx, y: ty + 11 * pikselPerSatuan(k), teks: "?" }];
 }
 
 /**
