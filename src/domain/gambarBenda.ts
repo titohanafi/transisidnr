@@ -24,14 +24,43 @@ const oval = (k: Kerangka, a: number, n: number, ra: number, rn: number, u: numb
   footprintOval(a, n, ra, rn, segmen).map(([x, y]) => titik(k, x, y, u));
 
 // Versi E (disetujui pemilik di papan Claude Design): mangkuk, kaki, dan cekungan digeser dari sumbu tangki supaya
-// pusatnya tampak sejajar dengan pusat tangki di layar (6 satuan layar ke kiri dan 6 ke atas = (-9,46; -2,54) di
-// koordinat lokal), dan satu garis menyambungkan dasar tangki ke badan mangkuk.
-const GESER_MANGKUK = { a: -9.464, n: -2.536 };
-// Panjang garis penyambung (satuan lokal) dari sudut bawah muka kanan tangki menerus ke arah n sampai badan mangkuk.
+// pusatnya tampak sejajar dengan pusat tangki di layar, dan satu garis menyambungkan dasar tangki ke badan mangkuk.
+// Geseran ditetapkan di LAYAR (6 satuan ke arah sisi mangkuk dan 6 ke atas pada panel), lalu diubah ke koordinat lokal
+// (a, n) menurut sumbu dinding dan kamera yang dipakai, supaya hasilnya sama di semua dinding dan sudut pandang. Pada
+// panel dinding belakang hasilnya (-9,464; -2,536).
+const GESER_LAYAR = 6;
+// Panjang garis penyambung (satuan lokal) dari sudut bawah muka tangki menerus ke arah n sampai badan mangkuk.
 const PANJANG_PENYAMBUNG = 14.56;
 
+/** Sumbu lokal `a` dan `n` di layar (vektor per satu satuan lokal, sudah termasuk skala kerangka). */
+function sumbuLayar(k: Kerangka): { a: Titik; n: Titik } {
+  const o = titik(k, 0, 0, 0);
+  const a = titik(k, 1, 0, 0);
+  const n = titik(k, 0, 1, 0);
+  return { a: [a[0] - o[0], a[1] - o[1]], n: [n[0] - o[0], n[1] - o[1]] };
+}
+
+/** Geseran lokal (a, n) yang menggeser mangkuk 6 satuan layar ke sisi n dan 6 ke atas, pada skala panel. */
+function geseranMangkuk(k: Kerangka): { a: number; n: number } {
+  const { a: A, n: N } = sumbuLayar(k);
+  const skala = Math.hypot(A[0], A[1]);
+  const sx = (N[0] >= 0 ? GESER_LAYAR : -GESER_LAYAR) * skala;
+  const sy = -GESER_LAYAR * skala;
+  const det = A[0] * N[1] - N[0] * A[1];
+  return { a: (sx * N[1] - N[0] * sy) / det, n: (A[0] * sy - sx * A[1]) / det };
+}
+
+/** Sisi tangki (+1 atau -1 sepanjang `a`) yang menghadap kamera: di situ garis penyambung digambar. */
+function sisiTerlihat(k: Kerangka): 1 | -1 {
+  const lihat = k.lihat ?? { x: 1, y: 1 };
+  const [x0, y0] = keRuang(k, 0, 0);
+  const [x1, y1] = keRuang(k, 1, 0);
+  return (x1 - x0) * lihat.x + (y1 - y0) * lihat.y >= 0 ? 1 : -1;
+}
+
 function klosetDuduk(k: Kerangka): Primitif[] {
-  const { a, n } = GESER_MANGKUK;
+  const { a, n } = geseranMangkuk(k);
+  const sisi = sisiTerlihat(k);
   const pusatN = 31 + n;
   return [
     ...kotak(k, -18, 18, 0, 18, 38, 80, "netral"),
@@ -40,7 +69,13 @@ function klosetDuduk(k: Kerangka): Primitif[] {
     ...ekstrusi(k, footprintOval(a, pusatN, 11, 17, 24), 0, 28, "netral", true),
     ...ekstrusi(k, footprintOval(a, pusatN, 18, 26, 32), 28, 46, "netral", true),
     poligon("rongga", oval(k, a, pusatN, 12, 19, 46), "netral"),
-    { jenis: "garis", dari: titik(k, 18, 18, 38), ke: titik(k, 18, 18 + PANJANG_PENYAMBUNG, 38), gaya: "tegas", peran: "netral" },
+    {
+      jenis: "garis",
+      dari: titik(k, sisi * 18, 18, 38),
+      ke: titik(k, sisi * 18, 18 + PANJANG_PENYAMBUNG, 38),
+      gaya: "tegas",
+      peran: "netral",
+    },
   ];
 }
 

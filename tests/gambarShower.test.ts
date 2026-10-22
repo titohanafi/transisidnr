@@ -12,6 +12,7 @@ import {
   susunGambar,
   titik,
   ukuranShower,
+  type Kerangka,
   type ModeGambar,
   type Primitif,
   type Titik,
@@ -388,5 +389,40 @@ describe("gambar benda kamar mandi", () => {
     // Benda lain tidak memakai gaya ini.
     for (const jenis of ["kloset_duduk", "kloset_jongkok", "pintu"] as const)
       expect(gambarBenda(jenis).some((p) => p.jenis === "poligon" && (p.tepi || p.garisTipis))).toBe(false);
+  });
+
+  it("kloset duduk: mangkuk bergeser sama relatif ke tangki di semua dinding dan sudut pandang (cermin untuk sisi berlawanan)", () => {
+    const proyeksi =
+      (az: number) =>
+      (x: number, y: number, z: number): Titik => {
+        const [c, s] = [Math.cos(az), Math.sin(az)];
+        return [(x * s - y * c) * 0.866, (x * c + y * s) * 0.5 - z];
+      };
+    const pusatRongga = (k: Kerangka): Titik => {
+      const rongga = gambarBenda("kloset_duduk", k).filter((p) => p.jenis === "poligon" && p.muka === "rongga");
+      const t = (rongga[rongga.length - 1] as { titik: Titik[] }).titik;
+      return [t.reduce((a, p) => a + p[0], 0) / t.length, t.reduce((a, p) => a + p[1], 0) / t.length];
+    };
+    // Dinding belakang dan kiri, kamera di sisi positif: bayangan cermin satu sama lain.
+    const dasar = { sepanjang: 0, bidang: 0, skala: 1, proyeksi: proyeksi(Math.PI / 4), lihat: { x: 1, y: 1 } } as const;
+    const belakang = pusatRongga({ ...dasar, dinding: "belakang" });
+    const kiri = pusatRongga({ ...dasar, dinding: "kiri" });
+    const tangki = (k: Kerangka): Titik => titik(k, 0, 9, 60);
+    const relB = belakang[0] - tangki({ ...dasar, dinding: "belakang" })[0];
+    const relK = kiri[0] - tangki({ ...dasar, dinding: "kiri" })[0];
+    expect(relB).toBeCloseTo(-relK, 6);
+  });
+
+  it("skalaRinci mengecilkan shower terhadap dinding tanpa mengubah tinggi pasangnya", () => {
+    const luas = (daftar: Primitif[]) => {
+      const t = daftar.flatMap(semuaTitik);
+      return Math.max(...t.map((p) => p[0])) - Math.min(...t.map((p) => p[0]));
+    };
+    for (const varian of ["hand_shower_gantung", "shower_tetap", "ember_gayung"] as const) {
+      const penuh = gambarShower(varian, "kondisi");
+      const kecil = gambarShower(varian, "kondisi", { skalaRinci: 0.5 });
+      expect(luas(kecil)).toBeLessThan(luas(penuh));
+      expect(gambarShower(varian, "kondisi", { skalaRinci: 1 })).toEqual(penuh);
+    }
   });
 });

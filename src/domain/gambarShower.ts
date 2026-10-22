@@ -359,13 +359,35 @@ export function latarPanel(k: Kerangka = kerangkaPanel("kanan")): Primitif[] {
   ];
 }
 
-function keran(k: Kerangka, mode: ModeGambar): Primitif[] {
+/**
+ * Mengecilkan satu rakitan (keran, kepala shower) dengan faktor `f` terhadap titik tumpu di dinding: `pa` sepanjang
+ * dinding dan `pu` tinggi (jarak dari dinding diskalakan dari dinding itu sendiri), sehingga rakitan tetap menempel di
+ * titik yang sama. Dipakai di ruangan, tempat benda kecil harus sepadan dengan kloset dan wastafel; panel memakai f = 1.
+ */
+function rakitan(f: number, pa: number, pu: number) {
+  const A = (v: number) => pa + f * (v - pa);
+  const N = (v: number) => f * v;
+  const U = (v: number) => pu + f * (v - pu);
+  return {
+    f,
+    A,
+    N,
+    U,
+    kotak: (k: Kerangka, a0: number, a1: number, n0: number, n1: number, u0: number, u1: number, peran: Peran) =>
+      kotak(k, A(a0), A(a1), N(n0), N(n1), U(u0), U(u1), peran),
+  };
+}
+
+const rakitanKeran = (f: number) => rakitan(f, -30, 101);
+
+function keran(k: Kerangka, mode: ModeGambar, f = 1): Primitif[] {
   const tuas = mode === "permanen";
+  const r = rakitanKeran(f);
   return [
-    ...kotak(k, -38, -22, 0, 6, 92, 110, "netral"),
-    ...kotak(k, -34, -26, 0, 28, 96, 106, "netral"),
-    ...kotak(k, -32, -28, 1, 5, 106, 122, tuas ? "aksen" : "netral"),
-    ...(tuas ? kotak(k, -32, -28, 2, 40, 122, 128, "aksen") : kotak(k, -40, -20, 0, 8, 122, 128, "netral")),
+    ...r.kotak(k, -38, -22, 0, 6, 92, 110, "netral"),
+    ...r.kotak(k, -34, -26, 0, 28, 96, 106, "netral"),
+    ...r.kotak(k, -32, -28, 1, 5, 106, 122, tuas ? "aksen" : "netral"),
+    ...(tuas ? r.kotak(k, -32, -28, 2, 40, 122, 128, "aksen") : r.kotak(k, -40, -20, 0, 8, 122, 128, "netral")),
   ];
 }
 
@@ -374,7 +396,7 @@ export function posisiKait(mode: ModeGambar, ukuran: UkuranShower = ukuranShower
   return mode === "kondisi" ? { uAtas: ukuran.zonaAtas + 100, aGeser: 0 } : { uAtas: ukuran.zonaAtas, aGeser: 35 };
 }
 
-function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi: boolean): Primitif[] {
+function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi: boolean, f: number): Primitif[] {
   const s = pikselPerSatuan(k);
   const arah: 1 | -1 = sumbuA(k)[0] >= 0 ? 1 : -1;
   const { uAtas, aGeser } = posisiKait(mode, ukuran);
@@ -397,19 +419,30 @@ function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi
       ),
     );
   }
-  hasil.push(...keran(k, mode));
+  const kr = rakitanKeran(f);
+  const kp = rakitan(f, aGeser, uAtas);
+  hasil.push(...keran(k, mode, f));
   if (mode === "hack") hasil.push(...kotak(k, -8, 8, 0, 12, lama.uAtas - 20, lama.uAtas, "hantu"));
-  hasil.push(selang(titik(k, aGeser + 4, 20, uBawahGagang), titik(k, 30, 10, 101), mode !== "kondisi", arah, s, "netral"));
-  hasil.push(...kotak(k, 26, 34, 0, 10, 96, 106, "netral"));
-  hasil.push(...kotak(k, aGeser - 8, aGeser + 8, 0, 12, uAtas - 20, uAtas, peran));
+  hasil.push(
+    selang(
+      titik(k, kp.A(aGeser + 4), kp.N(20), kp.U(uBawahGagang)),
+      titik(k, kr.A(30), kr.N(10), kr.U(101)),
+      mode !== "kondisi",
+      arah,
+      s * f,
+      "netral",
+    ),
+  );
+  hasil.push(...kr.kotak(k, 26, 34, 0, 10, 96, 106, "netral"));
+  hasil.push(...kp.kotak(k, aGeser - 8, aGeser + 8, 0, 12, uAtas - 20, uAtas, peran));
   if (mode === "permanen") {
     for (const u of [uAtas - 6.5, uAtas - 18.5]) {
-      const [cx, cy] = titik(k, aGeser - 3, 12, u);
+      const [cx, cy] = titik(k, kp.A(aGeser - 3), kp.N(12), kp.U(u));
       hasil.push({ jenis: "baut", cx, cy, peran });
     }
   }
-  hasil.push(...kotak(k, aGeser - 4, aGeser + 4, 12, 20, uBawahGagang, uAtas + 17, peran));
-  hasil.push(...silinderCakram(k, aGeser, 14, 10, uAtas + 25, 22, peran));
+  hasil.push(...kp.kotak(k, aGeser - 4, aGeser + 4, 12, 20, uBawahGagang, uAtas + 17, peran));
+  hasil.push(...silinderCakram(k, aGeser, kp.N(14), kp.N(10), kp.U(uAtas + 25), 22 * f, peran));
 
   if (anotasi && mode === "kondisi") {
     const dasar = titik(k, 50, 0, ukuran.zonaAtas);
@@ -426,12 +459,13 @@ function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi
   return hasil;
 }
 
-function showerTetap(k: Kerangka, ukuran: UkuranShower): Primitif[] {
-  const s = pikselPerSatuan(k);
+function showerTetap(k: Kerangka, ukuran: UkuranShower, f: number): Primitif[] {
+  const s = pikselPerSatuan(k) * f;
   const uP = ukuran.zonaAtas + 130;
-  const [cx, cyAtas] = titik(k, 0, 50, uP - 11);
+  const kp = rakitan(f, 0, uP);
+  const [cx, cyAtas] = titik(k, 0, kp.N(50), kp.U(uP - 11));
   return [
-    ...keran(k, "kondisi"),
+    ...keran(k, "kondisi", f),
     ...[-19, 0, 19].map((dx, i): Primitif => {
       const turun = i === 1 ? 5 : 0;
       return {
@@ -443,21 +477,22 @@ function showerTetap(k: Kerangka, ukuran: UkuranShower): Primitif[] {
       };
     }),
     ...silinderTegak(cx, cyAtas, 24 * s, 10 * s, "kiri", false, "netral"),
-    ...kotak(k, -8, 8, 0, 6, uP - 12, uP + 4, "netral"),
-    ...kotak(k, -2.5, 2.5, 6, 50, uP - 6, uP, "netral"),
+    ...kp.kotak(k, -8, 8, 0, 6, uP - 12, uP + 4, "netral"),
+    ...kp.kotak(k, -2.5, 2.5, 6, 50, uP - 6, uP, "netral"),
   ];
 }
 
-function emberGayung(k: Kerangka): Primitif[] {
-  const s = pikselPerSatuan(k);
+function emberGayung(k: Kerangka, f: number): Primitif[] {
+  const s = pikselPerSatuan(k) * f;
   const arah = sumbuA(k)[0] >= 0 ? 1 : -1;
   const [ex, eyBawah] = titik(k, -30, 40, 0);
   const tinggiEmber = 55 * s;
   const yAtasEmber = eyBawah - tinggiEmber;
   const [gx, gyBawah] = titik(k, 10, 30, 0);
-  const ujungKeran = titik(k, -30, 28, 96);
+  const kr = rakitanKeran(f);
+  const ujungKeran = titik(k, kr.A(-30), kr.N(28), kr.U(96));
   return [
-    ...keran(k, "kondisi"),
+    ...keran(k, "kondisi", f),
     {
       jenis: "garis",
       dari: [ujungKeran[0] - arah * 0.3 * s, ujungKeran[1] + 9 * s],
@@ -498,22 +533,24 @@ function tidakJelas(k: Kerangka): Primitif[] {
 /**
  * Gambar satu varian shower pada dinding, urutan gambar dari belakang ke depan. `mode` hanya berpengaruh pada hand
  * shower (kondisi dari foto, hack tanpa bongkar, permanen/renovasi). `anotasi` menambah zona jangkauan, silang, dan
- * panah. Tanpa `kerangka`, benda dipasang di dinding kanan panel.
+ * panah. Tanpa `kerangka`, benda dipasang di dinding kanan panel. `skalaRinci` (bawaan 1) mengecilkan keran, kepala shower,
+ * dan perlengkapannya terhadap dinding supaya sepadan dengan benda lain di ruangan.
  */
 export function gambarShower(
   varian: VarianShower,
   mode: ModeGambar = "kondisi",
-  opsi: { anotasi?: boolean; ukuran?: UkuranShower; kerangka?: Kerangka } = {},
+  opsi: { anotasi?: boolean; ukuran?: UkuranShower; kerangka?: Kerangka; skalaRinci?: number } = {},
 ): Primitif[] {
   const ukuran = opsi.ukuran ?? ukuranShower();
   const k = opsi.kerangka ?? kerangkaPanel("kanan");
+  const f = opsi.skalaRinci ?? 1;
   switch (varian) {
     case "hand_shower_gantung":
-      return handShower(k, mode, ukuran, opsi.anotasi ?? false);
+      return handShower(k, mode, ukuran, opsi.anotasi ?? false, f);
     case "shower_tetap":
-      return showerTetap(k, ukuran);
+      return showerTetap(k, ukuran, f);
     case "ember_gayung":
-      return emberGayung(k);
+      return emberGayung(k, f);
     case "tidak_jelas":
       return tidakJelas(k);
   }

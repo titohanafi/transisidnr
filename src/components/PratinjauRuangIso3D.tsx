@@ -29,6 +29,9 @@ const UKURAN_FRUSTUM = Math.max(Math.hypot(LANTAI_LEBAR, LANTAI_DALAM) / 2, TING
 // Margin gambar terhadap tepi kanvas (pecahan lebar/tinggi).
 const MARGIN = 0.05;
 const SKALA = TINGGI_DINDING / TINGGI_DINDING_PANEL;
+// Di panel, keran dan kepala shower digambar besar supaya jelas; di ruangan harus sepadan dengan kloset dan wastafel
+// (kepala hand shower nyata sekitar 12-14 cm, kloset sekitar 36 cm lebarnya).
+const SKALA_RINCI_SHOWER = 0.45;
 
 /** Azimuth kamera (radian) supaya dinding samping yang digambar SELALU di sisi jauh dari kamera (tidak menghalangi
  *  benda): kamera di (+X,+Z) (45°) membuat sisi kiri+belakang jauh; kamera di (-X,+Z) (135°) membuat kanan+belakang jauh. */
@@ -161,7 +164,9 @@ export function PratinjauRuangIso3D({
         lihat,
       };
       const daftar: Primitif[] =
-        id === "area_mandi" ? gambarShower(varianShower, "kondisi", { kerangka }) : gambarBenda(JENIS_BENDA_DENAH[id], kerangka);
+        id === "area_mandi"
+          ? gambarShower(varianShower, "kondisi", { kerangka, skalaRinci: SKALA_RINCI_SHOWER })
+          : gambarBenda(JENIS_BENDA_DENAH[id], kerangka);
       // Urutan gambar dari belakang ke depan: titik pijak benda yang lebih rendah di layar berarti lebih dekat kamera.
       const [x, y] = keRuang(kerangka, 0, 0);
       return { id, daftar, kedalaman: proyeksi(x, y, 0)[1] };
@@ -178,7 +183,7 @@ export function PratinjauRuangIso3D({
           <LapisPrimitif daftar={[lantai, ...dindingBelakang, ...dindingSamping]} garisDasar={1.6} />
           {susunan.map((b) => (
             <g key={b.id}>
-              <LapisPrimitif daftar={b.daftar} tebal={0.75} garisDasar={1.6} />
+              <LapisPrimitif daftar={b.daftar} tebal={b.id === "area_mandi" ? SKALA_RINCI_SHOWER : 0.75} garisDasar={1.6} />
             </g>
           ))}
         </g>
