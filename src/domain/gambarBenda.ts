@@ -23,14 +23,24 @@ export type JenisBenda = (typeof JENIS_BENDA)[number];
 const oval = (k: Kerangka, a: number, n: number, ra: number, rn: number, u: number, segmen = 32): Titik[] =>
   footprintOval(a, n, ra, rn, segmen).map(([x, y]) => titik(k, x, y, u));
 
+// Versi E (disetujui pemilik di papan Claude Design): mangkuk, kaki, dan cekungan digeser dari sumbu tangki supaya
+// pusatnya tampak sejajar dengan pusat tangki di layar (6 satuan layar ke kiri dan 6 ke atas = (-9,46; -2,54) di
+// koordinat lokal), dan satu garis menyambungkan dasar tangki ke badan mangkuk.
+const GESER_MANGKUK = { a: -9.464, n: -2.536 };
+// Panjang garis penyambung (satuan lokal) dari sudut bawah muka kanan tangki menerus ke arah n sampai badan mangkuk.
+const PANJANG_PENYAMBUNG = 14.56;
+
 function klosetDuduk(k: Kerangka): Primitif[] {
+  const { a, n } = GESER_MANGKUK;
+  const pusatN = 31 + n;
   return [
     ...kotak(k, -18, 18, 0, 18, 38, 80, "netral"),
     ...kotak(k, -20, 20, -1, 19.5, 80, 85, "netral"),
-    ...ekstrusi(k, footprintOval(0, 10, 3.5, 3.5, 12), 85, 88, "netral", true),
-    ...ekstrusi(k, footprintOval(0, 31, 11, 17, 24), 0, 28, "netral", true),
-    ...ekstrusi(k, footprintOval(0, 31, 18, 26, 32), 28, 46, "netral", true),
-    poligon("rongga", oval(k, 0, 31, 13, 21, 46), "netral"),
+    ...ekstrusi(k, footprintOval(0, 9.25, 3.5, 3.5, 12), 85, 88, "netral", true),
+    ...ekstrusi(k, footprintOval(a, pusatN, 11, 17, 24), 0, 28, "netral", true),
+    ...ekstrusi(k, footprintOval(a, pusatN, 18, 26, 32), 28, 46, "netral", true),
+    poligon("rongga", oval(k, a, pusatN, 12, 19, 46), "netral"),
+    { jenis: "garis", dari: titik(k, 18, 18, 38), ke: titik(k, 18, 18 + PANJANG_PENYAMBUNG, 38), gaya: "tegas", peran: "netral" },
   ];
 }
 
