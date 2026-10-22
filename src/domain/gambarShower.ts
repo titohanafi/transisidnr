@@ -227,9 +227,17 @@ export function ekstrusi(
     hasil.push({ ...poligon(terang ? "kanan" : "kiri", [atas[i], atas[j], bawah[j], bawah[i]], peran), tanpaGaris: licin });
   }
   if (licin && terlihat.length > 0) {
-    const awal = terlihat[0];
-    const akhir = (terlihat[terlihat.length - 1] + 1) % dunia.length;
-    hasil.push({ jenis: "garisPoli", titik: [...terlihat.map((i) => bawah[i]), bawah[akhir]], peran });
+    // Sisi yang terlihat berderet berurutan mengelilingi jejak, bisa melewati titik awal (indeks 0). Urutan dimulai
+    // dari sisi terlihat pertama setelah sisi yang tidak terlihat; tanpa ini siluet bawah menyambung dua ujung
+    // yang berjauhan dengan garis lurus yang memotong benda.
+    const ada = new Set(terlihat);
+    const n = dunia.length;
+    const mulai = terlihat.find((i) => !ada.has((i + n - 1) % n)) ?? terlihat[0];
+    const urutan: number[] = [];
+    for (let s = 0; s < n && ada.has((mulai + s) % n); s++) urutan.push((mulai + s) % n);
+    const awal = urutan[0];
+    const akhir = (urutan[urutan.length - 1] + 1) % n;
+    hasil.push({ jenis: "garisPoli", titik: [...urutan.map((i) => bawah[i]), bawah[akhir]], peran });
     hasil.push({ jenis: "garis", dari: atas[awal], ke: bawah[awal], gaya: "tegas", peran });
     hasil.push({ jenis: "garis", dari: atas[akhir], ke: bawah[akhir], gaya: "tegas", peran });
   }

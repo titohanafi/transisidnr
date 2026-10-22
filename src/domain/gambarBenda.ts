@@ -30,17 +30,12 @@ function klosetDuduk(k: Kerangka): Primitif[] {
     ...ekstrusi(k, footprintOval(0, 10, 3.5, 3.5, 12), 85, 88, "netral", true),
     ...ekstrusi(k, footprintOval(0, 31, 11, 17, 24), 0, 28, "netral", true),
     ...ekstrusi(k, footprintOval(0, 31, 18, 26, 32), 28, 46, "netral", true),
-    poligon("rongga", oval(k, 0, 33, 12, 19, 46), "netral"),
+    poligon("rongga", oval(k, 0, 31, 13, 21, 46), "netral"),
   ];
 }
 
 function klosetJongkok(k: Kerangka): Primitif[] {
-  return [
-    ...kotak(k, -18, 18, 0, 58, 0, 4, "netral"),
-    poligon("rongga", oval(k, 0, 22, 8, 19, 4), "netral"),
-    ...kotak(k, -15, -8, 38, 52, 4, 7, "netral"),
-    ...kotak(k, 8, 15, 38, 52, 4, 7, "netral"),
-  ];
+  return [...kotak(k, -18, 18, 0, 58, 0, 4, "netral"), poligon("rongga", oval(k, 0, 22, 8, 19, 4), "netral")];
 }
 
 function wastafel(k: Kerangka): Primitif[] {

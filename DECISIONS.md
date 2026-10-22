@@ -899,3 +899,8 @@
 - **Dibuat:** `src/domain/gambarBenda.ts` (kloset duduk, kloset jongkok, wastafel gantung, pintu terbuka ke dalam) dan `src/components/GambarBenda.tsx`, memakai alat yang sama dengan shower. Alat baru di `gambarShower.ts`: `ekstrusi` (benda dari jejak lantai bebas bentuk, termasuk oval dan persegi berputar, dengan sisi melengkung tanpa garis antar-segmen), `footprintOval`, `footprintPutar`, primitif `garisPoli`, dan nada `rongga`. Bingkai tiap benda dipasang otomatis (`bingkaiBenda`) supaya bisa dilihat dari dekat.
 - **Cara melihat:** `npm run dev`, lalu buka `/#/dev/shower` (semua benda ditampilkan di dinding kanan dan kiri).
 - **Belum:** benda-benda ini belum dipakai di aplikasi. Varian (mis. pintu geser, wastafel berkabinet) belum ada, dan Gemini belum mengenali jenis kloset/wastafel/pintu (hanya shower yang punya `varian`). Pintu digambar tanpa lubang pada dinding. Canvas isometrik SVG yang kameranya berputar sungguhan belum dibuat.
+
+## Perbaikan kloset duduk dan kloset jongkok (disetujui pemilik di papan Claude Design)
+- **Kloset duduk:** cekungan dudukan dipusatkan di mangkuk (sepusat, tepi dudukan merata), dan garis-garis bantu di mangkuk dan kaki dihapus. Penyebab garis bantu: siluet bawah pada `ekstrusi` menyambung dua ujung yang berjauhan bila sisi yang terlihat melewati titik awal jejak; kini urutannya dimulai dari sisi terlihat pertama setelah sisi tak terlihat. Wastafel (pipa) ikut terbantu.
+- **Kloset jongkok:** dua pijakan kaki dihapus (pemilik menyembunyikannya di papan).
+- **Alur kerja yang disepakati:** bentuk diubah di kode setelah desain disetujui di Claude Design; papan Acuan diperbarui dari kode, dan papan Eksplorasi terpisah untuk edit bebas. Tes mengunci gambar yang sudah disetujui.
