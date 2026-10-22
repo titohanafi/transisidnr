@@ -1,4 +1,4 @@
-import { Info, RotateCcw, RotateCw, X, ZoomIn } from "lucide-react";
+import { Info, RotateCw, X, ZoomIn } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { PilihanPil } from "./Pilihan";
 import { konten } from "../domain/content";
@@ -1268,40 +1268,30 @@ export function DenahKamarMandi({
           type="button"
           onClick={() => setPerbesar(true)}
           aria-label={t.denahPerbesar}
-          className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup shadow-kartu"
+          className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup shadow-kartu"
         >
           <ZoomIn className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
         </button>
 
         {/* Tombol putar: pojok KIRI atas kartu (bukan kanan, supaya tidak berdesakan dengan tombol perbesar) —
             cuma ada di tampilan isometrik, karena tampak-atas tidak punya "sisi dinding mana yang solid" untuk
-            diputar. Sengaja dua tombol terpisah (bukan satu tombol gilir) supaya arah putarannya jelas tanpa
-            perlu dibaca dulu, dan tetap 44×44px walau berdampingan. */}
+            diputar. Hanya satu tombol: sudut pandang cuma
+            ada dua (dinding samping kiri atau kanan), jadi tombol ini menggilir keduanya. */}
         {tampilan === "isometrik" && (
-          <div className="absolute left-3 top-3 flex gap-1">
-            <button
-              type="button"
-              onClick={() => putarSudut(-1)}
-              aria-label={t.denahPutarKiri}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup shadow-kartu"
-            >
-              <RotateCcw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
-            </button>
-            <button
-              type="button"
-              onClick={() => putarSudut(1)}
-              aria-label={t.denahPutarKanan}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup shadow-kartu"
-            >
-              <RotateCw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => putarSudut(1)}
+            aria-label={t.denahPutar}
+            className="absolute left-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup shadow-kartu"
+          >
+            <RotateCw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+          </button>
         )}
 
         {tampilan === "atas" ? (
           denahSvg("w-full max-w-[220px]")
         ) : MODE_ISO_3D ? (
-          <PratinjauRuangIso3D letak={letak} sudutAktif={sudutAktif} varianShower={varianShower} kelas="h-64 w-full max-w-[280px]" />
+          <PratinjauRuangIso3D letak={letak} sudutAktif={sudutAktif} varianShower={varianShower} kelas="h-80 w-full" />
         ) : (
           denahSvgIso("w-full max-w-[280px]")
         )}
@@ -1346,31 +1336,21 @@ export function DenahKamarMandi({
               type="button"
               onClick={() => setPerbesar(false)}
               aria-label={t.denahTutupPerbesar}
-              className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup"
+              className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup"
             >
               <X className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
             </button>
             {/* Tombol putar juga ada di popup (bukan cuma kartu kecil) — sama persis, cuma di sini perlu
                 pointerEvents eksplisit karena berada di dalam kartu yang menghentikan klik menembus ke backdrop. */}
             {tampilan === "isometrik" && (
-              <div className="absolute left-3 top-3 flex gap-1">
-                <button
-                  type="button"
-                  onClick={() => putarSudut(-1)}
-                  aria-label={t.denahPutarKiri}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup"
-                >
-                  <RotateCcw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => putarSudut(1)}
-                  aria-label={t.denahPutarKanan}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup"
-                >
-                  <RotateCw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => putarSudut(1)}
+                aria-label={t.denahPutar}
+                className="absolute left-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup"
+              >
+                <RotateCw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+              </button>
             )}
             {tampilan === "atas" ? (
               denahSvg("w-full max-w-none")

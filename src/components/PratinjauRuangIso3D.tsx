@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { titikDinding } from "../domain/denahGeometri";
 import { gambarBenda, type JenisBenda } from "../domain/gambarBenda";
-import { gambarShower, keRuang, kotak, poligon, TINGGI_DINDING_PANEL, type Kerangka, type Primitif } from "../domain/gambarShower";
+import {
+  gambarShower,
+  keRuang,
+  kotak,
+  poligon,
+  TINGGI_DINDING_PANEL,
+  type Kerangka,
+  type Primitif,
+  type Titik,
+} from "../domain/gambarShower";
 import { LANTAI_DALAM, LANTAI_LEBAR, posisiTigaMenempel } from "../domain/isoTigaGeometri";
 import { OBJEK_DENAH, type LetakDenah, type ObjekDenah, type VarianShower } from "../domain/pindai";
 import { bangunProyeksi } from "../lib/proyeksiIso3D";
@@ -17,9 +26,8 @@ const JENIS_BENDA_DENAH: Record<Exclude<ObjekDenah, "area_mandi">, JenisBenda> =
 // Frustum harus cukup besar untuk memuat lantai DAN tinggi dinding (kalau TINGGI_DINDING dinaikkan, bagian atas
 // dinding/pintu bisa terpotong) — dicek visual.
 const UKURAN_FRUSTUM = Math.max(Math.hypot(LANTAI_LEBAR, LANTAI_DALAM) / 2, TINGGI_DINDING * 1.1) * 1.2;
-// Setengah-lebar lantai di layar pada sudut isometrik, dengan sedikit ruang tepi; kanvas yang lebih sempit dari
-// tingginya memperbesar frustum supaya ruangan tidak terpotong di kiri-kanan.
-const SETENGAH_LEBAR_LAYAR = ((LANTAI_LEBAR + LANTAI_DALAM) / Math.SQRT2 / 2) * 1.08;
+// Margin gambar terhadap tepi kanvas (pecahan lebar/tinggi).
+const MARGIN = 0.05;
 const SKALA = TINGGI_DINDING / TINGGI_DINDING_PANEL;
 
 /** Azimuth kamera (radian) supaya dinding samping yang digambar SELALU di sisi jauh dari kamera (tidak menghalangi
@@ -74,12 +82,26 @@ export function PratinjauRuangIso3D({
 
   let gambar = null;
   if (ukuran) {
-    const proyeksi = bangunProyeksi(
-      azimuthDariSudut(sudutAktif.x),
-      ukuran.lebar,
-      ukuran.tinggi,
-      Math.max(UKURAN_FRUSTUM, (SETENGAH_LEBAR_LAYAR * ukuran.tinggi) / ukuran.lebar),
-    );
+    const dasar = bangunProyeksi(azimuthDariSudut(sudutAktif.x), ukuran.lebar, ukuran.tinggi, UKURAN_FRUSTUM);
+    // Pas-kan ruangan (lantai dan puncak dinding yang digambar) ke kanvas: diperbesar sebesar mungkin dan dipusatkan,
+    // berapa pun bentuk kartunya.
+    const sisiX = sudutAktif.x === "kanan" ? LANTAI_LEBAR / 2 : -LANTAI_LEBAR / 2;
+    const sudutRuang = [
+      dasar(-LANTAI_LEBAR / 2, -LANTAI_DALAM / 2, 0),
+      dasar(LANTAI_LEBAR / 2, -LANTAI_DALAM / 2, 0),
+      dasar(LANTAI_LEBAR / 2, LANTAI_DALAM / 2, 0),
+      dasar(-LANTAI_LEBAR / 2, LANTAI_DALAM / 2, 0),
+      dasar(-LANTAI_LEBAR / 2, -LANTAI_DALAM / 2, TINGGI_DINDING),
+      dasar(LANTAI_LEBAR / 2, -LANTAI_DALAM / 2, TINGGI_DINDING),
+      dasar(sisiX, LANTAI_DALAM / 2, TINGGI_DINDING),
+    ];
+    const [xMin, xMax] = [Math.min(...sudutRuang.map((t) => t[0])), Math.max(...sudutRuang.map((t) => t[0]))];
+    const [yMin, yMax] = [Math.min(...sudutRuang.map((t) => t[1])), Math.max(...sudutRuang.map((t) => t[1]))];
+    const pembesaran = Math.min((ukuran.lebar * (1 - 2 * MARGIN)) / (xMax - xMin), (ukuran.tinggi * (1 - 2 * MARGIN)) / (yMax - yMin));
+    const proyeksi = (x: number, y: number, z: number): Titik => {
+      const [px, py] = dasar(x, y, z);
+      return [(px - (xMin + xMax) / 2) * pembesaran + ukuran.lebar / 2, (py - (yMin + yMax) / 2) * pembesaran + ukuran.tinggi / 2];
+    };
     const lihat = { x: sudutAktif.x === "kanan" ? -1 : 1, y: 1 } as const;
 
     // Lantai dan dinding polos. Dinding digambar setebal TEBAL_DINDING (satuan ruangan; dibagi SKALA ke satuan panel).
@@ -146,7 +168,12 @@ export function PratinjauRuangIso3D({
     }).sort((a, b) => a.kedalaman - b.kedalaman);
 
     gambar = (
-      <svg viewBox={`0 0 ${ukuran.lebar} ${ukuran.tinggi}`} className="absolute inset-0 h-full w-full" aria-hidden="true" focusable="false">
+      <svg
+        viewBox={`0 0 ${ukuran.lebar} ${ukuran.tinggi}`}
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        aria-hidden="true"
+        focusable="false"
+      >
         <g strokeWidth={1.6} strokeLinejoin="round" strokeLinecap="round">
           <LapisPrimitif daftar={[lantai, ...dindingBelakang, ...dindingSamping]} garisDasar={1.6} />
           {susunan.map((b) => (

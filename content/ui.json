@@ -486,8 +486,7 @@
     "denahPetunjukNomor": "Ketuk nomor untuk melihat nama indikatornya.",
     "denahPerbesar": "Perbesar denah",
     "denahTutupPerbesar": "Tutup tampilan denah",
-    "denahPutarKiri": "Putar denah ke kiri",
-    "denahPutarKanan": "Putar denah ke kanan",
+    "denahPutar": "Lihat denah dari sisi lain",
     "status": {
       "ramah": "Mendukung",
       "perhatian": "Perhatian",
