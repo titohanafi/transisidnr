@@ -5,6 +5,7 @@ import {
   TINGGI_KANVAS,
   cerminkan,
   gambarShower,
+  langkahGambarShower,
   latarPanel,
   posisiKait,
   sudutSinggung,
@@ -175,5 +176,17 @@ describe("proyeksi", () => {
     const K = Math.sqrt(3) / 2;
     const turunan: Titik = [-Math.sin(th) * K, -Math.sin(th) * 0.5 - Math.cos(th)];
     expect(turunan[0] * d[1] - turunan[1] * d[0]).toBeCloseTo(0);
+  });
+});
+
+describe("langkah gambar yang ditampilkan", () => {
+  it("tiga langkah hanya untuk hand shower yang perlu perhatian", () => {
+    expect(langkahGambarShower("hand_shower_gantung", true)).toEqual(["kondisi", "hack", "permanen"]);
+    expect(langkahGambarShower("hand_shower_gantung", false)).toEqual(["kondisi"]);
+  });
+  it("varian lain hanya kondisi, dan tidak_jelas tanpa gambar", () => {
+    expect(langkahGambarShower("shower_tetap", true)).toEqual(["kondisi"]);
+    expect(langkahGambarShower("ember_gayung", true)).toEqual(["kondisi"]);
+    expect(langkahGambarShower("tidak_jelas", true)).toEqual([]);
   });
 });

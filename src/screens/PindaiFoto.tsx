@@ -3,18 +3,29 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { DenahKamarMandi } from "../components/DenahKamarMandi";
 import { Halaman } from "../components/Halaman";
+import { PanelShower } from "../components/PanelShower";
 import { HiasanLingkaran } from "../components/KartuHero";
 import { PilihanPil } from "../components/Pilihan";
 import { PeringatanNonMedis } from "../components/PeringatanNonMedis";
 import { Tombol, TombolLink } from "../components/Tombol";
 import { konten } from "../domain/content";
-import { hitungSkor, nomorItemHasil, POSISI_BAWAAN, type ObjekDenah, type PosisiObjek, type StatusItem } from "../domain/pindai";
+import {
+  hitungSkor,
+  nomorItemHasil,
+  POSISI_BAWAAN,
+  type ObjekDenah,
+  type PosisiObjek,
+  type StatusItem,
+  type VarianShower,
+} from "../domain/pindai";
 import { kecilkanFoto } from "../lib/foto";
 import { GalatPindai, pindaiFoto } from "../lib/pindai";
 import { isi } from "../lib/teks";
 
 const t = konten.ui.pindai;
 const ID_ITEM = t.item.map((i) => i.id);
+// Hal yang gambar jenis shower-nya ditampilkan (indikator "Keran dan shower", M-07 di checklist tim riset).
+const ID_ITEM_SHOWER = "jangkauan";
 
 type Tahap =
   | { nama: "pilih" }
@@ -29,6 +40,8 @@ type Tahap =
       sumber: "pindai" | "ceklis";
       temuan: Record<string, StatusItem>;
       objek: Record<ObjekDenah, PosisiObjek>;
+      /** Jenis shower yang terbaca dari foto; "tidak_jelas" bila dari ceklis manual atau tidak terbaca. */
+      varianShower: VarianShower;
     };
 
 const GAYA_STATUS: Record<StatusItem, string> = {
@@ -96,7 +109,7 @@ export function PindaiFoto() {
     try {
       const hasil = await pindaiFoto(foto, ID_ITEM);
       if (!hasil.kamarMandi) setTahap({ nama: "galat", pesan: t.bukanKamarMandi });
-      else setTahap({ nama: "hasil", sumber: "pindai", temuan: hasil.temuan, objek: hasil.objek });
+      else setTahap({ nama: "hasil", sumber: "pindai", temuan: hasil.temuan, objek: hasil.objek, varianShower: hasil.varianShower });
     } catch (e) {
       const kode = e instanceof GalatPindai ? e.kode : null;
       setTahap({
@@ -281,14 +294,18 @@ export function PindaiFoto() {
             </div>
             <Tombol
               className="mt-4 w-full"
-              onClick={() => setTahap({ nama: "hasil", sumber: "ceklis", temuan: tahap.jawaban, objek: POSISI_BAWAAN })}
+              onClick={() =>
+                setTahap({ nama: "hasil", sumber: "ceklis", temuan: tahap.jawaban, objek: POSISI_BAWAAN, varianShower: "tidak_jelas" })
+              }
             >
               {t.lihatHasil}
             </Tombol>
           </section>
         )}
 
-        {tahap.nama === "hasil" && <Hasil sumber={tahap.sumber} temuan={tahap.temuan} objek={tahap.objek} onUlang={ulang} />}
+        {tahap.nama === "hasil" && (
+          <Hasil sumber={tahap.sumber} temuan={tahap.temuan} objek={tahap.objek} varianShower={tahap.varianShower} onUlang={ulang} />
+        )}
       </div>
     </Halaman>
   );
@@ -298,17 +315,21 @@ function Hasil({
   sumber,
   temuan: temuanAwal,
   objek,
+  varianShower,
   onUlang,
 }: {
   sumber: "pindai" | "ceklis";
   temuan: Record<string, StatusItem>;
   objek: Record<ObjekDenah, PosisiObjek>;
+  varianShower: VarianShower;
   onUlang: () => void;
 }) {
   // Jawaban Gemini (atau ceklis manual) cuma titik awal: tiap hal di "Rincian per hal" bisa dikoreksi user sendiri
   // (lihat pil Ya/Tidak/Tidak yakin di bawah), karena penyandang disabilitas/caregiver yang paling tahu kondisi
   // ruangnya sendiri, bukan tebakan dari foto. Perubahan ikut mengubah denah, ringkasan, dan tab - satu sumber data.
   const [temuan, setTemuan] = useState(temuanAwal);
+  // Jenis shower dari foto juga cuma titik awal: pengguna bisa menggantinya (lihat PanelShower).
+  const [varian, setVarian] = useState(varianShower);
   const skor = hitungSkor(temuan, ID_ITEM);
   const tingkat = t.tingkat[skor.tingkat];
   const NOMOR_ITEM = nomorItemHasil(ID_ITEM, temuan);
@@ -417,6 +438,7 @@ function Hasil({
                       {it.nama}
                     </p>
                     <p className="mt-1 text-kecil text-redup">{it.cek}</p>
+
                     {konfirmasi ? (
                       // Konfirmasi sesaat (lihat komentar `fase` di atas) — ganti tempat pil Ya/Tidak/Tidak yakin
                       // supaya user tahu jawabannya tersimpan dan ke mana kartu ini pindah, bukan cuma hilang.
@@ -449,6 +471,14 @@ function Hasil({
                           </Link>
                         )}
                       </>
+                    )}
+                    {it.id === ID_ITEM_SHOWER && !konfirmasi && (
+                      <PanelShower
+                        varian={varian}
+                        onUbahVarian={setVarian}
+                        perhatian={statusKini === "perhatian"}
+                        dariFoto={sumber === "pindai" && varian === varianShower}
+                      />
                     )}
                   </li>
                 );

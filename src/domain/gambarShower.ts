@@ -294,6 +294,16 @@ export function gambarShower(
   }
 }
 
+/**
+ * Langkah gambar yang ditampilkan untuk satu jenis shower. Tiga langkah (kondisi, hack, permanen) hanya untuk hand
+ * shower yang ditandai perlu perhatian, karena hanya itu yang punya gambar perbaikan; varian lain satu gambar
+ * kondisi; "tidak_jelas" tidak menampilkan gambar (pengguna diminta memilih jenisnya).
+ */
+export function langkahGambarShower(varian: VarianShower, perhatian: boolean): ModeGambar[] {
+  if (varian === "tidak_jelas") return [];
+  return varian === "hand_shower_gantung" && perhatian ? ["kondisi", "hack", "permanen"] : ["kondisi"];
+}
+
 /** Cermin kiri-kanan di sumbu tengah kanvas (dinding kiri): sisi terang/gelap tetap mengikuti arah, jadi label muka ditukar. */
 export function cerminkan(daftar: Primitif[]): Primitif[] {
   const x = (v: number) => LEBAR_KANVAS - v;

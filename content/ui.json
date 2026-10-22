@@ -504,6 +504,37 @@
       "ember_gayung_kondisi": "Tanpa shower. Air ditampung dari keran ke ember di lantai dan disiramkan dengan gayung.",
       "tidak_jelas_kondisi": "Bentuk netral bergaris putus-putus dengan tanda tanya, karena jenis shower tidak terbaca dari foto."
     },
+    "panelShower": {
+      "judul": "Jenis shower di kamar mandi Anda",
+      "terbacaDariFoto": "Terbaca dari foto. Ganti bila tidak sesuai.",
+      "petunjukJenis": "Jenis shower belum terbaca. Pilih yang paling mirip supaya gambar contoh sesuai.",
+      "nama": {
+        "hand_shower_gantung": "Hand shower digantung",
+        "shower_tetap": "Shower tetap di dinding",
+        "ember_gayung": "Ember dan gayung",
+        "tidak_jelas": "Tidak yakin"
+      },
+      "lihatContoh": "Lihat contoh perbaikan",
+      "langkah": {
+        "kondisi": {
+          "label": "Kondisi",
+          "sub": "contoh",
+          "isi": "Hand shower tergantung di kait yang tinggi, di luar zona jangkauan dari kursi roda."
+        },
+        "hack": {
+          "label": "Hack",
+          "sub": "tanpa bongkar",
+          "isi": "Pindahkan hand shower ke holder berperekat yang lebih rendah, di dalam zona jangkauan. Selang yang panjang tetap sampai ke keluaran air."
+        },
+        "permanen": {
+          "label": "Permanen",
+          "sub": "renovasi",
+          "isi": "Ganti keran putar dengan keran tuas, dan pasang holder hand shower dengan sekrup di zona jangkauan."
+        }
+      },
+      "istilah": "Hand shower: shower yang bisa dipegang, dengan selang. Zona jangkauan: bagian dinding yang masih terjangkau tangan dari kursi roda. Keran tuas: keran yang dibuka dengan menekan tuasnya, tanpa memutar.",
+      "catatanGambar": "Gambar hanya contoh, bukan ukuran. Angka menyusul setelah ditinjau ahli."
+    },
     "item": [
       {
         "id": "lantai",
