@@ -67,13 +67,12 @@ export const DASAR_Y: Record<ObjekDenah, number> = {
 // kiri/kanan perlu dibalik 180°. Diverifikasi ulang oleh user: kiri+kanan benar (ronde ini), depan+belakang
 // SEBELUMNYA benar sebelum sempat ikut dibalik 180° secara keliru (ronde sebelumnya) — sekarang dikembalikan ke 0.
 //
-// area_mandi: dinding kiri+kanan diverifikasi BENAR di 90° (lihat riwayat sebelumnya: dicek dari nol pakai
-// AxesHelper + uji 0°/90°/180°/270° di dinding belakang). TAPI dinding depan/belakang user laporkan masih
-// menghadap ke dinding (SALAH) — pola identik dengan kloset/wastafel di atas (yang benar untuk satu pasang
-// dinding ternyata salah untuk pasangan lainnya). Dinding depan/belakang BELUM diverifikasi ulang ke nilai yang
-// benar (menyusul — perlu alat kalibrasi diperbaiki dulu, sel depan/belakang kosong karena bug rendering
-// terpisah, lihat TODO di KalibrasiRotasiDev.tsx) — SEMENTARA dibiarkan 90° (BELUM TERVERIFIKASI untuk dinding
-// ini, jangan dianggap benar sampai ditandai user).
+// area_mandi: dinding kiri+kanan diverifikasi BENAR di 90° (dicek dari nol pakai AxesHelper + uji 0°/90°/180°/
+// 270° di dinding belakang). Dinding depan/belakang sempat dibiarkan 90° juga (asumsi generalisasi) tapi user
+// laporkan MASIH menghadap ke dinding — pola identik dengan kloset/wastafel (pasangan dinding yang satu butuh
+// +180° dari pasangan lainnya). Setelah bug kamera alat kalibrasi diperbaiki (lihat TODO lama di
+// KalibrasiRotasiDev.tsx — sudah selesai, sel depan/belakang sekarang tampil), dicoba 90°+180°=270° untuk
+// depan/belakang — BELUM diverifikasi user, menyusul.
 //
 // pintu: pengguna belum menandai salah untuk rotasi dasarnya di dinding manapun — tapi mencatat masalah LAIN yang
 // lebih dalam (lihat DECISIONS.md): posisi gagang/arah bukaan pintu seharusnya tergantung dekat sudut dinding
@@ -82,7 +81,10 @@ export const ROTASI_KALIBRASI: Record<ObjekDenah, Record<DindingDenah, number>> 
   pintu: { kiri: 0, kanan: 0, depan: 0, belakang: 0 },
   kloset: { kiri: Math.PI, kanan: Math.PI, depan: 0, belakang: 0 },
   wastafel: { kiri: Math.PI, kanan: Math.PI, depan: 0, belakang: 0 },
-  area_mandi: { kiri: Math.PI / 2, kanan: Math.PI / 2, depan: Math.PI / 2, belakang: Math.PI / 2 },
+  // kiri/kanan diverifikasi benar di 90°. depan/belakang user laporkan MASIH menghadap dinding di 90° yang sama —
+  // pola identik dengan kloset/wastafel (pasangan dinding yang satu butuh +180° dari pasangan lainnya). Dicoba
+  // +180° dari nilai kiri/kanan (270°) — BELUM diverifikasi user, menyusul.
+  area_mandi: { kiri: Math.PI / 2, kanan: Math.PI / 2, depan: (3 * Math.PI) / 2, belakang: (3 * Math.PI) / 2 },
 };
 
 // Kemiringan TAMBAHAN (radian, sumbu-X LOKAL model, diterapkan ke `model` BUKAN `pembungkus`) khusus area_mandi:
@@ -97,9 +99,13 @@ export const KEMIRINGAN_AREA_MANDI = -0.55;
 // shower dinding kanan di KalibrasiRotasiDev.tsx, dibesarkan sampai lingkaran kepala shower kebaca jelas) —
 // 0.3 rad sempat dikira pas (bulat simetris) lewat cek visual asisten AI, TAPI user melaporkan hasilnya masih
 // mengarah ke "jam 7" (seharusnya "jam 6" tepat lurus ke bawah) — bacaan visual asisten AI lagi-lagi kurang
-// presisi. Diturunkan ke 0.15 sebagai percobaan berikutnya — BELUM diverifikasi user, perlu dicek ulang lewat
-// alat kalibrasi.
-export const KEMIRINGAN_AREA_MANDI_ROLL = 0.15;
+// presisi. 0.15 (percobaan berikutnya) TERNYATA tidak terlihat berubah sama sekali dari sudut pandang user —
+// kemungkinan karena urutan komposisi Euler Three.js (order bawaan "XYZ": roll sumbu-Z diterapkan DULU ke
+// vertex, baru kemiringan sumbu-X — bukan sebaliknya seperti intuisi awal), jadi efek roll terhadap sudut yang
+// TERLIHAT tidak linear/sederhana. Diselesaikan dengan sapuan visual beberapa nilai sekaligus (bukan satu-satu)
+// — 0.6 rad membuat lengan terlihat tegak lurus persis di ATAS lingkaran kepala shower (bukan diagonal), artinya
+// kepala shower menggantung lurus ke bawah dari titik tempelnya — ini "jam 6" yang dimaksud user.
+export const KEMIRINGAN_AREA_MANDI_ROLL = 0.6;
 
 /** Benda yang SUNGGUHAN menempel/tertanam di dinding (dipakai `posisiTigaMenempel`, bukan `posisiTiga`) — beda
  *  dari benda berdiri bebas (kloset/wastafel) yang wajar punya jarak dari dinding. Lihat komentar di
