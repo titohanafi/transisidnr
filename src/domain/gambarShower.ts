@@ -17,7 +17,8 @@ export type Peran = "netral" | "aksen" | "hantu";
 export type Muka = "atas" | "kanan" | "kiri";
 
 export type Primitif =
-  | { jenis: "poligon"; muka: Muka | "latar" | "zona" | "pita"; titik: Titik[]; peran: Peran }
+  | { jenis: "poligon"; muka: Muka | "latar" | "zona" | "pita" | "rongga"; titik: Titik[]; peran: Peran; tanpaGaris?: boolean }
+  | { jenis: "garisPoli"; titik: Titik[]; peran: Peran; putus?: boolean }
   | { jenis: "elips"; cx: number; cy: number; rx: number; ry: number; tingkat: "atas" | "rongga" | "tutup"; peran: Peran }
   | { jenis: "badan"; cx: number; yAtas: number; yBawah: number; rx: number; ry: number; muka: "kanan" | "kiri"; peran: Peran }
   | {
@@ -71,7 +72,7 @@ export function kerangkaPanel(sisi: SisiDinding): Kerangka {
   return { dinding: sisi === "kanan" ? "belakang" : "kiri", sepanjang: 0, bidang: 0, proyeksi: proyeksiPanel, skala: 1 };
 }
 
-function keRuang(k: Kerangka, a: number, n: number): readonly [number, number] {
+export function keRuang(k: Kerangka, a: number, n: number): readonly [number, number] {
   switch (k.dinding) {
     case "belakang":
       return [k.sepanjang + a, k.bidang + n];
@@ -108,7 +109,7 @@ function sumbuU(k: Kerangka): Titik {
  * Piksel layar untuk satu satuan lokal gambar: skala benda dikali panjang satu satuan dunia di layar. Pada panel dan
  * denah SVG satu satuan dunia = 1 piksel, jadi nilainya sama dengan `skala`; pada kamera 3D nilainya lebih besar.
  */
-function pikselPerSatuan(k: Kerangka): number {
+export function pikselPerSatuan(k: Kerangka): number {
   const [x, y] = sumbuA(k);
   return k.skala * Math.hypot(x, y);
 }
@@ -128,7 +129,11 @@ export function ukuranShower(): UkuranShower {
   return { zonaBawah: bawah.cm * SKALA, zonaAtas: atas.cm * SKALA };
 }
 
-const poligon = (muka: Muka | "latar" | "zona" | "pita", pts: Titik[], peran: Peran): Primitif => ({
+export const poligon = (
+  muka: Muka | "latar" | "zona" | "pita" | "rongga",
+  pts: Titik[],
+  peran: Peran,
+): Extract<Primitif, { jenis: "poligon" }> => ({
   jenis: "poligon",
   muka,
   titik: pts,
@@ -136,7 +141,7 @@ const poligon = (muka: Muka | "latar" | "zona" | "pita", pts: Titik[], peran: Pe
 });
 
 /** Kotak pada koordinat lokal: tiga sisi yang terlihat dari kamera (atas dan dua sisi tegak yang menghadap kamera). */
-function kotak(k: Kerangka, a0: number, a1: number, n0: number, n1: number, u0: number, u1: number, peran: Peran): Primitif[] {
+export function kotak(k: Kerangka, a0: number, a1: number, n0: number, n1: number, u0: number, u1: number, peran: Peran): Primitif[] {
   const [xa, ya] = keRuang(k, a0 * k.skala, n0 * k.skala);
   const [xb, yb] = keRuang(k, a1 * k.skala, n1 * k.skala);
   const [x0, x1] = [Math.min(xa, xb), Math.max(xa, xb)];
@@ -156,6 +161,80 @@ function kotak(k: Kerangka, a0: number, a1: number, n0: number, n1: number, u0: 
     poligon(mukaX, [p(xf, y0, z1), p(xf, y1, z1), p(xf, y1, z0), p(xf, y0, z0)], peran),
     poligon(mukaY, [p(x0, yf, z1), p(x1, yf, z1), p(x1, yf, z0), p(x0, yf, z0)], peran),
   ];
+}
+
+/** Titik keliling oval datar (setengah-lebar `ra` sepanjang dinding, setengah-dalam `rn` menjauhi dinding) berpusat di (a, n). */
+export function footprintOval(a: number, n: number, ra: number, rn: number, segmen = 28): [number, number][] {
+  return Array.from({ length: segmen }, (_, i) => {
+    const th = (i / segmen) * Math.PI * 2;
+    return [a + ra * Math.cos(th), n + rn * Math.sin(th)];
+  });
+}
+
+/** Persegi panjang berputar: berpusat di (a, n), setengah-panjang `rp` searah sudut `sudut` (radian dari sumbu `a`), setengah-tebal `rt`. */
+export function footprintPutar(a: number, n: number, rp: number, rt: number, sudut: number): [number, number][] {
+  const [c, s] = [Math.cos(sudut), Math.sin(sudut)];
+  return (
+    [
+      [-rp, -rt],
+      [rp, -rt],
+      [rp, rt],
+      [-rp, rt],
+    ] as const
+  ).map(([x, y]) => [a + x * c - y * s, n + x * s + y * c]);
+}
+
+/**
+ * Benda dari jejak lantai bebas bentuk (cembung), diekstrusi dari `u0` ke `u1`: tutup atas dan sisi tegak yang
+ * menghadap kamera. `licin` = sisi melengkung tanpa garis antar-segmen (hanya siluet dan tepi atas), untuk oval;
+ * bila tidak, setiap sisi bergaris seperti kotak.
+ */
+export function ekstrusi(
+  k: Kerangka,
+  jejak: readonly (readonly [number, number])[],
+  u0: number,
+  u1: number,
+  peran: Peran,
+  licin = false,
+): Primitif[] {
+  const lihat = k.lihat ?? { x: 1, y: 1 };
+  const dunia = jejak.map(([a, n]) => keRuang(k, a * k.skala, n * k.skala));
+  const pusat: [number, number] = [dunia.reduce((s, p) => s + p[0], 0) / dunia.length, dunia.reduce((s, p) => s + p[1], 0) / dunia.length];
+  const atas = dunia.map(([x, y]) => k.proyeksi(x, y, u1 * k.skala));
+  const bawah = dunia.map(([x, y]) => k.proyeksi(x, y, u0 * k.skala));
+  const o = k.proyeksi(0, 0, 0);
+  const hasil: Primitif[] = [];
+  const terlihat: number[] = [];
+  for (let i = 0; i < dunia.length; i++) {
+    const j = (i + 1) % dunia.length;
+    const [ax, ay] = dunia[i];
+    const [bx, by] = dunia[j];
+    let nx = by - ay;
+    let ny = -(bx - ax);
+    if (nx * ((ax + bx) / 2 - pusat[0]) + ny * ((ay + by) / 2 - pusat[1]) < 0) {
+      nx = -nx;
+      ny = -ny;
+    }
+    // Sisi yang nyaris sejajar arah pandang tidak ikut digambar (lebarnya di layar nol; ambang menghindari noise hitung).
+    if (nx * lihat.x + ny * lihat.y <= 1e-6 * Math.hypot(nx, ny)) continue;
+    terlihat.push(i);
+    const [lx, ly] = k.proyeksi(nx, ny, 0);
+    const normalLayar = lx - o[0];
+    // Sisi yang menghadap tepat ke arah kamera (normal tegak di layar) dianggap searah sumbu `a`, supaya hasilnya
+    // stabil dan dinding kiri tetap cermin dinding kanan.
+    const seri = Math.abs(normalLayar) < 1e-6 * Math.hypot(normalLayar, ly - o[1]);
+    const terang = seri ? sumbuA(k)[0] >= 0 : normalLayar >= 0;
+    hasil.push({ ...poligon(terang ? "kanan" : "kiri", [atas[i], atas[j], bawah[j], bawah[i]], peran), tanpaGaris: licin });
+  }
+  if (licin && terlihat.length > 0) {
+    const awal = terlihat[0];
+    const akhir = (terlihat[terlihat.length - 1] + 1) % dunia.length;
+    hasil.push({ jenis: "garisPoli", titik: [...terlihat.map((i) => bawah[i]), bawah[akhir]], peran });
+    hasil.push({ jenis: "garis", dari: atas[awal], ke: bawah[awal], gaya: "tegas", peran });
+    hasil.push({ jenis: "garis", dari: atas[akhir], ke: bawah[akhir], gaya: "tegas", peran });
+  }
+  hasil.push(poligon("atas", atas, peran));
+  return hasil;
 }
 
 /** Sudut parameter (radian) tempat tepi elips cakram sejajar arah tebal `d`; dipakai untuk garis siluet silinder. */

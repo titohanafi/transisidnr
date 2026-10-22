@@ -12,9 +12,17 @@ import {
 } from "../domain/gambarShower";
 import type { VarianShower } from "../domain/pindai";
 
-type Bidang = "atas" | "kanan" | "kiri" | "latar" | "zona" | "pita";
+type Bidang = "atas" | "kanan" | "kiri" | "latar" | "zona" | "pita" | "rongga";
 const ISI: Record<Peran, Record<Bidang, string>> = {
-  netral: { atas: "fill-white", kanan: "fill-luar", kiri: "fill-garis", latar: "fill-white", zona: "fill-utama/10", pita: "fill-garis" },
+  netral: {
+    atas: "fill-white",
+    kanan: "fill-luar",
+    kiri: "fill-garis",
+    latar: "fill-white",
+    zona: "fill-utama/10",
+    pita: "fill-garis",
+    rongga: "fill-garis",
+  },
   aksen: {
     atas: "fill-utama-muda",
     kanan: "fill-utama-redup",
@@ -22,8 +30,17 @@ const ISI: Record<Peran, Record<Bidang, string>> = {
     latar: "fill-white",
     zona: "fill-utama/10",
     pita: "fill-utama/40",
+    rongga: "fill-utama/40",
   },
-  hantu: { atas: "fill-none", kanan: "fill-none", kiri: "fill-none", latar: "fill-none", zona: "fill-none", pita: "fill-none" },
+  hantu: {
+    atas: "fill-none",
+    kanan: "fill-none",
+    kiri: "fill-none",
+    latar: "fill-none",
+    zona: "fill-none",
+    pita: "fill-none",
+    rongga: "fill-none",
+  },
 };
 const GARIS: Record<Peran, string> = { netral: "stroke-tinta", aksen: "stroke-utama", hantu: "stroke-garisKontrol" };
 const ISI_BADAN: Record<Peran, Record<"kanan" | "kiri", string>> = {
@@ -67,12 +84,21 @@ function Bentuk({ s, penanda, m }: { s: Primitif; penanda: string; m: number }) 
       return (
         <polygon
           points={kePoin(s.titik)}
-          className={`${ISI[s.peran][s.muka]} ${s.muka === "pita" ? "stroke-none" : GARIS[s.peran]}`}
+          className={`${ISI[s.peran][s.muka]} ${s.muka === "pita" || s.tanpaGaris ? "stroke-none" : GARIS[s.peran]}`}
           strokeDasharray={hantu ? "5 4" : undefined}
           strokeWidth={hantu ? 1.8 * m : undefined}
         />
       );
     }
+    case "garisPoli":
+      return (
+        <polyline
+          points={kePoin(s.titik)}
+          className={`fill-none ${GARIS[s.peran]}`}
+          strokeDasharray={s.putus || s.peran === "hantu" ? "5 4" : undefined}
+          strokeWidth={s.peran === "hantu" ? 1.8 * m : undefined}
+        />
+      );
     case "elips": {
       const lebar = s.tingkat === "tutup" ? 1.2 * m : s.tingkat === "rongga" ? 1.4 * m : undefined;
       const kelas = s.tingkat === "atas" ? ISI_ATAS[s.peran] : s.tingkat === "rongga" ? ISI_RONGGA[s.peran] : "fill-none";

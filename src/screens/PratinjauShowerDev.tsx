@@ -1,4 +1,6 @@
+import { GambarBenda } from "../components/GambarBenda";
 import { GambarShower } from "../components/GambarShower";
+import { JENIS_BENDA } from "../domain/gambarBenda";
 import type { ModeGambar, SisiDinding } from "../domain/gambarShower";
 import type { VarianShower } from "../domain/pindai";
 
@@ -31,6 +33,14 @@ export function PratinjauShowerDev() {
           <figcaption style={{ fontSize: 13 }}>{`${k.varian} / ${k.mode} / ${k.sisi}`}</figcaption>
         </figure>
       ))}
+      {JENIS_BENDA.flatMap((jenis) =>
+        (["kanan", "kiri"] as const).map((sisi) => (
+          <figure key={`${jenis}${sisi}`} style={{ margin: 0, border: "1.5px solid #1F2933", borderRadius: 10, padding: 8 }}>
+            <GambarBenda jenis={jenis} sisi={sisi} className="" />
+            <figcaption style={{ fontSize: 13 }}>{`${jenis} / ${sisi}`}</figcaption>
+          </figure>
+        )),
+      )}
     </main>
   );
 }

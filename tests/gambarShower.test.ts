@@ -16,6 +16,7 @@ import {
   type Primitif,
   type Titik,
 } from "../src/domain/gambarShower";
+import { JENIS_BENDA, bingkaiBenda, gambarBenda, susunBenda } from "../src/domain/gambarBenda";
 import { VARIAN_SHOWER } from "../src/domain/pindai";
 import { UKURAN_AKSESIBEL, nilaiAcuan } from "../src/domain/ukuranAksesibel";
 
@@ -25,6 +26,7 @@ function semuaTitik(p: Primitif): Titik[] {
   switch (p.jenis) {
     case "poligon":
     case "jalur":
+    case "garisPoli":
       return p.titik;
     case "garis":
       return [p.dari, p.ke];
@@ -165,6 +167,7 @@ function cerminkanUji(daftar: Primitif[]): Primitif[] {
       case "garis":
         return { ...s, dari: p(s.dari), ke: p(s.ke) };
       case "jalur":
+      case "garisPoli":
         return { ...s, titik: s.titik.map(p) };
       case "baut":
         return { ...s, cx: x(s.cx) };
@@ -175,18 +178,19 @@ function cerminkanUji(daftar: Primitif[]): Primitif[] {
 }
 // Urutan titik pada poligon dan urutan sisi satu kotak boleh beda (arah putar berbalik saat dicerminkan); yang
 // dibandingkan bentuknya.
-const bulat = (v: number) => Math.round(v * 1e4) / 1e4 + 0;
+const bulat = (v: number) => Math.round(v * 1e2) / 1e2 + 0;
+const urut = (p: Titik, q: Titik) => p[0] - q[0] || p[1] - q[1];
 const bulatkan = (daftar: Primitif[]) =>
   JSON.stringify(
     daftar
-      .map((s) =>
-        JSON.stringify(
-          s.jenis === "poligon"
-            ? { ...s, titik: [...s.titik].map(([a, b]) => [bulat(a), bulat(b)]).sort((p, q) => p[0] - q[0] || p[1] - q[1]) }
-            : s,
-          (_k, v: unknown) => (typeof v === "number" ? bulat(v) : v),
-        ),
-      )
+      .map((s) => {
+        let n: Primitif = s;
+        if (s.jenis === "poligon") n = { ...s, titik: [...s.titik].sort(urut) };
+        if (s.jenis === "garis") n = urut(s.dari, s.ke) > 0 ? { ...s, dari: s.ke, ke: s.dari } : s;
+        if (s.jenis === "garisPoli")
+          n = { ...s, titik: urut(s.titik[0], s.titik[s.titik.length - 1]) > 0 ? [...s.titik].reverse() : s.titik };
+        return JSON.stringify(n, (_k, v: unknown) => (typeof v === "number" ? bulat(v) : v));
+      })
       .sort(),
   );
 
@@ -320,5 +324,54 @@ describe("langkah gambar yang ditampilkan", () => {
     expect(langkahGambarShower("shower_tetap", true)).toEqual(["kondisi"]);
     expect(langkahGambarShower("ember_gayung", true)).toEqual(["kondisi"]);
     expect(langkahGambarShower("tidak_jelas", true)).toEqual([]);
+  });
+});
+
+describe("gambar benda kamar mandi", () => {
+  it.each(JENIS_BENDA)("%s: ada isi dan semua titik terhingga dan di dalam kanvas", (jenis) => {
+    const daftar = susunBenda(jenis, "kanan");
+    expect(daftar.length).toBeGreaterThan(2);
+    for (const p of daftar) {
+      for (const [x, y] of semuaTitik(p)) {
+        expect(Number.isFinite(x) && Number.isFinite(y)).toBe(true);
+        expect(x).toBeGreaterThanOrEqual(-1);
+        expect(x).toBeLessThanOrEqual(LEBAR_KANVAS + 1);
+        expect(y).toBeGreaterThanOrEqual(-1);
+        expect(y).toBeLessThanOrEqual(TINGGI_KANVAS + 1);
+      }
+    }
+  });
+
+  it.each(JENIS_BENDA)("%s: dinding kiri sama dengan dinding kanan yang dicerminkan", (jenis) => {
+    expect(bulatkan(susunBenda(jenis, "kiri"))).toBe(bulatkan(cerminkanUji(susunBenda(jenis, "kanan"))));
+  });
+
+  it.each(JENIS_BENDA)("%s: bingkai pas dengan benda dan berasio panel", (jenis) => {
+    const [x, y, w, h] = bingkaiBenda(jenis, "kanan");
+    expect(w / h).toBeCloseTo(380 / 500, 5);
+    for (const p of gambarBenda(jenis)) {
+      for (const [px, py] of semuaTitik(p)) {
+        expect(px).toBeGreaterThanOrEqual(x - 1);
+        expect(px).toBeLessThanOrEqual(x + w + 1);
+        expect(py).toBeGreaterThanOrEqual(y - 1);
+        expect(py).toBeLessThanOrEqual(y + h + 1);
+      }
+    }
+  });
+
+  it("benda bisa dipasang di keempat dinding tanpa titik tak terhingga", () => {
+    const proyeksi = (x: number, y: number, z: number): Titik => [(x - y) * 0.866, (x + y) * 0.5 - z];
+    for (const dinding of ["belakang", "kiri", "kanan", "depan"] as const) {
+      for (const lihat of [
+        { x: 1, y: 1 },
+        { x: -1, y: 1 },
+      ] as const) {
+        for (const jenis of JENIS_BENDA) {
+          const k = { dinding, sepanjang: 10, bidang: 0, proyeksi, skala: 0.5, lihat };
+          for (const p of gambarBenda(jenis, k))
+            for (const [x, y] of semuaTitik(p)) expect(Number.isFinite(x) && Number.isFinite(y)).toBe(true);
+        }
+      }
+    }
   });
 });

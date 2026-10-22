@@ -504,6 +504,12 @@
       "ember_gayung_kondisi": "Tanpa shower. Air ditampung dari keran ke ember di lantai dan disiramkan dengan gayung.",
       "tidak_jelas_kondisi": "Bentuk netral bergaris putus-putus dengan tanda tanya, karena jenis shower tidak terbaca dari foto."
     },
+    "gambarBenda": {
+      "kloset_duduk": "Kloset duduk dengan tangki di belakang, menempel pada dinding.",
+      "kloset_jongkok": "Kloset jongkok rata dengan lantai, dengan dua pijakan kaki.",
+      "wastafel": "Wastafel gantung dengan keran, dipasang di dinding dengan siku penopang.",
+      "pintu": "Pintu terbuka ke dalam ruangan, dengan garis putus-putus untuk lintasan ayunnya."
+    },
     "panelShower": {
       "judul": "Jenis shower di kamar mandi Anda",
       "terbacaDariFoto": "Terbaca dari foto. Ganti bila tidak sesuai.",

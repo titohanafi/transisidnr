@@ -521,6 +521,7 @@ export const uiSchema = z
       ulang: teks,
       keRencana: teks,
       gambarShower: rekamTeks,
+      gambarBenda: rekamTeks,
       panelShower: z.object({
         judul: teks,
         terbacaDariFoto: teks,
