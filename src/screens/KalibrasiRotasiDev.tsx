@@ -5,6 +5,16 @@
 // benda dirender SENDIRIAN menempel SATU dinding, dengan kamera TEGAK LURUS ke dinding itu (bukan isometrik) —
 // supaya "menghadap ke ruangan" vs "menghadap ke dinding" tidak ambigu. User menandai tiap sel Benar/Salah
 // sendiri; asisten AI TIDAK BOLEH mengklaim kalibrasi benar tanpa tanda ini.
+//
+// BUG DIKETAHUI (belum diperbaiki): sel "area_mandi" di dinding "depan" dan "belakang" kadang tampil KOSONG
+// (bukan kepotong — benar-benar tidak ada apa pun yang dirender, bahkan lantai/dindingnya). Beberapa teori sudah
+// dicoba & terbukti SALAH: (1) dinding menutupi benda (ditest dengan menyembunyikan dinding — tetap kosong), (2)
+// rasio aspek kamera tidak disesuaikan ulang setelah model dimuat (sudah diperbaiki, tidak menyelesaikan masalah),
+// (3) kotak pembatas dunia berisi NaN/nilai aneh (dicek lewat console.log — angkanya wajar). Dugaan tersisa yang
+// BELUM diuji: batas jumlah konteks WebGL aktif per halaman (16 sel = 16 context Three.js sekaligus) kemungkinan
+// terlampaui untuk sel yang urutan rendernya belakangan. Nilai kalibrasi area_mandi (lihat iso3dKalibrasi.ts)
+// sudah diverifikasi visual di dinding KIRI dan KANAN (keduanya benar, lingkaran kepala shower bulat simetris
+// menghadap kamera) — dinding depan/belakang BELUM bisa diverifikasi langsung karena bug ini.
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
@@ -60,17 +70,17 @@ function muatModel(src: string): Promise<THREE.Object3D> {
 /** Posisi+arah kamera ORTOGRAFIK TEGAK LURUS ke satu dinding tertentu (BUKAN isometrik seperti tampilan utama) —
  *  inti dari alat ini: dari sudut pandang ini, benda yang menghadap ke ruangan vs menghadap ke dinding langsung
  *  kelihatan beda (yang benar: sisi "depan" benda menghadap kamera; yang salah: kita melihat punggung/belakangnya
- *  atau benda menempel miring ke dinding). Dibidik ke TENGAH TINGGI BENDA ITU SENDIRI (bukan tengah dinding) —
- *  supaya benda pendek (kloset/wastafel) tidak jadi titik kecil di tengah bingkai yang dihitung untuk benda
- *  setinggi pintu.
+ *  atau benda menempel miring ke dinding). `tinggiTarget` (tengah vertikal yang dibidik) diberikan oleh pemanggil
+ *  — dihitung dari TINGGI_TARGET nominal untuk render pertama (sebelum model dimuat), lalu dari kotak pembatas
+ *  DUNIA sesungguhnya begitu model selesai dimuat (lihat `SelKalibrasi`) — supaya benda pendek (kloset/wastafel)
+ *  atau yang jangkauannya berubah karena kemiringan (area_mandi) tidak jadi titik kecil tak di tengah bingkai.
  *
  *  Kamera DINAIKKAN sedikit (~20° dari horizontal, BUKAN 45° isometrik seperti tampilan utama) — murni tegak
  *  lurus ternyata membuat bentuk mangkuk kloset/wastafel tidak terbaca (dari depan persis, mangkuknya tersembunyi
  *  di belakang siluet tangki, terlihat seperti kotak datar polos). Sedikit dari atas membuka bentuknya tanpa
  *  membuat arah "menghadap ruangan vs menghadap dinding" ambigu lagi seperti render isometrik 45° lama. */
-function kameraUntukDinding(objek: ObjekDenah, dinding: DindingDenah): { posisi: THREE.Vector3; target: THREE.Vector3 } {
+function kameraUntukDinding(dinding: DindingDenah, tinggiTarget: number): { posisi: THREE.Vector3; target: THREE.Vector3 } {
   const jarak = 6;
-  const tinggiTarget = DASAR_Y[objek] + TINGGI_TARGET[objek] / 2;
   const tinggiKamera = tinggiTarget + jarak * Math.tan((20 * Math.PI) / 180);
   switch (dinding) {
     case "belakang":
@@ -91,8 +101,12 @@ function lebarDindingUntuk(dinding: DindingDenah): number {
 /** Satu sel grid: scene Three.js mandiri berisi SATU dinding (solid, tegak lurus kamera) + SATU benda menempel
  *  padanya di posisi "tengah". Dibangun sebagai efek React biasa (bukan lewat `PratinjauRuangIso3D` yang didesain
  *  untuk ruangan penuh 4 dinding+4 benda sekaligus) karena kebutuhannya beda: di sini tiap sel cuma perlu 1
- *  dinding dari sudut tegak lurus, bukan ruangan isometrik lengkap. */
-function SelKalibrasi({ objek, dinding }: { objek: ObjekDenah; dinding: DindingDenah }) {
+ *  dinding dari sudut tegak lurus, bukan ruangan isometrik lengkap.
+ *
+ *  `tampilkanSumbu`: opsional, menambah `THREE.AxesHelper` (merah=X, hijau=Y, biru=Z) di titik jangkar benda —
+ *  dipakai untuk DIAGNOSIS kalau suatu sel ditandai Salah dan penyebabnya tidak jelas dari siluet saja (lihat
+ *  riwayat di iso3dKalibrasi.ts: menebak nilai kalibrasi tanpa melihat sumbu lokal benda terbukti tidak andal). */
+function SelKalibrasi({ objek, dinding, tampilkanSumbu }: { objek: ObjekDenah; dinding: DindingDenah; tampilkanSumbu: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -134,29 +148,58 @@ function SelKalibrasi({ objek, dinding }: { objek: ObjekDenah; dinding: DindingD
     cahaya.position.set(2, 6, 4);
     scene.add(cahaya);
 
-    // Dibidik ke ukuran BENDA ITU SENDIRI (bukan lebar dinding penuh, ATAU batas tetap berdasar TINGGI_DINDING) —
-    // sebelumnya pakai lebar dinding, benda pendek (kloset/wastafel) jadi titik kecil tak terbaca; lalu dicoba
-    // batas bawah TINGGI_DINDING*0.55, tapi itu bikin shower (jauh lebih pendek dari kloset) ikut jadi kecil tak
-    // terbaca juga. Sekarang MURNI proporsional ke ukuran benda masing-masing (ditambah margin kecil) — tiap sel
-    // boleh punya tingkat zoom beda, yang penting bendanya sendiri besar & jelas di bingkainya sendiri.
-    //
-    // area_mandi dapat margin EKSTRA (2.3x bukan 1.4x): kemiringan (KEMIRINGAN_AREA_MANDI, rotasi sumbu-X lokal)
-    // membuat jangkauan vertikal benda SETELAH dimiringkan lebih besar dari TINGGI_TARGET aslinya (yang dihitung
-    // sebelum kemiringan diterapkan) — tanpa margin ekstra, kepala shower kepotong di tepi bingkai pada beberapa
-    // dinding (lihat screenshot cek visual).
-    const margin = objek === "area_mandi" ? 2.3 : 1.4;
-    const frustumSetengah = Math.max(TINGGI_TARGET[objek] * margin, 0.3);
+    // Bingkai (frustum) & titik bidik kamera dihitung OTOMATIS dari kotak pembatas DUNIA benda SETELAH model
+    // dimuat (bukan ditebak dari TINGGI_TARGET sebelum model dimuat) — sebelumnya ada beberapa percobaan angka
+    // "margin tebakan" yang tidak konsisten antara ukuran bingkai dan titik bidik (terutama untuk area_mandi,
+    // yang jangkauan vertikal SETELAH dimiringkan bisa jauh dari TINGGI_TARGET nominalnya tergantung kombinasi
+    // rotasi dinding + kemiringan) — hasilnya benda kadang kepotong, kadang melayang tidak di tengah. Sekarang
+    // kamera mulai dengan bingkai & titik bidik GENERIK (dari TINGGI_TARGET, cukup untuk render pertama sebelum
+    // model GLB selesai diunduh), lalu DIPERBAIKI PERSIS begitu kotak pembatas dunia yang sesungguhnya diketahui.
+    let frustumSetengah = Math.max(TINGGI_TARGET[objek] * 1.3, 0.3);
     const camera = new THREE.OrthographicCamera(-frustumSetengah, frustumSetengah, frustumSetengah, -frustumSetengah, 0.1, 30);
-    const { posisi, target } = kameraUntukDinding(objek, dinding);
-    camera.position.copy(posisi);
-    camera.lookAt(target);
+    const terapkanKamera = (jarakKamera: THREE.Vector3, titikBidik: THREE.Vector3) => {
+      camera.position.copy(jarakKamera);
+      camera.lookAt(titikBidik);
+      camera.updateProjectionMatrix();
+    };
+    const { posisi: posisiAwal, target: targetAwal } = kameraUntukDinding(dinding, DASAR_Y[objek] + TINGGI_TARGET[objek] / 2);
+    terapkanKamera(posisiAwal, targetAwal);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+    // Sumbu bantu dunia (BUKAN ditempel ke benda) — merah=X, hijau=Y (selalu vertikal, "atas dunia"), biru=Z.
+    // Sengaja diletakkan di titik jangkar benda tapi TIDAK ikut rotasi pembungkus/model, supaya jadi penggaris
+    // tetap untuk menilai "benda ini miring ke arah mana sungguhan" — kalau ditempel ke benda, sumbu-nya ikut
+    // berputar/miring juga dan tidak berguna sebagai acuan.
+    if (tampilkanSumbu) {
+      const sumbu = new THREE.AxesHelper(frustumSetengah * 0.6);
+      sumbu.position.set(0, DASAR_Y[objek], 0);
+      scene.add(sumbu);
+    }
+
     muatModel(MODEL_SRC[objek]).then((modelAsli) => {
       if (batal) return;
-      scene.add(bangunPembungkusObjek(objek, { dinding, posisi: "tengah" }, modelAsli));
+      const pembungkus = bangunPembungkusObjek(objek, { dinding, posisi: "tengah" }, modelAsli);
+      scene.add(pembungkus);
+      // Kotak pembatas DUNIA sesungguhnya (sudah termasuk efek kemiringan kalau ada) — ini sumber kebenaran
+      // untuk framing, bukan TINGGI_TARGET yang cuma perkiraan sebelum model dimuat.
+      const kotak = new THREE.Box3().setFromObject(pembungkus);
+      const tinggiNyata = Math.max(kotak.max.y - kotak.min.y, 0.05);
+      const tinggiTengahNyata = (kotak.min.y + kotak.max.y) / 2;
+      frustumSetengah = Math.max(tinggiNyata * 1.3, 0.15);
+      // Aspek rasio canvas (lebar jauh lebih besar dari tinggi) WAJIB diterapkan ke kiri/kanan DI SINI JUGA, bukan
+      // cuma mengandalkan loop render di bawah — loop itu cuma menyesuaikan kiri/kanan saat UKURAN canvas berubah
+      // (resize), dan di titik ini ukurannya biasanya SUDAH sama dari render pertama, jadi kondisinya tidak pernah
+      // terpicu lagi: kiri/kanan jadi tetap persegi (tidak melebar sesuai aspek), bendanya kepotong/hilang di
+      // beberapa dinding (ditemukan lewat sel "Depan"/"Belakang" yang kosong total setelah bingkai diperkecil).
+      const aspek = canvas.clientWidth > 0 && canvas.clientHeight > 0 ? canvas.clientWidth / canvas.clientHeight : 1;
+      camera.left = -frustumSetengah * aspek;
+      camera.right = frustumSetengah * aspek;
+      camera.top = frustumSetengah;
+      camera.bottom = -frustumSetengah;
+      const { posisi, target } = kameraUntukDinding(dinding, tinggiTengahNyata);
+      terapkanKamera(posisi, target);
     });
 
     let frameId = 0;
@@ -178,7 +221,7 @@ function SelKalibrasi({ objek, dinding }: { objek: ObjekDenah; dinding: DindingD
       cancelAnimationFrame(frameId);
       renderer.dispose();
     };
-  }, [objek, dinding]);
+  }, [objek, dinding, tampilkanSumbu]);
 
   return <canvas ref={canvasRef} className="h-40 w-full rounded border border-neutral-300" aria-hidden="true" />;
 }
@@ -208,6 +251,7 @@ const LABEL_DINDING: Record<DindingDenah, string> = {
 
 export function KalibrasiRotasiDev() {
   const [tanda, setTanda] = useState<Record<string, Tanda>>(() => bacaTanda());
+  const [tampilkanSumbu, setTampilkanSumbu] = useState(false);
 
   const tandaiSel = (kunci: string, nilai: Tanda) => {
     setTanda((sebelumnya) => {
@@ -232,6 +276,10 @@ export function KalibrasiRotasiDev() {
       <p className="mt-2 text-sm font-medium text-neutral-800">
         Ditandai: {jumlahBenar} benar, {jumlahSalah} salah, {totalSel - jumlahBenar - jumlahSalah} belum ditandai dari {totalSel} sel.
       </p>
+      <label className="mt-2 flex min-h-11 items-center gap-2 text-sm text-neutral-700">
+        <input type="checkbox" checked={tampilkanSumbu} onChange={(e) => setTampilkanSumbu(e.target.checked)} className="h-5 w-5" />
+        Tampilkan sumbu bantu (merah=X, hijau=Y/atas, biru=Z) — untuk diagnosis sel yang ditandai Salah
+      </label>
 
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {OBJEK_DENAH.map((objek) =>
@@ -250,7 +298,7 @@ export function KalibrasiRotasiDev() {
                     {LABEL_OBJEK[objek]} — dinding {LABEL_DINDING[dinding]}
                   </span>
                 </div>
-                <SelKalibrasi objek={objek} dinding={dinding} />
+                <SelKalibrasi objek={objek} dinding={dinding} tampilkanSumbu={tampilkanSumbu} />
                 <p className="mt-1 text-xs text-neutral-500">{labelAsumsi(objek, dinding)}</p>
                 <div className="mt-2 flex gap-2">
                   <button
