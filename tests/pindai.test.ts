@@ -21,6 +21,19 @@ describe("skor pindai", () => {
   });
 });
 
+describe("varian shower dari respons", () => {
+  const dasar = { kamar_mandi: true, temuan: [] };
+  it("memakai varian yang sah", () => {
+    expect(bacaRespons({ ...dasar, varian_shower: "hand_shower_gantung" }, ids)?.varianShower).toBe("hand_shower_gantung");
+    expect(bacaRespons({ ...dasar, varian_shower: "ember_gayung" }, ids)?.varianShower).toBe("ember_gayung");
+  });
+  it("varian asing, salah tipe, atau hilang dianggap tidak jelas", () => {
+    expect(bacaRespons({ ...dasar, varian_shower: "bathtub" }, ids)?.varianShower).toBe("tidak_jelas");
+    expect(bacaRespons({ ...dasar, varian_shower: 7 }, ids)?.varianShower).toBe("tidak_jelas");
+    expect(bacaRespons(dasar, ids)?.varianShower).toBe("tidak_jelas");
+  });
+});
+
 describe("respons pindai", () => {
   it("menolak bentuk salah, mengabaikan id asing, mengisi yang hilang", () => {
     expect(bacaRespons(null, ids)).toBeNull();

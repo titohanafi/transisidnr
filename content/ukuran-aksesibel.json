@@ -11,6 +11,12 @@
       "nama": "2010 ADA Standards for Accessible Design (Amerika Serikat), bab 6",
       "peran": "pembanding",
       "tautan": "https://www.ada.gov/law-and-regs/design-standards/2010-stds/"
+    },
+    {
+      "id": "checklist_tim_riset",
+      "nama": "Checklist Physical Accessibility Audit (tim riset, berkas lokal di riset/)",
+      "peran": "pembanding",
+      "tautan": null
     }
   ],
   "entri": [
@@ -478,6 +484,27 @@
         }
       ],
       "catatan": "Dua acuan berbeda tujuan: PerMen memberi rentang pasang di gambar contoh, ADA membatasi tepi bawah agar terlihat dari posisi duduk. Perlu diputuskan peninjau; PerMen diutamakan.",
+      "status_validasi": "draf"
+    },
+    {
+      "id": "jangkauan-zona-perlengkapan",
+      "objek": "area_mandi",
+      "nama": "Rentang tinggi jangkauan untuk kran, holder shower, dan rak dari posisi duduk",
+      "indikator": [
+        "M-07",
+        "M-11"
+      ],
+      "nilai": [
+        {
+          "rujukan": "checklist_tim_riset",
+          "rincian": "Checklist tim riset, tab Pertanyaan Assesmen, M-07 dan M-11 (merujuk ADA 2010 sec. 308)",
+          "sifat": "saran",
+          "dibaca_dari_gambar": false,
+          "min_cm": 38,
+          "maks_cm": 122
+        }
+      ],
+      "catatan": "Batas atas 122 cm sudah dicocokkan ke ADA sec. 308.2.2 (jangkauan atas 48 inci bila ada penghalang dengan kedalaman jangkauan maksimal 51 cm). Batas bawah 38 cm belum dicocokkan ke teks ADA. Untuk batas atas, PerMen (kran paling tinggi 120 cm) diutamakan.",
       "status_validasi": "draf"
     }
   ]

@@ -496,6 +496,14 @@
     "lihatPanduan": "Lihat panduan",
     "ulang": "Pindai foto lain",
     "keRencana": "Buka panduan saya",
+    "gambarShower": {
+      "hand_shower_gantung_kondisi": "Hand shower tergantung di kait dinding yang tinggi, dengan selang menjuntai ke keluaran air. Ada keran di bawahnya.",
+      "hand_shower_gantung_hack": "Hand shower dipindahkan ke holder berperekat yang lebih rendah, di dalam zona jangkauan dari kursi roda.",
+      "hand_shower_gantung_permanen": "Holder hand shower dipasang dengan sekrup di zona jangkauan, dan keran diganti keran tuas.",
+      "shower_tetap_kondisi": "Shower tetap menempel pada lengan di dinding. Ada keran di bawahnya.",
+      "ember_gayung_kondisi": "Tanpa shower. Air ditampung dari keran ke ember di lantai dan disiramkan dengan gayung.",
+      "tidak_jelas_kondisi": "Bentuk netral bergaris putus-putus dengan tanda tanya, karena jenis shower tidak terbaca dari foto."
+    },
     "item": [
       {
         "id": "lantai",

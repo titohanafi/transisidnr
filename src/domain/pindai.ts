@@ -67,6 +67,11 @@ export interface LetakDenah {
 export const OBJEK_DENAH = ["pintu", "kloset", "wastafel", "area_mandi"] as const;
 export type ObjekDenah = (typeof OBJEK_DENAH)[number];
 
+// Jenis shower yang dikenali dari foto. Daftar tertutup: tiap varian punya gambar sendiri (lihat gambarShower.ts),
+// dan "tidak_jelas" dipakai bila jenisnya tidak terbaca supaya denah tidak menggambar benda yang tidak ada.
+export const VARIAN_SHOWER = ["hand_shower_gantung", "shower_tetap", "ember_gayung", "tidak_jelas"] as const;
+export type VarianShower = (typeof VARIAN_SHOWER)[number];
+
 // Pintu di dinding depan; wastafel dan kloset sama-sama di dinding belakang, berdampingan (kloset di sisi kanan,
 // wastafel di sisi kirinya); area mandi di dinding kanan (dinding yang beda dari kloset, walau sama-sama "di
 // pojok kanan belakang" kalau dilihat sebagai zona) pada kedalaman tengah, supaya tidak menumpuk dengan kloset.

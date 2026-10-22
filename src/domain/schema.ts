@@ -146,7 +146,7 @@ export const ukuranAksesibelSchema = z
           id: z.string().regex(/^[a-z0-9_]+$/),
           nama: teks,
           peran: z.enum(["utama", "pembanding"]),
-          tautan: urlHttp,
+          tautan: urlHttp.nullable(),
         }),
       )
       .min(1),
@@ -520,6 +520,7 @@ export const uiSchema = z
       lihatPanduan: teks,
       ulang: teks,
       keRencana: teks,
+      gambarShower: rekamTeks,
       item: z.array(z.object({ id: teks, nama: teks, cek: teks, kartu: teks })).min(1),
     }),
     checkin: z.object({

@@ -24,6 +24,9 @@ import { StoreProvider } from "./state/store";
 const KalibrasiRotasiDev = import.meta.env.DEV
   ? lazy(() => import("./screens/KalibrasiRotasiDev").then((m) => ({ default: m.KalibrasiRotasiDev })))
   : null;
+const PratinjauShowerDev = import.meta.env.DEV
+  ? lazy(() => import("./screens/PratinjauShowerDev").then((m) => ({ default: m.PratinjauShowerDev })))
+  : null;
 
 export function App() {
   return (
@@ -53,6 +56,16 @@ export function App() {
             element={
               <Suspense fallback={null}>
                 <KalibrasiRotasiDev />
+              </Suspense>
+            }
+          />
+        )}
+        {import.meta.env.DEV && PratinjauShowerDev && (
+          <Route
+            path="/dev/shower"
+            element={
+              <Suspense fallback={null}>
+                <PratinjauShowerDev />
               </Suspense>
             }
           />

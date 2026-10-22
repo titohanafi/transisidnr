@@ -5,15 +5,18 @@ import {
   POSISI_DI_DINDING,
   selesaikanTabrakanDenah,
   STATUS_ITEM,
+  VARIAN_SHOWER,
   type ObjekDenah,
   type PosisiObjek,
   type StatusItem,
+  type VarianShower,
 } from "../domain/pindai";
 
 export interface HasilModel {
   kamarMandi: boolean;
   temuan: Record<string, StatusItem>;
   objek: Record<ObjekDenah, PosisiObjek>;
+  varianShower: VarianShower;
 }
 
 export type KodeGalat = "belum_diatur" | "terlalu_sering" | "jaringan" | "respons";
@@ -42,7 +45,8 @@ export function bacaRespons(x: unknown, idItem: string[]): HasilModel | null {
       return [id, { dinding, posisi }];
     }),
   ) as Record<ObjekDenah, PosisiObjek>;
-  return { kamarMandi: x.kamar_mandi, temuan, objek: selesaikanTabrakanDenah(objekMentahSah) };
+  const varianShower = (VARIAN_SHOWER as readonly unknown[]).includes(x.varian_shower) ? (x.varian_shower as VarianShower) : "tidak_jelas";
+  return { kamarMandi: x.kamar_mandi, temuan, objek: selesaikanTabrakanDenah(objekMentahSah), varianShower };
 }
 
 // Status tiap hal untuk foto contoh `dev/mock-foto.jpg`, dinilai dari yang tampak di foto itu sendiri (bukan
@@ -74,7 +78,10 @@ function hasilTiruan(idItem: string[]): Promise<HasilModel> {
     string,
     StatusItem
   >;
-  return new Promise((selesai) => setTimeout(() => selesai({ kamarMandi: true, temuan, objek: POSISI_BAWAAN }), 1200));
+  // Foto contoh menampilkan hand shower yang digantung di dinding, bersama keran.
+  return new Promise((selesai) =>
+    setTimeout(() => selesai({ kamarMandi: true, temuan, objek: POSISI_BAWAAN, varianShower: "hand_shower_gantung" }), 1200),
+  );
 }
 
 /** Mengirim foto (data URL JPEG) ke fungsi pindai (api/pindai.ts) dan mengembalikan hasil yang sudah diperiksa. */
