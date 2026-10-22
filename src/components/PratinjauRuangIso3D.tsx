@@ -1,12 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { titikDinding } from "../domain/denahGeometri";
-import { gambarShower, TINGGI_DINDING_PANEL, type Kerangka, type Titik } from "../domain/gambarShower";
+import { gambarBenda, type JenisBenda } from "../domain/gambarBenda";
+import { gambarShower, keRuang, TINGGI_DINDING_PANEL, type Kerangka, type Primitif, type Titik } from "../domain/gambarShower";
 import { LANTAI_DALAM, LANTAI_LEBAR, posisiTigaMenempel } from "../domain/isoTigaGeometri";
 import { OBJEK_DENAH, type LetakDenah, type ObjekDenah, type VarianShower } from "../domain/pindai";
 import { LapisPrimitif } from "./GambarShower";
-import { bangunPembungkusObjek, MODEL_SRC, TEBAL_DINDING, TINGGI_DINDING } from "./iso3dKalibrasi";
+import { TEBAL_DINDING, TINGGI_DINDING } from "./iso3dKalibrasi";
+
+const JENIS_BENDA_DENAH: Record<Exclude<ObjekDenah, "area_mandi">, JenisBenda> = {
+  pintu: "pintu",
+  kloset: "kloset_duduk",
+  wastafel: "wastafel",
+};
 
 const ELEVASI_KAMERA = Math.atan(1 / Math.sqrt(2));
 const JARAK_KAMERA = 12;
@@ -57,8 +63,9 @@ function posisiKamera(azimuth: number): THREE.Vector3 {
  * diklik (bukan trik tukar dinding solid seperti versi SVG). BELUM ada warna status atau badge — lihat scope
  * milestone di plan.
  *
- * Shower TIDAK lagi memakai model GLB: digambar dengan gaya manual perakitan (`../domain/gambarShower.ts`) sebagai
- * lapisan SVG di atas kanvas, diproyeksikan lewat kamera yang sama, sesuai jenis shower yang terbaca/dipilih.
+ * Keempat benda TIDAK lagi memakai model GLB: semuanya digambar dengan gaya manual perakitan (`gambarShower.ts` dan
+ * `gambarBenda.ts`) sebagai lapisan SVG di atas kanvas, diproyeksikan lewat kamera yang sama, shower sesuai jenis yang
+ * terbaca/dipilih. Kanvas 3D tinggal menggambar lantai dan dinding.
  */
 export function PratinjauRuangIso3D({
   letak,
@@ -143,29 +150,6 @@ export function PratinjauRuangIso3D({
     cahayaPengisi.position.set(-4, 4, -6);
     scene.add(cahayaPengisi);
 
-    let batal = false;
-    const loader = new GLTFLoader();
-    for (const id of OBJEK_DENAH) {
-      // Shower digambar sebagai lapisan SVG (lihat bawah), bukan model GLB.
-      if (id === "area_mandi") continue;
-      // `letak(id)` (closure dari DenahKamarMandi.tsx) sudah menjatuhkan ke POSISI_BAWAAN kalau dindingnya
-      // "tidak_terlihat" — selalu mengembalikan LetakDenah yang valid (4 dinding, tidak pernah "tidak_terlihat").
-      const letakId = letak(id);
-      loader.load(
-        MODEL_SRC[id],
-        (gltf) => {
-          if (batal) return;
-          // `bangunPembungkusObjek` SATU-SATUNYA tempat logika skala/posisi/rotasi ditulis — dipakai sama persis
-          // oleh alat bantu dev `KalibrasiRotasiDev.tsx`, supaya tidak ada dua salinan yang diam-diam beda.
-          scene.add(bangunPembungkusObjek(id, letakId, gltf.scene));
-        },
-        undefined,
-        (err) => {
-          console.error(`Gagal memuat model 3D untuk "${id}" (prototipe VITE_ISO_3D):`, err);
-        },
-      );
-    }
-
     let frameId = 0;
     const render = () => {
       const { clientWidth, clientHeight } = canvas;
@@ -181,7 +165,6 @@ export function PratinjauRuangIso3D({
     render();
 
     return () => {
-      batal = true;
       cancelAnimationFrame(frameId);
       renderer.dispose();
       kameraRef.current = null;
@@ -208,29 +191,38 @@ export function PratinjauRuangIso3D({
   }, [sudutAktif.x]);
 
   const azimuth = azimuthDariSudut(sudutAktif.x);
-  let lapisShower = null;
+  let lapisBenda = null;
   if (ukuran) {
-    const letakShower = letak("area_mandi");
-    const dinding = titikDinding(letakShower).dinding;
-    const posisi = posisiTigaMenempel(letakShower);
-    // Permukaan dalam dinding (dinding digambar setebal TEBAL_DINDING, berpusat di garis lantai).
-    const bidang =
-      dinding === "belakang"
-        ? -LANTAI_DALAM / 2 + TEBAL_DINDING / 2
-        : dinding === "depan"
-          ? LANTAI_DALAM / 2 - TEBAL_DINDING / 2
-          : dinding === "kiri"
-            ? -LANTAI_LEBAR / 2 + TEBAL_DINDING / 2
-            : LANTAI_LEBAR / 2 - TEBAL_DINDING / 2;
-    const kerangka: Kerangka = {
-      dinding,
-      sepanjang: dinding === "belakang" || dinding === "depan" ? posisi.x : posisi.z,
-      bidang,
-      proyeksi: bangunProyeksi(azimuth, ukuran.lebar, ukuran.tinggi),
-      skala: TINGGI_DINDING / TINGGI_DINDING_PANEL,
-      lihat: { x: sudutAktif.x === "kanan" ? -1 : 1, y: 1 },
-    };
-    lapisShower = (
+    const proyeksi = bangunProyeksi(azimuth, ukuran.lebar, ukuran.tinggi);
+    const lihat = { x: sudutAktif.x === "kanan" ? -1 : 1, y: 1 } as const;
+    const susunan = OBJEK_DENAH.map((id) => {
+      const letakId = letak(id);
+      const dinding = titikDinding(letakId).dinding;
+      const posisi = posisiTigaMenempel(letakId);
+      // Permukaan dalam dinding (dinding digambar setebal TEBAL_DINDING, berpusat di garis lantai).
+      const bidang =
+        dinding === "belakang"
+          ? -LANTAI_DALAM / 2 + TEBAL_DINDING / 2
+          : dinding === "depan"
+            ? LANTAI_DALAM / 2 - TEBAL_DINDING / 2
+            : dinding === "kiri"
+              ? -LANTAI_LEBAR / 2 + TEBAL_DINDING / 2
+              : LANTAI_LEBAR / 2 - TEBAL_DINDING / 2;
+      const kerangka: Kerangka = {
+        dinding,
+        sepanjang: dinding === "belakang" || dinding === "depan" ? posisi.x : posisi.z,
+        bidang,
+        proyeksi,
+        skala: TINGGI_DINDING / TINGGI_DINDING_PANEL,
+        lihat,
+      };
+      const daftar: Primitif[] =
+        id === "area_mandi" ? gambarShower(varianShower, "kondisi", { kerangka }) : gambarBenda(JENIS_BENDA_DENAH[id], kerangka);
+      // Urutan gambar dari belakang ke depan: titik pijak benda yang lebih rendah di layar berarti lebih dekat kamera.
+      const [x, y] = keRuang(kerangka, 0, 0);
+      return { id, daftar, kedalaman: proyeksi(x, y, 0)[1] };
+    }).sort((a, b) => a.kedalaman - b.kedalaman);
+    lapisBenda = (
       <svg
         viewBox={`0 0 ${ukuran.lebar} ${ukuran.tinggi}`}
         className="pointer-events-none absolute inset-0 h-full w-full"
@@ -238,7 +230,11 @@ export function PratinjauRuangIso3D({
         focusable="false"
       >
         <g strokeWidth={1.6} strokeLinejoin="round" strokeLinecap="round">
-          <LapisPrimitif daftar={gambarShower(varianShower, "kondisi", { kerangka })} tebal={0.75} />
+          {susunan.map((b) => (
+            <g key={b.id}>
+              <LapisPrimitif daftar={b.daftar} tebal={0.75} garisDasar={1.6} />
+            </g>
+          ))}
         </g>
       </svg>
     );
@@ -247,7 +243,7 @@ export function PratinjauRuangIso3D({
   return (
     <div ref={pembungkusRef} className={`relative mx-auto ${kelas}`}>
       <canvas ref={canvasRef} className="h-full w-full" aria-hidden="true" />
-      {lapisShower}
+      {lapisBenda}
     </div>
   );
 }

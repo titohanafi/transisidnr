@@ -74,19 +74,20 @@ function kePath(pts: readonly Titik[]): string {
   return d;
 }
 
-function Bentuk({ s, penanda, m }: { s: Primitif; penanda: string; m: number }) {
+function Bentuk({ s, penanda, m, w }: { s: Primitif; penanda: string; m: number; w: number }) {
   switch (s.jenis) {
     case "poligon": {
       if (s.muka === "zona") {
         return <polygon points={kePoin(s.titik)} className="fill-utama/10 stroke-utama" strokeWidth={2.4 * m} strokeDasharray="9 6" />;
       }
+      if (s.tepi) return <polygon points={kePoin(s.titik)} className="fill-tinta stroke-tinta" strokeWidth={2 * w} />;
       const hantu = s.peran === "hantu";
       return (
         <polygon
           points={kePoin(s.titik)}
           className={`${ISI[s.peran][s.muka]} ${s.muka === "pita" || s.tanpaGaris ? "stroke-none" : GARIS[s.peran]}`}
           strokeDasharray={hantu ? "5 4" : undefined}
-          strokeWidth={hantu ? 1.8 * m : undefined}
+          strokeWidth={hantu ? 1.8 * m : s.garisTipis ? 0.45 * w : undefined}
         />
       );
     }
@@ -175,11 +176,22 @@ function Bentuk({ s, penanda, m }: { s: Primitif; penanda: string; m: number }) 
 }
 
 /** Daftar bentuk gambar shower di dalam <svg> yang sudah ada (denah isometrik), dengan tebal garis dikalikan `tebal`. */
-export function LapisPrimitif({ daftar, penanda = "", tebal = 1 }: { daftar: Primitif[]; penanda?: string; tebal?: number }) {
+export function LapisPrimitif({
+  daftar,
+  penanda = "",
+  tebal = 1,
+  garisDasar = 2.2,
+}: {
+  daftar: Primitif[];
+  penanda?: string;
+  tebal?: number;
+  /** Tebal garis dasar pada <g> pembungkus; dipakai untuk menurunkan tebal garis tepi dan garis tipis. */
+  garisDasar?: number;
+}) {
   return (
     <>
       {daftar.map((s, i) => (
-        <Bentuk key={i} s={s} penanda={penanda} m={tebal} />
+        <Bentuk key={i} s={s} penanda={penanda} m={tebal} w={garisDasar} />
       ))}
     </>
   );

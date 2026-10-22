@@ -374,4 +374,19 @@ describe("gambar benda kamar mandi", () => {
       }
     }
   });
+
+  it("wastafel: keran bersih (alas tepi + garis tipis) dan meja berbentuk D di atas penopang", () => {
+    const daftar = gambarBenda("wastafel");
+    const poligon = daftar.filter((p) => p.jenis === "poligon");
+    const tepi = poligon.filter((p) => p.tepi);
+    const tipis = poligon.filter((p) => p.garisTipis);
+    // Dua kotak keran (tiang dan cerat), masing-masing tiga sisi terlihat.
+    expect(tepi).toHaveLength(6);
+    expect(tipis).toHaveLength(6);
+    // Alas tepi digambar sebelum semua poligon bergaris tipis.
+    expect(daftar.indexOf(tepi[tepi.length - 1])).toBeLessThan(daftar.indexOf(tipis[0]));
+    // Benda lain tidak memakai gaya ini.
+    for (const jenis of ["kloset_duduk", "kloset_jongkok", "pintu"] as const)
+      expect(gambarBenda(jenis).some((p) => p.jenis === "poligon" && (p.tepi || p.garisTipis))).toBe(false);
+  });
 });

@@ -17,7 +17,17 @@ export type Peran = "netral" | "aksen" | "hantu";
 export type Muka = "atas" | "kanan" | "kiri";
 
 export type Primitif =
-  | { jenis: "poligon"; muka: Muka | "latar" | "zona" | "pita" | "rongga"; titik: Titik[]; peran: Peran; tanpaGaris?: boolean }
+  | {
+      jenis: "poligon";
+      muka: Muka | "latar" | "zona" | "pita" | "rongga";
+      titik: Titik[];
+      peran: Peran;
+      tanpaGaris?: boolean;
+      /** Alas gelap bergaris dua kali tebal: bila ditumpuk di bawah poligon lain, hanya garis tepi luar gabungannya yang tampak. */
+      tepi?: boolean;
+      /** Garis di dalam objek digambar tipis (tepi luar tetap tebal lewat `tepi`). */
+      garisTipis?: boolean;
+    }
   | { jenis: "garisPoli"; titik: Titik[]; peran: Peran; putus?: boolean }
   | { jenis: "elips"; cx: number; cy: number; rx: number; ry: number; tingkat: "atas" | "rongga" | "tutup"; peran: Peran }
   | { jenis: "badan"; cx: number; yAtas: number; yBawah: number; rx: number; ry: number; muka: "kanan" | "kiri"; peran: Peran }

@@ -48,19 +48,34 @@ function klosetJongkok(k: Kerangka): Primitif[] {
   return [...kotak(k, -18, 18, 0, 58, 0, 4, "netral"), poligon("rongga", oval(k, 0, 22, 8, 19, 4), "netral")];
 }
 
+/**
+ * Keran bersih (versi C yang disetujui): alas gelap di bawah semua sisi supaya hanya tepi luar yang tebal, garis di
+ * dalam objek tipis, dan sisi dibedakan dengan nada warna.
+ */
+function bersihkan(daftar: Primitif[]): Primitif[] {
+  const polis = daftar.filter((p): p is Extract<Primitif, { jenis: "poligon" }> => p.jenis === "poligon");
+  return [...polis.map((p) => ({ ...p, tepi: true })), ...polis.map((p) => ({ ...p, garisTipis: true }))];
+}
+
+// Meja berbentuk D: setengah belakang persegi (menempel dinding), setengah depan oval, tanpa patahan di sambungan.
+const JEJAK_MEJA: [number, number][] = [
+  [-24, 0],
+  [24, 0],
+  ...Array.from({ length: 17 }, (_, i): [number, number] => {
+    const th = (i / 16) * Math.PI;
+    return [24 * Math.cos(th), 18 + 18 * Math.sin(th)];
+  }),
+];
+
 function wastafel(k: Kerangka): Primitif[] {
   return [
     ...ekstrusi(k, footprintOval(0, 10, 2.5, 2.5, 10), 40, 78, "netral", true),
     ...kotak(k, -2.5, 2.5, 4, 14, 36, 42, "netral"),
-    ...kotak(k, -22, -18, 2, 32, 66, 78, "netral"),
-    ...kotak(k, 18, 22, 2, 32, 66, 78, "netral"),
-    ...kotak(k, -24, 24, 0, 36, 78, 86, "netral"),
-    poligon("rongga", oval(k, 0, 19, 16, 13, 86), "netral"),
-    ...kotak(k, -24, 24, 0, 4, 86, 104, "netral"),
-    ...kotak(k, -2, 2, 3, 7, 86, 97, "netral"),
-    ...kotak(k, -1.5, 1.5, 5, 19, 96, 99, "netral"),
-    ...kotak(k, -13, -9, 4, 8, 86, 92, "netral"),
-    ...kotak(k, 9, 13, 4, 8, 86, 92, "netral"),
+    ...kotak(k, -14, -10, 6, 28, 66, 78, "netral"),
+    ...kotak(k, 10, 14, 6, 28, 66, 78, "netral"),
+    ...ekstrusi(k, JEJAK_MEJA, 78, 86, "netral", true),
+    poligon("rongga", oval(k, 0, 20, 16, 12, 86), "netral"),
+    ...bersihkan([...kotak(k, -2, 2, 3, 7, 86, 97, "netral"), ...kotak(k, -1.5, 1.5, 5, 19, 96, 99, "netral")]),
   ];
 }
 
