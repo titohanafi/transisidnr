@@ -70,27 +70,44 @@ function muatModel(src: string): Promise<THREE.Object3D> {
 /** Posisi+arah kamera ORTOGRAFIK TEGAK LURUS ke satu dinding tertentu (BUKAN isometrik seperti tampilan utama) —
  *  inti dari alat ini: dari sudut pandang ini, benda yang menghadap ke ruangan vs menghadap ke dinding langsung
  *  kelihatan beda (yang benar: sisi "depan" benda menghadap kamera; yang salah: kita melihat punggung/belakangnya
- *  atau benda menempel miring ke dinding). `tinggiTarget` (tengah vertikal yang dibidik) diberikan oleh pemanggil
- *  — dihitung dari TINGGI_TARGET nominal untuk render pertama (sebelum model dimuat), lalu dari kotak pembatas
- *  DUNIA sesungguhnya begitu model selesai dimuat (lihat `SelKalibrasi`) — supaya benda pendek (kloset/wastafel)
- *  atau yang jangkauannya berubah karena kemiringan (area_mandi) tidak jadi titik kecil tak di tengah bingkai.
+ *  atau benda menempel miring ke dinding). `pusatBenda` (titik tengah kotak pembatas DUNIA yang dibidik) diberikan
+ *  oleh pemanggil — awalnya dari TINGGI_TARGET nominal + x/z=0 untuk render pertama (sebelum model dimuat), lalu
+ *  dari kotak pembatas DUNIA sesungguhnya begitu model selesai dimuat (lihat `SelKalibrasi`).
+ *
+ *  PENTING: x/z target TIDAK BOLEH di-hardcode ke 0 — sebelumnya begitu, dan itu salah untuk dinding depan/
+ *  belakang (benda di sana berada di z jauh dari 0, bukan di z=0), membuat benda terlempar keluar bingkai kecil
+ *  sepenuhnya (kelihatan kosong total, bukan cuma kepotong). Dinding kiri/kanan kebetulan tidak separah itu
+ *  karena pergeserannya ada di sumbu yang sama dengan arah pandang kamera (bukan sumbu layar-horizontal), jadi
+ *  bug yang sama tetap ada tapi tidak separah terlihatnya.
  *
  *  Kamera DINAIKKAN sedikit (~20° dari horizontal, BUKAN 45° isometrik seperti tampilan utama) — murni tegak
  *  lurus ternyata membuat bentuk mangkuk kloset/wastafel tidak terbaca (dari depan persis, mangkuknya tersembunyi
  *  di belakang siluet tangki, terlihat seperti kotak datar polos). Sedikit dari atas membuka bentuknya tanpa
  *  membuat arah "menghadap ruangan vs menghadap dinding" ambigu lagi seperti render isometrik 45° lama. */
-function kameraUntukDinding(dinding: DindingDenah, tinggiTarget: number): { posisi: THREE.Vector3; target: THREE.Vector3 } {
+function kameraUntukDinding(dinding: DindingDenah, pusatBenda: THREE.Vector3): { posisi: THREE.Vector3; target: THREE.Vector3 } {
   const jarak = 6;
-  const tinggiKamera = tinggiTarget + jarak * Math.tan((20 * Math.PI) / 180);
+  const tinggiKamera = pusatBenda.y + jarak * Math.tan((20 * Math.PI) / 180);
   switch (dinding) {
     case "belakang":
-      return { posisi: new THREE.Vector3(0, tinggiKamera, jarak), target: new THREE.Vector3(0, tinggiTarget, 0) };
+      return {
+        posisi: new THREE.Vector3(pusatBenda.x, tinggiKamera, pusatBenda.z + jarak),
+        target: pusatBenda.clone(),
+      };
     case "depan":
-      return { posisi: new THREE.Vector3(0, tinggiKamera, -jarak), target: new THREE.Vector3(0, tinggiTarget, 0) };
+      return {
+        posisi: new THREE.Vector3(pusatBenda.x, tinggiKamera, pusatBenda.z - jarak),
+        target: pusatBenda.clone(),
+      };
     case "kiri":
-      return { posisi: new THREE.Vector3(jarak, tinggiKamera, 0), target: new THREE.Vector3(0, tinggiTarget, 0) };
+      return {
+        posisi: new THREE.Vector3(pusatBenda.x + jarak, tinggiKamera, pusatBenda.z),
+        target: pusatBenda.clone(),
+      };
     case "kanan":
-      return { posisi: new THREE.Vector3(-jarak, tinggiKamera, 0), target: new THREE.Vector3(0, tinggiTarget, 0) };
+      return {
+        posisi: new THREE.Vector3(pusatBenda.x - jarak, tinggiKamera, pusatBenda.z),
+        target: pusatBenda.clone(),
+      };
   }
 }
 
@@ -162,21 +179,12 @@ function SelKalibrasi({ objek, dinding, tampilkanSumbu }: { objek: ObjekDenah; d
       camera.lookAt(titikBidik);
       camera.updateProjectionMatrix();
     };
-    const { posisi: posisiAwal, target: targetAwal } = kameraUntukDinding(dinding, DASAR_Y[objek] + TINGGI_TARGET[objek] / 2);
+    const pusatAwal = new THREE.Vector3(0, DASAR_Y[objek] + TINGGI_TARGET[objek] / 2, 0);
+    const { posisi: posisiAwal, target: targetAwal } = kameraUntukDinding(dinding, pusatAwal);
     terapkanKamera(posisiAwal, targetAwal);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    // Sumbu bantu dunia (BUKAN ditempel ke benda) — merah=X, hijau=Y (selalu vertikal, "atas dunia"), biru=Z.
-    // Sengaja diletakkan di titik jangkar benda tapi TIDAK ikut rotasi pembungkus/model, supaya jadi penggaris
-    // tetap untuk menilai "benda ini miring ke arah mana sungguhan" — kalau ditempel ke benda, sumbu-nya ikut
-    // berputar/miring juga dan tidak berguna sebagai acuan.
-    if (tampilkanSumbu) {
-      const sumbu = new THREE.AxesHelper(frustumSetengah * 0.6);
-      sumbu.position.set(0, DASAR_Y[objek], 0);
-      scene.add(sumbu);
-    }
 
     muatModel(MODEL_SRC[objek]).then((modelAsli) => {
       if (batal) return;
@@ -186,8 +194,19 @@ function SelKalibrasi({ objek, dinding, tampilkanSumbu }: { objek: ObjekDenah; d
       // untuk framing, bukan TINGGI_TARGET yang cuma perkiraan sebelum model dimuat.
       const kotak = new THREE.Box3().setFromObject(pembungkus);
       const tinggiNyata = Math.max(kotak.max.y - kotak.min.y, 0.05);
-      const tinggiTengahNyata = (kotak.min.y + kotak.max.y) / 2;
+      const pusatNyata = new THREE.Vector3();
+      kotak.getCenter(pusatNyata);
       frustumSetengah = Math.max(tinggiNyata * 1.3, 0.15);
+      // Sumbu bantu dunia (BUKAN ditempel ke benda) — merah=X, hijau=Y (selalu vertikal, "atas dunia"), biru=Z.
+      // Diletakkan di titik TENGAH BAWAH kotak pembatas benda (bukan selalu x=0,z=0 — itu bug lama, lihat
+      // `kameraUntukDinding`), supaya tetap jadi penggaris yang berguna di dinding manapun, tapi TIDAK ikut
+      // rotasi pembungkus/model (kalau ditempel ke benda, sumbu-nya ikut berputar/miring juga dan tidak berguna
+      // sebagai acuan arah dunia).
+      if (tampilkanSumbu) {
+        const sumbu = new THREE.AxesHelper(frustumSetengah * 0.6);
+        sumbu.position.set(pusatNyata.x, kotak.min.y, pusatNyata.z);
+        scene.add(sumbu);
+      }
       // Aspek rasio canvas (lebar jauh lebih besar dari tinggi) WAJIB diterapkan ke kiri/kanan DI SINI JUGA, bukan
       // cuma mengandalkan loop render di bawah — loop itu cuma menyesuaikan kiri/kanan saat UKURAN canvas berubah
       // (resize), dan di titik ini ukurannya biasanya SUDAH sama dari render pertama, jadi kondisinya tidak pernah
@@ -198,7 +217,7 @@ function SelKalibrasi({ objek, dinding, tampilkanSumbu }: { objek: ObjekDenah; d
       camera.right = frustumSetengah * aspek;
       camera.top = frustumSetengah;
       camera.bottom = -frustumSetengah;
-      const { posisi, target } = kameraUntukDinding(dinding, tinggiTengahNyata);
+      const { posisi, target } = kameraUntukDinding(dinding, pusatNyata);
       terapkanKamera(posisi, target);
     });
 
@@ -230,7 +249,7 @@ function SelKalibrasi({ objek, dinding, tampilkanSumbu }: { objek: ObjekDenah; d
  *  menebak dari gambar. */
 function labelAsumsi(objek: ObjekDenah, dinding: DindingDenah): string {
   const posisi = (objek === "area_mandi" ? posisiTigaMenempel : posisiTiga)({ dinding, posisi: "tengah" });
-  const totalDerajat = Math.round(((posisi.rotasiY + ROTASI_KALIBRASI[objek]) * 180) / Math.PI);
+  const totalDerajat = Math.round(((posisi.rotasiY + ROTASI_KALIBRASI[objek][dinding]) * 180) / Math.PI);
   const tilt = objek === "area_mandi" ? `, kemiringan ${Math.round((KEMIRINGAN_AREA_MANDI * 180) / Math.PI)}°` : "";
   return `rotasi dinding ${totalDerajat}°${tilt}`;
 }

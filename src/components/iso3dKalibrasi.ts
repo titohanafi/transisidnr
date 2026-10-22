@@ -4,7 +4,7 @@
 // diubah (lihat DECISIONS.md).
 import * as THREE from "three";
 import { posisiTiga, posisiTigaMenempel } from "../domain/isoTigaGeometri";
-import type { LetakDenah, ObjekDenah } from "../domain/pindai";
+import type { DindingDenah, LetakDenah, ObjekDenah } from "../domain/pindai";
 
 export const MODEL_SRC: Record<ObjekDenah, string> = {
   pintu: "/model/pintu/quaternius-pintu.glb",
@@ -54,42 +54,35 @@ export const DASAR_Y: Record<ObjekDenah, number> = {
   area_mandi: TINGGI_DINDING * 0.65,
 };
 
-// Rotasi tambahan PER JENIS BENDA (radian, ditambahkan ke rotasi dasar dari `posisiTiga`) — model GLB diekspor
-// dengan arah "depan" bawaan yang tidak diketahui pasti (tidak ada konvensi universal), jadi mungkin perlu offset
-// kalibrasi supaya benda benar-benar menghadap ke dalam ruangan, bukan ke dinding. Mulai dari 0 (asumsikan model
-// sudah menghadap +Z) — DITENTUKAN/DIPERBAIKI lewat cek visual langsung di browser, lihat commit kalibrasi.
+// Rotasi tambahan PER BENDA **DAN PER DINDING** (radian, ditambahkan ke rotasi dasar dari `posisiTiga`/
+// `rotasiMenghadapDalam` di isoTigaGeometri.ts). Awalnya ini SATU angka per benda (asumsi: kalau benar di satu
+// dinding, otomatis benar di 4 dinding, karena `rotasiMenghadapDalam` dianggap konsisten/simetris) — TERBUKTI
+// SALAH lewat tanda user di `KalibrasiRotasiDev.tsx`: untuk kloset & wastafel, Math.PI memperbaiki dinding
+// kiri/kanan tapi JUSTRU MERUSAK dinding depan/belakang yang sebelumnya sudah benar — kebalikan dari yang
+// diharapkan. Ini membuktikan `rotasiMenghadapDalam` sendiri TIDAK simetris antara pasangan kiri/kanan dan
+// pasangan depan/belakang (kemungkinan konvensi tanda sumbu-X vs sumbu-Z beda), jadi kalibrasi per-benda harus
+// bisa beda per dinding juga, bukan satu angka rata.
 //
-// PENTING — riwayat kepercayaan diri yang salah: nilai area_mandi sempat "diverifikasi" lewat baca render
-// isometrik kecil di browser dan dianggap benar di 4 dinding, tapi user menunjukkan pembacaan itu KELIRU (shower
-// di dinding kanan masih salah arah, kloset/wastafel di dinding kiri/kanan juga menghadap ke dinding bukan
-// menempel). Render isometrik 45° kecil TERLALU AMBIGU untuk dipakai sebagai bukti arah.
+// kloset & wastafel: dinding depan/belakang SUDAH BENAR tanpa kalibrasi tambahan (0°) — jangan disentuh. Dinding
+// kiri/kanan perlu dibalik 180°. Diverifikasi ulang oleh user: kiri+kanan benar (ronde ini), depan+belakang
+// SEBELUMNYA benar sebelum sempat ikut dibalik 180° secara keliru (ronde sebelumnya) — sekarang dikembalikan ke 0.
 //
-// kloset & wastafel (Math.PI, bukan 0): user menandai SALAH di `KalibrasiRotasiDev.tsx` untuk dinding kiri+kanan —
-// kedua model ternyata menghadap ke dinding, bukan ke ruangan, dengan asumsi dasar "+Z" lama. Pola yang SAMA
-// PERSIS dengan area_mandi sebelumnya: dibalik 180°. Dicek ulang visual di dinding kiri DAN kanan (kloset+wastafel)
-// setelah perbaikan — mangkuk/cekungan menghadap kamera di keduanya.
+// area_mandi: dinding kiri+kanan diverifikasi BENAR di 90° (lihat riwayat sebelumnya: dicek dari nol pakai
+// AxesHelper + uji 0°/90°/180°/270° di dinding belakang). TAPI dinding depan/belakang user laporkan masih
+// menghadap ke dinding (SALAH) — pola identik dengan kloset/wastafel di atas (yang benar untuk satu pasang
+// dinding ternyata salah untuk pasangan lainnya). Dinding depan/belakang BELUM diverifikasi ulang ke nilai yang
+// benar (menyusul — perlu alat kalibrasi diperbaiki dulu, sel depan/belakang kosong karena bug rendering
+// terpisah, lihat TODO di KalibrasiRotasiDev.tsx) — SEMENTARA dibiarkan 90° (BELUM TERVERIFIKASI untuk dinding
+// ini, jangan dianggap benar sampai ditandai user).
 //
-// area_mandi (Math.PI/2, BUKAN Math.PI seperti perkiraan pertama): user juga menandai SALAH shower di dinding
-// kanan (arah masih salah) dan dinding depan/belakang (menghadap samping, bukan ke pengguna) meski sebelumnya
-// Math.PI dikira benar. Dicek ulang dari NOL pakai AxesHelper + uji rotasi 0°/90°/180°/270° satu per satu di
-// dinding "belakang" (dinding net Y=0, jadi rotasi lokal = rotasi dunia, paling gampang dibaca) — HANYA 90°
-// (bukan 180°) yang membuat lengan foreshortened (menempel tegak lurus ke dinding, bukan menyamping). Dicek ulang
-// visual di dinding kiri DAN kanan setelah perbaikan: kepala shower bulat jelas menghadap kamera di keduanya.
-// Dinding depan/belakang BELUM bisa diverifikasi ulang lewat alat ini (bug rendering terpisah di
-// KalibrasiRotasiDev.tsx membuat sel itu kosong, lihat catatan TODO di file itu) — tapi secara matematis rotasi-Y
-// murni berlaku sama di dinding manapun (rotasi-Y tidak pernah mengubah komponen vertikal suatu arah; begitu juga
-// komponen horizontal relatif terhadap dinding yang dihadapi, karena rotasi dasar `rotasiMenghadapDalam` per
-// dinding sudah dirancang konsisten) — jadi 90° yang terbukti benar di kiri+kanan cukup kuat untuk digeneralisasi
-// ke depan+belakang, TAPI tetap tercatat sebagai "belum dicek langsung" sampai bug alat itu diperbaiki.
-//
-// pintu (tetap 0): pengguna belum menandai salah untuk rotasi dasarnya — tapi mencatat masalah LAIN yang lebih
-// dalam (lihat DECISIONS.md): posisi gagang/arah bukaan pintu seharusnya tergantung dekat sudut dinding mana
-// (2 kemungkinan per dinding, bukan satu rotasi tetap) — belum diimplementasikan, bukan sekadar nilai kalibrasi.
-export const ROTASI_KALIBRASI: Record<ObjekDenah, number> = {
-  pintu: 0,
-  kloset: Math.PI,
-  wastafel: Math.PI,
-  area_mandi: Math.PI / 2,
+// pintu: pengguna belum menandai salah untuk rotasi dasarnya di dinding manapun — tapi mencatat masalah LAIN yang
+// lebih dalam (lihat DECISIONS.md): posisi gagang/arah bukaan pintu seharusnya tergantung dekat sudut dinding
+// mana (2 kemungkinan per dinding) — belum diimplementasikan, bukan sekadar nilai kalibrasi rotasi.
+export const ROTASI_KALIBRASI: Record<ObjekDenah, Record<DindingDenah, number>> = {
+  pintu: { kiri: 0, kanan: 0, depan: 0, belakang: 0 },
+  kloset: { kiri: Math.PI, kanan: Math.PI, depan: 0, belakang: 0 },
+  wastafel: { kiri: Math.PI, kanan: Math.PI, depan: 0, belakang: 0 },
+  area_mandi: { kiri: Math.PI / 2, kanan: Math.PI / 2, depan: Math.PI / 2, belakang: Math.PI / 2 },
 };
 
 // Kemiringan TAMBAHAN (radian, sumbu-X LOKAL model, diterapkan ke `model` BUKAN `pembungkus`) khusus area_mandi:
@@ -102,8 +95,11 @@ export const KEMIRINGAN_AREA_MANDI = -0.55;
 // tidak simetris persis terhadap sumbu-X lokal (lengan membengkok, bukan lurus satu sumbu) — tilt sumbu-tunggal
 // saja selalu menyisakan putaran (roll) residual. Ditemukan & nilainya dicari lewat cek visual langsung (sel
 // shower dinding kanan di KalibrasiRotasiDev.tsx, dibesarkan sampai lingkaran kepala shower kebaca jelas) —
-// 0.3 rad membuat lingkaran kepala shower jadi BULAT SIMETRIS menghadap kamera, bukan oval diagonal.
-export const KEMIRINGAN_AREA_MANDI_ROLL = 0.3;
+// 0.3 rad sempat dikira pas (bulat simetris) lewat cek visual asisten AI, TAPI user melaporkan hasilnya masih
+// mengarah ke "jam 7" (seharusnya "jam 6" tepat lurus ke bawah) — bacaan visual asisten AI lagi-lagi kurang
+// presisi. Diturunkan ke 0.15 sebagai percobaan berikutnya — BELUM diverifikasi user, perlu dicek ulang lewat
+// alat kalibrasi.
+export const KEMIRINGAN_AREA_MANDI_ROLL = 0.15;
 
 /** Benda yang SUNGGUHAN menempel/tertanam di dinding (dipakai `posisiTigaMenempel`, bukan `posisiTiga`) — beda
  *  dari benda berdiri bebas (kloset/wastafel) yang wajar punya jarak dari dinding. Lihat komentar di
@@ -155,6 +151,6 @@ export function bangunPembungkusObjek(id: ObjekDenah, letak: LetakDenah, modelAs
   const pembungkus = new THREE.Group();
   pembungkus.add(model);
   pembungkus.position.set(posisi.x, DASAR_Y[id], posisi.z);
-  pembungkus.rotation.y = posisi.rotasiY + ROTASI_KALIBRASI[id];
+  pembungkus.rotation.y = posisi.rotasiY + ROTASI_KALIBRASI[id][letak.dinding];
   return pembungkus;
 }
