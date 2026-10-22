@@ -1,17 +1,9 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { LANTAI_DALAM, LANTAI_LEBAR, posisiTiga, posisiTigaMenempel } from "../domain/isoTigaGeometri";
+import { LANTAI_DALAM, LANTAI_LEBAR } from "../domain/isoTigaGeometri";
 import { OBJEK_DENAH, type LetakDenah, type ObjekDenah } from "../domain/pindai";
-import {
-  DASAR_Y,
-  KEMIRINGAN_AREA_MANDI,
-  MODEL_SRC,
-  ROTASI_KALIBRASI,
-  TEBAL_DINDING,
-  TINGGI_DINDING,
-  TINGGI_TARGET,
-} from "./iso3dKalibrasi";
+import { bangunPembungkusObjek, MODEL_SRC, TEBAL_DINDING, TINGGI_DINDING } from "./iso3dKalibrasi";
 
 const ELEVASI_KAMERA = Math.atan(1 / Math.sqrt(2));
 const JARAK_KAMERA = 12;
@@ -118,49 +110,14 @@ export function PratinjauRuangIso3D({
     for (const id of OBJEK_DENAH) {
       // `letak(id)` (closure dari DenahKamarMandi.tsx) sudah menjatuhkan ke POSISI_BAWAAN kalau dindingnya
       // "tidak_terlihat" — selalu mengembalikan LetakDenah yang valid (4 dinding, tidak pernah "tidak_terlihat").
-      // `area_mandi` (kepala shower) & `pintu` (daun pintu) pakai `posisiTigaMenempel` (rata ke garis dinding
-      // sungguhan di satuan 3D) karena keduanya SUNGGUHAN menempel/tertanam di dinding — beda dari kloset/
-      // wastafel yang wajar berdiri berjarak dari dinding (lihat komentar di isoTigaGeometri.ts). Tanpa ini,
-      // shower terlihat mengambang di tengah ruangan dan pintu menyisakan sejumput lantai di belakangnya yang
-      // seharusnya sudah jadi bagian dinding.
       const letakId = letak(id);
-      const menempel = id === "area_mandi" || id === "pintu";
-      const posisi = menempel ? posisiTigaMenempel(letakId) : posisiTiga(letakId);
-      // Dorong sedikit ke dalam ruangan (menjauhi garis dinding) supaya mesh tidak z-fighting / menembus dinding
-      // — kecil saja (separuh tebal dinding + sedikit), cukup supaya kelihatan menempel tanpa tenggelam di dalam
-      // geometri dinding.
-      if (menempel) {
-        const dorong = TEBAL_DINDING / 2 + 0.02;
-        if (letakId.dinding === "kiri") posisi.x += dorong;
-        else if (letakId.dinding === "kanan") posisi.x -= dorong;
-        else if (letakId.dinding === "depan") posisi.z -= dorong;
-        else posisi.z += dorong;
-      }
       loader.load(
         MODEL_SRC[id],
         (gltf) => {
           if (batal) return;
-          const model = gltf.scene;
-          const kotakAsli = new THREE.Box3().setFromObject(model);
-          const ukuranAsli = new THREE.Vector3();
-          kotakAsli.getSize(ukuranAsli);
-          const skala = TINGGI_TARGET[id] / Math.max(ukuranAsli.y, 0.0001);
-          model.scale.setScalar(skala);
-          const kotakSetelahSkala = new THREE.Box3().setFromObject(model);
-          const pusat = new THREE.Vector3();
-          kotakSetelahSkala.getCenter(pusat);
-          // Pusatkan x/z benda ke titik jangkarnya sendiri (0,0,0) dulu, baru digeser ke posisi dunia — supaya
-          // titik jangkar konsisten di tengah-bawah model, lepas dari titik tumpu aslinya di file GLB.
-          model.position.set(-pusat.x, -kotakSetelahSkala.min.y, -pusat.z);
-          // Kemiringan kepala shower diterapkan di ROTASI LOKAL model (bukan pembungkus) — supaya "menunduk"-nya
-          // selalu relatif ke benda itu sendiri, lepas dari rotasi Y pembungkus yang menentukan dinding mana yang
-          // dihadapi (dua rotasi di dua node berbeda, tidak perlu mengatur urutan Euler).
-          if (id === "area_mandi") model.rotation.x = KEMIRINGAN_AREA_MANDI;
-          const pembungkus = new THREE.Group();
-          pembungkus.add(model);
-          pembungkus.position.set(posisi.x, DASAR_Y[id], posisi.z);
-          pembungkus.rotation.y = posisi.rotasiY + ROTASI_KALIBRASI[id];
-          scene.add(pembungkus);
+          // `bangunPembungkusObjek` SATU-SATUNYA tempat logika skala/posisi/rotasi ditulis — dipakai sama persis
+          // oleh alat bantu dev `KalibrasiRotasiDev.tsx`, supaya tidak ada dua salinan yang diam-diam beda.
+          scene.add(bangunPembungkusObjek(id, letakId, gltf.scene));
         },
         undefined,
         (err) => {

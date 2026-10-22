@@ -2,7 +2,10 @@ import type { Config } from "tailwindcss";
 
 // Semua token desain ada di sini supaya desainer bisa menggantinya.
 export default {
-  content: ["./index.html", "./src/**/*.{ts,tsx}"],
+  // `KalibrasiRotasiDev.tsx` dikecualikan: alat dev-only (lihat App.tsx), class Tailwind-nya kalau ikut dipindai
+  // tetap membengkakkan CSS produksi walau komponennya sendiri sudah di-tree-shake dari JS — melanggar aturan
+  // "ringan untuk kuota rendah" di CLAUDE.md tanpa memberi manfaat ke pengguna sungguhan.
+  content: ["./index.html", "./src/**/*.{ts,tsx}", "!./src/screens/KalibrasiRotasiDev.tsx"],
   theme: {
     extend: {
       colors: {

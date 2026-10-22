@@ -1,7 +1,10 @@
-// Konstanta kalibrasi visual untuk scene Three.js Pindai (dipakai bersama oleh `PratinjauRuangIso3D.tsx` dan
-// alat bantu dev `KalibrasiRotasiDev.tsx`) — dipisah ke sini supaya KEDUANYA memakai angka yang SAMA PERSIS,
-// tidak ada risiko dua salinan diam-diam beda setelah salah satu diubah (lihat DECISIONS.md).
-import type { ObjekDenah } from "../domain/pindai";
+// Konstanta + logika posisi/skala kalibrasi visual untuk scene Three.js Pindai (dipakai bersama oleh
+// `PratinjauRuangIso3D.tsx` dan alat bantu dev `KalibrasiRotasiDev.tsx`) — dipisah ke sini supaya KEDUANYA
+// memakai angka DAN logika yang SAMA PERSIS, tidak ada risiko dua salinan diam-diam beda setelah salah satu
+// diubah (lihat DECISIONS.md).
+import * as THREE from "three";
+import { posisiTiga, posisiTigaMenempel } from "../domain/isoTigaGeometri";
+import type { LetakDenah, ObjekDenah } from "../domain/pindai";
 
 export const MODEL_SRC: Record<ObjekDenah, string> = {
   pintu: "/model/pintu/quaternius-pintu.glb",
@@ -75,3 +78,49 @@ export const ROTASI_KALIBRASI: Record<ObjekDenah, number> = {
 // tidak bisa membuat lingkaran kepala shower MENUNDUK ke lantai/area mandi — itu perlu kemiringan di sumbu lain.
 // BELUM TERVERIFIKASI pengguna juga — lihat catatan di ROTASI_KALIBRASI di atas.
 export const KEMIRINGAN_AREA_MANDI = -0.55;
+
+/** Benda yang SUNGGUHAN menempel/tertanam di dinding (dipakai `posisiTigaMenempel`, bukan `posisiTiga`) — beda
+ *  dari benda berdiri bebas (kloset/wastafel) yang wajar punya jarak dari dinding. Lihat komentar di
+ *  `isoTigaGeometri.ts`. */
+export const OBJEK_MENEMPEL: ReadonlySet<ObjekDenah> = new Set<ObjekDenah>(["area_mandi", "pintu"]);
+
+/**
+ * Fungsi BERSAMA (dipakai `PratinjauRuangIso3D.tsx` DAN `KalibrasiRotasiDev.tsx`) yang mengubah model GLB mentah
+ * jadi `THREE.Group` siap-taruh di scene: diskalakan ke `TINGGI_TARGET`, dipusatkan di dasar, dirotasi+diposisikan
+ * sesuai `letak`. Meng-clone `modelAsli` dulu (bukan memakainya langsung) supaya AMAN dipanggil berkali-kali dari
+ * satu model GLB yang di-cache/dipakai ulang (dev tool memuat tiap model SEKALI lalu meng-clone-nya ke 4 sel
+ * dinding, bukan unduh ulang 4x) — tanpa clone, pemanggilan kedua akan menimpa transform pemanggilan pertama.
+ */
+export function bangunPembungkusObjek(id: ObjekDenah, letak: LetakDenah, modelAsli: THREE.Object3D): THREE.Group {
+  const model = modelAsli.clone(true);
+  const kotakAsli = new THREE.Box3().setFromObject(model);
+  const ukuranAsli = new THREE.Vector3();
+  kotakAsli.getSize(ukuranAsli);
+  const skala = TINGGI_TARGET[id] / Math.max(ukuranAsli.y, 0.0001);
+  model.scale.setScalar(skala);
+  const kotakSetelahSkala = new THREE.Box3().setFromObject(model);
+  const pusat = new THREE.Vector3();
+  kotakSetelahSkala.getCenter(pusat);
+  // Pusatkan x/z benda ke titik jangkarnya sendiri (0,0,0) dulu, baru digeser ke posisi dunia — supaya titik
+  // jangkar konsisten di tengah-bawah model, lepas dari titik tumpu aslinya di file GLB.
+  model.position.set(-pusat.x, -kotakSetelahSkala.min.y, -pusat.z);
+  if (id === "area_mandi") model.rotation.x = KEMIRINGAN_AREA_MANDI;
+
+  const menempel = OBJEK_MENEMPEL.has(id);
+  const posisi = menempel ? posisiTigaMenempel(letak) : posisiTiga(letak);
+  // Dorong sedikit ke dalam ruangan (menjauhi garis dinding) supaya mesh tidak z-fighting / menembus dinding —
+  // kecil saja (separuh tebal dinding + sedikit), cukup supaya kelihatan menempel tanpa tenggelam di dinding.
+  if (menempel) {
+    const dorong = TEBAL_DINDING / 2 + 0.02;
+    if (letak.dinding === "kiri") posisi.x += dorong;
+    else if (letak.dinding === "kanan") posisi.x -= dorong;
+    else if (letak.dinding === "depan") posisi.z -= dorong;
+    else posisi.z += dorong;
+  }
+
+  const pembungkus = new THREE.Group();
+  pembungkus.add(model);
+  pembungkus.position.set(posisi.x, DASAR_Y[id], posisi.z);
+  pembungkus.rotation.y = posisi.rotasiY + ROTASI_KALIBRASI[id];
+  return pembungkus;
+}

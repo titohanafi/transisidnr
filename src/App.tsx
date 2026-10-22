@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Aksi } from "./screens/Aksi";
 import { AsesmenAktivitas } from "./screens/AsesmenAktivitas";
@@ -16,6 +17,13 @@ import { PilihRuangan } from "./screens/PilihRuangan";
 import { Saya } from "./screens/Saya";
 import { Rencana } from "./screens/Rencana";
 import { StoreProvider } from "./state/store";
+
+// Alat bantu dev-only (lihat KalibrasiRotasiDev.tsx) — di-lazy-load DAN rutenya cuma didaftarkan saat
+// `import.meta.env.DEV`, supaya Vite benar-benar menghilangkannya dari bundle produksi (bukan cuma disembunyikan
+// dari navigasi), sesuai aturan "tanpa pustaka berat"/ringan untuk kuota rendah di CLAUDE.md.
+const KalibrasiRotasiDev = import.meta.env.DEV
+  ? lazy(() => import("./screens/KalibrasiRotasiDev").then((m) => ({ default: m.KalibrasiRotasiDev })))
+  : null;
 
 export function App() {
   return (
@@ -39,6 +47,16 @@ export function App() {
         <Route path="/igd" element={<Navigate to="/kontak" replace />} />
         <Route path="/saya" element={<Saya />} />
         <Route path="/hapus" element={<HapusData />} />
+        {import.meta.env.DEV && KalibrasiRotasiDev && (
+          <Route
+            path="/dev/kalibrasi-rotasi"
+            element={
+              <Suspense fallback={null}>
+                <KalibrasiRotasiDev />
+              </Suspense>
+            }
+          />
+        )}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </StoreProvider>
