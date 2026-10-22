@@ -15,6 +15,25 @@ describe("ukuran aksesibel", () => {
     expect(u.entri.filter((e) => e.status_validasi !== "draf")).toEqual([]);
   });
 
+  it("tiap ukuran terhubung ke indikator M-01 sampai M-12", () => {
+    const u = ukuranAksesibelSchema.parse(baca());
+    for (const e of u.entri) {
+      expect(e.indikator.length, e.id).toBeGreaterThan(0);
+      for (const m of e.indikator) expect(Number(m.slice(2)), `${e.id} ${m}`).toBeGreaterThanOrEqual(1);
+      for (const m of e.indikator) expect(Number(m.slice(2)), `${e.id} ${m}`).toBeLessThanOrEqual(12);
+    }
+  });
+
+  it("nilai PerMen selalu didaftar sebelum nilai ADA", () => {
+    const u = ukuranAksesibelSchema.parse(baca());
+    for (const e of u.entri) {
+      const urutan = e.nilai.map((n) => n.rujukan);
+      const adaPertama = urutan.indexOf("ada_2010");
+      const permenSetelahAda = adaPertama >= 0 && urutan.slice(adaPertama).includes("permen_pupr_14_2017");
+      expect(permenSetelahAda, e.id).toBe(false);
+    }
+  });
+
   it("gagal bila nilai menunjuk rujukan yang tidak ada", () => {
     const u = structuredClone(baca()) as { entri: { nilai: { rujukan: string }[] }[] };
     u.entri[0].nilai[0].rujukan = "tidak_ada";

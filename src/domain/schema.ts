@@ -155,6 +155,8 @@ export const ukuranAksesibelSchema = z
         id: z.string().regex(/^[a-z0-9-]+$/),
         objek: z.enum(["pintu", "ruang_toilet", "kloset", "wastafel", "area_mandi", "pegangan", "ruang_gerak"]),
         nama: teks,
+        /** Indikator checklist tim riset (M-01 sampai M-12) yang memakai ukuran ini. */
+        indikator: z.array(z.string().regex(/^M-\d{2}$/)),
         nilai: z
           .array(
             z
