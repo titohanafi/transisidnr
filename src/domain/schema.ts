@@ -134,6 +134,59 @@ export const kontakSchema = z
   .refine((k) => k.entri.every((e) => k.kategori.some((c) => c.id === e.kategori)), { message: "entri menunjuk kategori yang tidak ada" })
   .refine((k) => new Set(k.entri.map((e) => e.id)).size === k.entri.length, { message: "id entri kontak ganda" });
 
+const angkaCm = z.number().positive().nullable().optional();
+
+// Ukuran acuan kamar mandi aksesibel. Tiap angka wajib menyebut rujukan dan letaknya (pasal/halaman/gambar),
+// supaya bisa diperiksa dan diganti satu per satu oleh peninjau. Angka tetap berstatus draf sampai ditinjau ahli.
+export const ukuranAksesibelSchema = z
+  .object({
+    rujukan: z
+      .array(
+        z.object({
+          id: z.string().regex(/^[a-z0-9_]+$/),
+          nama: teks,
+          peran: z.enum(["utama", "pembanding"]),
+          tautan: urlHttp,
+        }),
+      )
+      .min(1),
+    entri: z.array(
+      z.object({
+        id: z.string().regex(/^[a-z0-9-]+$/),
+        objek: z.enum(["pintu", "ruang_toilet", "kloset", "wastafel", "area_mandi", "pegangan", "ruang_gerak"]),
+        nama: teks,
+        nilai: z
+          .array(
+            z
+              .object({
+                rujukan: z.string(),
+                rincian: teks,
+                sifat: z.enum(["persyaratan", "saran"]),
+                dibaca_dari_gambar: z.boolean(),
+                nilai_cm: angkaCm,
+                min_cm: angkaCm,
+                maks_cm: angkaCm,
+                lebar_cm: angkaCm,
+                panjang_cm: angkaCm,
+              })
+              .refine((n) => [n.nilai_cm, n.min_cm, n.maks_cm, n.lebar_cm, n.panjang_cm].some((v) => typeof v === "number"), {
+                message: "setiap nilai butuh minimal satu angka",
+              })
+              .refine((n) => n.min_cm == null || n.maks_cm == null || n.min_cm <= n.maks_cm, {
+                message: "min_cm lebih besar dari maks_cm",
+              }),
+          )
+          .min(1),
+        catatan: z.string().nullable(),
+        status_validasi: z.enum(STATUS_VALIDASI),
+      }),
+    ),
+  })
+  .refine((u) => u.entri.every((e) => e.nilai.every((n) => u.rujukan.some((r) => r.id === n.rujukan))), {
+    message: "nilai menunjuk rujukan yang tidak ada",
+  })
+  .refine((u) => new Set(u.entri.map((e) => e.id)).size === u.entri.length, { message: "id entri ukuran ganda" });
+
 export const asesmenSchema = z.object({
   aktivitas: z.array(z.object({ id: z.enum(AKTIVITAS), label: teks, bisaDipilihPrioritas: z.boolean() })).min(1),
   pertanyaan: z
@@ -493,6 +546,7 @@ export type Kartu = z.infer<typeof kartuSchema>;
 export type TingkatSolusi = z.infer<typeof tingkatSolusiSchema>;
 export type Barang = z.infer<typeof barangSchema>;
 export type Kontak = z.infer<typeof kontakSchema>;
+export type UkuranAksesibel = z.infer<typeof ukuranAksesibelSchema>;
 export type Asesmen = z.infer<typeof asesmenSchema>;
 export type Pertanyaan = Asesmen["pertanyaan"][number];
 export type Config = z.infer<typeof configSchema>;
