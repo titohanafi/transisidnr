@@ -886,3 +886,11 @@
 - **Kejujuran isi:** Gemini hanya mengenali jenis shower, bukan tinggi kait. Karena itu langkah "Kondisi" dilabeli "contoh" dan kalimatnya tidak mengklaim kondisi pengguna. Gambar tidak memuat angka; catatan "bukan ukuran, angka menyusul setelah ditinjau ahli" ditampilkan di bawah contoh.
 - **Ceklis manual:** jenis shower awalnya `tidak_jelas`; pengguna bisa memilih sendiri.
 - **Belum:** gambar untuk jenis shower lain yang ditandai perlu perhatian (hanya hand shower punya Hack dan Permanen), panel M-08 (area mandi), dan pemasangan gambar ke denah.
+
+## Tab Isometrik memakai gaya manual perakitan (percobaan)
+- **Permintaan pemilik:** tab Isometrik pada denah dibuat dengan gaya gambar baru (manual perakitan).
+- **Yang berubah:** tembok dan lantai polos putih (pola titik keramik, titik-titik lantai, dan gradasi bayangan dihapus); sisi kotak hanya dua nada datar (terang untuk sisi depan, lebih gelap untuk sisi samping); area lantai yang disorot memakai garis putus-putus. Shower memakai penggambar `gambarShower.ts` sesuai jenis yang terbaca/dipilih pengguna (`varianShower` dilewatkan dari `PindaiFoto` ke `DenahKamarMandi`, jadi mengoreksi jenis shower ikut mengubah denah). Ikon kotak+pipa lama dihapus.
+- **Penggambar dirombak:** `gambarShower.ts` kini bekerja lewat "kerangka dinding" (`Kerangka`: dinding belakang/kiri/kanan/depan, titik sepanjang dinding, proyeksi, skala), jadi gambar yang sama dipakai di panel (proyeksi panel) dan di denah (proyeksi `iso()` ruangan, diskalakan ke tinggi dinding 190). Dinding kiri tidak lagi dibuat dengan mencerminkan hasil; tes memastikan hasilnya sama dengan cermin dinding kanan.
+- **Dinding kanan:** pada sudut pandang kanan, dinding kanan digambar solid dan hanya sisi luarnya yang terlihat, jadi shower dipasang di permukaan luar itu (memakai kerangka dinding kiri bergeser ke `W + TEBAL_DINDING`). Pada sudut pandang kiri, dinding kanan tidak digambar dan shower tampak menjorok dari tepi terbuka (dilihat dari belakang). Ini batasan tampilan potongan ruangan, belum diselesaikan.
+- **Belum diubah gayanya:** kloset, wastafel, dan pintu masih memakai bentuk lama (hanya nada datar yang baru). Gambar baru untuk benda-benda itu belum dibuat. Tampak atas tidak diubah.
+- Diverifikasi lewat mode mock (browser, lebar 400 px): kedua sudut pandang tampil tanpa galat; panel di `/dev/shower` tidak berubah.

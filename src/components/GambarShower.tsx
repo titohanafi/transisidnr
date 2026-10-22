@@ -12,8 +12,6 @@ import {
 } from "../domain/gambarShower";
 import type { VarianShower } from "../domain/pindai";
 
-const K = Math.sqrt(3) / 2;
-
 type Bidang = "atas" | "kanan" | "kiri" | "latar" | "zona" | "pita";
 const ISI: Record<Peran, Record<Bidang, string>> = {
   netral: { atas: "fill-white", kanan: "fill-luar", kiri: "fill-garis", latar: "fill-white", zona: "fill-utama/10", pita: "fill-garis" },
@@ -59,11 +57,11 @@ function kePath(pts: readonly Titik[]): string {
   return d;
 }
 
-function Bentuk({ s, penanda }: { s: Primitif; penanda: string }) {
+function Bentuk({ s, penanda, m }: { s: Primitif; penanda: string; m: number }) {
   switch (s.jenis) {
     case "poligon": {
       if (s.muka === "zona") {
-        return <polygon points={kePoin(s.titik)} className="fill-utama/10 stroke-utama" strokeWidth={2.4} strokeDasharray="9 6" />;
+        return <polygon points={kePoin(s.titik)} className="fill-utama/10 stroke-utama" strokeWidth={2.4 * m} strokeDasharray="9 6" />;
       }
       const hantu = s.peran === "hantu";
       return (
@@ -71,12 +69,12 @@ function Bentuk({ s, penanda }: { s: Primitif; penanda: string }) {
           points={kePoin(s.titik)}
           className={`${ISI[s.peran][s.muka]} ${s.muka === "pita" ? "stroke-none" : GARIS[s.peran]}`}
           strokeDasharray={hantu ? "5 4" : undefined}
-          strokeWidth={hantu ? 1.8 : undefined}
+          strokeWidth={hantu ? 1.8 * m : undefined}
         />
       );
     }
     case "elips": {
-      const lebar = s.tingkat === "tutup" ? 1.2 : s.tingkat === "rongga" ? 1.4 : undefined;
+      const lebar = s.tingkat === "tutup" ? 1.2 * m : s.tingkat === "rongga" ? 1.4 * m : undefined;
       const kelas = s.tingkat === "atas" ? ISI_ATAS[s.peran] : s.tingkat === "rongga" ? ISI_RONGGA[s.peran] : "fill-none";
       return <ellipse cx={s.cx} cy={s.cy} rx={s.rx} ry={s.ry} className={`${kelas} ${GARIS[s.peran]}`} strokeWidth={lebar} />;
     }
@@ -88,16 +86,17 @@ function Bentuk({ s, penanda }: { s: Primitif; penanda: string }) {
         />
       );
     case "cakram": {
-      const depan = s.tingkat === "depan";
+      const muka = s.tingkat !== "belakang";
+      const lubang = s.tingkat === "depan";
       return (
-        <g transform={`matrix(${s.arah * K} 0.5 0 -1 ${s.cx} ${s.cy})`} className={GARIS[s.peran]}>
-          <circle r={s.r} className={depan ? ISI_ATAS[s.peran] : ISI.netral.pita} vectorEffect="non-scaling-stroke" />
-          {depan && (
+        <g transform={`matrix(${s.sumbuA[0]} ${s.sumbuA[1]} 0 -1 ${s.cx} ${s.cy})`} className={GARIS[s.peran]}>
+          <circle r={s.r} className={muka ? ISI_ATAS[s.peran] : ISI.netral.pita} vectorEffect="non-scaling-stroke" />
+          {lubang && (
             <>
-              <circle r={s.r * 0.68} className="fill-none" strokeWidth={1.2} vectorEffect="non-scaling-stroke" />
+              <circle r={s.r * 0.68} className="fill-none" strokeWidth={1.2 * m} vectorEffect="non-scaling-stroke" />
               <g className={ISI_LUBANG[s.peran]} stroke="none">
                 {LUBANG.map(([x, y]) => (
-                  <circle key={`${x}${y}`} cx={x} cy={y} r={1.6} />
+                  <circle key={`${x}${y}`} cx={x * (s.r / 22)} cy={y * (s.r / 22)} r={1.6 * (s.r / 22)} />
                 ))}
               </g>
             </>
@@ -109,8 +108,8 @@ function Bentuk({ s, penanda }: { s: Primitif; penanda: string }) {
       const [x1, y1] = s.dari;
       const [x2, y2] = s.ke;
       if (s.gaya === "air")
-        return <line x1={x1} y1={y1} x2={x2} y2={y2} className="stroke-garisKontrol" strokeWidth={2} strokeDasharray="4 5" />;
-      if (s.gaya === "silang") return <line x1={x1} y1={y1} x2={x2} y2={y2} className={GARIS[s.peran]} strokeWidth={5} />;
+        return <line x1={x1} y1={y1} x2={x2} y2={y2} className="stroke-garisKontrol" strokeWidth={2 * m} strokeDasharray="4 5" />;
+      if (s.gaya === "silang") return <line x1={x1} y1={y1} x2={x2} y2={y2} className={GARIS[s.peran]} strokeWidth={5 * m} />;
       if (s.gaya === "panah") {
         return (
           <line
@@ -119,7 +118,7 @@ function Bentuk({ s, penanda }: { s: Primitif; penanda: string }) {
             x2={x2}
             y2={y2}
             className={GARIS[s.peran]}
-            strokeWidth={3.5}
+            strokeWidth={3.5 * m}
             strokeDasharray="7 5"
             markerEnd={`url(#${penanda})`}
           />
@@ -129,17 +128,17 @@ function Bentuk({ s, penanda }: { s: Primitif; penanda: string }) {
     }
     case "jalur": {
       const d = kePath(s.titik);
-      if (s.gaya === "lengkung") return <path d={d} className={`fill-none ${GARIS[s.peran]}`} strokeWidth={1.8} />;
+      if (s.gaya === "lengkung") return <path d={d} className={`fill-none ${GARIS[s.peran]}`} strokeWidth={1.8 * m} />;
       const dalam = s.gaya === "selang" ? "stroke-garisKontrol" : "stroke-luar";
       return (
         <>
-          <path d={d} className="fill-none stroke-tinta" strokeWidth={s.gaya === "selang" ? 8.5 : 7} />
-          <path d={d} className={`fill-none ${dalam}`} strokeWidth={s.gaya === "selang" ? 4.5 : 3} />
+          <path d={d} className="fill-none stroke-tinta" strokeWidth={(s.gaya === "selang" ? 8.5 : 7) * m} />
+          <path d={d} className={`fill-none ${dalam}`} strokeWidth={(s.gaya === "selang" ? 4.5 : 3) * m} />
         </>
       );
     }
     case "baut":
-      return <circle cx={s.cx} cy={s.cy} r={1.8} className={`${ISI_LUBANG[s.peran]} stroke-none`} />;
+      return <circle cx={s.cx} cy={s.cy} r={1.8 * m} className={`${ISI_LUBANG[s.peran]} stroke-none`} />;
     case "tanda":
       return (
         <text x={s.x} y={s.y} textAnchor="middle" fontSize={30} fontWeight={800} className="fill-redup stroke-none">
@@ -147,6 +146,17 @@ function Bentuk({ s, penanda }: { s: Primitif; penanda: string }) {
         </text>
       );
   }
+}
+
+/** Daftar bentuk gambar shower di dalam <svg> yang sudah ada (denah isometrik), dengan tebal garis dikalikan `tebal`. */
+export function LapisPrimitif({ daftar, penanda = "", tebal = 1 }: { daftar: Primitif[]; penanda?: string; tebal?: number }) {
+  return (
+    <>
+      {daftar.map((s, i) => (
+        <Bentuk key={i} s={s} penanda={penanda} m={tebal} />
+      ))}
+    </>
+  );
 }
 
 interface Props {
@@ -173,9 +183,7 @@ export function GambarShower({ varian, mode = "kondisi", sisi = "kanan", anotasi
         </marker>
       </defs>
       <g strokeWidth={2.2} strokeLinejoin="round" strokeLinecap="round">
-        {susunGambar(varian, mode, sisi, { anotasi, latar }).map((s, i) => (
-          <Bentuk key={i} s={s} penanda={penanda} />
-        ))}
+        <LapisPrimitif daftar={susunGambar(varian, mode, sisi, { anotasi, latar })} penanda={penanda} />
       </g>
     </svg>
   );

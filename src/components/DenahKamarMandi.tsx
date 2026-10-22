@@ -1,5 +1,6 @@
 import { Info, RotateCcw, RotateCw, X, ZoomIn } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
+import { LapisPrimitif } from "./GambarShower";
 import { PilihanPil } from "./Pilihan";
 import { konten } from "../domain/content";
 import {
@@ -12,6 +13,7 @@ import {
   type ObjekDenah,
   type PosisiObjek,
   type StatusItem,
+  type VarianShower,
 } from "../domain/pindai";
 import {
   dorongKeDalam,
@@ -27,6 +29,7 @@ import {
   W,
   type TitikDatar,
 } from "../domain/denahGeometri";
+import { gambarShower, TINGGI_DINDING_PANEL, type Kerangka } from "../domain/gambarShower";
 import { UKURAN_AREA_MANDI, UKURAN_KLOSET, UKURAN_PINTU, UKURAN_WASTAFEL } from "../domain/objekUkuran";
 import { PratinjauIsoTiga } from "./PratinjauIsoTiga";
 import { PratinjauRuangIso3D } from "./PratinjauRuangIso3D";
@@ -67,6 +70,7 @@ import {
   TANGKI_PUSH_IN,
   TANGKI_TINGGI,
   TANGKI_Z_MULAI,
+  TEBAL_DINDING,
   WASTAFEL_KERAN_PUSH_IN,
 } from "../domain/denahIsoGeometri";
 
@@ -200,12 +204,9 @@ function BentukIso({
         return (
           <g key={i}>
             <polygon points={titik} />
-            {/* Lapisan gelap di atas isian (bukan ganti warna isi): tetap ikut warna status/`isi` apa pun, cuma
-                diredupkan — meniru bayangan tiap sisi di acuan. SELALU ada lapisan (bukan cuma kalau gelap>0.05
-                seperti sebelumnya) dengan dasar 0.12 supaya sisi manapun tetap kelihatan punya "cat" berbeda dari
-                sisi atas yang polos — sebelumnya sisi yang hampir menghadap depan (gelap mendekati 0) nyaris
-                tidak punya bayangan sama sekali, jadi kelihatan rata kosong seperti rangka, bukan benda padat. */}
-            <polygon points={titik} className="fill-tinta" fillOpacity={0.12 + gelap * 0.22} pointerEvents="none" />
+            {/* Gaya manual perakitan: dua nada datar saja. Sisi yang menghadap depan terang, sisi samping lebih gelap;
+                tidak ada gradasi. Lapisan ini ikut warna isian, jadi benda bernada status tetap terbaca. */}
+            <polygon points={titik} className="fill-tinta" fillOpacity={gelap > 0.5 ? 0.14 : 0.05} pointerEvents="none" />
           </g>
         );
       })}
@@ -645,12 +646,15 @@ function AreaMandi({
 export function DenahKamarMandi({
   temuan,
   objek,
+  varianShower = "tidak_jelas",
   filter,
   onUbahFilter,
   children,
 }: {
   temuan: Record<string, StatusItem>;
   objek: Record<ObjekDenah, PosisiObjek>;
+  /** Jenis shower yang digambar di tampilan isometrik (dari hasil pindai atau pilihan pengguna). */
+  varianShower?: VarianShower;
   /** Status yang sedang aktif di tab filter — dikendalikan dari pemanggil (bukan state lokal) supaya "Rincian per
    *  hal" di PindaiFoto.tsx bisa ikut berganti isi mengikuti tab yang sama, bukan tab terpisah yang tidak nyambung. */
   filter: StatusItem;
@@ -868,15 +872,6 @@ export function DenahKamarMandi({
     const footprintBelakangIni = footprintDindingBelakang();
     const footprintSampingIni = footprintDindingSamping(sudutAktif.x);
     const footprintTiangIni = footprintTiangSudut(sudutAktif.x);
-    // Pita ubin dekoratif di bagian bawah kedua dinding solid (selalu tampil, tidak terkait status apa pun) — di
-    // acuan gambar isometrik, dinding punya ubin setinggi dada (bukan polos kosong), terutama penting sekarang
-    // dinding jauh lebih tinggi dari sebelumnya dan akan terlihat kosong tanpa ini.
-    const TINGGI_UBIN = ISO_TINGGI_DINDING * 0.45;
-    const ubinBelakang = ke([iso(0, 0, 0), iso(W, 0, 0), iso(W, 0, TINGGI_UBIN), iso(0, 0, TINGGI_UBIN)]);
-    const ubinSamping =
-      sudutAktif.x === "kanan"
-        ? ke([iso(W, 0, 0), iso(W, H, 0), iso(W, H, TINGGI_UBIN), iso(W, 0, TINGGI_UBIN)])
-        : ke([iso(0, 0, 0), iso(0, H, 0), iso(0, H, TINGGI_UBIN), iso(0, 0, TINGGI_UBIN)]);
 
     // Titik asli (sebelum digeser `dorongKeDalam`) dipakai untuk jejak benda di lantai; titik yang sudah digeser ke
     // arah ruangan dipakai untuk badge-nya — persis seperti pembagian x/y di tampak atas (lihat `Pintu`/`Kloset`/dst).
@@ -891,38 +886,23 @@ export function DenahKamarMandi({
     const jangkauanBadge = dorongKeDalam(areaMandi.x, areaMandi.y, areaMandi.dinding, 20);
     // Jejak area mandi memanjang sepanjang dindingnya (bukan kotak persegi), sama seperti zona di tampak atas.
     const sepanjangDinding = areaMandi.dinding === "kiri" || areaMandi.dinding === "kanan";
-    // Titik PERSIS di garis dinding (z bebas) — dipakai untuk menggambar kepala shower menempel dinding, bukan
-    // melayang di tengah lantai seperti sebelumnya (acuan gambar isometrik menggambarnya sebagai kotak kecil +
-    // pipa yang menempel dinding, bukan lingkaran semprot di lantai).
-    const titikDiDinding = (dinding: DindingDenah, sepanjang: number, z: number): { x: number; y: number } =>
-      dinding === "kiri"
-        ? iso(PAD, sepanjang, z)
-        : dinding === "kanan"
-          ? iso(W - PAD, sepanjang, z)
-          : dinding === "depan"
-            ? iso(sepanjang, H - PAD, z)
-            : iso(sepanjang, PAD, z);
-    // Kotak kecil rata dinding (dipakai untuk badan kepala shower) — generalisasi dari pita ubin/bibir dinding di
-    // atas, cuma untuk persegi kecil di satu titik sepanjang dinding, bukan selebar dinding.
-    const kotakDiDinding = (dinding: DindingDenah, sepanjang: number, z: number, setengahSepanjang: number, setengahZ: number): string => {
-      const a = sepanjang - setengahSepanjang;
-      const b = sepanjang + setengahSepanjang;
-      return ke([
-        titikDiDinding(dinding, a, z - setengahZ),
-        titikDiDinding(dinding, b, z - setengahZ),
-        titikDiDinding(dinding, b, z + setengahZ),
-        titikDiDinding(dinding, a, z + setengahZ),
-      ]);
-    };
+    // Shower digambar dengan penggambar bergaya manual perakitan (`../domain/gambarShower.ts`), dipasang di dinding
+    // tempat area mandi menempel. Ukurannya diseragamkan ke tinggi dinding ruangan ini lewat `skala`.
     const showerSepanjang = sepanjangDinding ? areaMandi.y : areaMandi.x;
-    const SHOWER_Z_BAWAH = ISO_TINGGI_DINDING * 0.58;
-    const SHOWER_Z_ATAS = ISO_TINGGI_DINDING * 0.94;
-    // Dibesarkan (dulu setengah-sisi 7/6 dan 4/4) — pada ukuran sebelumnya ikonnya terlalu kecil untuk terbaca
-    // sebagai "shower" di kanvas sebesar ini, kelihatan seperti coretan lepas di dekat sudut dinding.
-    const showerKotak = kotakDiDinding(areaMandi.dinding, showerSepanjang, SHOWER_Z_BAWAH, 10, 9);
-    const showerPipaAtas = titikDiDinding(areaMandi.dinding, showerSepanjang, SHOWER_Z_ATAS);
-    const showerPipaBawah = titikDiDinding(areaMandi.dinding, showerSepanjang, SHOWER_Z_BAWAH + 9);
-    const showerKotakAtas = kotakDiDinding(areaMandi.dinding, showerSepanjang, SHOWER_Z_ATAS, 6, 5);
+    // Dinding kanan yang digambar solid hanya memperlihatkan sisi luarnya (sisi dalamnya membelakangi kamera), jadi
+    // shower dipasang di permukaan luar itu: pola menempel dinding yang sama dengan dinding kiri.
+    const dipasangDiLuar = areaMandi.dinding === "kanan" && sudutAktif.x === "kanan";
+    const kerangkaShower: Kerangka = {
+      dinding: dipasangDiLuar ? "kiri" : areaMandi.dinding,
+      sepanjang: showerSepanjang,
+      bidang: dipasangDiLuar ? W + TEBAL_DINDING : areaMandi.dinding === "kanan" ? W : areaMandi.dinding === "depan" ? H : 0,
+      proyeksi: (x, y, z) => {
+        const p = iso(x, y, z);
+        return [p.x, p.y];
+      },
+      skala: ISO_TINGGI_DINDING / TINGGI_DINDING_PANEL,
+    };
+    const gambarShowerRuang = gambarShower(varianShower, "kondisi", { kerangka: kerangkaShower });
     // Dipakai untuk menentukan orientasi balok 3D tiap benda (lebih panjang sepanjang dinding atau menjorok ke
     // ruangan) — dicek per benda sendiri-sendiri karena bisa saja berbeda dinding satu sama lain.
     const sejajar = (d: DindingDenah) => d === "kiri" || d === "kanan";
@@ -1008,25 +988,19 @@ export function DenahKamarMandi({
             Dinding "belakang" selalu digambar; dinding "samping" gantian kiri/kanan sesuai `sudutAktif.x`, TANPA
             ada koordinat yang dibalik — cuma footprint-nya sendiri yang beda (lihat definisinya di atas). */}
         <BentukIso footprint={footprintBelakangIni} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
-        <BentukIso footprint={footprintSampingIni} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-permukaan" />
+        <BentukIso footprint={footprintSampingIni} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
         <BentukIso footprint={footprintTiangIni} tinggi={ISO_TINGGI_DINDING} kelas="text-tinta" isi="fill-white" />
-        <defs>
-          <pattern id="iso-ubin" width="7" height="7" patternUnits="userSpaceOnUse">
-            <rect width={7} height={7} className="fill-permukaan" />
-            <circle cx={2} cy={2} r={0.7} className="fill-garisKontrol" />
-            <circle cx={5.5} cy={5} r={0.5} className="fill-garisKontrol" />
-          </pattern>
-        </defs>
-        <polygon points={ubinBelakang} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
-        <polygon points={ubinSamping} fill="url(#iso-ubin)" stroke="currentColor" strokeWidth={1.2} strokeLinejoin="round" />
         <polygon points={lantai} fill="white" stroke="currentColor" strokeWidth={2.2} strokeLinejoin="round" />
-        {Array.from({ length: 10 }, (_, baris) =>
-          Array.from({ length: 7 }, (_, kolom) => {
-            const p = iso(PAD + 14 + kolom * 26, PAD + 14 + baris * 28);
-            return (
-              <circle key={`${baris}-${kolom}`} cx={p.x} cy={p.y} r={1.3} className={warna("lantai")} fill="currentColor" opacity={0.45} />
-            );
-          }),
+        {nomorLantai !== undefined && (
+          <polygon
+            points={isoPersegi(W / 2, H / 2, W / 2 - PAD, H / 2 - PAD, 0)}
+            fill="none"
+            className={warna("lantai")}
+            stroke="currentColor"
+            strokeWidth={1.5}
+            strokeDasharray="5 5"
+            opacity={0.6}
+          />
         )}
         {nomorRuang !== undefined && (
           <polygon
@@ -1066,7 +1040,7 @@ export function DenahKamarMandi({
           ]
             .map((p) => `${p.x},${p.y}`)
             .join(" ")}
-          className="fill-garis text-garisKontrol"
+          className="fill-white text-garisKontrol"
           stroke="currentColor"
           strokeWidth={1.6}
         />
@@ -1177,17 +1151,8 @@ export function DenahKamarMandi({
             dekat sudut yang sama dengan kloset/wastafel, dan kalau digambar lebih dulu, bodinya ketutup kotak
             kloset/wastafel yang digambar belakangan (cuma pipa/kotak kecilnya yang nongol, kelihatan seperti
             bendera kecil nyangkut, bukan shower). */}
-        <g className={warna("jangkauan")} stroke="currentColor" fill="white" strokeWidth={2} pointerEvents="none">
-          <line
-            x1={showerPipaAtas.x}
-            y1={showerPipaAtas.y}
-            x2={showerPipaBawah.x}
-            y2={showerPipaBawah.y}
-            strokeWidth={4}
-            strokeLinecap="round"
-          />
-          <polygon points={showerKotakAtas} strokeLinejoin="round" />
-          <polygon points={showerKotak} strokeLinejoin="round" />
+        <g className="text-tinta" strokeWidth={1.6} strokeLinejoin="round" strokeLinecap="round" pointerEvents="none">
+          <LapisPrimitif daftar={gambarShowerRuang} tebal={0.75} />
         </g>
         {badgeIso({ x: W / 2, y: H / 2 }, "ruang", nomorRuang, warna("ruang"), latar("ruang"))}
         {badgeIso({ x: W / 2, y: H / 2 - 45 }, "lantai", nomorLantai, warna("lantai"), latar("lantai"))}

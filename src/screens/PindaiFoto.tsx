@@ -407,7 +407,7 @@ function Hasil({
 
       {/* "Rincian per hal" dirender sebagai children DenahKamarMandi, di dalam kartu yang sama dengan denah+toggle
           (bukan section terpisah di bawahnya) - supaya isi tab status yang aktif terlihat sebagai satu kesatuan. */}
-      <DenahKamarMandi temuan={temuan} objek={objek} filter={filter} onUbahFilter={setFilter}>
+      <DenahKamarMandi temuan={temuan} objek={objek} varianShower={varian} filter={filter} onUbahFilter={setFilter}>
         <section aria-labelledby="judul-temuan">
           <div className="mb-isi">
             <h2 id="judul-temuan" className="text-judulKartu">

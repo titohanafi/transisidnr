@@ -1,7 +1,9 @@
 // Gambar shower isometrik bergaya manual perakitan: fungsi murni yang menghasilkan daftar bentuk (primitif) dari
-// varian, mode, dan ukuran. Komponen `GambarShower.tsx` hanya merender daftar ini.
+// varian, mode, ukuran, dan "kerangka dinding" (dinding mana, di titik mana, diproyeksikan bagaimana). Komponen
+// `GambarShower.tsx` merender daftar ini sebagai panel; denah isometrik (`DenahKamarMandi.tsx`) memakai daftar yang
+// sama langsung di koordinat ruangan.
 //
-// Satuan: "satuan gambar" di kanvas 380x500. Hanya tinggi zona jangkauan yang berasal dari tabel ukuran
+// Satuan: "satuan gambar". Hanya tinggi zona jangkauan yang berasal dari tabel ukuran
 // (`content/ukuran-aksesibel.json`, diubah ke satuan gambar lewat SKALA). Bentuk benda (kait, gagang, kepala shower,
 // ember) adalah ilustrasi, BUKAN ukuran produk. Gambar tidak pernah menampilkan angka.
 import type { VarianShower } from "./pindai";
@@ -10,6 +12,7 @@ import { nilaiAcuan } from "./ukuranAksesibel";
 export type Titik = readonly [number, number];
 export type ModeGambar = "kondisi" | "hack" | "permanen";
 export type SisiDinding = "kanan" | "kiri";
+export type Dinding = "belakang" | "kiri" | "kanan" | "depan";
 export type Peran = "netral" | "aksen" | "hantu";
 export type Muka = "atas" | "kanan" | "kiri";
 
@@ -17,7 +20,7 @@ export type Primitif =
   | { jenis: "poligon"; muka: Muka | "latar" | "zona" | "pita"; titik: Titik[]; peran: Peran }
   | { jenis: "elips"; cx: number; cy: number; rx: number; ry: number; tingkat: "atas" | "rongga" | "tutup"; peran: Peran }
   | { jenis: "badan"; cx: number; yAtas: number; yBawah: number; rx: number; ry: number; muka: "kanan" | "kiri"; peran: Peran }
-  | { jenis: "cakram"; cx: number; cy: number; r: number; arah: 1 | -1; tingkat: "belakang" | "depan"; peran: Peran }
+  | { jenis: "cakram"; cx: number; cy: number; r: number; sumbuA: Titik; tingkat: "belakang" | "depan" | "polos"; peran: Peran }
   | { jenis: "garis"; dari: Titik; ke: Titik; gaya: "tegas" | "putus" | "air" | "silang" | "panah"; peran: Peran }
   | { jenis: "jalur"; titik: Titik[]; gaya: "selang" | "gagang" | "lengkung"; peran: Peran }
   | { jenis: "baut"; cx: number; cy: number; peran: Peran }
@@ -27,14 +30,58 @@ export const LEBAR_KANVAS = 380;
 export const TINGGI_KANVAS = 500;
 /** Satuan gambar per sentimeter, dipakai khusus untuk angka dari tabel ukuran. */
 export const SKALA = 1.2;
+/** Tinggi dinding polos pada panel, satuan gambar. */
+export const TINGGI_DINDING_PANEL = 310;
 
 const K = Math.sqrt(3) / 2;
 const PUSAT_X = LEBAR_KANVAS / 2;
 const PUSAT_Y = 400;
 
-// Dinding kanan: sumbu `a` sepanjang dinding (turun ke kanan), `n` menjauh dari dinding ke dalam ruangan (turun ke
-// kiri), `u` tinggi. Dinding kiri dibuat dengan mencerminkan hasilnya (lihat `cerminkan`).
-export const titik = (a: number, n: number, u: number): Titik => [PUSAT_X + K * (a - n), PUSAT_Y + 0.5 * (a + n) - u];
+/** Proyeksi isometrik titik ruangan (x, y, tinggi) ke kanvas panel. Sumbu x turun ke kanan, y turun ke kiri. */
+export const proyeksiPanel = (x: number, y: number, z: number): Titik => [PUSAT_X + K * (x - y), PUSAT_Y + 0.5 * (x + y) - z];
+
+/**
+ * Tempat benda dipasang: dinding mana, titik di sepanjang dinding itu, bidang dinding, cara memproyeksikan koordinat
+ * ruangan, dan pengali ukuran gambar. Koordinat lokal benda: `a` sepanjang dinding, `n` menjauhi dinding ke dalam
+ * ruangan, `u` tinggi. Dinding belakang dan kiri terlihat dari dalam; kanan dan depan terlihat dari belakang benda.
+ */
+export interface Kerangka {
+  dinding: Dinding;
+  sepanjang: number;
+  bidang: number;
+  proyeksi: (x: number, y: number, z: number) => Titik;
+  skala: number;
+}
+
+export function kerangkaPanel(sisi: SisiDinding): Kerangka {
+  return { dinding: sisi === "kanan" ? "belakang" : "kiri", sepanjang: 0, bidang: 0, proyeksi: proyeksiPanel, skala: 1 };
+}
+
+function keRuang(k: Kerangka, a: number, n: number): readonly [number, number] {
+  switch (k.dinding) {
+    case "belakang":
+      return [k.sepanjang + a, k.bidang + n];
+    case "kiri":
+      return [k.bidang + n, k.sepanjang + a];
+    case "kanan":
+      return [k.bidang - n, k.sepanjang + a];
+    case "depan":
+      return [k.sepanjang + a, k.bidang - n];
+  }
+}
+
+/** Titik layar untuk koordinat lokal benda (a, n, u), sudah dikalikan skala gambar. */
+export function titik(k: Kerangka, a: number, n: number, u: number): Titik {
+  const [x, y] = keRuang(k, a * k.skala, n * k.skala);
+  return k.proyeksi(x, y, u * k.skala);
+}
+
+/** Arah sumbu `a` di layar (vektor satuan): kanan-bawah atau kiri-bawah. */
+function sumbuA(k: Kerangka): Titik {
+  const p = titik(k, 0, 0, 0);
+  const q = titik(k, 1 / k.skala, 0, 0);
+  return [q[0] - p[0], q[1] - p[1]];
+}
 
 export interface UkuranShower {
   /** Batas bawah zona jangkauan dari lantai, satuan gambar. */
@@ -58,44 +105,58 @@ const poligon = (muka: Muka | "latar" | "zona" | "pita", pts: Titik[], peran: Pe
   peran,
 });
 
-function kotak(a0: number, a1: number, n0: number, n1: number, u0: number, u1: number, peran: Peran): Primitif[] {
+/** Kotak pada koordinat lokal: tiga sisi yang terlihat dari kamera (atas, sisi menghadap kanan-bawah, sisi menghadap kiri-bawah). */
+function kotak(k: Kerangka, a0: number, a1: number, n0: number, n1: number, u0: number, u1: number, peran: Peran): Primitif[] {
+  const [xa, ya] = keRuang(k, a0 * k.skala, n0 * k.skala);
+  const [xb, yb] = keRuang(k, a1 * k.skala, n1 * k.skala);
+  const [x0, x1] = [Math.min(xa, xb), Math.max(xa, xb)];
+  const [y0, y1] = [Math.min(ya, yb), Math.max(ya, yb)];
+  const [z0, z1] = [u0 * k.skala, u1 * k.skala];
+  const p = k.proyeksi;
   return [
-    poligon("atas", [titik(a0, n0, u1), titik(a1, n0, u1), titik(a1, n1, u1), titik(a0, n1, u1)], peran),
-    poligon("kanan", [titik(a1, n0, u1), titik(a1, n1, u1), titik(a1, n1, u0), titik(a1, n0, u0)], peran),
-    poligon("kiri", [titik(a0, n1, u1), titik(a1, n1, u1), titik(a1, n1, u0), titik(a0, n1, u0)], peran),
+    poligon("atas", [p(x0, y0, z1), p(x1, y0, z1), p(x1, y1, z1), p(x0, y1, z1)], peran),
+    poligon("kanan", [p(x1, y0, z1), p(x1, y1, z1), p(x1, y1, z0), p(x1, y0, z0)], peran),
+    poligon("kiri", [p(x0, y1, z1), p(x1, y1, z1), p(x1, y1, z0), p(x0, y1, z0)], peran),
   ];
 }
 
 /** Sudut parameter (radian) tempat tepi elips cakram sejajar arah tebal `d`; dipakai untuk garis siluet silinder. */
-export function sudutSinggung(arah: 1 | -1, d: Titik): number {
-  const e1: Titik = [arah * K, 0.5];
-  const e2: Titik = [0, -1];
-  return Math.atan2(e2[0] * d[1] - e2[1] * d[0], e1[0] * d[1] - e1[1] * d[0]);
+export function sudutSinggung(sumbu: Titik, d: Titik): number {
+  return Math.atan2(d[0], sumbu[0] * d[1] - sumbu[1] * d[0]);
 }
 
-const pada = (c: Titik, r: number, arah: 1 | -1, theta: number): Titik => [
-  c[0] + r * Math.cos(theta) * arah * K,
-  c[1] + r * (Math.cos(theta) * 0.5 - Math.sin(theta)),
+const pada = (c: Titik, r: number, sumbu: Titik, theta: number): Titik => [
+  c[0] + r * Math.cos(theta) * sumbu[0],
+  c[1] + r * (Math.cos(theta) * sumbu[1] - Math.sin(theta)),
 ];
 
-/** Silinder yang sumbunya menembus bidang `a`-`u` (kepala hand shower): cakram belakang, pita, siluet, cakram depan. */
-function silinderCakram(belakang: Titik, d: Titik, r: number, peran: Peran): Primitif[] {
-  const depan: Titik = [belakang[0] + d[0], belakang[1] + d[1]];
-  const th = sudutSinggung(1, d);
-  const b1 = pada(belakang, r, 1, th);
-  const b2 = pada(belakang, r, 1, th + Math.PI);
-  const d1 = pada(depan, r, 1, th);
-  const d2 = pada(depan, r, 1, th + Math.PI);
+/**
+ * Silinder yang sumbunya menembus bidang `a`-`u` (kepala hand shower): cakram jauh, pita, siluet, cakram dekat.
+ * Lubang semprot hanya tampak bila sisi yang menghadap ke ruangan juga menghadap kamera.
+ */
+function silinderCakram(k: Kerangka, a: number, nMulai: number, tebal: number, u: number, r: number, peran: Peran): Primitif[] {
+  const c0 = titik(k, a, nMulai, u);
+  const c1 = titik(k, a, nMulai + tebal, u);
+  const d: Titik = [c1[0] - c0[0], c1[1] - c0[1]];
+  const sumbu = sumbuA(k);
+  const rr = r * k.skala;
+  const menghadapKamera = d[1] >= 0;
+  const [jauh, dekat] = menghadapKamera ? [c0, c1] : [c1, c0];
+  const th = sudutSinggung(sumbu, d);
+  const b1 = pada(jauh, rr, sumbu, th);
+  const b2 = pada(jauh, rr, sumbu, th + Math.PI);
+  const d1 = pada(dekat, rr, sumbu, th);
+  const d2 = pada(dekat, rr, sumbu, th + Math.PI);
   return [
-    { jenis: "cakram", cx: belakang[0], cy: belakang[1], r, arah: 1, tingkat: "belakang", peran },
+    { jenis: "cakram", cx: jauh[0], cy: jauh[1], r: rr, sumbuA: sumbu, tingkat: "belakang", peran },
     poligon("pita", [b1, d1, d2, b2], peran),
     { jenis: "garis", dari: b1, ke: d1, gaya: "tegas", peran },
     { jenis: "garis", dari: b2, ke: d2, gaya: "tegas", peran },
-    { jenis: "cakram", cx: depan[0], cy: depan[1], r, arah: 1, tingkat: "depan", peran },
+    { jenis: "cakram", cx: dekat[0], cy: dekat[1], r: rr, sumbuA: sumbu, tingkat: menghadapKamera ? "depan" : "polos", peran },
   ];
 }
 
-/** Silinder berdiri di lantai atau di benda (ember, gayung, kepala shower tetap). `yAtas` = pusat elips tutup. */
+/** Silinder berdiri di lantai atau di benda (ember, gayung, kepala shower tetap). `yAtas` = pusat elips tutup, di layar. */
 function silinderTegak(
   cx: number,
   yAtas: number,
@@ -116,36 +177,59 @@ function silinderTegak(
   ];
 }
 
-function selang(mulai: Titik, akhir: Titik, pendek: boolean, peran: Peran): Primitif {
+/** Selang: ayunan ke arah `arah` (+1 kanan layar, -1 kiri layar), ukuran ayunan mengikuti skala. */
+function selang(mulai: Titik, akhir: Titik, pendek: boolean, arah: 1 | -1, s: number, peran: Peran): Primitif {
   const [sx, sy] = mulai;
   const [ex, ey] = akhir;
+  const dx = (v: number) => arah * v * s;
+  const dy = (v: number) => v * s;
   const pts: Titik[] = pendek
     ? (() => {
-        const l: Titik = [ex + 24.7, ey + 27];
-        return [mulai, [sx + 43.6, sy + 10.5], [l[0] + 30, l[1] + 5], l, [l[0] - 16, l[1] - 3], [ex + 3, ey + 12], akhir];
+        const l: Titik = [ex + dx(24.7), ey + dy(27)];
+        return [
+          mulai,
+          [sx + dx(43.6), sy + dy(10.5)],
+          [l[0] + dx(30), l[1] + dy(5)],
+          l,
+          [l[0] - dx(16), l[1] - dy(3)],
+          [ex + dx(3), ey + dy(12)],
+          akhir,
+        ];
       })()
     : (() => {
-        const l: Titik = [ex + 31, ey + 10];
-        return [mulai, [sx + 56, sy + 8], [l[0] + 24, l[1] - 30], l, [l[0] - 10, l[1] + 12], [ex + 7, ey + 10], akhir];
+        const l: Titik = [ex + dx(31), ey + dy(10)];
+        return [
+          mulai,
+          [sx + dx(56), sy + dy(8)],
+          [l[0] + dx(24), l[1] - dy(30)],
+          l,
+          [l[0] - dx(10), l[1] + dy(12)],
+          [ex + dx(7), ey + dy(10)],
+          akhir,
+        ];
       })();
   return { jenis: "jalur", titik: pts, gaya: "selang", peran };
 }
 
-/** Dinding dan lantai polos (putih, hanya garis), supaya gaya mengikuti manual perakitan. */
-export function latarPanel(): Primitif[] {
+/** Dinding dan lantai polos (putih, hanya garis) untuk panel, supaya gaya mengikuti manual perakitan. */
+export function latarPanel(k: Kerangka = kerangkaPanel("kanan")): Primitif[] {
   return [
-    poligon("latar", [titik(-100, 0, 0), titik(100, 0, 0), titik(100, 80, 0), titik(-100, 80, 0)], "netral"),
-    poligon("latar", [titik(-100, 0, 0), titik(100, 0, 0), titik(100, 0, 310), titik(-100, 0, 310)], "netral"),
+    poligon("latar", [titik(k, -100, 0, 0), titik(k, 100, 0, 0), titik(k, 100, 80, 0), titik(k, -100, 80, 0)], "netral"),
+    poligon(
+      "latar",
+      [titik(k, -100, 0, 0), titik(k, 100, 0, 0), titik(k, 100, 0, TINGGI_DINDING_PANEL), titik(k, -100, 0, TINGGI_DINDING_PANEL)],
+      "netral",
+    ),
   ];
 }
 
-function keran(mode: ModeGambar): Primitif[] {
+function keran(k: Kerangka, mode: ModeGambar): Primitif[] {
   const tuas = mode === "permanen";
   return [
-    ...kotak(-38, -22, 0, 6, 92, 110, "netral"),
-    ...kotak(-34, -26, 0, 28, 96, 106, "netral"),
-    ...kotak(-32, -28, 1, 5, 106, 122, tuas ? "aksen" : "netral"),
-    ...(tuas ? kotak(-32, -28, 2, 40, 122, 128, "aksen") : kotak(-40, -20, 0, 8, 122, 128, "netral")),
+    ...kotak(k, -38, -22, 0, 6, 92, 110, "netral"),
+    ...kotak(k, -34, -26, 0, 28, 96, 106, "netral"),
+    ...kotak(k, -32, -28, 1, 5, 106, 122, tuas ? "aksen" : "netral"),
+    ...(tuas ? kotak(k, -32, -28, 2, 40, 122, 128, "aksen") : kotak(k, -40, -20, 0, 8, 122, 128, "netral")),
   ];
 }
 
@@ -154,16 +238,13 @@ export function posisiKait(mode: ModeGambar, ukuran: UkuranShower = ukuranShower
   return mode === "kondisi" ? { uAtas: ukuran.zonaAtas + 100, aGeser: 0 } : { uAtas: ukuran.zonaAtas, aGeser: 35 };
 }
 
-function handShower(mode: ModeGambar, ukuran: UkuranShower, anotasi: boolean): Primitif[] {
+function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi: boolean): Primitif[] {
+  const s = k.skala;
+  const arah: 1 | -1 = sumbuA(k)[0] >= 0 ? 1 : -1;
   const { uAtas, aGeser } = posisiKait(mode, ukuran);
   const lama = posisiKait("kondisi", ukuran);
   const peran: Peran = mode === "kondisi" ? "netral" : "aksen";
   const uBawahGagang = mode === "kondisi" ? uAtas - 57 : uAtas - 17;
-  const stub = kotak(26, 34, 0, 10, 96, 106, "netral");
-  const ujungSelang = titik(30, 10, 101);
-  const mulaiSelang = titik(aGeser + 4, 20, uBawahGagang);
-  const pusatBelakang = titik(aGeser, 14, uAtas + 25);
-  const d: Titik = [-K * 10, 5];
   const hasil: Primitif[] = [];
 
   if (anotasi) {
@@ -171,126 +252,134 @@ function handShower(mode: ModeGambar, ukuran: UkuranShower, anotasi: boolean): P
       poligon(
         "zona",
         [
-          titik(-100, 0, ukuran.zonaBawah),
-          titik(100, 0, ukuran.zonaBawah),
-          titik(100, 0, ukuran.zonaAtas),
-          titik(-100, 0, ukuran.zonaAtas),
+          titik(k, -100, 0, ukuran.zonaBawah),
+          titik(k, 100, 0, ukuran.zonaBawah),
+          titik(k, 100, 0, ukuran.zonaAtas),
+          titik(k, -100, 0, ukuran.zonaAtas),
         ],
         "aksen",
       ),
     );
   }
-  hasil.push(...keran(mode));
-  if (mode === "hack") hasil.push(...kotak(-8, 8, 0, 12, lama.uAtas - 20, lama.uAtas, "hantu"));
-  hasil.push(selang(mulaiSelang, ujungSelang, mode !== "kondisi", "netral"), ...stub);
-  hasil.push(...kotak(aGeser - 8, aGeser + 8, 0, 12, uAtas - 20, uAtas, peran));
+  hasil.push(...keran(k, mode));
+  if (mode === "hack") hasil.push(...kotak(k, -8, 8, 0, 12, lama.uAtas - 20, lama.uAtas, "hantu"));
+  hasil.push(selang(titik(k, aGeser + 4, 20, uBawahGagang), titik(k, 30, 10, 101), mode !== "kondisi", arah, s, "netral"));
+  hasil.push(...kotak(k, 26, 34, 0, 10, 96, 106, "netral"));
+  hasil.push(...kotak(k, aGeser - 8, aGeser + 8, 0, 12, uAtas - 20, uAtas, peran));
   if (mode === "permanen") {
-    const baut = (u: number): Primitif => {
-      const [cx, cy] = titik(aGeser - 3, 12, u);
-      return { jenis: "baut", cx, cy, peran };
-    };
-    hasil.push(baut(uAtas - 6.5), baut(uAtas - 18.5));
+    for (const u of [uAtas - 6.5, uAtas - 18.5]) {
+      const [cx, cy] = titik(k, aGeser - 3, 12, u);
+      hasil.push({ jenis: "baut", cx, cy, peran });
+    }
   }
-  hasil.push(...kotak(aGeser - 4, aGeser + 4, 12, 20, uBawahGagang, uAtas + 17, peran));
-  hasil.push(...silinderCakram(pusatBelakang, d, 22, peran));
+  hasil.push(...kotak(k, aGeser - 4, aGeser + 4, 12, 20, uBawahGagang, uAtas + 17, peran));
+  hasil.push(...silinderCakram(k, aGeser, 14, 10, uAtas + 25, 22, peran));
 
   if (anotasi && mode === "kondisi") {
-    const yAtasZona =
-      titik(-100, 0, ukuran.zonaAtas)[1] + ((240 - titik(-100, 0, 0)[0]) / (titik(100, 0, 0)[0] - titik(-100, 0, 0)[0])) * 100;
-    hasil.push({ jenis: "garis", dari: [240, yAtasZona], ke: [240, 206], gaya: "putus", peran: "netral" });
-    hasil.push({ jenis: "garis", dari: [229, 176], ke: [251, 198], gaya: "silang", peran: "netral" });
-    hasil.push({ jenis: "garis", dari: [251, 176], ke: [229, 198], gaya: "silang", peran: "netral" });
+    const dasar = titik(k, 50, 0, ukuran.zonaAtas);
+    const ujung = titik(k, 50, 0, ukuran.zonaAtas + 79);
+    const [cx, cy] = titik(k, 50, 0, ukuran.zonaAtas + 98);
+    const h = 11 * s;
+    hasil.push({ jenis: "garis", dari: dasar, ke: ujung, gaya: "putus", peran: "netral" });
+    hasil.push({ jenis: "garis", dari: [cx - h, cy - h], ke: [cx + h, cy + h], gaya: "silang", peran: "netral" });
+    hasil.push({ jenis: "garis", dari: [cx + h, cy - h], ke: [cx - h, cy + h], gaya: "silang", peran: "netral" });
   }
   if (anotasi && mode === "hack") {
-    const yMulai = titik(0, 0, lama.uAtas)[1] + 36;
-    const yAkhir = titik(aGeser, 0, uAtas)[1] - 17;
-    hasil.push({ jenis: "garis", dari: [246, yMulai], ke: [246, yAkhir], gaya: "panah", peran: "netral" });
+    hasil.push({ jenis: "garis", dari: titik(k, 65, 0, lama.uAtas - 4), ke: titik(k, 65, 0, uAtas + 33), gaya: "panah", peran: "netral" });
   }
   return hasil;
 }
 
-function showerTetap(ukuran: UkuranShower): Primitif[] {
+function showerTetap(k: Kerangka, ukuran: UkuranShower): Primitif[] {
+  const s = k.skala;
   const uP = ukuran.zonaAtas + 130;
-  const [cx, cyAtas] = titik(0, 50, uP - 11);
+  const [cx, cyAtas] = titik(k, 0, 50, uP - 11);
   return [
-    ...keran("kondisi"),
-    ...[-19, 0, 19].map((dx, i): Primitif => ({
-      jenis: "garis",
-      dari: [cx + dx, cyAtas + 36 + (i === 1 ? 5 : 0)],
-      ke: [cx + dx, cyAtas + 74 + (i === 1 ? 5 : 0)],
-      gaya: "air",
-      peran: "netral",
-    })),
-    ...silinderTegak(cx, cyAtas, 24, 10, "kiri", false, "netral"),
-    ...kotak(-8, 8, 0, 6, uP - 12, uP + 4, "netral"),
-    ...kotak(-2.5, 2.5, 6, 50, uP - 6, uP, "netral"),
+    ...keran(k, "kondisi"),
+    ...[-19, 0, 19].map((dx, i): Primitif => {
+      const turun = i === 1 ? 5 : 0;
+      return {
+        jenis: "garis",
+        dari: [cx + dx * s, cyAtas + (36 + turun) * s],
+        ke: [cx + dx * s, cyAtas + (74 + turun) * s],
+        gaya: "air",
+        peran: "netral",
+      };
+    }),
+    ...silinderTegak(cx, cyAtas, 24 * s, 10 * s, "kiri", false, "netral"),
+    ...kotak(k, -8, 8, 0, 6, uP - 12, uP + 4, "netral"),
+    ...kotak(k, -2.5, 2.5, 6, 50, uP - 6, uP, "netral"),
   ];
 }
 
-function emberGayung(): Primitif[] {
-  const [ex, eyBawah] = titik(-30, 40, 0);
-  const tinggiEmber = 55;
+function emberGayung(k: Kerangka): Primitif[] {
+  const s = k.skala;
+  const arah = sumbuA(k)[0] >= 0 ? 1 : -1;
+  const [ex, eyBawah] = titik(k, -30, 40, 0);
+  const tinggiEmber = 55 * s;
   const yAtasEmber = eyBawah - tinggiEmber;
-  const [gx, gyBawah] = titik(10, 30, 0);
-  const ujungKeran = titik(-30, 28, 96);
+  const [gx, gyBawah] = titik(k, 10, 30, 0);
+  const ujungKeran = titik(k, -30, 28, 96);
   return [
-    ...keran("kondisi"),
+    ...keran(k, "kondisi"),
     {
       jenis: "garis",
-      dari: [ujungKeran[0] - 0.3, ujungKeran[1] + 9],
-      ke: [ujungKeran[0] - 7.8, yAtasEmber - 10],
+      dari: [ujungKeran[0] - arah * 0.3 * s, ujungKeran[1] + 9 * s],
+      ke: [ujungKeran[0] - arah * 7.8 * s, yAtasEmber - 10 * s],
       gaya: "air",
       peran: "netral",
     },
     {
       jenis: "jalur",
       titik: [
-        [ex - 25.4, yAtasEmber - 4],
-        [ex - 31.4, yAtasEmber - 50],
-        [ex + 30.6, yAtasEmber - 50],
-        [ex + 25.6, yAtasEmber - 4],
+        [ex - arah * 25.4 * s, yAtasEmber - 4 * s],
+        [ex - arah * 31.4 * s, yAtasEmber - 50 * s],
+        [ex + arah * 30.6 * s, yAtasEmber - 50 * s],
+        [ex + arah * 25.6 * s, yAtasEmber - 4 * s],
       ],
       gaya: "lengkung",
       peran: "netral",
     },
-    ...silinderTegak(ex, yAtasEmber, 22, tinggiEmber, "kanan", true, "netral"),
+    ...silinderTegak(ex, yAtasEmber, 22 * s, tinggiEmber, "kanan", true, "netral"),
     {
       jenis: "jalur",
       titik: [
-        [gx + 9.3, gyBawah - 14],
-        [gx + 41.3, gyBawah - 28],
+        [gx + arah * 9.3 * s, gyBawah - 14 * s],
+        [gx + arah * 41.3 * s, gyBawah - 28 * s],
       ],
       gaya: "gagang",
       peran: "netral",
     },
-    ...silinderTegak(gx, gyBawah - 14, 9, 14, "kanan", true, "netral"),
+    ...silinderTegak(gx, gyBawah - 14 * s, 9 * s, 14 * s, "kanan", true, "netral"),
   ];
 }
 
-function tidakJelas(): Primitif[] {
-  const [tx, ty] = titik(0, 30, 170);
-  return [...kotak(-20, 20, 0, 30, 140, 200, "hantu"), { jenis: "tanda", x: tx, y: ty + 11, teks: "?" }];
+function tidakJelas(k: Kerangka): Primitif[] {
+  const [tx, ty] = titik(k, 0, 30, 170);
+  return [...kotak(k, -20, 20, 0, 30, 140, 200, "hantu"), { jenis: "tanda", x: tx, y: ty + 11 * k.skala, teks: "?" }];
 }
 
 /**
- * Gambar satu varian shower pada dinding kanan, urutan gambar dari belakang ke depan. `mode` hanya berpengaruh pada
- * hand shower (kondisi dari foto, hack tanpa bongkar, permanen/renovasi). `anotasi` menambah zona jangkauan, silang, dan panah.
+ * Gambar satu varian shower pada dinding, urutan gambar dari belakang ke depan. `mode` hanya berpengaruh pada hand
+ * shower (kondisi dari foto, hack tanpa bongkar, permanen/renovasi). `anotasi` menambah zona jangkauan, silang, dan
+ * panah. Tanpa `kerangka`, benda dipasang di dinding kanan panel.
  */
 export function gambarShower(
   varian: VarianShower,
   mode: ModeGambar = "kondisi",
-  opsi: { anotasi?: boolean; ukuran?: UkuranShower } = {},
+  opsi: { anotasi?: boolean; ukuran?: UkuranShower; kerangka?: Kerangka } = {},
 ): Primitif[] {
   const ukuran = opsi.ukuran ?? ukuranShower();
+  const k = opsi.kerangka ?? kerangkaPanel("kanan");
   switch (varian) {
     case "hand_shower_gantung":
-      return handShower(mode, ukuran, opsi.anotasi ?? false);
+      return handShower(k, mode, ukuran, opsi.anotasi ?? false);
     case "shower_tetap":
-      return showerTetap(ukuran);
+      return showerTetap(k, ukuran);
     case "ember_gayung":
-      return emberGayung();
+      return emberGayung(k);
     case "tidak_jelas":
-      return tidakJelas();
+      return tidakJelas(k);
   }
 }
 
@@ -304,40 +393,13 @@ export function langkahGambarShower(varian: VarianShower, perhatian: boolean): M
   return varian === "hand_shower_gantung" && perhatian ? ["kondisi", "hack", "permanen"] : ["kondisi"];
 }
 
-/** Cermin kiri-kanan di sumbu tengah kanvas (dinding kiri): sisi terang/gelap tetap mengikuti arah, jadi label muka ditukar. */
-export function cerminkan(daftar: Primitif[]): Primitif[] {
-  const x = (v: number) => LEBAR_KANVAS - v;
-  const p = (t: Titik): Titik => [x(t[0]), t[1]];
-  const tukar = <T extends string>(m: T): T => (m === "kanan" ? ("kiri" as T) : m === "kiri" ? ("kanan" as T) : m);
-  return daftar.map((s): Primitif => {
-    switch (s.jenis) {
-      case "poligon":
-        return { ...s, muka: tukar(s.muka), titik: s.titik.map(p) };
-      case "elips":
-        return { ...s, cx: x(s.cx) };
-      case "badan":
-        return { ...s, cx: x(s.cx), muka: tukar(s.muka) };
-      case "cakram":
-        return { ...s, cx: x(s.cx), arah: s.arah === 1 ? -1 : 1 };
-      case "garis":
-        return { ...s, dari: p(s.dari), ke: p(s.ke) };
-      case "jalur":
-        return { ...s, titik: s.titik.map(p) };
-      case "baut":
-        return { ...s, cx: x(s.cx) };
-      case "tanda":
-        return { ...s, x: x(s.x) };
-    }
-  });
-}
-
-/** Gambar lengkap: latar polos + varian pada dinding yang dipilih. */
+/** Gambar lengkap untuk panel: latar polos + varian pada dinding kanan (belakang) atau kiri. */
 export function susunGambar(
   varian: VarianShower,
   mode: ModeGambar,
   sisi: SisiDinding,
   opsi: { anotasi?: boolean; latar?: boolean } = {},
 ): Primitif[] {
-  const isi = [...(opsi.latar === false ? [] : latarPanel()), ...gambarShower(varian, mode, { anotasi: opsi.anotasi })];
-  return sisi === "kiri" ? cerminkan(isi) : isi;
+  const k = kerangkaPanel(sisi);
+  return [...(opsi.latar === false ? [] : latarPanel(k)), ...gambarShower(varian, mode, { anotasi: opsi.anotasi, kerangka: k })];
 }
