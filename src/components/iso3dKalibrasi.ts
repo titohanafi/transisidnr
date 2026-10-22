@@ -2,6 +2,13 @@
 // `PratinjauRuangIso3D.tsx` dan alat bantu dev `KalibrasiRotasiDev.tsx`) — dipisah ke sini supaya KEDUANYA
 // memakai angka DAN logika yang SAMA PERSIS, tidak ada risiko dua salinan diam-diam beda setelah salah satu
 // diubah (lihat DECISIONS.md).
+//
+// CATATAN DEBUGGING PENTING: saat mengubah angka di sini lalu mengecek via browser otomatis yang menavigasi
+// berulang kali ke URL HASH YANG SAMA (mis. "#/pindai" ke "#/pindai" lagi), React/Vite kadang TIDAK benar-benar
+// memuat ulang modul ini — tampilan bisa diam-diam menampilkan render LAMA meski kode & dev server sudah
+// berubah (sempat membuat beberapa kali perubahan "terlihat tidak berpengaruh sama sekali", padahal kodenya
+// benar, cuma browser-nya tidak reload). Pastikan `location.reload(true)` (hard reload) dipakai, atau navigasi ke
+// URL BERBEDA dulu baru kembali, sebelum menyimpulkan suatu perubahan nilai "tidak berpengaruh".
 import * as THREE from "three";
 import { posisiTiga, posisiTigaMenempel } from "../domain/isoTigaGeometri";
 import type { DindingDenah, LetakDenah, ObjekDenah } from "../domain/pindai";
@@ -90,7 +97,12 @@ export const ROTASI_KALIBRASI: Record<ObjekDenah, Record<DindingDenah, number>> 
 // Kemiringan TAMBAHAN (radian, sumbu-X LOKAL model, diterapkan ke `model` BUKAN `pembungkus`) khusus area_mandi:
 // rotasi Y pembungkus (ROTASI_KALIBRASI) cuma memutar benda MENDATAR (menentukan dinding mana yang dihadapi),
 // tidak bisa membuat lingkaran kepala shower MENUNDUK ke lantai/area mandi — itu perlu kemiringan di sumbu lain.
-export const KEMIRINGAN_AREA_MANDI = -0.55;
+// -0.55 (nilai lama) ternyata membuat kepala shower menghadap ke DEPAN/pengguna di tampilan produksi (isometrik),
+// bukan ke LANTAI seperti kepala shower sungguhan — user menunjukkan ini lewat tampilan yang sudah diimplementasikan
+// (bukan alat kalibrasi tegak-lurus-dinding, yang sudut kameranya kurang sensitif untuk membedakan "menghadap
+// pengguna" vs "menghadap lantai"). Dinaikkan jauh lebih curam ke -1.15 — dicek ulang di tampilan produksi
+// (bukan cuma alat kalibrasi) sampai siluetnya jelas menunduk, bukan menghadap datar ke depan.
+export const KEMIRINGAN_AREA_MANDI = -1.15;
 
 // Koreksi ROLL (radian, sumbu-Z LOKAL model) — TANPA ini, kemiringan sumbu-X di atas membuat lingkaran kepala
 // shower terlihat miring diagonal ("jam 4", kata user) alih-alih lurus menunduk ("jam 6"), karena model aslinya
