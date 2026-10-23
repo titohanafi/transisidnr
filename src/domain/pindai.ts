@@ -130,6 +130,36 @@ const URUTAN_POSISI_SEPANJANG_DINDING: Record<DindingDenah, readonly PosisiDiDin
 const PRIORITAS_OBJEK: readonly ObjekDenah[] = ["pintu", "kloset", "wastafel", "area_mandi"];
 
 /**
+ * Fungsi murni: merapikan penempatan di SUDUT ruangan yang secara perspektif ambigu. Benda di pojok belakang bisa
+ * dibaca sebagai "dinding samping, zona belakang" atau "dinding belakang, zona samping", dan bacaan Gemini untuk hal itu
+ * berubah-ubah antar foto dan antar ukuran foto yang sama. Aturannya (dites): wastafel dan kloset yang berdampingan hampir
+ * selalu menempel pada dinding yang sama, jadi bila yang satu di dinding belakang, yang lain di dinding samping pada
+ * zona belakang dipindah ke dinding belakang pada zona sisi itu; dan bila wastafel dan kloset sama-sama di dinding
+ * belakang, area mandi yang terbaca di dinding belakang zona kiri atau kanan dipindah ke dinding samping itu.
+ */
+export function rapikanSudutDenah(objek: Record<ObjekDenah, PosisiObjek>): Record<ObjekDenah, PosisiObjek> {
+  const hasil = { ...objek };
+  const perabot = ["kloset", "wastafel"] as const;
+  for (const id of perabot) {
+    const lain = id === "kloset" ? "wastafel" : "kloset";
+    const { dinding, posisi } = hasil[id];
+    if ((dinding === "kiri" || dinding === "kanan") && posisi === "belakang" && hasil[lain].dinding === "belakang") {
+      hasil[id] = { dinding: "belakang", posisi: dinding };
+    }
+  }
+  const { dinding, posisi } = hasil.area_mandi;
+  if (
+    dinding === "belakang" &&
+    (posisi === "kiri" || posisi === "kanan") &&
+    hasil.kloset.dinding === "belakang" &&
+    hasil.wastafel.dinding === "belakang"
+  ) {
+    hasil.area_mandi = { dinding: posisi, posisi: "tengah" };
+  }
+  return hasil;
+}
+
+/**
  * Fungsi murni: bila dua benda kebetulan dapat (dinding, posisi) yang PERSIS sama (akan tergambar numpuk), benda
  * dengan prioritas lebih rendah digeser satu langkah di sepanjang dinding yang SAMA, supaya denah tidak pernah
  * menumpuk sempurna apa pun jawaban AI-nya. Dinding tidak pernah diubah oleh fungsi ini (itu sudah pasti dari AI).

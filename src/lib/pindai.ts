@@ -4,6 +4,7 @@ import {
   OBJEK_DENAH,
   POSISI_BAWAAN,
   POSISI_DI_DINDING,
+  rapikanSudutDenah,
   selesaikanTabrakanDenah,
   STATUS_ITEM,
   VARIAN_PINTU,
@@ -54,7 +55,14 @@ export function bacaRespons(x: unknown, idItem: string[]): HasilModel | null {
   const varianShower = (VARIAN_SHOWER as readonly unknown[]).includes(x.varian_shower) ? (x.varian_shower as VarianShower) : "tidak_jelas";
   const jenisKloset = (JENIS_KLOSET as readonly unknown[]).includes(x.jenis_kloset) ? (x.jenis_kloset as JenisKloset) : "tidak_jelas";
   const varianPintu = (VARIAN_PINTU as readonly unknown[]).includes(x.varian_pintu) ? (x.varian_pintu as VarianPintu) : "tidak_jelas";
-  return { kamarMandi: x.kamar_mandi, temuan, objek: selesaikanTabrakanDenah(objekMentahSah), varianShower, jenisKloset, varianPintu };
+  return {
+    kamarMandi: x.kamar_mandi,
+    temuan,
+    objek: selesaikanTabrakanDenah(rapikanSudutDenah(objekMentahSah)),
+    varianShower,
+    jenisKloset,
+    varianPintu,
+  };
 }
 
 // Status tiap hal untuk foto contoh `dev/mock-foto.jpg`, dinilai dari yang tampak di foto itu sendiri (bukan

@@ -1,6 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { konten } from "../src/domain/content";
-import { hitungSkor, nomorItemHasil, OBJEK_DENAH, posisiPersenDenah, selesaikanTabrakanDenah, type StatusItem } from "../src/domain/pindai";
+import {
+  hitungSkor,
+  nomorItemHasil,
+  OBJEK_DENAH,
+  posisiPersenDenah,
+  rapikanSudutDenah,
+  selesaikanTabrakanDenah,
+  type ObjekDenah,
+  type PosisiObjek,
+  type StatusItem,
+} from "../src/domain/pindai";
 import { bacaRespons, GalatPindai, pindaiFoto } from "../src/lib/pindai";
 
 const ids = konten.ui.pindai.item.map((i) => i.id);
@@ -56,6 +66,47 @@ describe("jenis kloset dan varian pintu dari respons", () => {
       varianPintu: "tidak_jelas",
     });
     expect(bacaRespons(dasar, ids)).toMatchObject({ jenisKloset: "tidak_jelas", varianPintu: "tidak_jelas" });
+  });
+});
+
+describe("rapikanSudutDenah", () => {
+  const dasar = {
+    pintu: { dinding: "depan", posisi: "kiri" },
+    kloset: { dinding: "belakang", posisi: "tengah" },
+    wastafel: { dinding: "belakang", posisi: "kiri" },
+    area_mandi: { dinding: "kanan", posisi: "tengah" },
+  } as Record<ObjekDenah, PosisiObjek>;
+
+  it("bacaan yang sudah benar tidak diubah", () => {
+    expect(rapikanSudutDenah(dasar)).toEqual(dasar);
+  });
+  it("wastafel di dinding kiri zona belakang dipindah ke dinding belakang bila kloset di dinding belakang", () => {
+    const hasil = rapikanSudutDenah({ ...dasar, wastafel: { dinding: "kiri", posisi: "belakang" } });
+    expect(hasil.wastafel).toEqual({ dinding: "belakang", posisi: "kiri" });
+  });
+  it("sebaliknya: kloset di dinding kanan zona belakang ikut dinding belakang wastafel", () => {
+    const hasil = rapikanSudutDenah({ ...dasar, kloset: { dinding: "kanan", posisi: "belakang" } });
+    expect(hasil.kloset).toEqual({ dinding: "belakang", posisi: "kanan" });
+  });
+  it("wastafel di dinding kiri zona belakang tidak dipindah bila kloset tidak di dinding belakang", () => {
+    const masukan = {
+      ...dasar,
+      kloset: { dinding: "kanan", posisi: "tengah" },
+      wastafel: { dinding: "kiri", posisi: "belakang" },
+    } as Record<ObjekDenah, PosisiObjek>;
+    expect(rapikanSudutDenah(masukan).wastafel).toEqual({ dinding: "kiri", posisi: "belakang" });
+  });
+  it("area mandi di dinding belakang zona kanan dipindah ke dinding kanan bila wastafel dan kloset sudah di dinding belakang", () => {
+    const hasil = rapikanSudutDenah({ ...dasar, area_mandi: { dinding: "belakang", posisi: "kanan" } });
+    expect(hasil.area_mandi).toEqual({ dinding: "kanan", posisi: "tengah" });
+  });
+  it("area mandi di dinding belakang tetap bila hanya satu perabot di dinding belakang", () => {
+    const masukan = {
+      ...dasar,
+      wastafel: { dinding: "kiri", posisi: "tengah" },
+      area_mandi: { dinding: "belakang", posisi: "kanan" },
+    } as Record<ObjekDenah, PosisiObjek>;
+    expect(rapikanSudutDenah(masukan).area_mandi).toEqual({ dinding: "belakang", posisi: "kanan" });
   });
 });
 
