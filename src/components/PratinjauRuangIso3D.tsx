@@ -13,6 +13,7 @@ import {
   type Primitif,
   type Titik,
 } from "../domain/gambarShower";
+import { susunSepanjangDinding, type BendaDinding } from "../domain/tataLetak";
 import { OBJEK_DENAH, type LetakDenah, type ObjekDenah, type VarianShower } from "../domain/pindai";
 import { bangunProyeksi } from "../lib/proyeksiIso3D";
 import { LapisPrimitif } from "./GambarShower";
@@ -69,6 +70,33 @@ function bidangDalam(dinding: Dinding): number {
 function sepanjangDinding(letak: LetakDenah): number {
   const t = titikDinding(letak);
   return t.dinding === "belakang" || t.dinding === "depan" ? ((t.x - W / 2) / W) * LEBAR : ((t.y - H / 2) / H) * DALAM;
+}
+
+// Setengah lebar tiap benda sepanjang dindingnya (cm), untuk menjaga jarak antar benda di satu dinding. Kloset: tangki dan
+// mangkuk yang bergeser; shower: bilik pancuran minimum PerMen (90 cm).
+const SETENGAH_LEBAR: Record<ObjekDenah, number> = {
+  pintu: DIM.pintu.bukaanBersih / 2 + 4,
+  kloset: 26,
+  wastafel: DIM.wastafel.lebarBak / 2,
+  area_mandi: 45,
+};
+
+/** Posisi tengah tiap benda sepanjang dindingnya (cm), digeser seperlunya supaya tidak berdempetan. */
+function posisiSepanjang(letak: (id: ObjekDenah) => LetakDenah): Record<ObjekDenah, number> {
+  const perDinding = new Map<Dinding, BendaDinding[]>();
+  for (const id of OBJEK_DENAH) {
+    const l = letak(id);
+    const dinding = titikDinding(l).dinding;
+    const daftar = perDinding.get(dinding) ?? [];
+    daftar.push({ id, awal: sepanjangDinding(l), setengah: SETENGAH_LEBAR[id] });
+    perDinding.set(dinding, daftar);
+  }
+  const hasil = {} as Record<ObjekDenah, number>;
+  for (const [dinding, daftar] of perDinding) {
+    const panjang = dinding === "belakang" || dinding === "depan" ? LEBAR : DALAM;
+    Object.assign(hasil, susunSepanjangDinding(daftar, panjang));
+  }
+  return hasil;
 }
 
 /**
@@ -139,13 +167,15 @@ export function PratinjauRuangIso3D({
       lihat,
     });
 
+    // Lantai menutup seluruh telapak dinding: ruang dalam ditambah tebal dinding belakang dan dinding samping yang digambar.
+    const [lantaiKiri, lantaiKanan] = sudutAktif.x === "kiri" ? [-LEBAR / 2 - TEBAL, LEBAR / 2] : [-LEBAR / 2, LEBAR / 2 + TEBAL];
     const lantai = poligon(
       "latar",
       [
-        proyeksi(-LEBAR / 2, -DALAM / 2, 0),
-        proyeksi(LEBAR / 2, -DALAM / 2, 0),
-        proyeksi(LEBAR / 2, DALAM / 2, 0),
-        proyeksi(-LEBAR / 2, DALAM / 2, 0),
+        proyeksi(lantaiKiri, -DALAM / 2 - TEBAL, 0),
+        proyeksi(lantaiKanan, -DALAM / 2 - TEBAL, 0),
+        proyeksi(lantaiKanan, DALAM / 2, 0),
+        proyeksi(lantaiKiri, DALAM / 2, 0),
       ],
       "netral",
     );
@@ -161,9 +191,10 @@ export function PratinjauRuangIso3D({
     ];
 
     const tersembunyi = tampilkanSemua ? [] : bendaTersembunyi(letak, sudutAktif.x);
+    const posisi = posisiSepanjang(letak);
     const susunan = OBJEK_DENAH.map((id) => {
       const letakId = letak(id);
-      const kerangka: Kerangka = { ...kerangkaDinding(titikDinding(letakId).dinding), sepanjang: sepanjangDinding(letakId) };
+      const kerangka: Kerangka = { ...kerangkaDinding(titikDinding(letakId).dinding), sepanjang: posisi[id] };
       // Benda yang disembunyikan tidak digambar sama sekali (termasuk pintu, tanpa garis bukaan).
       if (tersembunyi.includes(id)) return null;
       const daftar: Primitif[] =
