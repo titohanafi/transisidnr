@@ -74,9 +74,12 @@ export function sepanjangDinding(letak: LetakDenah): number {
  * satu dinding tidak berdempetan. Dipakai bersama oleh denah tampak atas dan isometrik, jadi keduanya menempatkan benda
  * persis sama, walau Gemini hanya membaca zona kasar (kiri, tengah, kanan).
  */
-export function posisiSepanjang(letak: (id: ObjekDenah) => LetakDenah): Record<ObjekDenah, number> {
+export function posisiSepanjang(
+  letak: (id: ObjekDenah) => LetakDenah,
+  ids: readonly ObjekDenah[] = OBJEK_DENAH,
+): Record<ObjekDenah, number> {
   const perDinding = new Map<DindingDenah, BendaDinding[]>();
-  for (const id of OBJEK_DENAH) {
+  for (const id of ids) {
     const l = letak(id);
     const dinding = titikDinding(l).dinding;
     const daftar = perDinding.get(dinding) ?? [];
@@ -92,10 +95,13 @@ export function posisiSepanjang(letak: (id: ObjekDenah) => LetakDenah): Record<O
  * Fungsi murni: titik denah tampak atas (satuan viewBox `W` x `H`) tiap benda setelah penataan jarak, dengan koordinat
  * tegak lurus dinding tetap sama seperti `titikDinding`.
  */
-export function titikTertata(letak: (id: ObjekDenah) => LetakDenah): Record<ObjekDenah, { x: number; y: number }> {
-  const sepanjang = posisiSepanjang(letak);
+export function titikTertata(
+  letak: (id: ObjekDenah) => LetakDenah,
+  ids: readonly ObjekDenah[] = OBJEK_DENAH,
+): Record<ObjekDenah, { x: number; y: number }> {
+  const sepanjang = posisiSepanjang(letak, ids);
   return Object.fromEntries(
-    OBJEK_DENAH.map((id) => {
+    ids.map((id) => {
       const t = titikDinding(letak(id));
       const lewatX = t.dinding === "belakang" || t.dinding === "depan";
       return [

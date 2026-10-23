@@ -581,6 +581,9 @@ export function DenahKamarMandi({
 }) {
   const status = (id: string) => temuan[id] ?? "tidak_jelas";
   const NOMOR_ITEM = nomorItemHasil(ID_ITEM, temuan);
+  // Benda yang tidak terlihat di foto tidak digambar (posisinya tidak diketahui); `letak` tetap memberi posisi bawaan supaya
+  // fungsi yang memerlukan letak tidak pecah, tetapi gambarnya dilewati.
+  const tidakTerlihat = OBJEK_DENAH.filter((id) => objek[id].dinding === "tidak_terlihat");
   const letak = (id: ObjekDenah): Letak => {
     const o = objek[id];
     return o.dinding === "tidak_terlihat" ? POSISI_BAWAAN[id] : { dinding: o.dinding, posisi: o.posisi };
@@ -624,7 +627,7 @@ export function DenahKamarMandi({
   const sudutAktif = sudutManual ?? sudutOtomatis;
   // Tampilan 3D menyembunyikan benda di dinding yang tidak digambar; tombol ini menampilkannya kembali.
   const [tampilkanTersembunyi, setTampilkanTersembunyi] = useState(false);
-  const adaTersembunyi = bendaTersembunyi(letak, sudutAktif.x).length > 0;
+  const adaTersembunyi = bendaTersembunyi(letak, sudutAktif.x, tidakTerlihat).length > 0;
   const putarSudut = (arah: 1 | -1) => {
     const sekarang = sudutManual ?? sudutOtomatis;
     const i = SUDUT_URUTAN.findIndex((s) => s.x === sekarang.x);
@@ -635,7 +638,10 @@ export function DenahKamarMandi({
   // Dipakai dua kali dengan ukuran berbeda (inline di kartu, dan lebih besar di popup "perbesar denah") — isinya
   // sama persis, cuma lebar maksimumnya yang beda, supaya tidak ada dua salinan markup yang bisa tidak sinkron.
   // Posisi benda setelah penataan jarak, sama dengan tampilan isometrik (lihat `posisiSepanjang`).
-  const tertata = titikTertata(letak);
+  const tertata = titikTertata(
+    letak,
+    OBJEK_DENAH.filter((id) => !tidakTerlihat.includes(id)),
+  );
   const denahSvg = (ukuran: string) => (
     <svg viewBox={`0 0 ${W} ${H}`} className={`mx-auto text-garisKontrol ${ukuran}`} aria-hidden="true" focusable="false">
       <rect
@@ -726,45 +732,53 @@ export function DenahKamarMandi({
         />
       )}
 
-      <Pintu
-        letak={letak("pintu")}
-        titik={tertata.pintu}
-        warna={warna("pintu")}
-        latar={latar("pintu")}
-        nomor={nomor("pintu")}
-        terbukaId={terbukaId}
-        onToggleId={onToggleId}
-      />
-      <Kloset
-        letak={letak("kloset")}
-        titik={tertata.kloset}
-        warnaPegangan={warna("pegangan")}
-        latarPegangan={latar("pegangan")}
-        nomorPegangan={nomor("pegangan")}
-        terbukaId={terbukaId}
-        onToggleId={onToggleId}
-      />
-      <Wastafel
-        letak={letak("wastafel")}
-        titik={tertata.wastafel}
-        warna={warna("wastafel")}
-        latar={latar("wastafel")}
-        nomor={nomor("wastafel")}
-        terbukaId={terbukaId}
-        onToggleId={onToggleId}
-      />
-      <AreaMandi
-        letak={letak("area_mandi")}
-        titik={tertata.area_mandi}
-        warna={warna("area_mandi")}
-        latarAreaMandi={latar("area_mandi")}
-        warnaJangkauan={warna("jangkauan")}
-        latarJangkauan={latar("jangkauan")}
-        nomorAreaMandi={nomor("area_mandi")}
-        nomorJangkauan={nomor("jangkauan")}
-        terbukaId={terbukaId}
-        onToggleId={onToggleId}
-      />
+      {!tidakTerlihat.includes("pintu") && (
+        <Pintu
+          letak={letak("pintu")}
+          titik={tertata.pintu}
+          warna={warna("pintu")}
+          latar={latar("pintu")}
+          nomor={nomor("pintu")}
+          terbukaId={terbukaId}
+          onToggleId={onToggleId}
+        />
+      )}
+      {!tidakTerlihat.includes("kloset") && (
+        <Kloset
+          letak={letak("kloset")}
+          titik={tertata.kloset}
+          warnaPegangan={warna("pegangan")}
+          latarPegangan={latar("pegangan")}
+          nomorPegangan={nomor("pegangan")}
+          terbukaId={terbukaId}
+          onToggleId={onToggleId}
+        />
+      )}
+      {!tidakTerlihat.includes("wastafel") && (
+        <Wastafel
+          letak={letak("wastafel")}
+          titik={tertata.wastafel}
+          warna={warna("wastafel")}
+          latar={latar("wastafel")}
+          nomor={nomor("wastafel")}
+          terbukaId={terbukaId}
+          onToggleId={onToggleId}
+        />
+      )}
+      {!tidakTerlihat.includes("area_mandi") && (
+        <AreaMandi
+          letak={letak("area_mandi")}
+          titik={tertata.area_mandi}
+          warna={warna("area_mandi")}
+          latarAreaMandi={latar("area_mandi")}
+          warnaJangkauan={warna("jangkauan")}
+          latarJangkauan={latar("jangkauan")}
+          nomorAreaMandi={nomor("area_mandi")}
+          nomorJangkauan={nomor("jangkauan")}
+          terbukaId={terbukaId}
+          onToggleId={onToggleId}
+        />
+      )}
     </svg>
   );
 
@@ -877,6 +891,7 @@ export function DenahKamarMandi({
             jenisKloset={jenisKloset}
             varianPintu={varianPintu}
             tampilkanSemua={tampilkanTersembunyi}
+            tidakTerlihat={tidakTerlihat}
             kelas="aspect-[7/9] w-full max-w-[360px]"
           />
         )}
@@ -962,6 +977,7 @@ export function DenahKamarMandi({
                 jenisKloset={jenisKloset}
                 varianPintu={varianPintu}
                 tampilkanSemua={tampilkanTersembunyi}
+                tidakTerlihat={tidakTerlihat}
                 kelas="aspect-[7/9] w-full max-h-[78vh] max-w-[480px]"
               />
             )}

@@ -47,8 +47,13 @@ const MARGIN = 0.03;
  * Benda yang tidak digambar karena dinding tempatnya menempel tidak digambar (dinding samping berlawanan dan dinding
  * depan): dari luar mereka tampak dari belakang dan melayang. Berlaku sama untuk semua benda, termasuk pintu.
  */
-export function bendaTersembunyi(letak: (id: ObjekDenah) => LetakDenah, sisiSamping: "kiri" | "kanan"): ObjekDenah[] {
+export function bendaTersembunyi(
+  letak: (id: ObjekDenah) => LetakDenah,
+  sisiSamping: "kiri" | "kanan",
+  tidakTerlihat: readonly ObjekDenah[] = [],
+): ObjekDenah[] {
   return OBJEK_DENAH.filter((id) => {
+    if (tidakTerlihat.includes(id)) return false;
     const dinding = titikDinding(letak(id)).dinding;
     return dinding !== "belakang" && dinding !== sisiSamping;
   });
@@ -88,6 +93,7 @@ export function PratinjauRuangIso3D({
   jenisKloset = "tidak_jelas",
   varianPintu = "tidak_jelas",
   tampilkanSemua = false,
+  tidakTerlihat = [],
   kelas = "h-96 w-full",
 }: {
   letak: (id: ObjekDenah) => LetakDenah;
@@ -98,6 +104,8 @@ export function PratinjauRuangIso3D({
   varianPintu?: VarianPintu;
   /** Tampilkan juga benda yang biasanya disembunyikan (di dinding yang tidak digambar). */
   tampilkanSemua?: boolean;
+  /** Benda yang tidak terlihat di foto (posisinya tidak diketahui): tidak digambar sama sekali, juga bukan lewat tombol mata. */
+  tidakTerlihat?: readonly ObjekDenah[];
   kelas?: string;
 }) {
   const pembungkusRef = useRef<HTMLDivElement>(null);
@@ -180,26 +188,28 @@ export function PratinjauRuangIso3D({
 
     const jenisBenda = (id: Exclude<ObjekDenah, "area_mandi">): JenisBenda =>
       id === "kloset" ? JENIS_KLOSET_GAMBAR[jenisKloset] : id === "pintu" ? VARIAN_PINTU_GAMBAR[varianPintu] : "wastafel";
-    const tersembunyi = tampilkanSemua ? [] : bendaTersembunyi(letak, sudutAktif.x);
-    const posisi = posisiSepanjang(letak);
+    const terlihat = OBJEK_DENAH.filter((id) => !tidakTerlihat.includes(id));
+    const tersembunyi = tampilkanSemua ? [] : bendaTersembunyi(letak, sudutAktif.x, tidakTerlihat);
+    const posisi = posisiSepanjang(letak, terlihat);
     // Bukaan pintu pada dinding yang digambar: lubang di atas dinding berkeramik supaya pintu menembus dinding. Pada dinding
     // yang tidak digambar (mis. dinding depan, sisi kamera) tidak ada dinding untuk dilubangi.
     const dindingPintu = titikDinding(letak("pintu")).dinding;
     const bukaan: Primitif[] =
-      !tersembunyi.includes("pintu") && (dindingPintu === "belakang" || dindingPintu === sudutAktif.x)
+      terlihat.includes("pintu") && !tersembunyi.includes("pintu") && (dindingPintu === "belakang" || dindingPintu === sudutAktif.x)
         ? [bukaanDinding({ ...kerangkaDinding(dindingPintu), sepanjang: posisi.pintu })]
         : [];
-    const susunan = OBJEK_DENAH.map((id) => {
-      const letakId = letak(id);
-      const kerangka: Kerangka = { ...kerangkaDinding(titikDinding(letakId).dinding), sepanjang: posisi[id] };
-      // Benda yang disembunyikan tidak digambar sama sekali (termasuk pintu, tanpa garis bukaan).
-      if (tersembunyi.includes(id)) return null;
-      const daftar: Primitif[] =
-        id === "area_mandi" ? gambarShower(varianShower, "kondisi", { kerangka }) : gambarBenda(jenisBenda(id), kerangka);
-      // Urutan gambar dari belakang ke depan: titik pijak benda yang lebih rendah di layar berarti lebih dekat kamera.
-      const [x, y] = keRuang(kerangka, 0, 0);
-      return { id, daftar, kedalaman: proyeksi(x, y, 0)[1] };
-    })
+    const susunan = terlihat
+      .map((id) => {
+        const letakId = letak(id);
+        const kerangka: Kerangka = { ...kerangkaDinding(titikDinding(letakId).dinding), sepanjang: posisi[id] };
+        // Benda yang disembunyikan tidak digambar sama sekali (termasuk pintu, tanpa garis bukaan).
+        if (tersembunyi.includes(id)) return null;
+        const daftar: Primitif[] =
+          id === "area_mandi" ? gambarShower(varianShower, "kondisi", { kerangka }) : gambarBenda(jenisBenda(id), kerangka);
+        // Urutan gambar dari belakang ke depan: titik pijak benda yang lebih rendah di layar berarti lebih dekat kamera.
+        const [x, y] = keRuang(kerangka, 0, 0);
+        return { id, daftar, kedalaman: proyeksi(x, y, 0)[1] };
+      })
       .filter((b) => b !== null)
       .sort((a, b) => a.kedalaman - b.kedalaman);
 

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { DIM } from "../src/domain/dimensiGambar";
 import { H, W } from "../src/domain/denahGeometri";
 import type { LetakDenah, ObjekDenah } from "../src/domain/pindai";
-import { JARAK_BEBAS_BENDA, JARAK_TEPI_DINDING, susunSepanjangDinding, titikTertata } from "../src/domain/tataLetak";
+import { JARAK_BEBAS_BENDA, JARAK_TEPI_DINDING, posisiSepanjang, susunSepanjangDinding, titikTertata } from "../src/domain/tataLetak";
 
 describe("susunSepanjangDinding", () => {
   it("benda yang sudah berjauhan tidak digeser", () => {
@@ -110,5 +110,23 @@ describe("titikTertata (tampak atas)", () => {
     expect(t.area_mandi.y).toBeGreaterThan(0);
     expect(t.area_mandi.y).toBeLessThan(H);
     expect(t.pintu.x).toBeGreaterThan(0);
+  });
+});
+
+describe("benda yang tidak terlihat diabaikan dalam penataan", () => {
+  const letak = (id: ObjekDenah): LetakDenah =>
+    ({
+      pintu: { dinding: "depan", posisi: "kiri" },
+      wastafel: { dinding: "belakang", posisi: "kiri" },
+      kloset: { dinding: "belakang", posisi: "kiri" },
+      area_mandi: { dinding: "kanan", posisi: "tengah" },
+    })[id] as LetakDenah;
+
+  it("posisi hanya dihitung untuk benda yang terlihat, sehingga benda tunggal tidak digeser oleh benda yang tidak terlihat", () => {
+    const semua = posisiSepanjang(letak);
+    const tanpaWastafel = posisiSepanjang(letak, ["pintu", "kloset", "area_mandi"]);
+    expect(tanpaWastafel.wastafel).toBeUndefined();
+    // Kloset tunggal di dinding belakang tetap di posisi awalnya, tidak terdorong menjauh dari wastafel yang tidak ada.
+    expect(Math.abs(tanpaWastafel.kloset - semua.kloset)).toBeGreaterThan(1);
   });
 });
