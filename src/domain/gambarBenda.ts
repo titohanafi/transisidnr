@@ -135,14 +135,6 @@ function lintasanAyun(k: Kerangka): Primitif {
   return { jenis: "garisPoli", titik: titikLintasan, peran: "hantu" };
 }
 
-/**
- * Hanya bukaan pintu di lantai (tanpa kusen dan daun): garis tegas selebar bukaan dan lintasan ayun putus-putus. Dipakai
- * saat dinding tempat pintu menempel tidak digambar, sehingga pintu tidak ditampilkan tetapi letaknya tetap terbaca.
- */
-export function bukaanPintu(k: Kerangka = kerangkaPanel("kanan")): Primitif[] {
-  return [lintasanAyun(k), { jenis: "garis", dari: titik(k, -48, 0, 0), ke: titik(k, 48, 0, 0), gaya: "tegas", peran: "netral" }];
-}
-
 function pintu(k: Kerangka): Primitif[] {
   const sudut = SUDUT_BUKA;
   const engsel = ENGSEL;

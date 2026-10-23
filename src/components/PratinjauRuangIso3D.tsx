@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { titikDinding } from "../domain/denahGeometri";
-import { bukaanPintu, gambarBenda, type JenisBenda } from "../domain/gambarBenda";
+import { gambarBenda, type JenisBenda } from "../domain/gambarBenda";
 import {
   gambarShower,
   keRuang,
@@ -179,11 +179,10 @@ export function PratinjauRuangIso3D({
         lihat,
       };
       const sembunyi = tersembunyi.includes(id);
-      // Benda yang disembunyikan tidak digambar; pintu tetap meninggalkan garis bukaan dan lintasan ayunnya di lantai.
-      if (sembunyi && id !== "pintu") return null;
-      const daftar: Primitif[] = sembunyi
-        ? bukaanPintu(kerangka)
-        : id === "area_mandi"
+      // Benda yang disembunyikan tidak digambar sama sekali (termasuk pintu, tanpa garis bukaan).
+      if (sembunyi) return null;
+      const daftar: Primitif[] =
+        id === "area_mandi"
           ? gambarShower(varianShower, "kondisi", { kerangka, skalaRinci: SKALA_RINCI_SHOWER })
           : gambarBenda(JENIS_BENDA_DENAH[id], kerangka);
       // Urutan gambar dari belakang ke depan: titik pijak benda yang lebih rendah di layar berarti lebih dekat kamera.
