@@ -15,6 +15,12 @@ export default {
         tinta: "#1F2933", // teks utama (kontras tinggi)
         redup: "#4A5560", // teks sekunder
         garis: "#DCE2E7", // pembatas dekoratif (tipis, lembut)
+        // Palet gambar isometrik: semuanya abu netral (tanpa semburat warna) dan setiap nada berbeda agar tidak ada warna
+        // benda yang sama dengan dinding atau lantai. Dari terang ke gelap: putih (atas dan sisi terang benda), dinding
+        // belakang (putih), dinding samping (shower, abu sangat muda), lantai (abu muda), sisi gelap benda, sisi tebal dinding.
+        benda: { DEFAULT: "#FFFFFF", atas: "#FFFFFF", kanan: "#FFFFFF", kiri: "#E6E6E6" },
+        dinding: { DEFAULT: "#F7F7F7", belakang: "#FFFFFF", tebal: "#DDDDDD" },
+        lantai: "#EBEBEB", // lantai: abu muda, lebih gelap dari kedua dinding, memberi kesan kedalaman
         garisKontrol: "#6B7580", // batas kontrol formulir (kontras ≥ 3:1)
         utama: { DEFAULT: "#0F5E63", gelap: "#0A4549", muda: "#E3F1F1", redup: "#C2DCDC" }, // teal tenang
         aksen: { DEFAULT: "#9A4A12", muda: "#FBEBDD" }, // hangat

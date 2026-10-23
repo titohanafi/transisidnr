@@ -4,6 +4,7 @@ import {
   TINGGI_KANVAS,
   ZOOM_PANEL,
   garisUbin,
+  garisUbinLantai,
   gambarShower,
   langkahGambarShower,
   latarPanel,
@@ -142,14 +143,21 @@ describe("gambar shower", () => {
     }
   });
 
-  it("latar: dinding dan lantai polos ditambah garis keramik tipis sebagai penggaris", () => {
+  it("latar: dinding putih dan lantai lebih gelap, keduanya berkeramik tipis sebagai penggaris", () => {
     const l = latarPanel();
     const poligon = l.filter((p) => p.jenis === "poligon");
-    expect(poligon).toHaveLength(2);
-    expect(poligon.every((p) => p.muka === "latar")).toBe(true);
-    const ubin = l.filter((p) => p.jenis === "garis");
-    expect(ubin.length).toBeGreaterThan(8);
-    expect(ubin.every((p) => p.jenis === "garis" && p.gaya === "ubin")).toBe(true);
+    expect(poligon.map((p) => p.muka)).toEqual(["lantai", "latar"]);
+    const gaya = new Set(l.filter((p) => p.jenis === "garis").map((p) => (p.jenis === "garis" ? p.gaya : "")));
+    expect([...gaya].sort()).toEqual(["ubin", "ubinLantai"]);
+  });
+
+  it("garis keramik lantai berjarak 30 cm dalam dua arah dan dimulai dari titik acuan", () => {
+    const k: Kerangka = { dinding: "belakang", sepanjang: 0, bidang: 0, proyeksi: (x, y): Titik => [x, y], skala: 1 };
+    const garis = garisUbinLantai(k, 0, 100, 0, 100, 0, 0);
+    const sejajarN = garis.filter((g) => g.jenis === "garis" && g.dari[0] === g.ke[0]).map((g) => (g.jenis === "garis" ? g.dari[0] : 0));
+    const sejajarA = garis.filter((g) => g.jenis === "garis" && g.dari[1] === g.ke[1]).map((g) => (g.jenis === "garis" ? g.dari[1] : 0));
+    expect(sejajarN).toEqual([30, 60, 90]);
+    expect(sejajarA).toEqual([30, 60, 90]);
   });
 
   it("garis keramik berjarak sama dengan ukuran ubin dan dimulai dari titik acuan", () => {

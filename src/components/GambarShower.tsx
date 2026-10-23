@@ -12,22 +12,24 @@ import {
 } from "../domain/gambarShower";
 import type { VarianShower } from "../domain/pindai";
 
-type Bidang = "atas" | "kanan" | "kiri" | "latar" | "zona" | "pita" | "rongga";
+type Bidang = "atas" | "kanan" | "kiri" | "latar" | "lantai" | "zona" | "pita" | "rongga";
 const ISI: Record<Peran, Record<Bidang, string>> = {
   netral: {
-    atas: "fill-white",
-    kanan: "fill-luar",
-    kiri: "fill-garis",
+    atas: "fill-benda-atas",
+    kanan: "fill-benda-kanan",
+    kiri: "fill-benda-kiri",
     latar: "fill-white",
+    lantai: "fill-lantai",
     zona: "fill-utama/10",
-    pita: "fill-garis",
-    rongga: "fill-garis",
+    pita: "fill-benda-kiri",
+    rongga: "fill-benda-kiri",
   },
   aksen: {
     atas: "fill-utama-muda",
     kanan: "fill-utama-redup",
     kiri: "fill-utama/40",
     latar: "fill-white",
+    lantai: "fill-lantai",
     zona: "fill-utama/10",
     pita: "fill-utama/40",
     rongga: "fill-utama/40",
@@ -37,20 +39,32 @@ const ISI: Record<Peran, Record<Bidang, string>> = {
     kanan: "fill-none",
     kiri: "fill-none",
     latar: "fill-none",
+    lantai: "fill-none",
     zona: "fill-none",
     pita: "fill-none",
     rongga: "fill-none",
   },
+  ruang: {
+    atas: "fill-white",
+    kanan: "fill-dinding",
+    kiri: "fill-dinding-tebal",
+    latar: "fill-dinding-belakang",
+    lantai: "fill-lantai",
+    zona: "fill-utama/10",
+    pita: "fill-dinding-tebal",
+    rongga: "fill-dinding-tebal",
+  },
 };
-const GARIS: Record<Peran, string> = { netral: "stroke-tinta", aksen: "stroke-utama", hantu: "stroke-garisKontrol" };
+const GARIS: Record<Peran, string> = { netral: "stroke-tinta", aksen: "stroke-utama", hantu: "stroke-garisKontrol", ruang: "stroke-tinta" };
 const ISI_BADAN: Record<Peran, Record<"kanan" | "kiri", string>> = {
-  netral: { kanan: "fill-luar", kiri: "fill-garis" },
+  netral: { kanan: "fill-benda-kanan", kiri: "fill-benda-kiri" },
+  ruang: { kanan: "fill-dinding", kiri: "fill-dinding-tebal" },
   aksen: { kanan: "fill-utama-redup", kiri: "fill-utama/40" },
   hantu: { kanan: "fill-none", kiri: "fill-none" },
 };
-const ISI_ATAS: Record<Peran, string> = { netral: "fill-white", aksen: "fill-utama-muda", hantu: "fill-none" };
-const ISI_RONGGA: Record<Peran, string> = { netral: "fill-garis", aksen: "fill-utama/40", hantu: "fill-none" };
-const ISI_LUBANG: Record<Peran, string> = { netral: "fill-tinta", aksen: "fill-utama", hantu: "fill-none" };
+const ISI_ATAS: Record<Peran, string> = { netral: "fill-benda-atas", ruang: "fill-white", aksen: "fill-utama-muda", hantu: "fill-none" };
+const ISI_RONGGA: Record<Peran, string> = { netral: "fill-benda-kiri", ruang: "fill-garis", aksen: "fill-utama/40", hantu: "fill-none" };
+const ISI_LUBANG: Record<Peran, string> = { netral: "fill-tinta", ruang: "fill-tinta", aksen: "fill-utama", hantu: "fill-none" };
 const LUBANG: readonly (readonly [number, number])[] = [
   [0, 0],
   [8, 0],
@@ -137,7 +151,9 @@ function Bentuk({ s, penanda, m, w }: { s: Primitif; penanda: string; m: number;
       if (s.gaya === "air")
         return <line x1={x1} y1={y1} x2={x2} y2={y2} className="stroke-garisKontrol" strokeWidth={2 * m} strokeDasharray="4 5" />;
       if (s.gaya === "ubin")
-        return <line x1={x1} y1={y1} x2={x2} y2={y2} className="stroke-garisKontrol" strokeOpacity={0.35} strokeWidth={0.45 * w} />;
+        return <line x1={x1} y1={y1} x2={x2} y2={y2} className="stroke-garisKontrol" strokeOpacity={0.13} strokeWidth={0.45 * w} />;
+      if (s.gaya === "ubinLantai")
+        return <line x1={x1} y1={y1} x2={x2} y2={y2} className="stroke-garisKontrol" strokeOpacity={0.3} strokeWidth={0.45 * w} />;
       if (s.gaya === "silang") return <line x1={x1} y1={y1} x2={x2} y2={y2} className={GARIS[s.peran]} strokeWidth={5 * m} />;
       if (s.gaya === "panah") {
         return (
@@ -158,7 +174,7 @@ function Bentuk({ s, penanda, m, w }: { s: Primitif; penanda: string; m: number;
     case "jalur": {
       const d = kePath(s.titik);
       if (s.gaya === "lengkung") return <path d={d} className={`fill-none ${GARIS[s.peran]}`} strokeWidth={1.8 * m} />;
-      const dalam = s.gaya === "selang" ? "stroke-garisKontrol" : "stroke-luar";
+      const dalam = s.gaya === "selang" ? "stroke-white" : "stroke-luar";
       return (
         <>
           <path d={d} className="fill-none stroke-tinta" strokeWidth={(s.gaya === "selang" ? 8.5 : 7) * m} />

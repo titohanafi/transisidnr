@@ -4,6 +4,7 @@ import { DIM } from "../domain/dimensiGambar";
 import { gambarBenda, type JenisBenda } from "../domain/gambarBenda";
 import {
   garisUbin,
+  garisUbinLantai,
   gambarShower,
   keRuang,
   kotak,
@@ -168,31 +169,34 @@ export function PratinjauRuangIso3D({
       lihat,
     });
 
-    // Lantai hanya seluas ruang dalam (PerMen); dinding berdiri di luarnya dan tidak ikut tercakup lantai.
+    // Lantai hanya seluas ruang dalam (PerMen); dinding berdiri di luarnya dan tidak ikut tercakup lantai. Lantai paling
+    // gelap dan berkotak 30 cm (sama dengan dinding) sebagai penggaris; kotak dimulai dari sudut pojok belakang-kiri.
+    const kBelakang = kerangkaDinding("belakang");
     const lantai = poligon(
-      "latar",
+      "lantai",
       [
         proyeksi(-LEBAR / 2, -DALAM / 2, 0),
         proyeksi(LEBAR / 2, -DALAM / 2, 0),
         proyeksi(LEBAR / 2, DALAM / 2, 0),
         proyeksi(-LEBAR / 2, DALAM / 2, 0),
       ],
-      "netral",
+      "ruang",
     );
+    const ubinLantai = garisUbinLantai(kBelakang, -LEBAR / 2, LEBAR / 2, 0, DALAM, -LEBAR / 2, 0);
     // Dinding setebal TEBAL di luar ruang dalam. Dinding belakang melebar sampai menutupi ujung dinding samping; dinding
     // samping dimulai dari permukaan dalam dinding belakang. Garis keramik dimulai dari sudut pojok belakang.
-    const kBelakang = kerangkaDinding("belakang");
     const kSamping = kerangkaDinding(sudutAktif.x);
-    // Permukaan dalam dinding dibuat putih (lebih cerah) supaya garis keramik terlihat; sisi tebal dan puncak dinding tetap
-    // bernada abu.
-    const mukaDalam = (k: Kerangka, a0: number, a1: number): Primitif =>
-      poligon("latar", [titik(k, a0, 0, 0), titik(k, a1, 0, 0), titik(k, a1, 0, TINGGI), titik(k, a0, 0, TINGGI)], "netral");
+    // Permukaan dalam dinding dibuat terang supaya garis keramik terlihat: dinding belakang (wastafel dan kloset) putih,
+    // dinding samping (shower) sedikit lebih gelap untuk memberi kesan kedalaman, dan lantai paling gelap. Sisi tebal dan
+    // puncak dinding tetap bernada abu.
+    const mukaDalam = (k: Kerangka, a0: number, a1: number, muka: "latar" | "kanan"): Primitif =>
+      poligon(muka, [titik(k, a0, 0, 0), titik(k, a1, 0, 0), titik(k, a1, 0, TINGGI), titik(k, a0, 0, TINGGI)], "ruang");
     const dinding: Primitif[] = [
-      ...kotak(kBelakang, -LEBAR / 2 - TEBAL, LEBAR / 2 + TEBAL, -TEBAL, 0, 0, TINGGI, "netral"),
-      mukaDalam(kBelakang, -LEBAR / 2 - TEBAL, LEBAR / 2 + TEBAL),
+      ...kotak(kBelakang, -LEBAR / 2 - TEBAL, LEBAR / 2 + TEBAL, -TEBAL, 0, 0, TINGGI, "ruang"),
+      mukaDalam(kBelakang, -LEBAR / 2 - TEBAL, LEBAR / 2 + TEBAL, "latar"),
       ...garisUbin(kBelakang, -LEBAR / 2, LEBAR / 2, TINGGI, -LEBAR / 2),
-      ...kotak(kSamping, -DALAM / 2, DALAM / 2, -TEBAL, 0, 0, TINGGI, "netral"),
-      mukaDalam(kSamping, -DALAM / 2, DALAM / 2),
+      ...kotak(kSamping, -DALAM / 2, DALAM / 2, -TEBAL, 0, 0, TINGGI, "ruang"),
+      mukaDalam(kSamping, -DALAM / 2, DALAM / 2, "kanan"),
       ...garisUbin(kSamping, -DALAM / 2, DALAM / 2, TINGGI, -DALAM / 2),
     ];
 
@@ -220,7 +224,7 @@ export function PratinjauRuangIso3D({
         focusable="false"
       >
         <g strokeWidth={1.6} strokeLinejoin="round" strokeLinecap="round">
-          <LapisPrimitif daftar={[lantai, ...dinding]} garisDasar={1.6} />
+          <LapisPrimitif daftar={[lantai, ...ubinLantai, ...dinding]} garisDasar={1.6} />
           {susunan.map((b) => (
             <g key={b.id}>
               <LapisPrimitif daftar={b.daftar} tebal={0.75} garisDasar={1.6} />

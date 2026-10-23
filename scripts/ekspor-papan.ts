@@ -20,9 +20,37 @@ const f = (v: number) => (Math.round(v * 100) / 100).toString();
 const pts = (t: readonly Titik[]) => t.map((p) => `${f(p[0])},${f(p[1])}`).join(" ");
 
 const ISI: Record<string, Record<string, string>> = {
-  netral: { atas: "#fff", kanan: "#e6e6e6", kiri: "#d6d6d6", latar: "#fff", pita: "#d6d6d6", rongga: "#d6d6d6", zona: "none" },
-  aksen: { atas: "#bfe6db", kanan: "#8fcfbf", kiri: "#7cc2b0", latar: "#fff", pita: "#7cc2b0", rongga: "#7cc2b0", zona: AKSEN },
-  hantu: { atas: "none", kanan: "none", kiri: "none", latar: "none", pita: "none", rongga: "none", zona: "none" },
+  netral: {
+    atas: "#fff",
+    kanan: "#fff",
+    kiri: "#e6e6e6",
+    latar: "#fff",
+    lantai: "#ebebeb",
+    pita: "#e6e6e6",
+    rongga: "#e6e6e6",
+    zona: "none",
+  },
+  ruang: {
+    atas: "#fff",
+    kanan: "#f7f7f7",
+    kiri: "#ddd",
+    latar: "#fff",
+    lantai: "#ebebeb",
+    pita: "#ddd",
+    rongga: "#ddd",
+    zona: "none",
+  },
+  aksen: {
+    atas: "#bfe6db",
+    kanan: "#8fcfbf",
+    kiri: "#7cc2b0",
+    latar: "#fff",
+    lantai: "#ebebeb",
+    pita: "#7cc2b0",
+    rongga: "#7cc2b0",
+    zona: AKSEN,
+  },
+  hantu: { atas: "none", kanan: "none", kiri: "none", latar: "none", lantai: "none", pita: "none", rongga: "none", zona: "none" },
 };
 const garis = (peran: string) => (peran === "aksen" ? AKSEN : peran === "hantu" ? KONTROL : TINTA);
 
@@ -46,13 +74,13 @@ function bentuk(s: Primitif, penanda: string, m: number): string {
       return `<ellipse cx="${f(s.cx)}" cy="${f(s.cy)}" rx="${f(s.rx)}" ry="${f(s.ry)}" fill="${isi}" stroke="${garis(s.peran)}" stroke-width="${f(lebar)}"/>`;
     }
     case "badan": {
-      const isi = s.peran === "aksen" ? (s.muka === "kanan" ? "#8fcfbf" : "#7cc2b0") : s.muka === "kanan" ? "#e6e6e6" : "#d6d6d6";
+      const isi = s.peran === "aksen" ? (s.muka === "kanan" ? "#8fcfbf" : "#7cc2b0") : s.muka === "kanan" ? "#fff" : "#e6e6e6";
       return `<path d="M${f(s.cx - s.rx)},${f(s.yAtas)} L${f(s.cx - s.rx)},${f(s.yBawah)} A${f(s.rx)} ${f(s.ry)} 0 0 0 ${f(s.cx + s.rx)},${f(s.yBawah)} L${f(s.cx + s.rx)},${f(s.yAtas)} Z" fill="${isi}" stroke="${garis(s.peran)}"/>`;
     }
     case "cakram": {
       const muka = s.tingkat !== "belakang";
       const lubang = s.tingkat === "depan";
-      const isi = muka ? ISI[s.peran].atas : "#d6d6d6";
+      const isi = muka ? ISI[s.peran].atas : "#e6e6e6";
       const titikLubang: [number, number][] = [
         [0, 0],
         [8, 0],
@@ -80,7 +108,8 @@ function bentuk(s: Primitif, penanda: string, m: number): string {
       const [x1, y1] = s.dari;
       const [x2, y2] = s.ke;
       const c = `x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}"`;
-      if (s.gaya === "ubin") return `<line ${c} stroke="#6B7580" stroke-opacity="0.35" stroke-width="${f(0.45 * w)}"/>`;
+      if (s.gaya === "ubin") return `<line ${c} stroke="#6B7580" stroke-opacity="0.13" stroke-width="${f(0.45 * w)}"/>`;
+      if (s.gaya === "ubinLantai") return `<line ${c} stroke="#6B7580" stroke-opacity="0.3" stroke-width="${f(0.45 * w)}"/>`;
       if (s.gaya === "air") return `<line ${c} stroke="${KONTROL}" stroke-width="${f(2 * m)}" stroke-dasharray="${f(4 * m)} ${f(5 * m)}"/>`;
       if (s.gaya === "silang") return `<line ${c} stroke="${garis(s.peran)}" stroke-width="${f(5 * m)}"/>`;
       if (s.gaya === "panah")
@@ -92,7 +121,7 @@ function bentuk(s: Primitif, penanda: string, m: number): string {
       if (s.titik.length === 2) d += ` L${f(s.titik[1][0])},${f(s.titik[1][1])}`;
       else for (let i = 1; i + 2 < s.titik.length; i += 3) d += ` C${pts([s.titik[i]])} ${pts([s.titik[i + 1]])} ${pts([s.titik[i + 2]])}`;
       if (s.gaya === "lengkung") return `<path d="${d}" fill="none" stroke="${garis(s.peran)}" stroke-width="${f(1.8 * m)}"/>`;
-      const dalam = s.gaya === "selang" ? KONTROL : "#ECECEA";
+      const dalam = s.gaya === "selang" ? "#fff" : "#ECECEA";
       return `<path d="${d}" fill="none" stroke="${TINTA}" stroke-width="${f((s.gaya === "selang" ? 8.5 : 7) * m)}"/><path d="${d}" fill="none" stroke="${dalam}" stroke-width="${f((s.gaya === "selang" ? 4.5 : 3) * m)}"/>`;
     }
     case "baut":

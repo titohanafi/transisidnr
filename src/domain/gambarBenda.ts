@@ -3,6 +3,7 @@
 // BUKAN ukuran produk, dan gambar tidak pernah memuat angka.
 import { DIM } from "./dimensiGambar";
 import {
+  bersihkan,
   ekstrusi,
   footprintOval,
   footprintPutar,
@@ -84,15 +85,6 @@ function klosetDuduk(k: Kerangka): Primitif[] {
 
 function klosetJongkok(k: Kerangka): Primitif[] {
   return [...kotak(k, -18, 18, 0, 58, 0, 4, "netral"), poligon("rongga", oval(k, 0, 22, 8, 19, 4), "netral")];
-}
-
-/**
- * Keran bersih (versi C yang disetujui): alas gelap di bawah semua sisi supaya hanya tepi luar yang tebal, garis di
- * dalam objek tipis, dan sisi dibedakan dengan nada warna.
- */
-function bersihkan(daftar: Primitif[]): Primitif[] {
-  const polis = daftar.filter((p): p is Extract<Primitif, { jenis: "poligon" }> => p.jenis === "poligon");
-  return [...polis.map((p) => ({ ...p, tepi: true })), ...polis.map((p) => ({ ...p, garisTipis: true }))];
 }
 
 // Wastafel: bak PerMen (lebar x dalam) dan tinggi pasang untuk pengguna kursi roda dari tabel. Meja berbentuk D:

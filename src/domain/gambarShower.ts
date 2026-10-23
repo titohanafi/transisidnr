@@ -15,13 +15,14 @@ export type Titik = readonly [number, number];
 export type ModeGambar = "kondisi" | "hack" | "permanen";
 export type SisiDinding = "kanan" | "kiri";
 export type Dinding = "belakang" | "kiri" | "kanan" | "depan";
-export type Peran = "netral" | "aksen" | "hantu";
+/** Peran warna: `netral` benda (putih dan abu netral), `aksen` perubahan yang disarankan (hijau), `hantu` posisi lama, `ruang` dinding dan lantai. */
+export type Peran = "netral" | "aksen" | "hantu" | "ruang";
 export type Muka = "atas" | "kanan" | "kiri";
 
 export type Primitif =
   | {
       jenis: "poligon";
-      muka: Muka | "latar" | "zona" | "pita" | "rongga";
+      muka: Muka | "latar" | "lantai" | "zona" | "pita" | "rongga";
       titik: Titik[];
       peran: Peran;
       tanpaGaris?: boolean;
@@ -43,7 +44,7 @@ export type Primitif =
       tingkat: "belakang" | "depan" | "polos";
       peran: Peran;
     }
-  | { jenis: "garis"; dari: Titik; ke: Titik; gaya: "tegas" | "putus" | "air" | "silang" | "panah" | "ubin"; peran: Peran }
+  | { jenis: "garis"; dari: Titik; ke: Titik; gaya: "tegas" | "putus" | "air" | "silang" | "panah" | "ubin" | "ubinLantai"; peran: Peran }
   | { jenis: "jalur"; titik: Titik[]; gaya: "selang" | "gagang" | "lengkung"; peran: Peran }
   | { jenis: "baut"; cx: number; cy: number; peran: Peran }
   | { jenis: "tanda"; x: number; y: number; teks: string };
@@ -137,7 +138,7 @@ export function ukuranShower(): UkuranShower {
 }
 
 export const poligon = (
-  muka: Muka | "latar" | "zona" | "pita" | "rongga",
+  muka: Muka | "latar" | "lantai" | "zona" | "pita" | "rongga",
   pts: Titik[],
   peran: Peran,
 ): Extract<Primitif, { jenis: "poligon" }> => ({
@@ -310,38 +311,29 @@ function silinderTegak(
   ];
 }
 
-/** Selang: ayunan ke arah `arah` (+1 kanan layar, -1 kiri layar), ukuran ayunan mengikuti skala. */
-function selang(mulai: Titik, akhir: Titik, pendek: boolean, arah: 1 | -1, s: number, peran: Peran): Primitif {
-  const [sx, sy] = mulai;
-  const [ex, ey] = akhir;
-  const dx = (v: number) => arah * v * s;
-  const dy = (v: number) => v * s;
-  const pts: Titik[] = pendek
-    ? (() => {
-        const l: Titik = [ex + dx(24.7), ey + dy(27)];
-        return [
-          mulai,
-          [sx + dx(43.6), sy + dy(10.5)],
-          [l[0] + dx(30), l[1] + dy(5)],
-          l,
-          [l[0] - dx(16), l[1] - dy(3)],
-          [ex + dx(3), ey + dy(12)],
-          akhir,
-        ];
-      })()
-    : (() => {
-        const l: Titik = [ex + dx(31), ey + dy(10)];
-        return [
-          mulai,
-          [sx + dx(56), sy + dy(8)],
-          [l[0] + dx(24), l[1] - dy(30)],
-          l,
-          [l[0] - dx(10), l[1] + dy(12)],
-          [ex + dx(7), ey + dy(10)],
-          akhir,
-        ];
-      })();
-  return { jenis: "jalur", titik: pts, gaya: "selang", peran };
+/**
+ * Selang berbentuk gagang payung (huruf J) pada bidang dinding: batang lurus turun dari gagang hand shower, lalu melengkung
+ * di bawah dan naik masuk ke sambungan di bukaan bawah keran dari bawah. Digambar dalam koordinat dinding (a sepanjang
+ * dinding, n menjauhi dinding, u tinggi) lalu diproyeksikan, jadi J menempel sejajar dinding dan ujungnya bertemu keran.
+ */
+function selang(k: Kerangka, mulai: readonly [number, number, number], akhir: readonly [number, number, number], peran: Peran): Primitif {
+  const [am, nm, um] = mulai;
+  const [ae, ne, ue] = akhir;
+  const lebar = Math.abs(ae - am);
+  const dasar = Math.min(um, ue) - lebar * 0.5;
+  const uq = Math.min(um, dasar + lebar);
+  const tinggi = uq - dasar;
+  const batang = (um - uq) / 3;
+  const titikSelang: Titik[] = [
+    titik(k, am, nm, um),
+    titik(k, am, nm, um - batang),
+    titik(k, am, nm, um - 2 * batang),
+    titik(k, am, nm, uq),
+    titik(k, am, nm, uq - tinggi * 0.7),
+    titik(k, ae, ne, ue - tinggi * 0.7),
+    titik(k, ae, ne, ue),
+  ];
+  return { jenis: "jalur", titik: titikSelang, gaya: "selang", peran };
 }
 
 /**
@@ -360,12 +352,37 @@ export function garisUbin(k: Kerangka, a0: number, a1: number, tinggi: number, a
   return hasil;
 }
 
+/**
+ * Garis keramik lantai: garis sejajar `n` tiap `DIM.ubin` cm dari `aMulai` (dalam rentang `a0`..`a1`) dan garis sejajar `a`
+ * tiap `DIM.ubin` cm dari `nMulai` (dalam rentang `n0`..`n1`), digambar pada lantai (u = 0). Ukuran kotak sama dengan dinding.
+ */
+export function garisUbinLantai(k: Kerangka, a0: number, a1: number, n0: number, n1: number, aMulai = 0, nMulai = 0): Primitif[] {
+  const jarak = DIM.ubin;
+  const hasil: Primitif[] = [];
+  const garis = (dari: Titik, ke: Titik): Primitif => ({ jenis: "garis", dari, ke, gaya: "ubinLantai", peran: "netral" });
+  for (let a = aMulai + Math.ceil((a0 - aMulai) / jarak) * jarak; a < a1 - 1e-6; a += jarak)
+    if (a > a0 + 1e-6) hasil.push(garis(titik(k, a, n0, 0), titik(k, a, n1, 0)));
+  for (let n = nMulai + Math.ceil((n0 - nMulai) / jarak) * jarak; n < n1 - 1e-6; n += jarak)
+    if (n > n0 + 1e-6) hasil.push(garis(titik(k, a0, n, 0), titik(k, a1, n, 0)));
+  return hasil;
+}
+
+/**
+ * Gaya bersih: alas gelap di bawah semua sisi supaya hanya tepi luar yang tebal, garis di dalam objek tipis, dan sisi
+ * dibedakan dengan nada warna. Dipakai pada keran.
+ */
+export function bersihkan(daftar: Primitif[]): Primitif[] {
+  const polis = daftar.filter((p): p is Extract<Primitif, { jenis: "poligon" }> => p.jenis === "poligon");
+  return [...polis.map((p) => ({ ...p, tepi: true })), ...polis.map((p) => ({ ...p, garisTipis: true }))];
+}
+
 /** Dinding dan lantai polos (putih, hanya garis) untuk panel, supaya gaya mengikuti manual perakitan. Dinding berkeramik. */
 export function latarPanel(k: Kerangka = kerangkaPanel("kanan")): Primitif[] {
   const tinggi = DIM.ruang.tinggi;
   return [
-    poligon("latar", [titik(k, -80, 0, 0), titik(k, 80, 0, 0), titik(k, 80, 90, 0), titik(k, -80, 90, 0)], "netral"),
-    poligon("latar", [titik(k, -80, 0, 0), titik(k, 80, 0, 0), titik(k, 80, 0, tinggi), titik(k, -80, 0, tinggi)], "netral"),
+    poligon("lantai", [titik(k, -80, 0, 0), titik(k, 80, 0, 0), titik(k, 80, 90, 0), titik(k, -80, 90, 0)], "ruang"),
+    ...garisUbinLantai(k, -80, 80, 0, 90),
+    poligon("latar", [titik(k, -80, 0, 0), titik(k, 80, 0, 0), titik(k, 80, 0, tinggi), titik(k, -80, 0, tinggi)], "ruang"),
     ...garisUbin(k, -80, 80, tinggi),
   ];
 }
@@ -389,27 +406,29 @@ function rakitan(f: number, pa: number, pu: number) {
   };
 }
 
-const rakitanKeran = (f: number) => rakitan(f, -30, 101);
+const rakitanKeran = (f: number) => rakitan(f, 0, 101);
 
+/**
+ * Keran dinding sederhana di tengah dinding (a = 0): pelat, cerat ke depan, dan satu tuas. Keran punya dua bukaan air:
+ * cerat ke depan dan cerat pendek ke bawah tempat selang hand shower dipasang.
+ */
 function keran(k: Kerangka, mode: ModeGambar, f: number): Primitif[] {
-  const tuas = mode === "permanen";
   const r = rakitanKeran(f);
-  return [
-    ...r.kotak(k, -38, -22, 0, 6, 92, 110, "netral"),
-    ...r.kotak(k, -34, -26, 0, 28, 96, 106, "netral"),
-    ...r.kotak(k, -32, -28, 1, 5, 106, 122, tuas ? "aksen" : "netral"),
-    ...(tuas ? r.kotak(k, -32, -28, 2, 40, 122, 128, "aksen") : r.kotak(k, -40, -20, 0, 8, 122, 128, "netral")),
-  ];
+  return bersihkan([
+    ...r.kotak(k, -8, 8, 0, 4, 92, 110, "netral"),
+    ...r.kotak(k, -3, 3, 8, 14, 82, 96, "netral"),
+    ...r.kotak(k, -4, 4, 0, 28, 96, 106, "netral"),
+    ...r.kotak(k, -2, 2, 1, 5, 106, 118, mode === "permanen" ? "aksen" : "netral"),
+  ]);
 }
 
 /** Posisi kait hand shower: tinggi atasnya dan geseran sepanjang dinding. Kondisi = di luar zona; hack/permanen = di batas atas zona. */
 export function posisiKait(mode: ModeGambar, ukuran: UkuranShower = ukuranShower()): { uAtas: number; aGeser: number } {
-  return mode === "kondisi" ? { uAtas: DIM.shower.kaitLuarJangkauan, aGeser: 0 } : { uAtas: ukuran.zonaAtas, aGeser: 35 };
+  return mode === "kondisi" ? { uAtas: DIM.shower.kaitLuarJangkauan, aGeser: 30 } : { uAtas: ukuran.zonaAtas, aGeser: 35 };
 }
 
 function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi: boolean, f: number): Primitif[] {
   const s = pikselPerSatuan(k);
-  const arah: 1 | -1 = sumbuA(k)[0] >= 0 ? 1 : -1;
   const { uAtas, aGeser } = posisiKait(mode, ukuran);
   const lama = posisiKait("kondisi", ukuran);
   const peran: Peran = mode === "kondisi" ? "netral" : "aksen";
@@ -434,17 +453,9 @@ function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi
   const kp = rakitan(f, aGeser, uAtas);
   hasil.push(...keran(k, mode, f));
   if (mode === "hack") hasil.push(...kotak(k, -8, 8, 0, 12, lama.uAtas - 20, lama.uAtas, "hantu"));
-  hasil.push(
-    selang(
-      titik(k, kp.A(aGeser + 4), kp.N(20), kp.U(uBawahGagang)),
-      titik(k, kr.A(30), kr.N(10), kr.U(101)),
-      mode !== "kondisi",
-      arah,
-      s * f,
-      "netral",
-    ),
-  );
-  hasil.push(...kr.kotak(k, 26, 34, 0, 10, 96, 106, "netral"));
+  hasil.push(selang(k, [kp.A(aGeser + 4), kp.N(20), kp.U(uBawahGagang)], [kr.A(0), kr.N(11), kr.U(79)], "netral"));
+  // Sambungan selang pada bukaan keran yang menghadap ke bawah.
+  hasil.push(...bersihkan(kr.kotak(k, -4, 4, 7, 15, 78, 84, "netral")));
   hasil.push(...kp.kotak(k, aGeser - 8, aGeser + 8, 0, 12, uAtas - 20, uAtas, peran));
   if (mode === "permanen") {
     for (const u of [uAtas - 6.5, uAtas - 18.5]) {
@@ -496,12 +507,12 @@ function showerTetap(k: Kerangka, f: number): Primitif[] {
 function emberGayung(k: Kerangka, f: number): Primitif[] {
   const s = pikselPerSatuan(k) * f;
   const arah = sumbuA(k)[0] >= 0 ? 1 : -1;
-  const [ex, eyBawah] = titik(k, -30, 40, 0);
+  const [ex, eyBawah] = titik(k, 0, 40, 0);
   const tinggiEmber = 55 * s;
   const yAtasEmber = eyBawah - tinggiEmber;
-  const [gx, gyBawah] = titik(k, 10, 30, 0);
+  const [gx, gyBawah] = titik(k, 40, 30, 0);
   const kr = rakitanKeran(f);
-  const ujungKeran = titik(k, kr.A(-30), kr.N(28), kr.U(96));
+  const ujungKeran = titik(k, kr.A(0), kr.N(28), kr.U(96));
   return [
     ...keran(k, "kondisi", f),
     {
