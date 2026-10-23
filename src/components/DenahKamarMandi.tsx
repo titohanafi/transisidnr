@@ -1314,7 +1314,7 @@ export function DenahKamarMandi({
             sudutAktif={sudutAktif}
             varianShower={varianShower}
             tampilkanSemua={tampilkanTersembunyi}
-            kelas="h-80 w-full"
+            kelas="aspect-[7/9] w-full max-w-[360px]"
           />
         ) : (
           denahSvgIso("w-full max-w-[280px]")
@@ -1399,7 +1399,7 @@ export function DenahKamarMandi({
                 sudutAktif={sudutAktif}
                 varianShower={varianShower}
                 tampilkanSemua={tampilkanTersembunyi}
-                kelas="h-[70vh] w-full"
+                kelas="aspect-[7/9] w-full max-h-[78vh] max-w-[480px]"
               />
             ) : (
               denahSvgIso("w-full max-w-none")

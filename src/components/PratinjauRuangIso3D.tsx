@@ -35,7 +35,7 @@ const TEBAL = DIM.ruang.tebalDinding;
 // Setengah-tinggi pandangan awal kamera (meter); gambar lalu dipas-kan ke kanvas, jadi nilainya tidak menentukan ukuran.
 const FRUSTUM_AWAL = 2.2;
 // Margin gambar terhadap tepi kanvas (pecahan lebar/tinggi).
-const MARGIN = 0.05;
+const MARGIN = 0.03;
 
 /**
  * Benda yang tidak digambar karena dinding tempatnya menempel tidak digambar (dinding samping berlawanan dan dinding
