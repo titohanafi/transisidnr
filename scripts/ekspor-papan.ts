@@ -80,7 +80,7 @@ function bentuk(s: Primitif, penanda: string, m: number): string {
       const [x1, y1] = s.dari;
       const [x2, y2] = s.ke;
       const c = `x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}"`;
-      if (s.gaya === "ubin") return `<line ${c} stroke="#DCE2E7" stroke-width="${f(0.45 * w)}"/>`;
+      if (s.gaya === "ubin") return `<line ${c} stroke="#6B7580" stroke-opacity="0.35" stroke-width="${f(0.45 * w)}"/>`;
       if (s.gaya === "air") return `<line ${c} stroke="${KONTROL}" stroke-width="${f(2 * m)}" stroke-dasharray="${f(4 * m)} ${f(5 * m)}"/>`;
       if (s.gaya === "silang") return `<line ${c} stroke="${garis(s.peran)}" stroke-width="${f(5 * m)}"/>`;
       if (s.gaya === "panah")

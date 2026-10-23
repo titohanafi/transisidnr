@@ -8,6 +8,7 @@ import {
   keRuang,
   kotak,
   poligon,
+  titik,
   type Dinding,
   type Kerangka,
   type Primitif,
@@ -182,10 +183,16 @@ export function PratinjauRuangIso3D({
     // samping dimulai dari permukaan dalam dinding belakang. Garis keramik dimulai dari sudut pojok belakang.
     const kBelakang = kerangkaDinding("belakang");
     const kSamping = kerangkaDinding(sudutAktif.x);
+    // Permukaan dalam dinding dibuat putih (lebih cerah) supaya garis keramik terlihat; sisi tebal dan puncak dinding tetap
+    // bernada abu.
+    const mukaDalam = (k: Kerangka, a0: number, a1: number): Primitif =>
+      poligon("latar", [titik(k, a0, 0, 0), titik(k, a1, 0, 0), titik(k, a1, 0, TINGGI), titik(k, a0, 0, TINGGI)], "netral");
     const dinding: Primitif[] = [
       ...kotak(kBelakang, -LEBAR / 2 - TEBAL, LEBAR / 2 + TEBAL, -TEBAL, 0, 0, TINGGI, "netral"),
+      mukaDalam(kBelakang, -LEBAR / 2 - TEBAL, LEBAR / 2 + TEBAL),
       ...garisUbin(kBelakang, -LEBAR / 2, LEBAR / 2, TINGGI, -LEBAR / 2),
       ...kotak(kSamping, -DALAM / 2, DALAM / 2, -TEBAL, 0, 0, TINGGI, "netral"),
+      mukaDalam(kSamping, -DALAM / 2, DALAM / 2),
       ...garisUbin(kSamping, -DALAM / 2, DALAM / 2, TINGGI, -DALAM / 2),
     ];
 
