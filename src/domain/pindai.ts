@@ -72,6 +72,13 @@ export type ObjekDenah = (typeof OBJEK_DENAH)[number];
 export const VARIAN_SHOWER = ["hand_shower_gantung", "shower_tetap", "ember_gayung", "tidak_jelas"] as const;
 export type VarianShower = (typeof VARIAN_SHOWER)[number];
 
+// Jenis kloset dan cara pintu membuka yang dikenali dari foto. Sama seperti varian shower: daftar tertutup, tiap nilai
+// punya gambar sendiri (gambarBenda.ts), dan "tidak_jelas" menampilkan penanda netral, bukan tebakan.
+export const JENIS_KLOSET = ["duduk", "jongkok", "tidak_jelas"] as const;
+export type JenisKloset = (typeof JENIS_KLOSET)[number];
+export const VARIAN_PINTU = ["ayun_ke_dalam", "ayun_ke_luar", "geser", "tidak_jelas"] as const;
+export type VarianPintu = (typeof VARIAN_PINTU)[number];
+
 // Pintu di dinding depan; wastafel dan kloset sama-sama di dinding belakang, berdampingan (kloset di sisi kanan,
 // wastafel di sisi kirinya); area mandi di dinding kanan (dinding yang beda dari kloset, walau sama-sama "di
 // pojok kanan belakang" kalau dilihat sebagai zona) pada kedalaman tengah, supaya tidak menumpuk dengan kloset.

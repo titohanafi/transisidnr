@@ -533,6 +533,14 @@ export const uiSchema = z
         istilah: teks,
         catatanGambar: teks,
       }),
+      gambarAkses: rekamTeks,
+      panelAkses: z.object({
+        judul: teks,
+        penjelasan: teks,
+        lihatContoh: teks,
+        langkah: z.record(z.string(), z.object({ label: teks, sub: teks, isi: teks })),
+        catatanGambar: teks,
+      }),
       item: z.array(z.object({ id: teks, nama: teks, cek: teks, kartu: teks })).min(1),
     }),
     checkin: z.object({

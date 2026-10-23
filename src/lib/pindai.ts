@@ -1,14 +1,18 @@
 import {
   DINDING_OBJEK,
+  JENIS_KLOSET,
   OBJEK_DENAH,
   POSISI_BAWAAN,
   POSISI_DI_DINDING,
   selesaikanTabrakanDenah,
   STATUS_ITEM,
+  VARIAN_PINTU,
   VARIAN_SHOWER,
+  type JenisKloset,
   type ObjekDenah,
   type PosisiObjek,
   type StatusItem,
+  type VarianPintu,
   type VarianShower,
 } from "../domain/pindai";
 
@@ -17,6 +21,8 @@ export interface HasilModel {
   temuan: Record<string, StatusItem>;
   objek: Record<ObjekDenah, PosisiObjek>;
   varianShower: VarianShower;
+  jenisKloset: JenisKloset;
+  varianPintu: VarianPintu;
 }
 
 export type KodeGalat = "belum_diatur" | "terlalu_sering" | "jaringan" | "respons";
@@ -46,7 +52,9 @@ export function bacaRespons(x: unknown, idItem: string[]): HasilModel | null {
     }),
   ) as Record<ObjekDenah, PosisiObjek>;
   const varianShower = (VARIAN_SHOWER as readonly unknown[]).includes(x.varian_shower) ? (x.varian_shower as VarianShower) : "tidak_jelas";
-  return { kamarMandi: x.kamar_mandi, temuan, objek: selesaikanTabrakanDenah(objekMentahSah), varianShower };
+  const jenisKloset = (JENIS_KLOSET as readonly unknown[]).includes(x.jenis_kloset) ? (x.jenis_kloset as JenisKloset) : "tidak_jelas";
+  const varianPintu = (VARIAN_PINTU as readonly unknown[]).includes(x.varian_pintu) ? (x.varian_pintu as VarianPintu) : "tidak_jelas";
+  return { kamarMandi: x.kamar_mandi, temuan, objek: selesaikanTabrakanDenah(objekMentahSah), varianShower, jenisKloset, varianPintu };
 }
 
 // Status tiap hal untuk foto contoh `dev/mock-foto.jpg`, dinilai dari yang tampak di foto itu sendiri (bukan
@@ -78,9 +86,20 @@ function hasilTiruan(idItem: string[]): Promise<HasilModel> {
     string,
     StatusItem
   >;
-  // Foto contoh menampilkan hand shower yang digantung di dinding, bersama keran.
+  // Foto contoh menampilkan hand shower yang digantung di dinding, bersama keran, kloset duduk, dan pintu berengsel.
   return new Promise((selesai) =>
-    setTimeout(() => selesai({ kamarMandi: true, temuan, objek: POSISI_BAWAAN, varianShower: "hand_shower_gantung" }), 1200),
+    setTimeout(
+      () =>
+        selesai({
+          kamarMandi: true,
+          temuan,
+          objek: POSISI_BAWAAN,
+          varianShower: "hand_shower_gantung",
+          jenisKloset: "duduk",
+          varianPintu: "ayun_ke_dalam",
+        }),
+      1200,
+    ),
   );
 }
 

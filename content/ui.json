@@ -4,7 +4,12 @@
   },
   "beranda": {
     "spandukDraf": "Konten masih draf dan belum ditinjau ahli.",
-    "sapaan": { "pagi": "Selamat pagi", "siang": "Selamat siang", "sore": "Selamat sore", "malam": "Selamat malam" },
+    "sapaan": {
+      "pagi": "Selamat pagi",
+      "siang": "Selamat siang",
+      "sore": "Selamat sore",
+      "malam": "Selamat malam"
+    },
     "pilih": {
       "judul": "Apa yang ingin Anda lakukan?",
       "susun": {
@@ -19,7 +24,16 @@
         "deskripsi": "Lihat satu hal untuk hari ini dan langkah berikutnya.",
         "tombol": "Buka Panduan Saya"
       },
-      "cari": { "label": "Temukan panduan dan solusi agar rumah lebih ramah disabilitas", "tombol": "Cari", "saranJudul": "Coba cari", "saran": ["Lantai licin", "Pintu sempit", "Pegangan kloset"] }
+      "cari": {
+        "label": "Temukan panduan dan solusi agar rumah lebih ramah disabilitas",
+        "tombol": "Cari",
+        "saranJudul": "Coba cari",
+        "saran": [
+          "Lantai licin",
+          "Pintu sempit",
+          "Pegangan kloset"
+        ]
+      }
     }
   },
   "umum": {
@@ -113,7 +127,10 @@
     "pilihan": [
       {
         "id": "capek_fisik",
-        "bantuan": { "tombol": "Lihat satu hal untuk hari ini", "ke": "/rencana" },
+        "bantuan": {
+          "tombol": "Lihat satu hal untuk hari ini",
+          "ke": "/rencana"
+        },
         "singkat": "Lelah",
         "emoji": "🥱",
         "label": "Tubuh terasa lelah",
@@ -121,7 +138,10 @@
       },
       {
         "id": "capek_emosi",
-        "bantuan": { "tombol": "Baca: mendampingi tanpa mengambil alih", "panduan": "care-assist-transfer" },
+        "bantuan": {
+          "tombol": "Baca: mendampingi tanpa mengambil alih",
+          "panduan": "care-assist-transfer"
+        },
         "singkat": "Berat",
         "emoji": "😔",
         "label": "Hati terasa penuh",
@@ -129,7 +149,10 @@
       },
       {
         "id": "bingung_langkah",
-        "bantuan": { "tombol": "Mulai dari pertanyaan singkat", "ke": "/mulai/1" },
+        "bantuan": {
+          "tombol": "Mulai dari pertanyaan singkat",
+          "ke": "/mulai/1"
+        },
         "singkat": "Bingung",
         "emoji": "😕",
         "label": "Bingung harus mulai dari mana",
@@ -137,7 +160,10 @@
       },
       {
         "id": "soal_biaya",
-        "bantuan": { "tombol": "Lihat panduan, mulai dari yang tanpa biaya", "ke": "/jelajah" },
+        "bantuan": {
+          "tombol": "Lihat panduan, mulai dari yang tanpa biaya",
+          "ke": "/jelajah"
+        },
         "singkat": "Biaya",
         "emoji": "😟",
         "label": "Khawatir soal biaya",
@@ -145,7 +171,10 @@
       },
       {
         "id": "butuh_istirahat",
-        "bantuan": { "tombol": "Lihat siapa yang bisa membantu", "ke": "/jelajah/ahli" },
+        "bantuan": {
+          "tombol": "Lihat siapa yang bisa membantu",
+          "ke": "/jelajah/ahli"
+        },
         "singkat": "Istirahat",
         "emoji": "😴",
         "label": "Ingin istirahat sebentar",
@@ -251,7 +280,12 @@
     "bantuan": "Siapa yang bisa membantu",
     "peranPenyandang": "Peran penyandang disabilitas",
     "peranCaregiver": "Peran caregiver",
-    "peranLangkah": { "penyandang_disabilitas": "Penyandang disabilitas", "caregiver": "Caregiver", "bersama": "Bersama", "tukang": "Tukang" },
+    "peranLangkah": {
+      "penyandang_disabilitas": "Penyandang disabilitas",
+      "caregiver": "Caregiver",
+      "bersama": "Bersama",
+      "tukang": "Tukang"
+    },
     "peringatan": "Perhatian",
     "sumber": "Sumber",
     "sumberMenyusul": "Sumber menyusul",
@@ -388,13 +422,31 @@
   "jelajah": {
     "judul": "Semua panduan",
     "pengantar": "Buka panduan untuk melihat langkahnya. Bila sudah tahu ingin mencari alat atau mengenali peran ahli dan tukang, pilih saringan di bawah. Urutan panduan tidak dipengaruhi pembayaran.",
-    "status": { "cukup": "Teratasi", "masih_sulit": "Masih sulit" },
+    "status": {
+      "cukup": "Teratasi",
+      "masih_sulit": "Masih sulit"
+    },
     "kosongFilter": "Belum ada panduan dengan isi lengkap untuk pilihan ini. Isi panduan masih disusun.",
     "caregiver": "Untuk caregiver",
     "aksiKartu": "Aksi untuk panduan ini",
     "semuaPanduan": "Kembali ke semua panduan",
-    "cari": { "label": "Cari panduan", "contoh": ["cara mengatasi lantai licin", "pintu sempit", "pegangan kloset"], "tombol": "Cari", "hapus": "Hapus pencarian", "cakupan": "Saat ini baru tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda.", "kosong": "Tidak ada panduan yang cocok. Coba kata lain, atau cek kebutuhan di rumah supaya langkahnya disesuaikan dengan kondisi Anda." },
-    "lainnya": { "judul": "Lainnya", "alat": "Daftar alat", "ahli": "Dukungan" },
+    "cari": {
+      "label": "Cari panduan",
+      "contoh": [
+        "cara mengatasi lantai licin",
+        "pintu sempit",
+        "pegangan kloset"
+      ],
+      "tombol": "Cari",
+      "hapus": "Hapus pencarian",
+      "cakupan": "Saat ini baru tersedia panduan untuk aktivitas di kamar mandi bagi pengguna kursi roda.",
+      "kosong": "Tidak ada panduan yang cocok. Coba kata lain, atau cek kebutuhan di rumah supaya langkahnya disesuaikan dengan kondisi Anda."
+    },
+    "lainnya": {
+      "judul": "Lainnya",
+      "alat": "Daftar alat",
+      "ahli": "Dukungan"
+    },
     "judulFilter": {
       "semua": "Semua panduan",
       "alat": "Produk Disabilitas",
@@ -498,8 +550,8 @@
     "ulang": "Pindai foto lain",
     "keRencana": "Buka panduan saya",
     "gambarShower": {
-      "hand_shower_gantung_kondisi": "Hand shower tergantung di kait dinding yang tinggi, dengan selang menjuntai ke keluaran air. Ada keran di bawahnya.",
-      "hand_shower_gantung_hack": "Hand shower dipindahkan ke holder berperekat yang lebih rendah, di dalam zona jangkauan dari kursi roda.",
+      "hand_shower_gantung_kondisi": "Hand shower tergantung di kait dinding yang tinggi. Selangnya turun lurus lalu melengkung seperti huruf J dan tersambung ke bukaan bawah keran.",
+      "hand_shower_gantung_hack": "Hand shower dipindahkan ke holder berperekat yang lebih rendah, di dalam zona jangkauan dari kursi roda, dengan selang tersambung ke keran.",
       "hand_shower_gantung_permanen": "Holder hand shower dipasang dengan sekrup di zona jangkauan, dan keran diganti keran tuas.",
       "shower_tetap_kondisi": "Shower tetap menempel pada lengan di dinding. Ada keran di bawahnya.",
       "ember_gayung_kondisi": "Tanpa shower. Air ditampung dari keran ke ember di lantai dan disiramkan dengan gayung.",
@@ -507,9 +559,13 @@
     },
     "gambarBenda": {
       "kloset_duduk": "Kloset duduk dengan tangki di belakang, menempel pada dinding.",
-      "kloset_jongkok": "Kloset jongkok rata dengan lantai, dengan dua pijakan kaki.",
-      "wastafel": "Wastafel gantung dengan keran, dipasang di dinding dengan siku penopang.",
-      "pintu": "Pintu terbuka ke dalam ruangan, dengan garis putus-putus untuk lintasan ayunnya."
+      "kloset_jongkok": "Kloset jongkok berupa pelat rata dengan lantai dan lubang oval di tengahnya.",
+      "kloset_tidak_jelas": "Kotak putus-putus dengan tanda tanya: jenis kloset tidak terbaca dari foto.",
+      "wastafel": "Wastafel gantung dengan meja setengah oval, keran sederhana, dan siku penopang di bawah meja.",
+      "pintu": "Pintu terbuka ke dalam ruangan, dengan garis putus-putus untuk lintasan ayunnya.",
+      "pintu_ayun_luar": "Pintu terbuka ke luar ruangan, dengan garis putus-putus untuk lintasan ayunnya.",
+      "pintu_geser": "Pintu geser separuh terbuka di depan dinding, pada rel di atas kusen.",
+      "pintu_tanpa_daun": "Kusen pintu tanpa daun: cara pintu membuka tidak terbaca dari foto."
     },
     "panelShower": {
       "judul": "Jenis shower di kamar mandi Anda",
@@ -585,7 +641,35 @@
         "cek": "Apakah keran, shower, dan tempat sabun tampak mudah dijangkau dari posisi duduk?",
         "kartu": "bath-reach-controls"
       }
-    ]
+    ],
+    "gambarAkses": {
+      "kondisi": "Bak mandi tembok dengan bibir tinggi. Panah dari lantai ke bak ditandai silang karena sulit dilewati kursi roda.",
+      "hack": "Ember air diletakkan di atas bangku di samping bak, setinggi jangkauan, sehingga air bisa diambil tanpa masuk ke bak.",
+      "permanen": "Bak dibongkar dan diganti area shower rata dengan lantai, miring ke saluran air di tepi depan. Panah kecil menunjukkan arah kemiringan."
+    },
+    "panelAkses": {
+      "judul": "Mandi tanpa terhalang bibir bak",
+      "penjelasan": "Bak mandi tembok punya bibir tinggi yang sulit dilewati dari kursi roda. Area shower tanpa undakan adalah lantai mandi yang rata dengan lantai kamar mandi, miring pelan ke saluran air.",
+      "lihatContoh": "Lihat contoh perbaikan",
+      "langkah": {
+        "kondisi": {
+          "label": "Kondisi",
+          "sub": "contoh",
+          "isi": "Mandi memakai bak tembok dengan bibir tinggi, sulit dimasuki dari kursi roda."
+        },
+        "hack": {
+          "label": "Hack",
+          "sub": "tanpa bongkar",
+          "isi": "Taruh ember di atas bangku setinggi jangkauan, atau pakai hand shower dari keran. Tidak perlu masuk ke bak."
+        },
+        "permanen": {
+          "label": "Permanen",
+          "sub": "renovasi",
+          "isi": "Bongkar bak tembok, ganti dengan area shower rata. Lantai miring pelan ke saluran, bibir pembatas serendah mungkin."
+        }
+      },
+      "catatanGambar": "Gambar hanya contoh, bukan ukuran. Angka menyusul setelah ditinjau ahli."
+    }
   },
   "ilustrasi": {
     "angka": {

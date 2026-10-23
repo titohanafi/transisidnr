@@ -3,7 +3,7 @@
 //
 // Pemakaian: npx tsx scripts/ekspor-papan.ts <folder papan>
 // Folder berisi Main.dc.html (varian shower), M07.dc.html (hand shower tiga langkah), M08.dc.html (akses mandi tiga langkah),
-// dan Benda.dc.html (kloset, wastafel, pintu). Hanya isi tiap <svg> yang diganti; judul, teks, dan tata letak papan dibiarkan.
+// Benda.dc.html (kloset, wastafel, pintu), dan Varian.dc.html (varian kloset dan pintu). Hanya isi tiap <svg> yang diganti; judul, teks, dan tata letak papan dibiarkan.
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { susunAkses } from "../src/domain/gambarAkses";
@@ -178,6 +178,11 @@ gantiSvg(
   langkah.map((m) => ({ daftar: susunAkses(m, "kanan"), viewBox: kanvas })),
 );
 const benda: JenisBenda[] = ["kloset_duduk", "kloset_jongkok", "wastafel", "pintu"];
+const varianBenda: JenisBenda[] = ["kloset_tidak_jelas", "pintu_ayun_luar", "pintu_geser", "pintu_tanpa_daun"];
+gantiSvg(
+  join(folder, "Varian.dc.html"),
+  varianBenda.map((j) => ({ daftar: susunBenda(j, "kanan"), viewBox: bingkaiBenda(j, "kanan").map(f).join(" ") })),
+);
 gantiSvg(
   join(folder, "Benda.dc.html"),
   benda.map((j) => ({ daftar: susunBenda(j, "kanan"), viewBox: bingkaiBenda(j, "kanan").map(f).join(" ") })),

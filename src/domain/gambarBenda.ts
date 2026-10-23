@@ -11,6 +11,7 @@ import {
   keRuang,
   kotak,
   latarPanel,
+  pikselPerSatuan,
   poligon,
   titik,
   type Kerangka,
@@ -19,7 +20,16 @@ import {
   type Titik,
 } from "./gambarShower";
 
-export const JENIS_BENDA = ["kloset_duduk", "kloset_jongkok", "wastafel", "pintu"] as const;
+export const JENIS_BENDA = [
+  "kloset_duduk",
+  "kloset_jongkok",
+  "kloset_tidak_jelas",
+  "wastafel",
+  "pintu",
+  "pintu_ayun_luar",
+  "pintu_geser",
+  "pintu_tanpa_daun",
+] as const;
 export type JenisBenda = (typeof JENIS_BENDA)[number];
 
 const oval = (k: Kerangka, a: number, n: number, ra: number, rn: number, u: number, segmen = 32): Titik[] =>
@@ -133,36 +143,72 @@ function normalTerlihat(k: Kerangka, na: number, nn: number): [number, number] {
 
 const SUDUT_BUKA = (55 * Math.PI) / 180;
 
-function pintu(k: Kerangka): Primitif[] {
+/** Kusen pintu: dua tiang dan ambang atas, mengapit bukaan bersih. */
+function kusenPintu(k: Kerangka): Primitif[] {
+  const s2 = DIM.pintu.bukaanBersih / 2;
+  const tinggi = DIM.pintu.tinggi;
+  return [
+    ...kotak(k, -s2 - 4, -s2, 0, 8, 0, tinggi + 8, "netral"),
+    ...kotak(k, s2, s2 + 4, 0, 8, 0, tinggi + 8, "netral"),
+    ...kotak(k, -s2 - 4, s2 + 4, 0, 8, tinggi, tinggi + 8, "netral"),
+  ];
+}
+
+/**
+ * Bukaan pintu pada bidang dinding: lubang selebar bukaan bersih setinggi pintu, digambar di atas dinding berkeramik supaya
+ * pintu tampak menembus dinding, bukan menempel di permukaannya.
+ */
+export function bukaanDinding(k: Kerangka): Primitif {
+  const s2 = DIM.pintu.bukaanBersih / 2;
+  const tinggi = DIM.pintu.tinggi;
+  return poligon("kiri", [titik(k, -s2, 0, 0), titik(k, s2, 0, 0), titik(k, s2, 0, tinggi), titik(k, -s2, 0, tinggi)], "ruang");
+}
+
+/**
+ * Pintu berengsel. `arah` = +1 membuka ke dalam ruangan (arah n), -1 ke luar. Daun yang membuka menjauhi kamera berada di
+ * belakang kusen dan digambar lebih dulu supaya tertutup kusen; daun yang mendekati kamera digambar terakhir.
+ */
+function pintuAyun(k: Kerangka, arah: 1 | -1): Primitif[] {
   const bukaan = DIM.pintu.bukaanBersih;
   const tinggi = DIM.pintu.tinggi;
-  const sudut = SUDUT_BUKA;
+  const sudut = SUDUT_BUKA * arah;
   const engsel: [number, number] = [-bukaan / 2, 4];
   const panjang = bukaan;
-  const arah: [number, number] = [Math.cos(sudut), Math.sin(sudut)];
-  const tengah: [number, number] = [engsel[0] + (arah[0] * panjang) / 2, engsel[1] + (arah[1] * panjang) / 2];
-  const [na, nn] = normalTerlihat(k, -arah[1], arah[0]);
-  const gagang: [number, number] = [engsel[0] + arah[0] * panjang * 0.89 + na * 3.5, engsel[1] + arah[1] * panjang * 0.89 + nn * 3.5];
+  const vektor: [number, number] = [Math.cos(sudut), Math.sin(sudut)];
+  const tengah: [number, number] = [engsel[0] + (vektor[0] * panjang) / 2, engsel[1] + (vektor[1] * panjang) / 2];
+  const [na, nn] = normalTerlihat(k, -vektor[1], vektor[0]);
+  const gagang: [number, number] = [engsel[0] + vektor[0] * panjang * 0.89 + na * 3.5, engsel[1] + vektor[1] * panjang * 0.89 + nn * 3.5];
   // Garis putus-putus lintasan ayun daun pintu di lantai.
   const lintasan: Titik[] = Array.from({ length: 13 }, (_, i) => {
     const p = (i / 12) * sudut;
     return titik(k, engsel[0] + Math.cos(p) * panjang, engsel[1] + Math.sin(p) * panjang, 0);
   });
-  const s2 = bukaan / 2;
-  const kusen = [
-    ...kotak(k, -s2 - 4, -s2, 0, 8, 0, tinggi + 8, "netral"),
-    ...kotak(k, s2, s2 + 4, 0, 8, 0, tinggi + 8, "netral"),
-    ...kotak(k, -s2 - 4, s2 + 4, 0, 8, tinggi, tinggi + 8, "netral"),
-  ];
   const daun = [
     ...ekstrusi(k, footprintPutar(tengah[0], tengah[1], panjang / 2, 2, sudut), 0, tinggi - 2, "netral"),
     ...ekstrusi(k, footprintPutar(gagang[0], gagang[1], 5, 1.5, sudut), 98, 102, "netral"),
   ];
-  // Daun membuka ke dalam ruangan (arah n). Bila arah itu menjauhi kamera (kamera di luar dinding pintu), daun berada
-  // di belakang kusen dan harus digambar lebih dulu supaya tertutup kusen; bila mendekati kamera, daun digambar terakhir.
   const { n: arahMasuk } = sumbuLayar(k);
-  const daunDekat = arahMasuk[1] > 0;
+  const daunDekat = arah * arahMasuk[1] > 0;
+  const kusen = kusenPintu(k);
   return [{ jenis: "garisPoli", titik: lintasan, peran: "hantu" }, ...(daunDekat ? [...kusen, ...daun] : [...daun, ...kusen])];
+}
+
+/** Pintu geser: daun bergeser di depan dinding pada rel di atas kusen, separuh terbuka. */
+function pintuGeser(k: Kerangka): Primitif[] {
+  const bukaan = DIM.pintu.bukaanBersih;
+  const tinggi = DIM.pintu.tinggi;
+  const s2 = bukaan / 2;
+  const rel = kotak(k, -s2 - 4, s2 + bukaan / 2 + 8, 8, 14, tinggi + 8, tinggi + 12, "netral");
+  const daun = [...kotak(k, 5, 5 + bukaan, 9, 13, 2, tinggi - 2, "netral"), ...kotak(k, 10, 13, 13, 15, 95, 115, "netral")];
+  const { n: arahMasuk } = sumbuLayar(k);
+  const kusen = kusenPintu(k);
+  return arahMasuk[1] > 0 ? [...kusen, ...rel, ...daun] : [...daun, ...kusen, ...rel];
+}
+
+/** Kloset yang jenisnya tidak terbaca dari foto: kotak putus-putus dengan tanda tanya, tidak menebak. */
+function klosetTidakJelas(k: Kerangka): Primitif[] {
+  const [tx, ty] = titik(k, 0, 30, 50);
+  return [...kotak(k, -20, 20, 0, 60, 0, 50, "hantu"), { jenis: "tanda", x: tx, y: ty + 11 * pikselPerSatuan(k), teks: "?" }];
 }
 
 /** Gambar satu benda pada dinding yang ditentukan `kerangka` (bawaan: dinding kanan panel). */
@@ -174,8 +220,16 @@ export function gambarBenda(jenis: JenisBenda, kerangka: Kerangka = kerangkaPane
       return klosetJongkok(kerangka);
     case "wastafel":
       return wastafel(kerangka);
+    case "kloset_tidak_jelas":
+      return klosetTidakJelas(kerangka);
     case "pintu":
-      return pintu(kerangka);
+      return pintuAyun(kerangka, 1);
+    case "pintu_ayun_luar":
+      return pintuAyun(kerangka, -1);
+    case "pintu_geser":
+      return pintuGeser(kerangka);
+    case "pintu_tanpa_daun":
+      return kusenPintu(kerangka);
   }
 }
 

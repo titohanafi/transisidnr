@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { H, titikDinding, W } from "../domain/denahGeometri";
 import { DIM } from "../domain/dimensiGambar";
-import { gambarBenda, type JenisBenda } from "../domain/gambarBenda";
+import { bukaanDinding, gambarBenda, type JenisBenda } from "../domain/gambarBenda";
 import {
   garisUbin,
   garisUbinLantai,
@@ -16,14 +16,20 @@ import {
   type Titik,
 } from "../domain/gambarShower";
 import { susunSepanjangDinding, type BendaDinding } from "../domain/tataLetak";
-import { OBJEK_DENAH, type LetakDenah, type ObjekDenah, type VarianShower } from "../domain/pindai";
+import { OBJEK_DENAH, type JenisKloset, type LetakDenah, type ObjekDenah, type VarianPintu, type VarianShower } from "../domain/pindai";
 import { bangunProyeksi } from "../lib/proyeksiIso3D";
 import { LapisPrimitif } from "./GambarShower";
 
-const JENIS_BENDA_DENAH: Record<Exclude<ObjekDenah, "area_mandi">, JenisBenda> = {
-  pintu: "pintu",
-  kloset: "kloset_duduk",
-  wastafel: "wastafel",
+const JENIS_KLOSET_GAMBAR: Record<JenisKloset, JenisBenda> = {
+  duduk: "kloset_duduk",
+  jongkok: "kloset_jongkok",
+  tidak_jelas: "kloset_tidak_jelas",
+};
+const VARIAN_PINTU_GAMBAR: Record<VarianPintu, JenisBenda> = {
+  ayun_ke_dalam: "pintu",
+  ayun_ke_luar: "pintu_ayun_luar",
+  geser: "pintu_geser",
+  tidak_jelas: "pintu_tanpa_daun",
 };
 
 // Seluruh gambar dalam cm nyata (1 satuan = 1 cm, sama dengan panel): ruangan seluas ruang dalam toilet PerMen
@@ -112,12 +118,17 @@ export function PratinjauRuangIso3D({
   letak,
   sudutAktif,
   varianShower = "tidak_jelas",
+  jenisKloset = "tidak_jelas",
+  varianPintu = "tidak_jelas",
   tampilkanSemua = false,
   kelas = "h-96 w-full",
 }: {
   letak: (id: ObjekDenah) => LetakDenah;
   sudutAktif: { x: "kiri" | "kanan" };
   varianShower?: VarianShower;
+  /** Jenis kloset dan cara pintu membuka (hasil pindai); "tidak_jelas" menggambar penanda netral. */
+  jenisKloset?: JenisKloset;
+  varianPintu?: VarianPintu;
   /** Tampilkan juga benda yang biasanya disembunyikan (di dinding yang tidak digambar). */
   tampilkanSemua?: boolean;
   kelas?: string;
@@ -200,15 +211,24 @@ export function PratinjauRuangIso3D({
       ...garisUbin(kSamping, -DALAM / 2, DALAM / 2, TINGGI, -DALAM / 2),
     ];
 
+    const jenisBenda = (id: Exclude<ObjekDenah, "area_mandi">): JenisBenda =>
+      id === "kloset" ? JENIS_KLOSET_GAMBAR[jenisKloset] : id === "pintu" ? VARIAN_PINTU_GAMBAR[varianPintu] : "wastafel";
     const tersembunyi = tampilkanSemua ? [] : bendaTersembunyi(letak, sudutAktif.x);
     const posisi = posisiSepanjang(letak);
+    // Bukaan pintu pada dinding yang digambar: lubang di atas dinding berkeramik supaya pintu menembus dinding. Pada dinding
+    // yang tidak digambar (mis. dinding depan, sisi kamera) tidak ada dinding untuk dilubangi.
+    const dindingPintu = titikDinding(letak("pintu")).dinding;
+    const bukaan: Primitif[] =
+      !tersembunyi.includes("pintu") && (dindingPintu === "belakang" || dindingPintu === sudutAktif.x)
+        ? [bukaanDinding({ ...kerangkaDinding(dindingPintu), sepanjang: posisi.pintu })]
+        : [];
     const susunan = OBJEK_DENAH.map((id) => {
       const letakId = letak(id);
       const kerangka: Kerangka = { ...kerangkaDinding(titikDinding(letakId).dinding), sepanjang: posisi[id] };
       // Benda yang disembunyikan tidak digambar sama sekali (termasuk pintu, tanpa garis bukaan).
       if (tersembunyi.includes(id)) return null;
       const daftar: Primitif[] =
-        id === "area_mandi" ? gambarShower(varianShower, "kondisi", { kerangka }) : gambarBenda(JENIS_BENDA_DENAH[id], kerangka);
+        id === "area_mandi" ? gambarShower(varianShower, "kondisi", { kerangka }) : gambarBenda(jenisBenda(id), kerangka);
       // Urutan gambar dari belakang ke depan: titik pijak benda yang lebih rendah di layar berarti lebih dekat kamera.
       const [x, y] = keRuang(kerangka, 0, 0);
       return { id, daftar, kedalaman: proyeksi(x, y, 0)[1] };
@@ -224,7 +244,7 @@ export function PratinjauRuangIso3D({
         focusable="false"
       >
         <g strokeWidth={1.6} strokeLinejoin="round" strokeLinecap="round">
-          <LapisPrimitif daftar={[lantai, ...ubinLantai, ...dinding]} garisDasar={1.6} />
+          <LapisPrimitif daftar={[lantai, ...ubinLantai, ...dinding, ...bukaan]} garisDasar={1.6} />
           {susunan.map((b) => (
             <g key={b.id}>
               <LapisPrimitif daftar={b.daftar} tebal={0.75} garisDasar={1.6} />

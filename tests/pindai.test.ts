@@ -34,6 +34,31 @@ describe("varian shower dari respons", () => {
   });
 });
 
+describe("jenis kloset dan varian pintu dari respons", () => {
+  const dasar = { kamar_mandi: true, temuan: [] };
+  it("memakai nilai yang sah", () => {
+    expect(bacaRespons({ ...dasar, jenis_kloset: "jongkok", varian_pintu: "geser" }, ids)).toMatchObject({
+      jenisKloset: "jongkok",
+      varianPintu: "geser",
+    });
+    expect(bacaRespons({ ...dasar, jenis_kloset: "duduk", varian_pintu: "ayun_ke_luar" }, ids)).toMatchObject({
+      jenisKloset: "duduk",
+      varianPintu: "ayun_ke_luar",
+    });
+  });
+  it("nilai asing, salah tipe, atau hilang dianggap tidak jelas", () => {
+    expect(bacaRespons({ ...dasar, jenis_kloset: "bidet", varian_pintu: "lipat" }, ids)).toMatchObject({
+      jenisKloset: "tidak_jelas",
+      varianPintu: "tidak_jelas",
+    });
+    expect(bacaRespons({ ...dasar, jenis_kloset: 3, varian_pintu: null }, ids)).toMatchObject({
+      jenisKloset: "tidak_jelas",
+      varianPintu: "tidak_jelas",
+    });
+    expect(bacaRespons(dasar, ids)).toMatchObject({ jenisKloset: "tidak_jelas", varianPintu: "tidak_jelas" });
+  });
+});
+
 describe("respons pindai", () => {
   it("menolak bentuk salah, mengabaikan id asing, mengisi yang hilang", () => {
     expect(bacaRespons(null, ids)).toBeNull();

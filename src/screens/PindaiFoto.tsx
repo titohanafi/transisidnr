@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { DenahKamarMandi } from "../components/DenahKamarMandi";
 import { Halaman } from "../components/Halaman";
+import { PanelAkses } from "../components/PanelAkses";
 import { PanelShower } from "../components/PanelShower";
 import { HiasanLingkaran } from "../components/KartuHero";
 import { PilihanPil } from "../components/Pilihan";
@@ -16,6 +17,8 @@ import {
   type ObjekDenah,
   type PosisiObjek,
   type StatusItem,
+  type JenisKloset,
+  type VarianPintu,
   type VarianShower,
 } from "../domain/pindai";
 import { kecilkanFoto } from "../lib/foto";
@@ -26,6 +29,7 @@ const t = konten.ui.pindai;
 const ID_ITEM = t.item.map((i) => i.id);
 // Hal yang gambar jenis shower-nya ditampilkan (indikator "Keran dan shower", M-07 di checklist tim riset).
 const ID_ITEM_SHOWER = "jangkauan";
+const ID_ITEM_AKSES = "area_mandi";
 
 type Tahap =
   | { nama: "pilih" }
@@ -42,6 +46,9 @@ type Tahap =
       objek: Record<ObjekDenah, PosisiObjek>;
       /** Jenis shower yang terbaca dari foto; "tidak_jelas" bila dari ceklis manual atau tidak terbaca. */
       varianShower: VarianShower;
+      /** Jenis kloset dan cara pintu membuka yang terbaca dari foto; "tidak_jelas" bila dari ceklis manual atau tidak terbaca. */
+      jenisKloset: JenisKloset;
+      varianPintu: VarianPintu;
     };
 
 const GAYA_STATUS: Record<StatusItem, string> = {
@@ -109,7 +116,16 @@ export function PindaiFoto() {
     try {
       const hasil = await pindaiFoto(foto, ID_ITEM);
       if (!hasil.kamarMandi) setTahap({ nama: "galat", pesan: t.bukanKamarMandi });
-      else setTahap({ nama: "hasil", sumber: "pindai", temuan: hasil.temuan, objek: hasil.objek, varianShower: hasil.varianShower });
+      else
+        setTahap({
+          nama: "hasil",
+          sumber: "pindai",
+          temuan: hasil.temuan,
+          objek: hasil.objek,
+          varianShower: hasil.varianShower,
+          jenisKloset: hasil.jenisKloset,
+          varianPintu: hasil.varianPintu,
+        });
     } catch (e) {
       const kode = e instanceof GalatPindai ? e.kode : null;
       setTahap({
@@ -295,7 +311,15 @@ export function PindaiFoto() {
             <Tombol
               className="mt-4 w-full"
               onClick={() =>
-                setTahap({ nama: "hasil", sumber: "ceklis", temuan: tahap.jawaban, objek: POSISI_BAWAAN, varianShower: "tidak_jelas" })
+                setTahap({
+                  nama: "hasil",
+                  sumber: "ceklis",
+                  temuan: tahap.jawaban,
+                  objek: POSISI_BAWAAN,
+                  varianShower: "tidak_jelas",
+                  jenisKloset: "tidak_jelas",
+                  varianPintu: "tidak_jelas",
+                })
               }
             >
               {t.lihatHasil}
@@ -304,7 +328,15 @@ export function PindaiFoto() {
         )}
 
         {tahap.nama === "hasil" && (
-          <Hasil sumber={tahap.sumber} temuan={tahap.temuan} objek={tahap.objek} varianShower={tahap.varianShower} onUlang={ulang} />
+          <Hasil
+            sumber={tahap.sumber}
+            temuan={tahap.temuan}
+            objek={tahap.objek}
+            varianShower={tahap.varianShower}
+            jenisKloset={tahap.jenisKloset}
+            varianPintu={tahap.varianPintu}
+            onUlang={ulang}
+          />
         )}
       </div>
     </Halaman>
@@ -316,12 +348,16 @@ function Hasil({
   temuan: temuanAwal,
   objek,
   varianShower,
+  jenisKloset,
+  varianPintu,
   onUlang,
 }: {
   sumber: "pindai" | "ceklis";
   temuan: Record<string, StatusItem>;
   objek: Record<ObjekDenah, PosisiObjek>;
   varianShower: VarianShower;
+  jenisKloset: JenisKloset;
+  varianPintu: VarianPintu;
   onUlang: () => void;
 }) {
   // Jawaban Gemini (atau ceklis manual) cuma titik awal: tiap hal di "Rincian per hal" bisa dikoreksi user sendiri
@@ -407,7 +443,15 @@ function Hasil({
 
       {/* "Rincian per hal" dirender sebagai children DenahKamarMandi, di dalam kartu yang sama dengan denah+toggle
           (bukan section terpisah di bawahnya) - supaya isi tab status yang aktif terlihat sebagai satu kesatuan. */}
-      <DenahKamarMandi temuan={temuan} objek={objek} varianShower={varian} filter={filter} onUbahFilter={setFilter}>
+      <DenahKamarMandi
+        temuan={temuan}
+        objek={objek}
+        varianShower={varian}
+        jenisKloset={jenisKloset}
+        varianPintu={varianPintu}
+        filter={filter}
+        onUbahFilter={setFilter}
+      >
         <section aria-labelledby="judul-temuan">
           <div className="mb-isi">
             <h2 id="judul-temuan" className="text-judulKartu">
@@ -472,6 +516,7 @@ function Hasil({
                         )}
                       </>
                     )}
+                    {it.id === ID_ITEM_AKSES && !konfirmasi && statusKini === "perhatian" && <PanelAkses />}
                     {it.id === ID_ITEM_SHOWER && !konfirmasi && (
                       <PanelShower
                         varian={varian}
