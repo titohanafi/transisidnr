@@ -26,11 +26,17 @@ export const JARAK_TEPI_DINDING = 6;
  */
 export function susunSepanjangDinding(benda: BendaDinding[], panjang: number): Record<string, number> {
   const urut = [...benda].sort((a, b) => a.awal - b.awal);
-  const pos = urut.map((b) => b.awal);
   const batas = (i: number): [number, number] => [
     -panjang / 2 + urut[i].setengah + JARAK_TEPI_DINDING,
     panjang / 2 - urut[i].setengah - JARAK_TEPI_DINDING,
   ];
+  // Bila benda dan jarak bebasnya tidak muat di dinding, jangan biarkan semuanya menumpuk di satu ujung: sebar rata
+  // menurut urutan (pusat di 1/(2n), 3/(2n), ... panjang dinding), sehingga tumpang tindihnya sekecil dan serata mungkin.
+  const kebutuhan = urut.reduce((jumlah, b) => jumlah + 2 * b.setengah, 0) + JARAK_BEBAS_BENDA * (urut.length - 1) + 2 * JARAK_TEPI_DINDING;
+  if (urut.length > 1 && kebutuhan > panjang) {
+    return Object.fromEntries(urut.map((b, i) => [b.id, -panjang / 2 + ((2 * i + 1) / (2 * urut.length)) * panjang]));
+  }
+  const pos = urut.map((b) => b.awal);
   for (let lewat = 0; lewat < 12; lewat++) {
     for (let i = 1; i < urut.length; i++) {
       const perlu = urut[i - 1].setengah + urut[i].setengah + JARAK_BEBAS_BENDA;
@@ -46,12 +52,12 @@ export function susunSepanjangDinding(benda: BendaDinding[], panjang: number): R
 }
 
 // Setengah lebar tiap benda sepanjang dindingnya (cm), untuk menjaga jarak antar benda di satu dinding. Kloset: tangki dan
-// mangkuk yang bergeser; shower: bilik pancuran minimum PerMen (90 cm).
+// mangkuk yang bergeser; shower: keran, selang, dan kepala shower di dinding (sekitar 50 cm lebarnya; bilik tidak digambar di lantai).
 const SETENGAH_LEBAR: Record<ObjekDenah, number> = {
   pintu: DIM.pintu.bukaanBersih / 2 + 4,
   kloset: 26,
   wastafel: DIM.wastafel.lebarBak / 2,
-  area_mandi: 45,
+  area_mandi: 25,
 };
 
 const panjangDinding = (dinding: DindingDenah): number =>

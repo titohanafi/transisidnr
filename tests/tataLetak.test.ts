@@ -67,6 +67,26 @@ describe("susunSepanjangDinding", () => {
   });
 });
 
+describe("susunSepanjangDinding bila tidak muat", () => {
+  it("tiga benda di dinding 152,5 cm disebar rata menurut urutan, tidak menumpuk di satu ujung", () => {
+    const hasil = susunSepanjangDinding(
+      [
+        { id: "a", awal: -60, setengah: 30 },
+        { id: "b", awal: -50, setengah: 26 },
+        { id: "c", awal: -40, setengah: 25 },
+      ],
+      152.5,
+    );
+    expect(hasil.a).toBeLessThan(hasil.b);
+    expect(hasil.b).toBeLessThan(hasil.c);
+    expect(hasil.b - hasil.a).toBeCloseTo(hasil.c - hasil.b, 6);
+    expect(hasil.a).toBeGreaterThan(-152.5 / 2);
+    expect(hasil.c).toBeLessThan(152.5 / 2);
+    // Sebaran rata menggeser benda pertama ke kiri dan ketiga ke kanan jauh dari posisi awal yang berdempetan.
+    expect(hasil.c - hasil.a).toBeGreaterThan(60);
+  });
+});
+
 describe("titikTertata (tampak atas)", () => {
   const letak = (id: ObjekDenah): LetakDenah =>
     ({
