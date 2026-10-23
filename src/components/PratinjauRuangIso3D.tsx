@@ -167,15 +167,14 @@ export function PratinjauRuangIso3D({
       lihat,
     });
 
-    // Lantai menutup seluruh telapak dinding: ruang dalam ditambah tebal dinding belakang dan dinding samping yang digambar.
-    const [lantaiKiri, lantaiKanan] = sudutAktif.x === "kiri" ? [-LEBAR / 2 - TEBAL, LEBAR / 2] : [-LEBAR / 2, LEBAR / 2 + TEBAL];
+    // Lantai hanya seluas ruang dalam (PerMen); dinding berdiri di luarnya dan tidak ikut tercakup lantai.
     const lantai = poligon(
       "latar",
       [
-        proyeksi(lantaiKiri, -DALAM / 2 - TEBAL, 0),
-        proyeksi(lantaiKanan, -DALAM / 2 - TEBAL, 0),
-        proyeksi(lantaiKanan, DALAM / 2, 0),
-        proyeksi(lantaiKiri, DALAM / 2, 0),
+        proyeksi(-LEBAR / 2, -DALAM / 2, 0),
+        proyeksi(LEBAR / 2, -DALAM / 2, 0),
+        proyeksi(LEBAR / 2, DALAM / 2, 0),
+        proyeksi(-LEBAR / 2, DALAM / 2, 0),
       ],
       "netral",
     );
