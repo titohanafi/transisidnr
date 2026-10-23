@@ -98,4 +98,22 @@ describe("dimensi nyata gambar (1 satuan = 1 cm)", () => {
           expect(y).toBeLessThanOrEqual(TINGGI_KANVAS + 1);
         }
   });
+
+  it("kloset jongkok: lubang tepat di tengah pelat (sumbu kedalaman dan sumbu dinding)", () => {
+    // Proyeksi uji yang memetakan kedalaman n ke layar x, lalu a ke layar x pada kerangka kedua: dua pengukuran terpisah.
+    const sumbu = (proyeksi: Kerangka["proyeksi"]) => {
+      const daftar = gambarBenda("kloset_jongkok", { ...k, proyeksi });
+      const pusat = (p: Primitif) => {
+        const x = titikSemua([p]).map((t) => t[0]);
+        return (Math.min(...x) + Math.max(...x)) / 2;
+      };
+      const pelat = daftar.find((p) => p.jenis === "poligon" && p.muka === "atas")!;
+      const rongga = daftar.find((p) => p.jenis === "poligon" && p.muka === "rongga")!;
+      return [pusat(pelat), pusat(rongga)];
+    };
+    const [pelatN, ronggaN] = sumbu((_x, y, z): Titik => [y, -z]);
+    expect(ronggaN).toBeCloseTo(pelatN, 5);
+    const [pelatA, ronggaA] = sumbu((x, _y, z): Titik => [x, -z]);
+    expect(ronggaA).toBeCloseTo(pelatA, 5);
+  });
 });

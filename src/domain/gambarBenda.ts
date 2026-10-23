@@ -83,8 +83,15 @@ function klosetDuduk(k: Kerangka): Primitif[] {
   ];
 }
 
+// Kloset jongkok: pelat rata dengan lantai dan lubang oval tepat di tengah pelat (pusat n = setengah kedalaman pelat).
+const PELAT_JONGKOK = { setengahLebar: 18, dalam: 58, tinggi: 4 };
+
 function klosetJongkok(k: Kerangka): Primitif[] {
-  return [...kotak(k, -18, 18, 0, 58, 0, 4, "netral"), poligon("rongga", oval(k, 0, 22, 8, 19, 4), "netral")];
+  const { setengahLebar, dalam, tinggi } = PELAT_JONGKOK;
+  return [
+    ...kotak(k, -setengahLebar, setengahLebar, 0, dalam, 0, tinggi, "netral"),
+    poligon("rongga", oval(k, 0, dalam / 2, 8, 19, tinggi), "netral"),
+  ];
 }
 
 // Wastafel: bak PerMen (lebar x dalam) dan tinggi pasang untuk pengguna kursi roda dari tabel. Meja berbentuk D:
