@@ -1,3 +1,8 @@
+import { H, titikDinding, W } from "./denahGeometri";
+import { DIM } from "./dimensiGambar";
+import type { DindingDenah, LetakDenah, ObjekDenah } from "./pindai";
+import { OBJEK_DENAH } from "./pindai";
+
 // Tata letak benda sepanjang dinding dalam cm, supaya benda di satu dinding tidak berdempetan atau menembus tepi dinding.
 // Posisi awal (dari persen kasar hasil pindai) dipertahankan sedekat mungkin; hanya digeser bila terlalu dekat.
 
@@ -38,4 +43,61 @@ export function susunSepanjangDinding(benda: BendaDinding[], panjang: number): R
     for (let i = 0; i < urut.length; i++) pos[i] = Math.min(Math.max(pos[i], batas(i)[0]), batas(i)[1]);
   }
   return Object.fromEntries(urut.map((b, i) => [b.id, pos[i]]));
+}
+
+// Setengah lebar tiap benda sepanjang dindingnya (cm), untuk menjaga jarak antar benda di satu dinding. Kloset: tangki dan
+// mangkuk yang bergeser; shower: bilik pancuran minimum PerMen (90 cm).
+const SETENGAH_LEBAR: Record<ObjekDenah, number> = {
+  pintu: DIM.pintu.bukaanBersih / 2 + 4,
+  kloset: 26,
+  wastafel: DIM.wastafel.lebarBak / 2,
+  area_mandi: 45,
+};
+
+const panjangDinding = (dinding: DindingDenah): number =>
+  dinding === "belakang" || dinding === "depan" ? DIM.ruang.lebar : DIM.ruang.dalam;
+
+/** Titik benda sepanjang dindingnya (cm dari tengah dinding), dari `letak` (dinding dan zona) sebelum penataan jarak. */
+export function sepanjangDinding(letak: LetakDenah): number {
+  const t = titikDinding(letak);
+  return t.dinding === "belakang" || t.dinding === "depan" ? ((t.x - W / 2) / W) * DIM.ruang.lebar : ((t.y - H / 2) / H) * DIM.ruang.dalam;
+}
+
+/**
+ * Fungsi murni: posisi tengah tiap benda sepanjang dindingnya (cm dari tengah dinding), digeser seperlunya supaya benda di
+ * satu dinding tidak berdempetan. Dipakai bersama oleh denah tampak atas dan isometrik, jadi keduanya menempatkan benda
+ * persis sama, walau Gemini hanya membaca zona kasar (kiri, tengah, kanan).
+ */
+export function posisiSepanjang(letak: (id: ObjekDenah) => LetakDenah): Record<ObjekDenah, number> {
+  const perDinding = new Map<DindingDenah, BendaDinding[]>();
+  for (const id of OBJEK_DENAH) {
+    const l = letak(id);
+    const dinding = titikDinding(l).dinding;
+    const daftar = perDinding.get(dinding) ?? [];
+    daftar.push({ id, awal: sepanjangDinding(l), setengah: SETENGAH_LEBAR[id] });
+    perDinding.set(dinding, daftar);
+  }
+  const hasil = {} as Record<ObjekDenah, number>;
+  for (const [dinding, daftar] of perDinding) Object.assign(hasil, susunSepanjangDinding(daftar, panjangDinding(dinding)));
+  return hasil;
+}
+
+/**
+ * Fungsi murni: titik denah tampak atas (satuan viewBox `W` x `H`) tiap benda setelah penataan jarak, dengan koordinat
+ * tegak lurus dinding tetap sama seperti `titikDinding`.
+ */
+export function titikTertata(letak: (id: ObjekDenah) => LetakDenah): Record<ObjekDenah, { x: number; y: number }> {
+  const sepanjang = posisiSepanjang(letak);
+  return Object.fromEntries(
+    OBJEK_DENAH.map((id) => {
+      const t = titikDinding(letak(id));
+      const lewatX = t.dinding === "belakang" || t.dinding === "depan";
+      return [
+        id,
+        lewatX
+          ? { x: W / 2 + (sepanjang[id] / DIM.ruang.lebar) * W, y: t.y }
+          : { x: t.x, y: H / 2 + (sepanjang[id] / DIM.ruang.dalam) * H },
+      ];
+    }),
+  ) as Record<ObjekDenah, { x: number; y: number }>;
 }

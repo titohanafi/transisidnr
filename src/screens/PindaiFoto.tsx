@@ -523,6 +523,7 @@ function Hasil({
                         onUbahVarian={setVarian}
                         perhatian={statusKini === "perhatian"}
                         dariFoto={sumber === "pindai" && varian === varianShower}
+                        bisaGanti={varianShower === "tidak_jelas"}
                       />
                     )}
                   </li>

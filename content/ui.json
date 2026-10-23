@@ -569,7 +569,7 @@
     },
     "panelShower": {
       "judul": "Jenis shower di kamar mandi Anda",
-      "terbacaDariFoto": "Terbaca dari foto. Ganti bila tidak sesuai.",
+      "terbacaDariFoto": "Terbaca dari foto: {nama}.",
       "petunjukJenis": "Jenis shower belum terbaca. Pilih yang paling mirip supaya gambar contoh sesuai.",
       "nama": {
         "hand_shower_gantung": "Hand shower digantung",

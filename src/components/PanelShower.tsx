@@ -59,25 +59,36 @@ export function PanelShower({
   onUbahVarian,
   perhatian,
   dariFoto,
+  bisaGanti,
 }: {
   varian: VarianShower;
   onUbahVarian: (v: VarianShower) => void;
   perhatian: boolean;
   dariFoto: boolean;
+  /** Pilihan jenis hanya ditampilkan bila jenisnya belum terbaca (tidak jelas atau dari ceklis manual). */
+  bisaGanti: boolean;
 }) {
   const langkah = langkahGambarShower(varian, perhatian);
-  const petunjuk = varian === "tidak_jelas" ? p.petunjukJenis : dariFoto ? p.terbacaDariFoto : null;
+  const petunjuk = bisaGanti
+    ? varian === "tidak_jelas"
+      ? p.petunjukJenis
+      : null
+    : dariFoto
+      ? p.terbacaDariFoto.replace("{nama}", p.nama[varian])
+      : null;
   return (
     <div className="mt-3 flex flex-col gap-3 border-t border-garis/70 pt-3">
       <div>
         <p className="font-semibold">{p.judul}</p>
         {petunjuk && <p className="text-kecil text-redup">{petunjuk}</p>}
       </div>
-      <div role="radiogroup" aria-label={p.judul} className="flex flex-wrap gap-2">
-        {VARIAN_SHOWER.map((v) => (
-          <PilihanPil key={v} nama="varian-shower" label={p.nama[v]} aktif={varian === v} onUbah={() => onUbahVarian(v)} />
-        ))}
-      </div>
+      {bisaGanti && (
+        <div role="radiogroup" aria-label={p.judul} className="flex flex-wrap gap-2">
+          {VARIAN_SHOWER.map((v) => (
+            <PilihanPil key={v} nama="varian-shower" label={p.nama[v]} aktif={varian === v} onUbah={() => onUbahVarian(v)} />
+          ))}
+        </div>
+      )}
       {langkah.length === 1 && (
         <Langkah mode="kondisi" varian={varian} anotasi={false} teks={konten.ui.pindai.gambarShower[`${varian}_kondisi`]} />
       )}

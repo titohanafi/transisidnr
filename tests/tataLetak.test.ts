@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { JARAK_BEBAS_BENDA, JARAK_TEPI_DINDING, susunSepanjangDinding } from "../src/domain/tataLetak";
+import { DIM } from "../src/domain/dimensiGambar";
+import { H, W } from "../src/domain/denahGeometri";
+import type { LetakDenah, ObjekDenah } from "../src/domain/pindai";
+import { JARAK_BEBAS_BENDA, JARAK_TEPI_DINDING, susunSepanjangDinding, titikTertata } from "../src/domain/tataLetak";
 
 describe("susunSepanjangDinding", () => {
   it("benda yang sudah berjauhan tidak digeser", () => {
@@ -61,5 +64,31 @@ describe("susunSepanjangDinding", () => {
       300,
     );
     expect(hasil.kiri).toBeLessThan(hasil.kanan);
+  });
+});
+
+describe("titikTertata (tampak atas)", () => {
+  const letak = (id: ObjekDenah): LetakDenah =>
+    ({
+      pintu: { dinding: "depan", posisi: "kiri" },
+      wastafel: { dinding: "belakang", posisi: "kiri" },
+      kloset: { dinding: "belakang", posisi: "tengah" },
+      area_mandi: { dinding: "kanan", posisi: "tengah" },
+    })[id] as LetakDenah;
+
+  it("wastafel dan kloset di dinding belakang tidak saling menimpa walau zonanya berdekatan, dan urutannya terjaga", () => {
+    const t = titikTertata(letak);
+    const jarakCm = ((t.kloset.x - t.wastafel.x) / W) * DIM.ruang.lebar;
+    expect(t.wastafel.x).toBeLessThan(t.kloset.x);
+    // Pusat berjarak minimal setengah lebar wastafel + setengah lebar kloset + jarak bebas.
+    expect(jarakCm).toBeGreaterThanOrEqual(DIM.wastafel.lebarBak / 2 + 26 + JARAK_BEBAS_BENDA - 1);
+  });
+
+  it("koordinat tegak lurus dinding tidak berubah, dan benda tunggal di dinding hampir tidak bergeser", () => {
+    const t = titikTertata(letak);
+    expect(t.wastafel.y).toBeCloseTo(t.kloset.y, 6);
+    expect(t.area_mandi.y).toBeGreaterThan(0);
+    expect(t.area_mandi.y).toBeLessThan(H);
+    expect(t.pintu.x).toBeGreaterThan(0);
   });
 });

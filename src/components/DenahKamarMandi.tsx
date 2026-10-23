@@ -16,6 +16,7 @@ import {
   type VarianShower,
 } from "../domain/pindai";
 import { dorongKeDalam, H, PAD, titikDinding, W } from "../domain/denahGeometri";
+import { titikTertata } from "../domain/tataLetak";
 import { UKURAN_AREA_MANDI, UKURAN_KLOSET, UKURAN_PINTU, UKURAN_WASTAFEL } from "../domain/objekUkuran";
 import { PratinjauIsoTiga } from "./PratinjauIsoTiga";
 import { bendaTersembunyi, PratinjauRuangIso3D } from "./PratinjauRuangIso3D";
@@ -200,6 +201,7 @@ function NomorBadge({
 /** Fungsi murni: pintu digambar menempel dinding sebagai celah + daun pintu terbuka + lintasan ayun putus-putus. */
 function Pintu({
   letak,
+  titik,
   warna,
   latar,
   nomor,
@@ -207,13 +209,18 @@ function Pintu({
   onToggleId,
 }: {
   letak: Letak;
+  /** Titik hasil penataan jarak antar benda (menggantikan titik dari `letak` saja). */
+  titik?: { x: number; y: number };
   warna: string;
   latar: string;
   nomor?: number;
   terbukaId: string | null;
   onToggleId: (id: string) => void;
 }) {
-  const { x, y, dinding } = titikDinding(letak);
+  const dasar = titikDinding(letak);
+  const { dinding } = dasar;
+  const x = titik?.x ?? dasar.x;
+  const y = titik?.y ?? dasar.y;
   const { panjang } = UKURAN_PINTU;
   if (dinding === "kiri" || dinding === "kanan") {
     const sisi = dinding === "kiri" ? -1 : 1;
@@ -273,6 +280,7 @@ function Pintu({
 /** Kloset menempel dinding (tangki di sisi dinding, mangkuk menghadap ruangan); tidak berstatus sendiri, hanya patokan lokasi pegangan. */
 function Kloset({
   letak,
+  titik,
   warnaPegangan,
   latarPegangan,
   nomorPegangan,
@@ -280,13 +288,18 @@ function Kloset({
   onToggleId,
 }: {
   letak: Letak;
+  /** Titik hasil penataan jarak antar benda (menggantikan titik dari `letak` saja). */
+  titik?: { x: number; y: number };
   warnaPegangan: string;
   latarPegangan: string;
   nomorPegangan?: number;
   terbukaId: string | null;
   onToggleId: (id: string) => void;
 }) {
-  const { x, y, dinding } = titikDinding(letak);
+  const dasar = titikDinding(letak);
+  const { dinding } = dasar;
+  const x = titik?.x ?? dasar.x;
+  const y = titik?.y ?? dasar.y;
   const { w: tangkiW, h: tangkiH } = UKURAN_KLOSET.tangki;
   const { rx: mangkukRx, ry: mangkukRy } = UKURAN_KLOSET.mangkuk;
   const tangki =
@@ -338,6 +351,7 @@ function Kloset({
 /** Wastafel menempel dinding: konter + keran, dengan ruang kosong di depannya untuk kursi roda. */
 function Wastafel({
   letak,
+  titik,
   warna,
   latar,
   nomor,
@@ -345,13 +359,18 @@ function Wastafel({
   onToggleId,
 }: {
   letak: Letak;
+  /** Titik hasil penataan jarak antar benda (menggantikan titik dari `letak` saja). */
+  titik?: { x: number; y: number };
   warna: string;
   latar: string;
   nomor?: number;
   terbukaId: string | null;
   onToggleId: (id: string) => void;
 }) {
-  const { x, y, dinding } = titikDinding(letak);
+  const dasar = titikDinding(letak);
+  const { dinding } = dasar;
+  const x = titik?.x ?? dasar.x;
+  const y = titik?.y ?? dasar.y;
   const { w: kotakW, h: kotakH } = UKURAN_WASTAFEL.kotak;
   const kotak =
     dinding === "kiri"
@@ -391,6 +410,7 @@ function Wastafel({
 /** Zona shower memanjang sepanjang dinding (bukan satu titik): diarsir, dengan tanda shower dan keran. */
 function AreaMandi({
   letak,
+  titik,
   warna,
   latarAreaMandi,
   warnaJangkauan,
@@ -401,6 +421,8 @@ function AreaMandi({
   onToggleId,
 }: {
   letak: Letak;
+  /** Titik hasil penataan jarak antar benda (menggantikan titik dari `letak` saja). */
+  titik?: { x: number; y: number };
   warna: string;
   latarAreaMandi: string;
   warnaJangkauan: string;
@@ -410,7 +432,10 @@ function AreaMandi({
   terbukaId: string | null;
   onToggleId: (id: string) => void;
 }) {
-  const { x, y, dinding } = titikDinding(letak);
+  const dasar = titikDinding(letak);
+  const { dinding } = dasar;
+  const x = titik?.x ?? dasar.x;
+  const y = titik?.y ?? dasar.y;
   const { panjangZona, tebalZona, jarakPojokBelakang: JARAK_POJOK_BELAKANG, jarakPojokDepan: JARAK_POJOK_DEPAN } = UKURAN_AREA_MANDI;
   // Jarak aman dari dua ujung dinding: benda lain (kloset/wastafel di dinding belakang, pintu di dinding depan) bisa
   // ada di pojok seberang dinding ini, jadi zona tidak boleh digambar sampai mepet pojok — nanti malah menabraknya.
@@ -609,6 +634,8 @@ export function DenahKamarMandi({
 
   // Dipakai dua kali dengan ukuran berbeda (inline di kartu, dan lebih besar di popup "perbesar denah") — isinya
   // sama persis, cuma lebar maksimumnya yang beda, supaya tidak ada dua salinan markup yang bisa tidak sinkron.
+  // Posisi benda setelah penataan jarak, sama dengan tampilan isometrik (lihat `posisiSepanjang`).
+  const tertata = titikTertata(letak);
   const denahSvg = (ukuran: string) => (
     <svg viewBox={`0 0 ${W} ${H}`} className={`mx-auto text-garisKontrol ${ukuran}`} aria-hidden="true" focusable="false">
       <rect
@@ -701,6 +728,7 @@ export function DenahKamarMandi({
 
       <Pintu
         letak={letak("pintu")}
+        titik={tertata.pintu}
         warna={warna("pintu")}
         latar={latar("pintu")}
         nomor={nomor("pintu")}
@@ -709,6 +737,7 @@ export function DenahKamarMandi({
       />
       <Kloset
         letak={letak("kloset")}
+        titik={tertata.kloset}
         warnaPegangan={warna("pegangan")}
         latarPegangan={latar("pegangan")}
         nomorPegangan={nomor("pegangan")}
@@ -717,6 +746,7 @@ export function DenahKamarMandi({
       />
       <Wastafel
         letak={letak("wastafel")}
+        titik={tertata.wastafel}
         warna={warna("wastafel")}
         latar={latar("wastafel")}
         nomor={nomor("wastafel")}
@@ -725,6 +755,7 @@ export function DenahKamarMandi({
       />
       <AreaMandi
         letak={letak("area_mandi")}
+        titik={tertata.area_mandi}
         warna={warna("area_mandi")}
         latarAreaMandi={latar("area_mandi")}
         warnaJangkauan={warna("jangkauan")}

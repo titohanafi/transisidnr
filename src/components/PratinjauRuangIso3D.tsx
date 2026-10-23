@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { H, titikDinding, W } from "../domain/denahGeometri";
+import { titikDinding } from "../domain/denahGeometri";
 import { DIM } from "../domain/dimensiGambar";
 import { bukaanDinding, gambarBenda, type JenisBenda } from "../domain/gambarBenda";
 import {
@@ -15,7 +15,7 @@ import {
   type Primitif,
   type Titik,
 } from "../domain/gambarShower";
-import { susunSepanjangDinding, type BendaDinding } from "../domain/tataLetak";
+import { posisiSepanjang } from "../domain/tataLetak";
 import { OBJEK_DENAH, type JenisKloset, type LetakDenah, type ObjekDenah, type VarianPintu, type VarianShower } from "../domain/pindai";
 import { bangunProyeksi } from "../lib/proyeksiIso3D";
 import { LapisPrimitif } from "./GambarShower";
@@ -72,39 +72,6 @@ function bidangDalam(dinding: Dinding): number {
     case "kanan":
       return LEBAR / 2;
   }
-}
-
-/** Titik benda sepanjang dindingnya (cm dari tengah dinding), dari `letak` yang sama dengan denah tampak atas. */
-function sepanjangDinding(letak: LetakDenah): number {
-  const t = titikDinding(letak);
-  return t.dinding === "belakang" || t.dinding === "depan" ? ((t.x - W / 2) / W) * LEBAR : ((t.y - H / 2) / H) * DALAM;
-}
-
-// Setengah lebar tiap benda sepanjang dindingnya (cm), untuk menjaga jarak antar benda di satu dinding. Kloset: tangki dan
-// mangkuk yang bergeser; shower: bilik pancuran minimum PerMen (90 cm).
-const SETENGAH_LEBAR: Record<ObjekDenah, number> = {
-  pintu: DIM.pintu.bukaanBersih / 2 + 4,
-  kloset: 26,
-  wastafel: DIM.wastafel.lebarBak / 2,
-  area_mandi: 45,
-};
-
-/** Posisi tengah tiap benda sepanjang dindingnya (cm), digeser seperlunya supaya tidak berdempetan. */
-function posisiSepanjang(letak: (id: ObjekDenah) => LetakDenah): Record<ObjekDenah, number> {
-  const perDinding = new Map<Dinding, BendaDinding[]>();
-  for (const id of OBJEK_DENAH) {
-    const l = letak(id);
-    const dinding = titikDinding(l).dinding;
-    const daftar = perDinding.get(dinding) ?? [];
-    daftar.push({ id, awal: sepanjangDinding(l), setengah: SETENGAH_LEBAR[id] });
-    perDinding.set(dinding, daftar);
-  }
-  const hasil = {} as Record<ObjekDenah, number>;
-  for (const [dinding, daftar] of perDinding) {
-    const panjang = dinding === "belakang" || dinding === "depan" ? LEBAR : DALAM;
-    Object.assign(hasil, susunSepanjangDinding(daftar, panjang));
-  }
-  return hasil;
 }
 
 /**
