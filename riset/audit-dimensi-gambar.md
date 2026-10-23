@@ -32,17 +32,18 @@ keramik 30 × 30 cm sebagai penggaris.
 | Tinggi kepala shower tetap | 200 cm | gambar kondisi dari foto |
 | Bagian kecil shower | pengali 0,45 dari ilustrasi awal | kepala hand shower sekitar 13 cm, ember sekitar 25 cm, keran sekitar 7 × 3 cm |
 | Tinggi pasang keran dinding | sekitar 100 cm | di bawah batas atas PerMen 120 cm |
+| Bak mandi tembok | 110 × 70 cm, bibir 50 cm | gambar kondisi M-08 |
 | Bagian keran wastafel, siku penopang, pipa | ukuran ilustratif | tidak dikaitkan ke tabel |
 
-## Yang belum seragam
+## Yang sudah diselaraskan dan yang tidak
 
-- Papan **M-08** (bak mandi tembok, area shower tanpa undakan) masih digambar manual, belum berasal dari kode, jadi belum memakai skala ini.
-- Papan eksplorasi **KlosetVarian** dan **WastafelOval** adalah riwayat rancangan pada skala lama; angkanya berbeda dari papan acuan.
-- Tata letak benda di ruangan berasal dari posisi kasar hasil pindai (persen sepanjang dinding), bukan ukuran.
+- Papan **M-08** (akses mandi) kini dibuat dari kode (`src/domain/gambarAkses.ts`), pada skala dan palet yang sama: tinggi bangku 45 cm dan lebar bilik 90 cm dari tabel PerMen, kedalaman bilik 91,5 cm dari ADA, bak mandi tembok 110 × 70 cm dengan bibir 50 cm sebagai perkiraan.
+- Papan eksplorasi **KlosetVarian** dan **WastafelOval** berisi versi-versi lama yang tidak bisa dibuat ulang dari kode, jadi diberi tanda ARSIP dan judul "Arsip: ..." di kanvas; yang berlaku adalah papan Benda.
+- Tata letak benda di ruangan berasal dari posisi kasar hasil pindai (persen sepanjang dinding), bukan ukuran; jaraknya dijaga minimum 25 cm oleh `tataLetak.ts`.
 
 ## Cara menjaga konsistensi
 
 - `tests/dimensiGambar.test.ts` memastikan angka dari tabel sama dengan yang dipakai gambar, dan tinggi dudukan kloset, tinggi
   wastafel, serta bukaan pintu pada gambar sama dengan tabel.
-- `scripts/ekspor-papan.ts` membuat ulang gambar di papan Main, M07, dan Benda dari kode yang sama:
+- `scripts/ekspor-papan.ts` membuat ulang gambar di papan Main, M07, M08, dan Benda dari kode yang sama:
   `npx tsx scripts/ekspor-papan.ts <folder papan>`, lalu terbitkan papannya.

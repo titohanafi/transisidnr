@@ -2,10 +2,11 @@
 // (`src/domain/gambarShower.ts` dan `gambarBenda.ts`), supaya papan dan aplikasi tidak pernah berbeda ukuran.
 //
 // Pemakaian: npx tsx scripts/ekspor-papan.ts <folder papan>
-// Folder berisi Main.dc.html (varian shower), M07.dc.html (hand shower tiga langkah), dan Benda.dc.html (kloset, wastafel,
-// pintu). Hanya isi tiap <svg> yang diganti; judul, teks, dan tata letak papan dibiarkan.
+// Folder berisi Main.dc.html (varian shower), M07.dc.html (hand shower tiga langkah), M08.dc.html (akses mandi tiga langkah),
+// dan Benda.dc.html (kloset, wastafel, pintu). Hanya isi tiap <svg> yang diganti; judul, teks, dan tata letak papan dibiarkan.
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { susunAkses } from "../src/domain/gambarAkses";
 import { bingkaiBenda, susunBenda, type JenisBenda } from "../src/domain/gambarBenda";
 import { LEBAR_KANVAS, susunGambar, TINGGI_KANVAS, type ModeGambar, type Primitif, type Titik } from "../src/domain/gambarShower";
 import type { VarianShower } from "../src/domain/pindai";
@@ -171,6 +172,10 @@ const langkah: ModeGambar[] = ["kondisi", "hack", "permanen"];
 gantiSvg(
   join(folder, "M07.dc.html"),
   langkah.map((m) => ({ daftar: susunGambar("hand_shower_gantung", m, "kanan", { anotasi: true }), viewBox: kanvas })),
+);
+gantiSvg(
+  join(folder, "M08.dc.html"),
+  langkah.map((m) => ({ daftar: susunAkses(m, "kanan"), viewBox: kanvas })),
 );
 const benda: JenisBenda[] = ["kloset_duduk", "kloset_jongkok", "wastafel", "pintu"];
 gantiSvg(

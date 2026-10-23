@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { DIM, DIMENSI_PERKIRAAN } from "../src/domain/dimensiGambar";
+import { gambarAkses, susunAkses } from "../src/domain/gambarAkses";
 import { gambarBenda } from "../src/domain/gambarBenda";
-import { gambarShower, type Kerangka, type Primitif, type Titik } from "../src/domain/gambarShower";
+import { LEBAR_KANVAS, TINGGI_KANVAS, gambarShower, type Kerangka, type Primitif, type Titik } from "../src/domain/gambarShower";
 import { nilaiAcuan } from "../src/domain/ukuranAksesibel";
 
 // Proyeksi uji yang mempertahankan ukuran nyata: layar x = sumbu dinding, layar y = -tinggi (cm). Tiap benda dipasang
@@ -77,5 +78,24 @@ describe("dimensi nyata gambar (1 satuan = 1 cm)", () => {
     expect(lebarX(hand)).toBeLessThan(90);
     const tetap = gambarShower("shower_tetap", "kondisi", { kerangka: k });
     expect(tinggiMaks(tetap)).toBeLessThan(DIM.ruang.tinggi);
+  });
+
+  it("akses mandi: bangku setinggi tabel, bilik selebar tabel, dan semua titik masuk kanvas panel", () => {
+    expect(DIM.akses.tempatDuduk).toBe(45);
+    expect(DIM.akses.lebarBilik).toBe(90);
+    const hack = gambarAkses("hack", k);
+    const bangku = hack.filter((p) => p.jenis === "poligon" && p.peran === "aksen" && p.muka === "atas");
+    // Puncak bangku (poligon atas aksen pertama) setinggi tempat duduk PerMen.
+    expect(Math.max(...bangku.map((p) => tinggiMaks([p])))).toBeGreaterThanOrEqual(DIM.akses.tempatDuduk);
+    const bilik = gambarAkses("permanen", k).filter((p) => p.jenis === "poligon" && p.muka === "atas" && p.peran === "aksen");
+    expect(lebarX(bilik.slice(0, 1))).toBeCloseTo(DIM.akses.lebarBilik, 0);
+    for (const mode of ["kondisi", "hack", "permanen"] as const)
+      for (const p of susunAkses(mode, "kanan"))
+        for (const [x, y] of titikSemua([p])) {
+          expect(Number.isFinite(x) && Number.isFinite(y)).toBe(true);
+          expect(x).toBeGreaterThanOrEqual(-1);
+          expect(x).toBeLessThanOrEqual(LEBAR_KANVAS + 1);
+          expect(y).toBeLessThanOrEqual(TINGGI_KANVAS + 1);
+        }
   });
 });

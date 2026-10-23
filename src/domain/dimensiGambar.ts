@@ -25,6 +25,10 @@ export const DIMENSI_PERKIRAAN = {
     keterangan: "Tinggi kait hand shower yang di luar zona jangkauan pada gambar kondisi dari foto.",
   },
   kepalaShowerTetap: { cm: 200, keterangan: "Tinggi kepala shower tetap pada gambar kondisi dari foto." },
+  bakMandi: {
+    cm: 110,
+    keterangan: "Panjang bak mandi tembok pada gambar kondisi (juga kedalaman 70 cm dan tinggi bibir 50 cm); tidak ada di tabel.",
+  },
   bagianKecilShower: {
     cm: 0.45,
     keterangan:
@@ -52,6 +56,14 @@ export const DIM = {
     lebarBak: dariTabel("wastafel-ukuran-bak", "panjang_cm"),
     dalamBak: dariTabel("wastafel-ukuran-bak", "lebar_cm"),
     tinggiPenggunaKursiRoda: dariTabel("wastafel-tinggi-pengguna-kursi-roda", "nilai_cm"),
+  },
+  akses: {
+    tempatDuduk: dariTabel("pancuran-tempat-duduk", "min_cm"),
+    lebarBilik: dariTabel("pancuran-lebar-bilik", "min_cm"),
+    dalamBilik: dariTabel("pancuran-lebar-bilik", "panjang_cm"),
+    panjangBak: DIMENSI_PERKIRAAN.bakMandi.cm,
+    dalamBak: 70,
+    bibirBak: 50,
   },
   shower: {
     zonaBawah: dariTabel("jangkauan-zona-perlengkapan", "min_cm"),

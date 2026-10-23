@@ -380,8 +380,8 @@ export function bersihkan(daftar: Primitif[]): Primitif[] {
 export function latarPanel(k: Kerangka = kerangkaPanel("kanan")): Primitif[] {
   const tinggi = DIM.ruang.tinggi;
   return [
-    poligon("lantai", [titik(k, -80, 0, 0), titik(k, 80, 0, 0), titik(k, 80, 90, 0), titik(k, -80, 90, 0)], "ruang"),
-    ...garisUbinLantai(k, -80, 80, 0, 90),
+    poligon("lantai", [titik(k, -80, 0, 0), titik(k, 80, 0, 0), titik(k, 80, 95, 0), titik(k, -80, 95, 0)], "ruang"),
+    ...garisUbinLantai(k, -80, 80, 0, 95),
     poligon("latar", [titik(k, -80, 0, 0), titik(k, 80, 0, 0), titik(k, 80, 0, tinggi), titik(k, -80, 0, tinggi)], "ruang"),
     ...garisUbin(k, -80, 80, tinggi),
   ];
