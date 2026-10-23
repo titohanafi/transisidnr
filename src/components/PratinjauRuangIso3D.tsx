@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { titikDinding } from "../domain/denahGeometri";
-import { gambarBenda, type JenisBenda } from "../domain/gambarBenda";
+import { bukaanPintu, gambarBenda, type JenisBenda } from "../domain/gambarBenda";
 import {
   gambarShower,
   keRuang,
@@ -33,6 +33,17 @@ const SKALA = TINGGI_DINDING / TINGGI_DINDING_PANEL;
 // (kepala hand shower nyata sekitar 12-14 cm, kloset sekitar 36 cm lebarnya).
 const SKALA_RINCI_SHOWER = 0.45;
 
+/**
+ * Benda yang tidak digambar karena dinding tempatnya menempel tidak digambar (dinding samping berlawanan dan dinding
+ * depan): dari luar mereka tampak dari belakang dan melayang. Berlaku sama untuk semua benda, termasuk pintu.
+ */
+export function bendaTersembunyi(letak: (id: ObjekDenah) => LetakDenah, sisiSamping: "kiri" | "kanan"): ObjekDenah[] {
+  return OBJEK_DENAH.filter((id) => {
+    const dinding = titikDinding(letak(id)).dinding;
+    return dinding !== "belakang" && dinding !== sisiSamping;
+  });
+}
+
 /** Azimuth kamera (radian) supaya dinding samping yang digambar SELALU di sisi jauh dari kamera (tidak menghalangi
  *  benda): kamera di (+X,+Z) (45°) membuat sisi kiri+belakang jauh; kamera di (-X,+Z) (135°) membuat kanan+belakang jauh. */
 function azimuthDariSudut(sisiSamping: "kiri" | "kanan"): number {
@@ -64,11 +75,14 @@ export function PratinjauRuangIso3D({
   letak,
   sudutAktif,
   varianShower = "tidak_jelas",
+  tampilkanSemua = false,
   kelas = "h-96 w-full",
 }: {
   letak: (id: ObjekDenah) => LetakDenah;
   sudutAktif: { x: "kiri" | "kanan" };
   varianShower?: VarianShower;
+  /** Tampilkan juga benda yang biasanya disembunyikan (di dinding yang tidak digambar). */
+  tampilkanSemua?: boolean;
   kelas?: string;
 }) {
   const pembungkusRef = useRef<HTMLDivElement>(null);
@@ -151,34 +165,32 @@ export function PratinjauRuangIso3D({
       "netral",
     );
 
-    // Benda di dinding yang tidak digambar (dinding samping yang berlawanan dan dinding depan) akan tampak dari belakang
-    // dan melayang, jadi disembunyikan. Pintu dikecualikan: ia memang di sisi depan yang terbuka.
-    const tampak = OBJEK_DENAH.filter((id) => {
-      if (id === "pintu") return true;
-      const dinding = titikDinding(letak(id)).dinding;
-      return dinding === "belakang" || dinding === sudutAktif.x;
-    });
-    const susunan = tampak
-      .map((id) => {
-        const letakId = letak(id);
-        const dinding = titikDinding(letakId).dinding;
-        const posisi = posisiTigaMenempel(letakId);
-        const kerangka: Kerangka = {
-          dinding,
-          sepanjang: dinding === "belakang" || dinding === "depan" ? posisi.x : posisi.z,
-          bidang: bidangDalam(dinding),
-          proyeksi,
-          skala: SKALA,
-          lihat,
-        };
-        const daftar: Primitif[] =
-          id === "area_mandi"
-            ? gambarShower(varianShower, "kondisi", { kerangka, skalaRinci: SKALA_RINCI_SHOWER })
-            : gambarBenda(JENIS_BENDA_DENAH[id], kerangka);
-        // Urutan gambar dari belakang ke depan: titik pijak benda yang lebih rendah di layar berarti lebih dekat kamera.
-        const [x, y] = keRuang(kerangka, 0, 0);
-        return { id, daftar, kedalaman: proyeksi(x, y, 0)[1] };
-      })
+    const tersembunyi = tampilkanSemua ? [] : bendaTersembunyi(letak, sudutAktif.x);
+    const susunan = OBJEK_DENAH.map((id) => {
+      const letakId = letak(id);
+      const dinding = titikDinding(letakId).dinding;
+      const posisi = posisiTigaMenempel(letakId);
+      const kerangka: Kerangka = {
+        dinding,
+        sepanjang: dinding === "belakang" || dinding === "depan" ? posisi.x : posisi.z,
+        bidang: bidangDalam(dinding),
+        proyeksi,
+        skala: SKALA,
+        lihat,
+      };
+      const sembunyi = tersembunyi.includes(id);
+      // Benda yang disembunyikan tidak digambar; pintu tetap meninggalkan garis bukaan dan lintasan ayunnya di lantai.
+      if (sembunyi && id !== "pintu") return null;
+      const daftar: Primitif[] = sembunyi
+        ? bukaanPintu(kerangka)
+        : id === "area_mandi"
+          ? gambarShower(varianShower, "kondisi", { kerangka, skalaRinci: SKALA_RINCI_SHOWER })
+          : gambarBenda(JENIS_BENDA_DENAH[id], kerangka);
+      // Urutan gambar dari belakang ke depan: titik pijak benda yang lebih rendah di layar berarti lebih dekat kamera.
+      const [x, y] = keRuang(kerangka, 0, 0);
+      return { id, daftar, kedalaman: proyeksi(x, y, 0)[1] };
+    })
+      .filter((b) => b !== null)
       .sort((a, b) => a.kedalaman - b.kedalaman);
 
     gambar = (

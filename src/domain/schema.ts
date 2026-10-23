@@ -515,6 +515,8 @@ export const uiSchema = z
       denahPerbesar: teks,
       denahTutupPerbesar: teks,
       denahPutar: teks,
+      denahTampilkanTersembunyi: teks,
+      denahSembunyikanLagi: teks,
       status: z.object({ ramah: teks, perhatian: teks, tidak_jelas: teks }),
       lihatPanduan: teks,
       ulang: teks,

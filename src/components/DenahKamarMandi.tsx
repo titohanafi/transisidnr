@@ -1,4 +1,4 @@
-import { Info, RotateCw, X, ZoomIn } from "lucide-react";
+import { Eye, EyeOff, Info, RotateCw, X, ZoomIn } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { PilihanPil } from "./Pilihan";
 import { konten } from "../domain/content";
@@ -30,7 +30,7 @@ import {
 } from "../domain/denahGeometri";
 import { UKURAN_AREA_MANDI, UKURAN_KLOSET, UKURAN_PINTU, UKURAN_WASTAFEL } from "../domain/objekUkuran";
 import { PratinjauIsoTiga } from "./PratinjauIsoTiga";
-import { PratinjauRuangIso3D } from "./PratinjauRuangIso3D";
+import { bendaTersembunyi, PratinjauRuangIso3D } from "./PratinjauRuangIso3D";
 
 // Prototipe Milestone 3 (lihat DECISIONS.md): kalau aktif, tab Isometrik menampilkan model 3D (Three.js) alih-alih
 // SVG tangan, KHUSUS untuk dibandingkan visual — bukan jalur produksi, belum ada posisi/rotasi/status sungguhan.
@@ -707,6 +707,9 @@ export function DenahKamarMandi({
   }
   const sudutOtomatis = pilihSudutTerbaik(letak);
   const sudutAktif = sudutManual ?? sudutOtomatis;
+  // Tampilan 3D menyembunyikan benda di dinding yang tidak digambar; tombol ini menampilkannya kembali.
+  const [tampilkanTersembunyi, setTampilkanTersembunyi] = useState(false);
+  const adaTersembunyi = MODE_ISO_3D && bendaTersembunyi(letak, sudutAktif.x).length > 0;
   const putarSudut = (arah: 1 | -1) => {
     const sekarang = sudutManual ?? sudutOtomatis;
     const i = SUDUT_URUTAN.findIndex((s) => s.x === sekarang.x);
@@ -1287,11 +1290,32 @@ export function DenahKamarMandi({
             <RotateCw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
           </button>
         )}
+        {tampilan === "isometrik" && adaTersembunyi && (
+          <button
+            type="button"
+            onClick={() => setTampilkanTersembunyi((v) => !v)}
+            aria-pressed={tampilkanTersembunyi}
+            aria-label={tampilkanTersembunyi ? t.denahSembunyikanLagi : t.denahTampilkanTersembunyi}
+            className="absolute left-[3.75rem] top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup shadow-kartu"
+          >
+            {tampilkanTersembunyi ? (
+              <EyeOff className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+            ) : (
+              <Eye className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+            )}
+          </button>
+        )}
 
         {tampilan === "atas" ? (
           denahSvg("w-full max-w-[220px]")
         ) : MODE_ISO_3D ? (
-          <PratinjauRuangIso3D letak={letak} sudutAktif={sudutAktif} varianShower={varianShower} kelas="h-80 w-full" />
+          <PratinjauRuangIso3D
+            letak={letak}
+            sudutAktif={sudutAktif}
+            varianShower={varianShower}
+            tampilkanSemua={tampilkanTersembunyi}
+            kelas="h-80 w-full"
+          />
         ) : (
           denahSvgIso("w-full max-w-[280px]")
         )}
@@ -1352,10 +1376,31 @@ export function DenahKamarMandi({
                 <RotateCw className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
               </button>
             )}
+            {tampilan === "isometrik" && adaTersembunyi && (
+              <button
+                type="button"
+                onClick={() => setTampilkanTersembunyi((v) => !v)}
+                aria-pressed={tampilkanTersembunyi}
+                aria-label={tampilkanTersembunyi ? t.denahSembunyikanLagi : t.denahTampilkanTersembunyi}
+                className="absolute left-[3.75rem] top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-garis/70 bg-white text-redup"
+              >
+                {tampilkanTersembunyi ? (
+                  <EyeOff className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+                ) : (
+                  <Eye className="h-5 w-5" strokeWidth={2} aria-hidden="true" focusable="false" />
+                )}
+              </button>
+            )}
             {tampilan === "atas" ? (
               denahSvg("w-full max-w-none")
             ) : MODE_ISO_3D ? (
-              <PratinjauRuangIso3D letak={letak} sudutAktif={sudutAktif} varianShower={varianShower} kelas="h-[70vh] w-full" />
+              <PratinjauRuangIso3D
+                letak={letak}
+                sudutAktif={sudutAktif}
+                varianShower={varianShower}
+                tampilkanSemua={tampilkanTersembunyi}
+                kelas="h-[70vh] w-full"
+              />
             ) : (
               denahSvgIso("w-full max-w-none")
             )}

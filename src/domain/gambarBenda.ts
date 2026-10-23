@@ -122,18 +122,35 @@ function normalTerlihat(k: Kerangka, na: number, nn: number): [number, number] {
   return (x1 - x0) * lihat.x + (y1 - y0) * lihat.y >= 0 ? [na, nn] : [-na, -nn];
 }
 
+const SUDUT_BUKA = (55 * Math.PI) / 180;
+const ENGSEL: [number, number] = [-44, 4];
+const PANJANG_DAUN = 88;
+
+/** Garis putus-putus lintasan ayun daun pintu di lantai. */
+function lintasanAyun(k: Kerangka): Primitif {
+  const titikLintasan: Titik[] = Array.from({ length: 13 }, (_, i) => {
+    const p = (i / 12) * SUDUT_BUKA;
+    return titik(k, ENGSEL[0] + Math.cos(p) * PANJANG_DAUN, ENGSEL[1] + Math.sin(p) * PANJANG_DAUN, 0);
+  });
+  return { jenis: "garisPoli", titik: titikLintasan, peran: "hantu" };
+}
+
+/**
+ * Hanya bukaan pintu di lantai (tanpa kusen dan daun): garis tegas selebar bukaan dan lintasan ayun putus-putus. Dipakai
+ * saat dinding tempat pintu menempel tidak digambar, sehingga pintu tidak ditampilkan tetapi letaknya tetap terbaca.
+ */
+export function bukaanPintu(k: Kerangka = kerangkaPanel("kanan")): Primitif[] {
+  return [lintasanAyun(k), { jenis: "garis", dari: titik(k, -48, 0, 0), ke: titik(k, 48, 0, 0), gaya: "tegas", peran: "netral" }];
+}
+
 function pintu(k: Kerangka): Primitif[] {
-  const sudut = (55 * Math.PI) / 180;
-  const engsel: [number, number] = [-44, 4];
-  const panjang = 88;
+  const sudut = SUDUT_BUKA;
+  const engsel = ENGSEL;
+  const panjang = PANJANG_DAUN;
   const arah: [number, number] = [Math.cos(sudut), Math.sin(sudut)];
   const tengah: [number, number] = [engsel[0] + (arah[0] * panjang) / 2, engsel[1] + (arah[1] * panjang) / 2];
   const [na, nn] = normalTerlihat(k, -arah[1], arah[0]);
   const gagang: [number, number] = [engsel[0] + arah[0] * 78 + na * 3.5, engsel[1] + arah[1] * 78 + nn * 3.5];
-  const lintasan: Titik[] = Array.from({ length: 13 }, (_, i) => {
-    const p = (i / 12) * sudut;
-    return titik(k, engsel[0] + Math.cos(p) * panjang, engsel[1] + Math.sin(p) * panjang, 0);
-  });
   const kusen = [
     ...kotak(k, -48, -44, 0, 8, 0, 232, "netral"),
     ...kotak(k, 44, 48, 0, 8, 0, 232, "netral"),
@@ -147,7 +164,7 @@ function pintu(k: Kerangka): Primitif[] {
   // di belakang kusen dan harus digambar lebih dulu supaya tertutup kusen; bila mendekati kamera, daun digambar terakhir.
   const { n: arahMasuk } = sumbuLayar(k);
   const daunDekat = arahMasuk[1] > 0;
-  return [{ jenis: "garisPoli", titik: lintasan, peran: "hantu" }, ...(daunDekat ? [...kusen, ...daun] : [...daun, ...kusen])];
+  return [lintasanAyun(k), ...(daunDekat ? [...kusen, ...daun] : [...daun, ...kusen])];
 }
 
 /** Gambar satu benda pada dinding yang ditentukan `kerangka` (bawaan: dinding kanan panel). */

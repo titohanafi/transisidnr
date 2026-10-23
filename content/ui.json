@@ -487,6 +487,8 @@
     "denahPerbesar": "Perbesar denah",
     "denahTutupPerbesar": "Tutup tampilan denah",
     "denahPutar": "Lihat denah dari sisi lain",
+    "denahTampilkanTersembunyi": "Tampilkan benda yang disembunyikan",
+    "denahSembunyikanLagi": "Sembunyikan benda di sisi yang tidak terlihat",
     "status": {
       "ramah": "Mendukung",
       "perhatian": "Perhatian",
