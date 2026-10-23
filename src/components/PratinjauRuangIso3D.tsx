@@ -151,26 +151,35 @@ export function PratinjauRuangIso3D({
       "netral",
     );
 
-    const susunan = OBJEK_DENAH.map((id) => {
-      const letakId = letak(id);
-      const dinding = titikDinding(letakId).dinding;
-      const posisi = posisiTigaMenempel(letakId);
-      const kerangka: Kerangka = {
-        dinding,
-        sepanjang: dinding === "belakang" || dinding === "depan" ? posisi.x : posisi.z,
-        bidang: bidangDalam(dinding),
-        proyeksi,
-        skala: SKALA,
-        lihat,
-      };
-      const daftar: Primitif[] =
-        id === "area_mandi"
-          ? gambarShower(varianShower, "kondisi", { kerangka, skalaRinci: SKALA_RINCI_SHOWER })
-          : gambarBenda(JENIS_BENDA_DENAH[id], kerangka);
-      // Urutan gambar dari belakang ke depan: titik pijak benda yang lebih rendah di layar berarti lebih dekat kamera.
-      const [x, y] = keRuang(kerangka, 0, 0);
-      return { id, daftar, kedalaman: proyeksi(x, y, 0)[1] };
-    }).sort((a, b) => a.kedalaman - b.kedalaman);
+    // Benda di dinding yang tidak digambar (dinding samping yang berlawanan dan dinding depan) akan tampak dari belakang
+    // dan melayang, jadi disembunyikan. Pintu dikecualikan: ia memang di sisi depan yang terbuka.
+    const tampak = OBJEK_DENAH.filter((id) => {
+      if (id === "pintu") return true;
+      const dinding = titikDinding(letak(id)).dinding;
+      return dinding === "belakang" || dinding === sudutAktif.x;
+    });
+    const susunan = tampak
+      .map((id) => {
+        const letakId = letak(id);
+        const dinding = titikDinding(letakId).dinding;
+        const posisi = posisiTigaMenempel(letakId);
+        const kerangka: Kerangka = {
+          dinding,
+          sepanjang: dinding === "belakang" || dinding === "depan" ? posisi.x : posisi.z,
+          bidang: bidangDalam(dinding),
+          proyeksi,
+          skala: SKALA,
+          lihat,
+        };
+        const daftar: Primitif[] =
+          id === "area_mandi"
+            ? gambarShower(varianShower, "kondisi", { kerangka, skalaRinci: SKALA_RINCI_SHOWER })
+            : gambarBenda(JENIS_BENDA_DENAH[id], kerangka);
+        // Urutan gambar dari belakang ke depan: titik pijak benda yang lebih rendah di layar berarti lebih dekat kamera.
+        const [x, y] = keRuang(kerangka, 0, 0);
+        return { id, daftar, kedalaman: proyeksi(x, y, 0)[1] };
+      })
+      .sort((a, b) => a.kedalaman - b.kedalaman);
 
     gambar = (
       <svg

@@ -425,4 +425,17 @@ describe("gambar benda kamar mandi", () => {
       expect(gambarShower(varian, "kondisi", { skalaRinci: 1 })).toEqual(penuh);
     }
   });
+
+  it("pintu: daun digambar sebelum kusen bila membuka menjauhi kamera, sesudahnya bila mendekati", () => {
+    const proyeksi = (x: number, y: number, z: number): Titik => [(x - y) * 0.866, (x + y) * 0.5 - z];
+    // Kamera di sisi +x/+y. Dinding belakang: arah masuk (n) = +y, mendekati kamera. Dinding depan: n = -y, menjauhi.
+    const terakhir = (dinding: "belakang" | "depan") => {
+      const daftar = gambarBenda("pintu", { dinding, sepanjang: 0, bidang: 0, proyeksi, skala: 1, lihat: { x: 1, y: 1 } });
+      return daftar[daftar.length - 1] as { titik: Titik[] };
+    };
+    const tinggiLayar = (p: { titik: Titik[] }) => Math.max(...p.titik.map((t) => t[1])) - Math.min(...p.titik.map((t) => t[1]));
+    // Yang digambar terakhir: gagang pada daun (tipis, 4 satuan) bila daun mendekati kamera, atau kusen atas (8 satuan)
+    // bila daun menjauhi kamera.
+    expect(tinggiLayar(terakhir("belakang"))).toBeLessThan(tinggiLayar(terakhir("depan")));
+  });
 });

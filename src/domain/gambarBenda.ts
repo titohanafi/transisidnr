@@ -134,14 +134,20 @@ function pintu(k: Kerangka): Primitif[] {
     const p = (i / 12) * sudut;
     return titik(k, engsel[0] + Math.cos(p) * panjang, engsel[1] + Math.sin(p) * panjang, 0);
   });
-  return [
-    { jenis: "garisPoli", titik: lintasan, peran: "hantu" },
+  const kusen = [
     ...kotak(k, -48, -44, 0, 8, 0, 232, "netral"),
     ...kotak(k, 44, 48, 0, 8, 0, 232, "netral"),
     ...kotak(k, -48, 48, 0, 8, 228, 236, "netral"),
+  ];
+  const daun = [
     ...ekstrusi(k, footprintPutar(tengah[0], tengah[1], panjang / 2, 2, sudut), 0, 226, "netral"),
     ...ekstrusi(k, footprintPutar(gagang[0], gagang[1], 5, 1.5, sudut), 98, 102, "netral"),
   ];
+  // Daun membuka ke dalam ruangan (arah n). Bila arah itu menjauhi kamera (kamera di luar dinding pintu), daun berada
+  // di belakang kusen dan harus digambar lebih dulu supaya tertutup kusen; bila mendekati kamera, daun digambar terakhir.
+  const { n: arahMasuk } = sumbuLayar(k);
+  const daunDekat = arahMasuk[1] > 0;
+  return [{ jenis: "garisPoli", titik: lintasan, peran: "hantu" }, ...(daunDekat ? [...kusen, ...daun] : [...daun, ...kusen])];
 }
 
 /** Gambar satu benda pada dinding yang ditentukan `kerangka` (bawaan: dinding kanan panel). */
