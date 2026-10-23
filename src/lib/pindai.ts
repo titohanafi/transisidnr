@@ -74,7 +74,7 @@ const STATUS_TIRUAN: Partial<Record<string, StatusItem>> = {
 };
 
 /**
- * Hasil tiruan untuk `VITE_PINDAI_MOCK=true`: supaya alur pindai bisa dicoba tanpa memanggil api/pindai.ts (tanpa kunci
+ * Hasil tiruan untuk `VITE_PINDAI_MOCK=true`: supaya alur pindai bisa dicoba tanpa memanggil server/pindai.ts (tanpa kunci
  * Gemini, tanpa kuota). Posisi memakai `POSISI_BAWAAN` (bukan tebakan AI sungguhan) — kebetulan juga kira-kira cocok
  * dengan tata letak foto contoh di `dev/mock-foto.jpg` (pintu di depan, wastafel dan kloset berdampingan di dinding
  * belakang dengan kloset di sudut kanan, area mandi menyambung di dinding kanan pada kedalaman tengah).
@@ -103,7 +103,7 @@ function hasilTiruan(idItem: string[]): Promise<HasilModel> {
   );
 }
 
-/** Mengirim foto (data URL JPEG) ke fungsi pindai (api/pindai.ts) dan mengembalikan hasil yang sudah diperiksa. */
+/** Mengirim foto (data URL JPEG) ke fungsi pindai (server/pindai.ts) dan mengembalikan hasil yang sudah diperiksa. */
 export async function pindaiFoto(
   dataUrl: string,
   idItem: string[],

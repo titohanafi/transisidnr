@@ -7,7 +7,7 @@ dan menilai apakah kualitasnya sama dengan gambar yang dirancang di Claude Desig
 
 1. Pastikan variabel `GEMINI_API_KEY` terpasang di Vercel (Project Settings, Environment Variables), lalu deploy (push ke cabang untuk preview,
    atau deploy produksi). Tidak ada flag lain yang perlu dipasang: tab Isometrik baru sudah menjadi bawaan.
-2. Atau jalankan lokal dengan fungsi server: `npx vercel dev` (butuh `GEMINI_API_KEY` di `.env.local`). `npm run dev` biasa tidak melayani
+2. Fungsi server di `server/pindai.ts` dibundel menjadi `api/pindai.mjs` (berkas ini ikut di-commit; jalankan `npm run bundel:api` setelah mengubah sumbernya, tes memeriksa keduanya sama). Atau jalankan lokal dengan fungsi server: `npx vercel dev` (butuh `GEMINI_API_KEY` di `.env.local`). `npm run dev` biasa tidak melayani
    `/api/pindai`; untuk mencoba alur tanpa Gemini pakai `VITE_PINDAI_MOCK=true npm run dev`.
 3. Buka `/#/pindai`, pilih foto (JPEG), tekan **Pindai foto ini**. Foto dikirim sekali ke Gemini dan tidak disimpan.
 4. Di hasil, buka tab **Isometrik**: putar sudut pandang (satu tombol), tampilkan benda tersembunyi (tombol mata), dan perbesar.

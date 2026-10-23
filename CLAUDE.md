@@ -31,7 +31,7 @@ MVP hanya mencakup: kamar mandi, pengguna kursi roda (kruk dan walker bila ada w
 
 ## Aturan teknis
 - Vite + React 18 + TypeScript (strict) + Tailwind + React Router (HashRouter agar bisa dihosting statis) + Zod + Vitest.
-- Tanpa backend, **kecuali** fitur Pindai (`api/pindai.ts`, fungsi Vercel yang meneruskan foto ke Gemini; lihat DECISIONS.md). State disimpan di localStorage dengan kunci berversi (`transisi:v1`). Tombol "Hapus data saya" wajib ada.
+- Tanpa backend, **kecuali** fitur Pindai (sumber `server/pindai.ts`, dibundel menjadi `api/pindai.mjs` lewat `npm run bundel:api`; fungsi Vercel yang meneruskan foto ke Gemini; lihat DECISIONS.md). State disimpan di localStorage dengan kunci berversi (`transisi:v1`). Tombol "Hapus data saya" wajib ada.
 - Tidak ada data yang dikirim keluar perangkat. Jangan menaruh data pribadi di URL atau query string.
 - Mobile-first (lebar 360px), area sentuh minimal 44x44px, aman dipakai satu tangan.
 - Aksesibilitas WCAG 2.2 AA: kontras, fokus terlihat, label formulir, tidak mengandalkan warna saja, bisa dipakai dengan screen reader.
@@ -59,4 +59,4 @@ tests/
 ## Perintah (perbarui setelah scaffold)
 - `npm run dev`, `npm run build` (validasi konten + typecheck + build), `npm test`, `npm run lint`, `npm run typecheck`, `npm run validasi` (hanya periksa `content/`), `npm run format` (rapikan kode dengan Prettier), `npm run format:cek`
 - Mode dev: `VITE_TAMPILKAN_ANGKA_DRAF=true npm run dev` menampilkan angka teknis kartu draf
-- Mode dev: `VITE_PINDAI_MOCK=true npm run dev` membuat fitur Pindai memakai hasil tiruan, tanpa memanggil `api/pindai.ts`/Gemini (tidak perlu kunci API, tidak kena kuota)
+- Mode dev: `VITE_PINDAI_MOCK=true npm run dev` membuat fitur Pindai memakai hasil tiruan, tanpa memanggil fungsi Pindai/Gemini (tidak perlu kunci API, tidak kena kuota)

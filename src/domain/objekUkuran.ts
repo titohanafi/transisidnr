@@ -1,6 +1,6 @@
 // Proporsi ilustrasi skematik tiap benda di denah (tampak atas maupun isometrik) — BUKAN ukuran/jarak kamar mandi
 // pengguna sungguhan. AI (Gemini) tidak pernah diminta mengukur apa pun dan tidak pernah memberi angka (lihat
-// prompt di `api/pindai.ts`) — angka di sini cuma supaya bentuk pintu/kloset/wastafel/area mandi di gambar
+// prompt di `server/pindai.ts`) — angka di sini cuma supaya bentuk pintu/kloset/wastafel/area mandi di gambar
 // proporsional dan konsisten antar-benda, satu sumber yang dipakai ulang, bukan data tentang ruangan pengguna.
 //
 // Diekstrak dari angka yang sudah dipakai `src/components/DenahKamarMandi.tsx` (tampak atas) sebelum refactor ini —
