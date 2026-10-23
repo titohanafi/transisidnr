@@ -3,11 +3,13 @@
 // `GambarShower.tsx` merender daftar ini sebagai panel; denah isometrik (`DenahKamarMandi.tsx`) memakai daftar yang
 // sama langsung di koordinat ruangan.
 //
-// Satuan: "satuan gambar". Hanya tinggi zona jangkauan yang berasal dari tabel ukuran
-// (`content/ukuran-aksesibel.json`, diubah ke satuan gambar lewat SKALA). Bentuk benda (kait, gagang, kepala shower,
-// ember) adalah ilustrasi, BUKAN ukuran produk. Gambar tidak pernah menampilkan angka.
+// Satuan: 1 satuan gambar = 1 cm nyata, sama untuk semua gambar (lihat `dimensiGambar.ts`). Tinggi zona jangkauan dan
+// ukuran ruangan berasal dari tabel ukuran (`content/ukuran-aksesibel.json`); ukuran kecil yang tidak ada di tabel
+// (kepala shower, keran, ember) adalah perkiraan yang tercatat di `DIMENSI_PERKIRAAN`, BUKAN ukuran produk. Panel
+// diperbesar seragam lewat `ZOOM_PANEL` pada kerangkanya, bukan dengan mengubah ukuran benda. Gambar tidak pernah
+// menampilkan angka.
 import type { VarianShower } from "./pindai";
-import { nilaiAcuan } from "./ukuranAksesibel";
+import { DIM } from "./dimensiGambar";
 
 export type Titik = readonly [number, number];
 export type ModeGambar = "kondisi" | "hack" | "permanen";
@@ -41,21 +43,19 @@ export type Primitif =
       tingkat: "belakang" | "depan" | "polos";
       peran: Peran;
     }
-  | { jenis: "garis"; dari: Titik; ke: Titik; gaya: "tegas" | "putus" | "air" | "silang" | "panah"; peran: Peran }
+  | { jenis: "garis"; dari: Titik; ke: Titik; gaya: "tegas" | "putus" | "air" | "silang" | "panah" | "ubin"; peran: Peran }
   | { jenis: "jalur"; titik: Titik[]; gaya: "selang" | "gagang" | "lengkung"; peran: Peran }
   | { jenis: "baut"; cx: number; cy: number; peran: Peran }
   | { jenis: "tanda"; x: number; y: number; teks: string };
 
 export const LEBAR_KANVAS = 380;
 export const TINGGI_KANVAS = 500;
-/** Satuan gambar per sentimeter, dipakai khusus untuk angka dari tabel ukuran. */
-export const SKALA = 1.2;
-/** Tinggi dinding polos pada panel, satuan gambar. */
-export const TINGGI_DINDING_PANEL = 310;
+/** Pembesaran seragam panel (piksel kanvas per cm pada sumbu dinding); hanya mengatur seberapa besar panel tampil. */
+export const ZOOM_PANEL = 1.2;
 
 const K = Math.sqrt(3) / 2;
 const PUSAT_X = LEBAR_KANVAS / 2;
-const PUSAT_Y = 400;
+const PUSAT_Y = 385;
 
 /** Proyeksi isometrik titik ruangan (x, y, tinggi) ke kanvas panel. Sumbu x turun ke kanan, y turun ke kiri. */
 export const proyeksiPanel = (x: number, y: number, z: number): Titik => [PUSAT_X + K * (x - y), PUSAT_Y + 0.5 * (x + y) - z];
@@ -79,7 +79,7 @@ export interface Kerangka {
 }
 
 export function kerangkaPanel(sisi: SisiDinding): Kerangka {
-  return { dinding: sisi === "kanan" ? "belakang" : "kiri", sepanjang: 0, bidang: 0, proyeksi: proyeksiPanel, skala: 1 };
+  return { dinding: sisi === "kanan" ? "belakang" : "kiri", sepanjang: 0, bidang: 0, proyeksi: proyeksiPanel, skala: ZOOM_PANEL };
 }
 
 export function keRuang(k: Kerangka, a: number, n: number): readonly [number, number] {
@@ -125,18 +125,15 @@ export function pikselPerSatuan(k: Kerangka): number {
 }
 
 export interface UkuranShower {
-  /** Batas bawah zona jangkauan dari lantai, satuan gambar. */
+  /** Batas bawah zona jangkauan dari lantai, cm. */
   zonaBawah: number;
-  /** Batas atas zona jangkauan dari lantai, satuan gambar. */
+  /** Batas atas zona jangkauan dari lantai, cm. */
   zonaAtas: number;
 }
 
-/** Zona jangkauan dari tabel: batas atas kran/holder dan batas bawah rentang jangkauan (PerMen diutamakan). */
+/** Zona jangkauan dari tabel: batas atas kran/holder dan batas bawah rentang jangkauan (PerMen diutamakan), dalam cm. */
 export function ukuranShower(): UkuranShower {
-  const atas = nilaiAcuan("pancuran-tinggi-kran", "maks_cm");
-  const bawah = nilaiAcuan("jangkauan-zona-perlengkapan", "min_cm");
-  if (!atas || !bawah) throw new Error("tabel ukuran aksesibel tidak lengkap untuk gambar shower");
-  return { zonaBawah: bawah.cm * SKALA, zonaAtas: atas.cm * SKALA };
+  return { zonaBawah: DIM.shower.zonaBawah, zonaAtas: DIM.shower.zonaAtas };
 }
 
 export const poligon = (
@@ -347,22 +344,36 @@ function selang(mulai: Titik, akhir: Titik, pendek: boolean, arah: 1 | -1, s: nu
   return { jenis: "jalur", titik: pts, gaya: "selang", peran };
 }
 
-/** Dinding dan lantai polos (putih, hanya garis) untuk panel, supaya gaya mengikuti manual perakitan. */
+/**
+ * Garis keramik di dinding sebagai penggaris: garis tegak tiap `DIM.ubin` cm dari `aMulai` sepanjang dinding (dalam
+ * rentang `a0`..`a1`) dan garis mendatar tiap `DIM.ubin` cm dari lantai sampai `tinggi`. Ukuran kotak adalah konvensi
+ * gambar, bukan ukuran produk.
+ */
+export function garisUbin(k: Kerangka, a0: number, a1: number, tinggi: number, aMulai = 0): Primitif[] {
+  const jarak = DIM.ubin;
+  const hasil: Primitif[] = [];
+  const garis = (dari: Titik, ke: Titik): Primitif => ({ jenis: "garis", dari, ke, gaya: "ubin", peran: "netral" });
+  for (let a = aMulai + Math.ceil((a0 - aMulai) / jarak) * jarak; a < a1 - 1e-6; a += jarak) {
+    if (a > a0 + 1e-6) hasil.push(garis(titik(k, a, 0, 0), titik(k, a, 0, tinggi)));
+  }
+  for (let u = jarak; u < tinggi - 1e-6; u += jarak) hasil.push(garis(titik(k, a0, 0, u), titik(k, a1, 0, u)));
+  return hasil;
+}
+
+/** Dinding dan lantai polos (putih, hanya garis) untuk panel, supaya gaya mengikuti manual perakitan. Dinding berkeramik. */
 export function latarPanel(k: Kerangka = kerangkaPanel("kanan")): Primitif[] {
+  const tinggi = DIM.ruang.tinggi;
   return [
-    poligon("latar", [titik(k, -100, 0, 0), titik(k, 100, 0, 0), titik(k, 100, 80, 0), titik(k, -100, 80, 0)], "netral"),
-    poligon(
-      "latar",
-      [titik(k, -100, 0, 0), titik(k, 100, 0, 0), titik(k, 100, 0, TINGGI_DINDING_PANEL), titik(k, -100, 0, TINGGI_DINDING_PANEL)],
-      "netral",
-    ),
+    poligon("latar", [titik(k, -80, 0, 0), titik(k, 80, 0, 0), titik(k, 80, 90, 0), titik(k, -80, 90, 0)], "netral"),
+    poligon("latar", [titik(k, -80, 0, 0), titik(k, 80, 0, 0), titik(k, 80, 0, tinggi), titik(k, -80, 0, tinggi)], "netral"),
+    ...garisUbin(k, -80, 80, tinggi),
   ];
 }
 
 /**
  * Mengecilkan satu rakitan (keran, kepala shower) dengan faktor `f` terhadap titik tumpu di dinding: `pa` sepanjang
  * dinding dan `pu` tinggi (jarak dari dinding diskalakan dari dinding itu sendiri), sehingga rakitan tetap menempel di
- * titik yang sama. Dipakai di ruangan, tempat benda kecil harus sepadan dengan kloset dan wastafel; panel memakai f = 1.
+ * titik yang sama. `f` = `DIM.shower.bagianKecil`: bentuk kecil ilustrasi awal diubah ke ukuran nyata.
  */
 function rakitan(f: number, pa: number, pu: number) {
   const A = (v: number) => pa + f * (v - pa);
@@ -380,7 +391,7 @@ function rakitan(f: number, pa: number, pu: number) {
 
 const rakitanKeran = (f: number) => rakitan(f, -30, 101);
 
-function keran(k: Kerangka, mode: ModeGambar, f = 1): Primitif[] {
+function keran(k: Kerangka, mode: ModeGambar, f: number): Primitif[] {
   const tuas = mode === "permanen";
   const r = rakitanKeran(f);
   return [
@@ -393,7 +404,7 @@ function keran(k: Kerangka, mode: ModeGambar, f = 1): Primitif[] {
 
 /** Posisi kait hand shower: tinggi atasnya dan geseran sepanjang dinding. Kondisi = di luar zona; hack/permanen = di batas atas zona. */
 export function posisiKait(mode: ModeGambar, ukuran: UkuranShower = ukuranShower()): { uAtas: number; aGeser: number } {
-  return mode === "kondisi" ? { uAtas: ukuran.zonaAtas + 100, aGeser: 0 } : { uAtas: ukuran.zonaAtas, aGeser: 35 };
+  return mode === "kondisi" ? { uAtas: DIM.shower.kaitLuarJangkauan, aGeser: 0 } : { uAtas: ukuran.zonaAtas, aGeser: 35 };
 }
 
 function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi: boolean, f: number): Primitif[] {
@@ -446,8 +457,8 @@ function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi
 
   if (anotasi && mode === "kondisi") {
     const dasar = titik(k, 50, 0, ukuran.zonaAtas);
-    const ujung = titik(k, 50, 0, ukuran.zonaAtas + 79);
-    const [cx, cy] = titik(k, 50, 0, ukuran.zonaAtas + 98);
+    const ujung = titik(k, 50, 0, lama.uAtas - 21);
+    const [cx, cy] = titik(k, 50, 0, lama.uAtas - 2);
     const h = 11 * s;
     hasil.push({ jenis: "garis", dari: dasar, ke: ujung, gaya: "putus", peran: "netral" });
     hasil.push({ jenis: "garis", dari: [cx - h, cy - h], ke: [cx + h, cy + h], gaya: "silang", peran: "netral" });
@@ -459,9 +470,9 @@ function handShower(k: Kerangka, mode: ModeGambar, ukuran: UkuranShower, anotasi
   return hasil;
 }
 
-function showerTetap(k: Kerangka, ukuran: UkuranShower, f: number): Primitif[] {
+function showerTetap(k: Kerangka, f: number): Primitif[] {
   const s = pikselPerSatuan(k) * f;
-  const uP = ukuran.zonaAtas + 130;
+  const uP = DIM.shower.kepalaTetap;
   const kp = rakitan(f, 0, uP);
   const [cx, cyAtas] = titik(k, 0, kp.N(50), kp.U(uP - 11));
   return [
@@ -533,22 +544,21 @@ function tidakJelas(k: Kerangka): Primitif[] {
 /**
  * Gambar satu varian shower pada dinding, urutan gambar dari belakang ke depan. `mode` hanya berpengaruh pada hand
  * shower (kondisi dari foto, hack tanpa bongkar, permanen/renovasi). `anotasi` menambah zona jangkauan, silang, dan
- * panah. Tanpa `kerangka`, benda dipasang di dinding kanan panel. `skalaRinci` (bawaan 1) mengecilkan keran, kepala shower,
- * dan perlengkapannya terhadap dinding supaya sepadan dengan benda lain di ruangan.
+ * panah. Tanpa `kerangka`, benda dipasang di dinding kanan panel.
  */
 export function gambarShower(
   varian: VarianShower,
   mode: ModeGambar = "kondisi",
-  opsi: { anotasi?: boolean; ukuran?: UkuranShower; kerangka?: Kerangka; skalaRinci?: number } = {},
+  opsi: { anotasi?: boolean; ukuran?: UkuranShower; kerangka?: Kerangka } = {},
 ): Primitif[] {
   const ukuran = opsi.ukuran ?? ukuranShower();
   const k = opsi.kerangka ?? kerangkaPanel("kanan");
-  const f = opsi.skalaRinci ?? 1;
+  const f = DIM.shower.bagianKecil;
   switch (varian) {
     case "hand_shower_gantung":
       return handShower(k, mode, ukuran, opsi.anotasi ?? false, f);
     case "shower_tetap":
-      return showerTetap(k, ukuran, f);
+      return showerTetap(k, f);
     case "ember_gayung":
       return emberGayung(k, f);
     case "tidak_jelas":

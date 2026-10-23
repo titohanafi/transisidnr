@@ -136,6 +136,7 @@ function Bentuk({ s, penanda, m, w }: { s: Primitif; penanda: string; m: number;
       const [x2, y2] = s.ke;
       if (s.gaya === "air")
         return <line x1={x1} y1={y1} x2={x2} y2={y2} className="stroke-garisKontrol" strokeWidth={2 * m} strokeDasharray="4 5" />;
+      if (s.gaya === "ubin") return <line x1={x1} y1={y1} x2={x2} y2={y2} className="stroke-garis" strokeWidth={0.45 * w} />;
       if (s.gaya === "silang") return <line x1={x1} y1={y1} x2={x2} y2={y2} className={GARIS[s.peran]} strokeWidth={5 * m} />;
       if (s.gaya === "panah") {
         return (

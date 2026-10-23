@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   LEBAR_KANVAS,
-  SKALA,
   TINGGI_KANVAS,
+  ZOOM_PANEL,
+  garisUbin,
   gambarShower,
   langkahGambarShower,
   latarPanel,
@@ -73,8 +74,8 @@ describe("nilai acuan ukuran", () => {
 describe("ukuran shower dari tabel", () => {
   it("zona jangkauan diturunkan dari tabel dengan skala gambar", () => {
     const u = ukuranShower();
-    expect(u.zonaAtas).toBeCloseTo(120 * SKALA);
-    expect(u.zonaBawah).toBeCloseTo(38 * SKALA);
+    expect(u.zonaAtas).toBeCloseTo(120);
+    expect(u.zonaBawah).toBeCloseTo(38);
     expect(u.zonaBawah).toBeLessThan(u.zonaAtas);
   });
 });
@@ -141,10 +142,23 @@ describe("gambar shower", () => {
     }
   });
 
-  it("latar dinding dan lantai polos tanpa tekstur", () => {
+  it("latar: dinding dan lantai polos ditambah garis keramik tipis sebagai penggaris", () => {
     const l = latarPanel();
-    expect(l).toHaveLength(2);
-    expect(l.every((p) => p.jenis === "poligon" && p.muka === "latar")).toBe(true);
+    const poligon = l.filter((p) => p.jenis === "poligon");
+    expect(poligon).toHaveLength(2);
+    expect(poligon.every((p) => p.muka === "latar")).toBe(true);
+    const ubin = l.filter((p) => p.jenis === "garis");
+    expect(ubin.length).toBeGreaterThan(8);
+    expect(ubin.every((p) => p.jenis === "garis" && p.gaya === "ubin")).toBe(true);
+  });
+
+  it("garis keramik berjarak sama dengan ukuran ubin dan dimulai dari titik acuan", () => {
+    const k: Kerangka = { dinding: "belakang", sepanjang: 0, bidang: 0, proyeksi: (x, y, z): Titik => [x, -z + y], skala: 1 };
+    const garis = garisUbin(k, 0, 100, 100, 0);
+    const tegak = garis.filter((g) => g.jenis === "garis" && g.dari[0] === g.ke[0]).map((g) => (g.jenis === "garis" ? g.dari[0] : 0));
+    const datar = garis.filter((g) => g.jenis === "garis" && g.dari[1] === g.ke[1]).map((g) => (g.jenis === "garis" ? -g.dari[1] : 0));
+    expect(tegak).toEqual([30, 60, 90]);
+    expect(datar).toEqual([30, 60, 90]);
   });
 });
 
@@ -299,12 +313,12 @@ describe("sisi kotak yang terlihat dari kamera", () => {
 });
 
 describe("proyeksi", () => {
-  it("naik satu satuan tinggi menggeser titik satu satuan ke atas layar", () => {
+  it("naik 1 cm menggeser titik sebesar pembesaran panel ke atas layar", () => {
     const k = kerangkaPanel("kanan");
     const [x1, y1] = titik(k, 10, 5, 0);
     const [x2, y2] = titik(k, 10, 5, 1);
     expect(x2).toBe(x1);
-    expect(y2).toBeCloseTo(y1 - 1);
+    expect(y2).toBeCloseTo(y1 - ZOOM_PANEL);
   });
   it("sudut singgung silinder cakram: garis siluet sejajar arah tebal", () => {
     const d: Titik = [-8.66, 5];
@@ -411,19 +425,6 @@ describe("gambar benda kamar mandi", () => {
     const relB = belakang[0] - tangki({ ...dasar, dinding: "belakang" })[0];
     const relK = kiri[0] - tangki({ ...dasar, dinding: "kiri" })[0];
     expect(relB).toBeCloseTo(-relK, 6);
-  });
-
-  it("skalaRinci mengecilkan shower terhadap dinding tanpa mengubah tinggi pasangnya", () => {
-    const luas = (daftar: Primitif[]) => {
-      const t = daftar.flatMap(semuaTitik);
-      return Math.max(...t.map((p) => p[0])) - Math.min(...t.map((p) => p[0]));
-    };
-    for (const varian of ["hand_shower_gantung", "shower_tetap", "ember_gayung"] as const) {
-      const penuh = gambarShower(varian, "kondisi");
-      const kecil = gambarShower(varian, "kondisi", { skalaRinci: 0.5 });
-      expect(luas(kecil)).toBeLessThan(luas(penuh));
-      expect(gambarShower(varian, "kondisi", { skalaRinci: 1 })).toEqual(penuh);
-    }
   });
 
   it("pintu: daun digambar sebelum kusen bila membuka menjauhi kamera, sesudahnya bila mendekati", () => {

@@ -1,6 +1,7 @@
 // Gambar benda kamar mandi (kloset, wastafel, pintu) bergaya manual perakitan, dibangun dengan alat yang sama dengan
 // gambar shower (`gambarShower.ts`): kerangka dinding, kotak, dan ekstrusi jejak lantai. Satuan gambar ilustratif,
 // BUKAN ukuran produk, dan gambar tidak pernah memuat angka.
+import { DIM } from "./dimensiGambar";
 import {
   ekstrusi,
   footprintOval,
@@ -62,17 +63,19 @@ function klosetDuduk(k: Kerangka): Primitif[] {
   const { a, n } = geseranMangkuk(k);
   const sisi = sisiTerlihat(k);
   const pusatN = 31 + n;
+  const setengah = DIM.kloset.lebar / 2;
+  const tinggiDudukan = DIM.kloset.tinggiDudukan;
   return [
-    ...kotak(k, -18, 18, 0, 18, 38, 80, "netral"),
-    ...kotak(k, -20, 20, -1, 19.5, 80, 85, "netral"),
+    ...kotak(k, -setengah, setengah, 0, 18, 38, 80, "netral"),
+    ...kotak(k, -setengah - 2, setengah + 2, -1, 19.5, 80, 85, "netral"),
     ...ekstrusi(k, footprintOval(0, 9.25, 3.5, 3.5, 12), 85, 88, "netral", true),
     ...ekstrusi(k, footprintOval(a, pusatN, 11, 17, 24), 0, 28, "netral", true),
-    ...ekstrusi(k, footprintOval(a, pusatN, 18, 26, 32), 28, 46, "netral", true),
-    poligon("rongga", oval(k, a, pusatN, 12, 19, 46), "netral"),
+    ...ekstrusi(k, footprintOval(a, pusatN, 18, 26, 32), 28, tinggiDudukan, "netral", true),
+    poligon("rongga", oval(k, a, pusatN, 12, 19, tinggiDudukan), "netral"),
     {
       jenis: "garis",
-      dari: titik(k, sisi * 18, 18, 38),
-      ke: titik(k, sisi * 18, 18 + PANJANG_PENYAMBUNG, 38),
+      dari: titik(k, sisi * setengah, 18, 38),
+      ke: titik(k, sisi * setengah, 18 + PANJANG_PENYAMBUNG, 38),
       gaya: "tegas",
       peran: "netral",
     },
@@ -92,25 +95,32 @@ function bersihkan(daftar: Primitif[]): Primitif[] {
   return [...polis.map((p) => ({ ...p, tepi: true })), ...polis.map((p) => ({ ...p, garisTipis: true }))];
 }
 
-// Meja berbentuk D: setengah belakang persegi (menempel dinding), setengah depan oval, tanpa patahan di sambungan.
-const JEJAK_MEJA: [number, number][] = [
-  [-24, 0],
-  [24, 0],
-  ...Array.from({ length: 17 }, (_, i): [number, number] => {
-    const th = (i / 16) * Math.PI;
-    return [24 * Math.cos(th), 18 + 18 * Math.sin(th)];
-  }),
-];
+// Wastafel: bak PerMen (lebar x dalam) dan tinggi pasang untuk pengguna kursi roda dari tabel. Meja berbentuk D:
+// setengah belakang persegi (menempel dinding), setengah depan oval, tanpa patahan di sambungan.
+function jejakMeja(lebar: number, dalam: number): [number, number][] {
+  const [ra, rn] = [lebar / 2, dalam / 2];
+  return [
+    [-ra, 0],
+    [ra, 0],
+    ...Array.from({ length: 17 }, (_, i): [number, number] => {
+      const th = (i / 16) * Math.PI;
+      return [ra * Math.cos(th), rn + rn * Math.sin(th)];
+    }),
+  ];
+}
 
 function wastafel(k: Kerangka): Primitif[] {
+  const { lebarBak, dalamBak, tinggiPenggunaKursiRoda: atas } = DIM.wastafel;
+  const tebalMeja = 8;
+  const bawahMeja = atas - tebalMeja;
   return [
-    ...ekstrusi(k, footprintOval(0, 10, 2.5, 2.5, 10), 40, 78, "netral", true),
-    ...kotak(k, -2.5, 2.5, 4, 14, 36, 42, "netral"),
-    ...kotak(k, -14, -10, 6, 28, 66, 78, "netral"),
-    ...kotak(k, 10, 14, 6, 28, 66, 78, "netral"),
-    ...ekstrusi(k, JEJAK_MEJA, 78, 86, "netral", true),
-    poligon("rongga", oval(k, 0, 20, 16, 12, 86), "netral"),
-    ...bersihkan([...kotak(k, -2, 2, 3, 7, 86, 97, "netral"), ...kotak(k, -1.5, 1.5, 5, 19, 96, 99, "netral")]),
+    ...ekstrusi(k, footprintOval(0, 12.5, 2.5, 2.5, 10), bawahMeja - 38, bawahMeja, "netral", true),
+    ...kotak(k, -2.5, 2.5, 7, 17, bawahMeja - 42, bawahMeja - 36, "netral"),
+    ...kotak(k, -16, -12, 6, 30, bawahMeja - 11, bawahMeja, "netral"),
+    ...kotak(k, 12, 16, 6, 30, bawahMeja - 11, bawahMeja, "netral"),
+    ...ekstrusi(k, jejakMeja(lebarBak, dalamBak), bawahMeja, atas, "netral", true),
+    poligon("rongga", oval(k, 0, dalamBak / 2 + 2.5, lebarBak / 2 - 10, dalamBak / 2 - 7.5, atas), "netral"),
+    ...bersihkan([...kotak(k, -2, 2, 3, 7, atas, atas + 11, "netral"), ...kotak(k, -1.5, 1.5, 5, 19, atas + 10, atas + 13, "netral")]),
   ];
 }
 
@@ -123,40 +133,37 @@ function normalTerlihat(k: Kerangka, na: number, nn: number): [number, number] {
 }
 
 const SUDUT_BUKA = (55 * Math.PI) / 180;
-const ENGSEL: [number, number] = [-44, 4];
-const PANJANG_DAUN = 88;
-
-/** Garis putus-putus lintasan ayun daun pintu di lantai. */
-function lintasanAyun(k: Kerangka): Primitif {
-  const titikLintasan: Titik[] = Array.from({ length: 13 }, (_, i) => {
-    const p = (i / 12) * SUDUT_BUKA;
-    return titik(k, ENGSEL[0] + Math.cos(p) * PANJANG_DAUN, ENGSEL[1] + Math.sin(p) * PANJANG_DAUN, 0);
-  });
-  return { jenis: "garisPoli", titik: titikLintasan, peran: "hantu" };
-}
 
 function pintu(k: Kerangka): Primitif[] {
+  const bukaan = DIM.pintu.bukaanBersih;
+  const tinggi = DIM.pintu.tinggi;
   const sudut = SUDUT_BUKA;
-  const engsel = ENGSEL;
-  const panjang = PANJANG_DAUN;
+  const engsel: [number, number] = [-bukaan / 2, 4];
+  const panjang = bukaan;
   const arah: [number, number] = [Math.cos(sudut), Math.sin(sudut)];
   const tengah: [number, number] = [engsel[0] + (arah[0] * panjang) / 2, engsel[1] + (arah[1] * panjang) / 2];
   const [na, nn] = normalTerlihat(k, -arah[1], arah[0]);
-  const gagang: [number, number] = [engsel[0] + arah[0] * 78 + na * 3.5, engsel[1] + arah[1] * 78 + nn * 3.5];
+  const gagang: [number, number] = [engsel[0] + arah[0] * panjang * 0.89 + na * 3.5, engsel[1] + arah[1] * panjang * 0.89 + nn * 3.5];
+  // Garis putus-putus lintasan ayun daun pintu di lantai.
+  const lintasan: Titik[] = Array.from({ length: 13 }, (_, i) => {
+    const p = (i / 12) * sudut;
+    return titik(k, engsel[0] + Math.cos(p) * panjang, engsel[1] + Math.sin(p) * panjang, 0);
+  });
+  const s2 = bukaan / 2;
   const kusen = [
-    ...kotak(k, -48, -44, 0, 8, 0, 232, "netral"),
-    ...kotak(k, 44, 48, 0, 8, 0, 232, "netral"),
-    ...kotak(k, -48, 48, 0, 8, 228, 236, "netral"),
+    ...kotak(k, -s2 - 4, -s2, 0, 8, 0, tinggi + 8, "netral"),
+    ...kotak(k, s2, s2 + 4, 0, 8, 0, tinggi + 8, "netral"),
+    ...kotak(k, -s2 - 4, s2 + 4, 0, 8, tinggi, tinggi + 8, "netral"),
   ];
   const daun = [
-    ...ekstrusi(k, footprintPutar(tengah[0], tengah[1], panjang / 2, 2, sudut), 0, 226, "netral"),
+    ...ekstrusi(k, footprintPutar(tengah[0], tengah[1], panjang / 2, 2, sudut), 0, tinggi - 2, "netral"),
     ...ekstrusi(k, footprintPutar(gagang[0], gagang[1], 5, 1.5, sudut), 98, 102, "netral"),
   ];
   // Daun membuka ke dalam ruangan (arah n). Bila arah itu menjauhi kamera (kamera di luar dinding pintu), daun berada
   // di belakang kusen dan harus digambar lebih dulu supaya tertutup kusen; bila mendekati kamera, daun digambar terakhir.
   const { n: arahMasuk } = sumbuLayar(k);
   const daunDekat = arahMasuk[1] > 0;
-  return [lintasanAyun(k), ...(daunDekat ? [...kusen, ...daun] : [...daun, ...kusen])];
+  return [{ jenis: "garisPoli", titik: lintasan, peran: "hantu" }, ...(daunDekat ? [...kusen, ...daun] : [...daun, ...kusen])];
 }
 
 /** Gambar satu benda pada dinding yang ditentukan `kerangka` (bawaan: dinding kanan panel). */

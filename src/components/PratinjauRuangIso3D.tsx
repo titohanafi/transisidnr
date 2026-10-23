@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { titikDinding } from "../domain/denahGeometri";
+import { H, titikDinding, W } from "../domain/denahGeometri";
+import { DIM } from "../domain/dimensiGambar";
 import { gambarBenda, type JenisBenda } from "../domain/gambarBenda";
 import {
+  garisUbin,
   gambarShower,
   keRuang,
   kotak,
   poligon,
-  TINGGI_DINDING_PANEL,
+  type Dinding,
   type Kerangka,
   type Primitif,
   type Titik,
 } from "../domain/gambarShower";
-import { LANTAI_DALAM, LANTAI_LEBAR, posisiTigaMenempel } from "../domain/isoTigaGeometri";
 import { OBJEK_DENAH, type LetakDenah, type ObjekDenah, type VarianShower } from "../domain/pindai";
 import { bangunProyeksi } from "../lib/proyeksiIso3D";
 import { LapisPrimitif } from "./GambarShower";
-import { TEBAL_DINDING, TINGGI_DINDING } from "./iso3dKalibrasi";
 
 const JENIS_BENDA_DENAH: Record<Exclude<ObjekDenah, "area_mandi">, JenisBenda> = {
   pintu: "pintu",
@@ -23,15 +23,16 @@ const JENIS_BENDA_DENAH: Record<Exclude<ObjekDenah, "area_mandi">, JenisBenda> =
   wastafel: "wastafel",
 };
 
-// Frustum harus cukup besar untuk memuat lantai DAN tinggi dinding (kalau TINGGI_DINDING dinaikkan, bagian atas
-// dinding/pintu bisa terpotong) — dicek visual.
-const UKURAN_FRUSTUM = Math.max(Math.hypot(LANTAI_LEBAR, LANTAI_DALAM) / 2, TINGGI_DINDING * 1.1) * 1.2;
+// Seluruh gambar dalam cm nyata (1 satuan = 1 cm, sama dengan panel): ruangan seluas ruang dalam toilet PerMen
+// (`DIM.ruang`), benda memakai dimensi dari `DIM`. Kamera bekerja dalam meter, jadi koordinat dibagi 100.
+const LEBAR = DIM.ruang.lebar;
+const DALAM = DIM.ruang.dalam;
+const TINGGI = DIM.ruang.tinggi;
+const TEBAL = DIM.ruang.tebalDinding;
+// Setengah-tinggi pandangan awal kamera (meter); gambar lalu dipas-kan ke kanvas, jadi nilainya tidak menentukan ukuran.
+const FRUSTUM_AWAL = 2.2;
 // Margin gambar terhadap tepi kanvas (pecahan lebar/tinggi).
 const MARGIN = 0.05;
-const SKALA = TINGGI_DINDING / TINGGI_DINDING_PANEL;
-// Di panel, keran dan kepala shower digambar besar supaya jelas; di ruangan harus sepadan dengan kloset dan wastafel
-// (kepala hand shower nyata sekitar 12-14 cm, kloset sekitar 36 cm lebarnya).
-const SKALA_RINCI_SHOWER = 0.45;
 
 /**
  * Benda yang tidak digambar karena dinding tempatnya menempel tidak digambar (dinding samping berlawanan dan dinding
@@ -50,26 +51,32 @@ function azimuthDariSudut(sisiSamping: "kiri" | "kanan"): number {
   return sisiSamping === "kanan" ? (3 * Math.PI) / 4 : Math.PI / 4;
 }
 
-/** Permukaan dalam dinding (dinding setebal TEBAL_DINDING berpusat di garis lantai). */
-function bidangDalam(dinding: "belakang" | "depan" | "kiri" | "kanan"): number {
+/** Permukaan dalam dinding (cm dari pusat ruangan): ruang dalam persis seluas `DIM.ruang`, dinding di luarnya. */
+function bidangDalam(dinding: Dinding): number {
   switch (dinding) {
     case "belakang":
-      return -LANTAI_DALAM / 2 + TEBAL_DINDING / 2;
+      return -DALAM / 2;
     case "depan":
-      return LANTAI_DALAM / 2 - TEBAL_DINDING / 2;
+      return DALAM / 2;
     case "kiri":
-      return -LANTAI_LEBAR / 2 + TEBAL_DINDING / 2;
+      return -LEBAR / 2;
     case "kanan":
-      return LANTAI_LEBAR / 2 - TEBAL_DINDING / 2;
+      return LEBAR / 2;
   }
+}
+
+/** Titik benda sepanjang dindingnya (cm dari tengah dinding), dari `letak` yang sama dengan denah tampak atas. */
+function sepanjangDinding(letak: LetakDenah): number {
+  const t = titikDinding(letak);
+  return t.dinding === "belakang" || t.dinding === "depan" ? ((t.x - W / 2) / W) * LEBAR : ((t.y - H / 2) / H) * DALAM;
 }
 
 /**
  * Tampilan isometrik tingkat-ruangan (prototipe di belakang flag `VITE_ISO_3D`), seluruhnya gambar SVG bergaya manual
- * perakitan: lantai dan dinding polos (belakang selalu, satu dinding samping sesuai `sudutAktif.x`), lalu keempat benda
- * (pintu, kloset, wastafel, shower) diposisikan sesuai `letak(id)` yang sama dengan denah tampak atas. Kamera
- * ortografik isometrik sungguhan berputar mengelilingi ruangan (`bangunProyeksi`), jadi sudut pandang tetap benar;
- * tidak ada Three.js, kanvas WebGL, atau model 3D yang dimuat (ringan untuk kuota rendah).
+ * perakitan dalam cm nyata: lantai dan dinding berkeramik (belakang selalu, satu dinding samping sesuai `sudutAktif.x`),
+ * lalu keempat benda (pintu, kloset, wastafel, shower) diposisikan sesuai `letak(id)` yang sama dengan denah tampak atas.
+ * Kamera ortografik isometrik sungguhan berputar mengelilingi ruangan (`bangunProyeksi`), jadi sudut pandang tetap
+ * benar; tidak ada Three.js, kanvas WebGL, atau model 3D yang dimuat (ringan untuk kuota rendah).
  */
 export function PratinjauRuangIso3D({
   letak,
@@ -99,92 +106,68 @@ export function PratinjauRuangIso3D({
 
   let gambar = null;
   if (ukuran) {
-    const dasar = bangunProyeksi(azimuthDariSudut(sudutAktif.x), ukuran.lebar, ukuran.tinggi, UKURAN_FRUSTUM);
+    const dasar = bangunProyeksi(azimuthDariSudut(sudutAktif.x), ukuran.lebar, ukuran.tinggi, FRUSTUM_AWAL);
+    const lihat = { x: sudutAktif.x === "kanan" ? -1 : 1, y: 1 } as const;
+
     // Pas-kan ruangan (lantai dan puncak dinding yang digambar) ke kanvas: diperbesar sebesar mungkin dan dipusatkan,
     // berapa pun bentuk kartunya.
-    const sisiX = sudutAktif.x === "kanan" ? LANTAI_LEBAR / 2 : -LANTAI_LEBAR / 2;
+    const sisiX = sudutAktif.x === "kanan" ? LEBAR / 2 : -LEBAR / 2;
+    const dm = (x: number, y: number, z: number) => dasar(x / 100, y / 100, z / 100);
     const sudutRuang = [
-      dasar(-LANTAI_LEBAR / 2, -LANTAI_DALAM / 2, 0),
-      dasar(LANTAI_LEBAR / 2, -LANTAI_DALAM / 2, 0),
-      dasar(LANTAI_LEBAR / 2, LANTAI_DALAM / 2, 0),
-      dasar(-LANTAI_LEBAR / 2, LANTAI_DALAM / 2, 0),
-      dasar(-LANTAI_LEBAR / 2, -LANTAI_DALAM / 2, TINGGI_DINDING),
-      dasar(LANTAI_LEBAR / 2, -LANTAI_DALAM / 2, TINGGI_DINDING),
-      dasar(sisiX, LANTAI_DALAM / 2, TINGGI_DINDING),
+      dm(-LEBAR / 2, -DALAM / 2, 0),
+      dm(LEBAR / 2, -DALAM / 2, 0),
+      dm(LEBAR / 2, DALAM / 2, 0),
+      dm(-LEBAR / 2, DALAM / 2, 0),
+      dm(-LEBAR / 2 - TEBAL, -DALAM / 2 - TEBAL, TINGGI),
+      dm(LEBAR / 2 + TEBAL, -DALAM / 2 - TEBAL, TINGGI),
+      dm(sisiX, DALAM / 2, TINGGI),
     ];
     const [xMin, xMax] = [Math.min(...sudutRuang.map((t) => t[0])), Math.max(...sudutRuang.map((t) => t[0]))];
     const [yMin, yMax] = [Math.min(...sudutRuang.map((t) => t[1])), Math.max(...sudutRuang.map((t) => t[1]))];
     const pembesaran = Math.min((ukuran.lebar * (1 - 2 * MARGIN)) / (xMax - xMin), (ukuran.tinggi * (1 - 2 * MARGIN)) / (yMax - yMin));
     const proyeksi = (x: number, y: number, z: number): Titik => {
-      const [px, py] = dasar(x, y, z);
+      const [px, py] = dm(x, y, z);
       return [(px - (xMin + xMax) / 2) * pembesaran + ukuran.lebar / 2, (py - (yMin + yMax) / 2) * pembesaran + ukuran.tinggi / 2];
     };
-    const lihat = { x: sudutAktif.x === "kanan" ? -1 : 1, y: 1 } as const;
 
-    // Lantai dan dinding polos. Dinding digambar setebal TEBAL_DINDING (satuan ruangan; dibagi SKALA ke satuan panel).
-    const lantai = poligon(
-      "latar",
-      [
-        proyeksi(-LANTAI_LEBAR / 2, -LANTAI_DALAM / 2, 0),
-        proyeksi(LANTAI_LEBAR / 2, -LANTAI_DALAM / 2, 0),
-        proyeksi(LANTAI_LEBAR / 2, LANTAI_DALAM / 2, 0),
-        proyeksi(-LANTAI_LEBAR / 2, LANTAI_DALAM / 2, 0),
-      ],
-      "netral",
-    );
-    const tebalPanel = TEBAL_DINDING / SKALA;
-    const kerangkaDinding = (dinding: "belakang" | "kiri" | "kanan"): Kerangka => ({
+    const kerangkaDinding = (dinding: Dinding): Kerangka => ({
       dinding,
       sepanjang: 0,
       bidang: bidangDalam(dinding),
       proyeksi,
-      skala: SKALA,
+      skala: 1,
       lihat,
     });
-    const setengahLebar = LANTAI_LEBAR / 2 / SKALA;
-    const setengahDalam = LANTAI_DALAM / 2 / SKALA;
-    const dindingBelakang = kotak(
-      kerangkaDinding("belakang"),
-      -setengahLebar - tebalPanel,
-      setengahLebar + tebalPanel,
-      -tebalPanel,
-      0,
-      0,
-      TINGGI_DINDING_PANEL,
+
+    const lantai = poligon(
+      "latar",
+      [
+        proyeksi(-LEBAR / 2, -DALAM / 2, 0),
+        proyeksi(LEBAR / 2, -DALAM / 2, 0),
+        proyeksi(LEBAR / 2, DALAM / 2, 0),
+        proyeksi(-LEBAR / 2, DALAM / 2, 0),
+      ],
       "netral",
     );
-    // Dinding samping dimulai dari permukaan dalam dinding belakang supaya sambungan sudutnya tidak bergaris ganda.
-    const dindingSamping = kotak(
-      kerangkaDinding(sudutAktif.x),
-      -setengahDalam + tebalPanel / 2,
-      setengahDalam + tebalPanel,
-      -tebalPanel,
-      0,
-      0,
-      TINGGI_DINDING_PANEL,
-      "netral",
-    );
+    // Dinding setebal TEBAL di luar ruang dalam. Dinding belakang melebar sampai menutupi ujung dinding samping; dinding
+    // samping dimulai dari permukaan dalam dinding belakang. Garis keramik dimulai dari sudut pojok belakang.
+    const kBelakang = kerangkaDinding("belakang");
+    const kSamping = kerangkaDinding(sudutAktif.x);
+    const dinding: Primitif[] = [
+      ...kotak(kBelakang, -LEBAR / 2 - TEBAL, LEBAR / 2 + TEBAL, -TEBAL, 0, 0, TINGGI, "netral"),
+      ...garisUbin(kBelakang, -LEBAR / 2, LEBAR / 2, TINGGI, -LEBAR / 2),
+      ...kotak(kSamping, -DALAM / 2, DALAM / 2, -TEBAL, 0, 0, TINGGI, "netral"),
+      ...garisUbin(kSamping, -DALAM / 2, DALAM / 2, TINGGI, -DALAM / 2),
+    ];
 
     const tersembunyi = tampilkanSemua ? [] : bendaTersembunyi(letak, sudutAktif.x);
     const susunan = OBJEK_DENAH.map((id) => {
       const letakId = letak(id);
-      const dinding = titikDinding(letakId).dinding;
-      const posisi = posisiTigaMenempel(letakId);
-      const kerangka: Kerangka = {
-        dinding,
-        sepanjang: dinding === "belakang" || dinding === "depan" ? posisi.x : posisi.z,
-        bidang: bidangDalam(dinding),
-        proyeksi,
-        skala: SKALA,
-        lihat,
-      };
-      const sembunyi = tersembunyi.includes(id);
+      const kerangka: Kerangka = { ...kerangkaDinding(titikDinding(letakId).dinding), sepanjang: sepanjangDinding(letakId) };
       // Benda yang disembunyikan tidak digambar sama sekali (termasuk pintu, tanpa garis bukaan).
-      if (sembunyi) return null;
+      if (tersembunyi.includes(id)) return null;
       const daftar: Primitif[] =
-        id === "area_mandi"
-          ? gambarShower(varianShower, "kondisi", { kerangka, skalaRinci: SKALA_RINCI_SHOWER })
-          : gambarBenda(JENIS_BENDA_DENAH[id], kerangka);
+        id === "area_mandi" ? gambarShower(varianShower, "kondisi", { kerangka }) : gambarBenda(JENIS_BENDA_DENAH[id], kerangka);
       // Urutan gambar dari belakang ke depan: titik pijak benda yang lebih rendah di layar berarti lebih dekat kamera.
       const [x, y] = keRuang(kerangka, 0, 0);
       return { id, daftar, kedalaman: proyeksi(x, y, 0)[1] };
@@ -200,10 +183,10 @@ export function PratinjauRuangIso3D({
         focusable="false"
       >
         <g strokeWidth={1.6} strokeLinejoin="round" strokeLinecap="round">
-          <LapisPrimitif daftar={[lantai, ...dindingBelakang, ...dindingSamping]} garisDasar={1.6} />
+          <LapisPrimitif daftar={[lantai, ...dinding]} garisDasar={1.6} />
           {susunan.map((b) => (
             <g key={b.id}>
-              <LapisPrimitif daftar={b.daftar} tebal={b.id === "area_mandi" ? SKALA_RINCI_SHOWER : 0.75} garisDasar={1.6} />
+              <LapisPrimitif daftar={b.daftar} tebal={0.75} garisDasar={1.6} />
             </g>
           ))}
         </g>
