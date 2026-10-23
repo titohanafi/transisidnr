@@ -13,7 +13,21 @@ describe("susunSepanjangDinding", () => {
     expect(hasil).toEqual({ a: -50, b: 50 });
   });
 
-  it("dua benda berdekatan didorong menjauh sama besar sampai berjarak bebas", () => {
+  it("dua benda berdekatan di dinding lebar didorong menjauh sama besar sampai berjarak bebas", () => {
+    const hasil = susunSepanjangDinding(
+      [
+        { id: "wastafel", awal: -30, setengah: 30 },
+        { id: "kloset", awal: 30, setengah: 26 },
+      ],
+      400,
+    );
+    const jarakTepi = hasil.kloset - 26 - (hasil.wastafel + 30);
+    expect(jarakTepi).toBeCloseTo(JARAK_BEBAS_BENDA, 6);
+    // Geser sama besar: titik tengah kedua benda tetap di tempat semula.
+    expect(hasil.wastafel + hasil.kloset).toBeCloseTo(0, 6);
+  });
+
+  it("di ruang minimum PerMen (152,5 cm) wastafel dan kloset masih berjarak bebas dan di dalam dinding", () => {
     const hasil = susunSepanjangDinding(
       [
         { id: "wastafel", awal: -30, setengah: 30 },
@@ -21,10 +35,9 @@ describe("susunSepanjangDinding", () => {
       ],
       152.5,
     );
-    const jarakTepi = hasil.kloset - 26 - (hasil.wastafel + 30);
-    expect(jarakTepi).toBeGreaterThanOrEqual(JARAK_BEBAS_BENDA - 1e-6);
-    // Geser sama besar: pusat tengah kedua benda tetap di titik tengah awalnya.
-    expect(hasil.wastafel + hasil.kloset).toBeCloseTo(0, 6);
+    expect(hasil.kloset - 26 - (hasil.wastafel + 30)).toBeGreaterThanOrEqual(JARAK_BEBAS_BENDA - 0.5);
+    expect(hasil.wastafel - 30).toBeGreaterThanOrEqual(-152.5 / 2 + JARAK_TEPI_DINDING - 1e-6);
+    expect(hasil.kloset + 26).toBeLessThanOrEqual(152.5 / 2 - JARAK_TEPI_DINDING + 1e-6);
   });
 
   it("tidak pernah menembus tepi dinding", () => {
